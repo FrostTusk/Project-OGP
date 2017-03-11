@@ -1,7 +1,9 @@
 package asteroids.tests;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -332,8 +334,50 @@ public class TestShip {
 	}
 	
 	 /*
+	  * |---------------------------------------------------|
+	  * | 6. The next tests test the Overlap method method.	|
+	  * |---------------------------------------------------| 
+	  */	
+	
+	@Test
+	public void testTurnOverlapT() throws ModelException {
+		Ship ship1 = facade.createShip(0, 0, 30, -15, 10, 0);
+		Ship ship2 = facade.createShip(5, 5, 30, -15, 20, Math.PI);
+		assertTrue(facade.overlap(ship1, ship2));
+	}
+	
+	@Test
+	public void testTurnOverlapF() throws ModelException {
+		Ship ship1 = facade.createShip(0, 0, 30, -15, 10, 0);
+		Ship ship2 = facade.createShip(100, 100, 30, -15, 20, 0);
+		assertFalse(facade.overlap(ship1, ship2));
+	}
+	
+	@Test(expected = ModelException.class)
+	public void testTurnOverlapShipIsNull() throws ModelException {
+		Ship ship1 = null;
+		Ship ship2 = facade.createShip(100, 100, 30, -15, 20, 0);
+		assertFalse(facade.overlap(ship1, ship2));
+	}
+	
+	 /*
 	  * |-------------------------------------------------------|
 	  * | 7. The next tests test the Distance method method.	|
 	  * |-------------------------------------------------------| 
-	  */	
+	  */
+	
+	@Test(expected = ModelException.class)
+	public void testDistanceGeneric() throws ModelException {
+		Ship ship1 = null;
+		Ship ship2 = facade.createShip(100, 100, 30, -15, 20, 0);
+		assertFalse(facade.overlap(ship1, ship2));
+	}
+	
+	@Test(expected = ModelException.class)
+	public void testDistanceShipIsNull() throws ModelException {
+		Ship ship1 = null;
+		Ship ship2 = facade.createShip(100, 100, 30, -15, 20, 0);
+		assertEquals(0, facade.getDistanceBetween(ship1, ship2), EPSILON);
+	}
+
 }

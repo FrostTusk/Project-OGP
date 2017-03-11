@@ -31,28 +31,48 @@ public class Facade implements IFacade {
 
 	@Override
 	public double[] getShipPosition(Ship ship) throws ModelException {
-		double positionX = ship.getPositionX();
-		double positionY = ship.getPositionY();
-		double[] position = {positionX, positionY};
-		return position;
+		try {
+			double positionX = ship.getPositionX();
+			double positionY = ship.getPositionY();
+			double[] position = {positionX, positionY};
+			return position;
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
 	public double[] getShipVelocity(Ship ship) throws ModelException {
+		try {
 		double velocityX = ship.getVelocityX();
 		double velocityY = ship.getVelocityY();
 		double[] velocity = {velocityX, velocityY};
 		return velocity;
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
 	public double getShipRadius(Ship ship) throws ModelException {
-		return ship.getRadius();
+		try {
+			return ship.getRadius();
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
 	public double getShipOrientation(Ship ship) throws ModelException {
-		return ship.getOrientation();
+		try {
+			return ship.getOrientation();
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
@@ -66,11 +86,19 @@ public class Facade implements IFacade {
 		catch (IndexOutOfBoundsException exc) {
 			throw new ModelException(exc);
 		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
 	public void thrust(Ship ship, double amount) throws ModelException {
-		ship.thrust(amount);
+		try {
+			ship.thrust(amount);
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
@@ -79,6 +107,9 @@ public class Facade implements IFacade {
 			ship.turn(angle);
 		}
 		catch (AssertionError exc) {
+			throw new ModelException(exc);
+		}
+		catch (NullPointerException exc) {
 			throw new ModelException(exc);
 		}
 			
@@ -92,6 +123,9 @@ public class Facade implements IFacade {
 		catch (IllegalArgumentException exc) {
 			throw new ModelException(exc);
 		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
@@ -100,6 +134,9 @@ public class Facade implements IFacade {
 			return ship1.overlap(ship2);
 		}
 		catch (IllegalArgumentException exc) {
+			throw new ModelException(exc);
+		}
+		catch (NullPointerException exc) {
 			throw new ModelException(exc);
 		}
 	}
@@ -112,6 +149,9 @@ public class Facade implements IFacade {
 		catch (IllegalArgumentException exc) {
 			throw new ModelException(exc);
 		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
@@ -120,6 +160,9 @@ public class Facade implements IFacade {
 			return ship1.getCollisionPosition(ship2);
 		}
 		catch (IllegalArgumentException exc) {
+			throw new ModelException(exc);
+		}
+		catch (NullPointerException exc) {
 			throw new ModelException(exc);
 		}
 	}
