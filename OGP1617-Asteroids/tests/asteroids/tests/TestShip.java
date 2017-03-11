@@ -334,9 +334,9 @@ public class TestShip {
 	}
 	
 	 /*
-	  * |---------------------------------------------------|
-	  * | 6. The next tests test the Overlap method method.	|
-	  * |---------------------------------------------------| 
+	  * |-----------------------------------------------|
+	  * | 6. The next tests test the Overlap method.	|
+	  * |-----------------------------------------------| 
 	  */	
 	
 	@Test
@@ -361,9 +361,9 @@ public class TestShip {
 	}
 	
 	 /*
-	  * |-------------------------------------------------------|
-	  * | 7. The next tests test the Distance method method.	|
-	  * |-------------------------------------------------------| 
+	  * |-----------------------------------------------|
+	  * | 7. The next tests test the Distance method.	|
+	  * |-----------------------------------------------| 
 	  */
 	
 	@Test
@@ -378,5 +378,32 @@ public class TestShip {
 		Ship ship2 = facade.createShip(100, 100, 30, -15, 20, 0);
 		assertEquals(0, facade.getDistanceBetween(ship1, ship2), EPSILON);
 	}
-
+	
+	 /*
+	  * |-----------------------------------------------------------|
+	  * | 7. The next tests test the Collision Detection methods.	|
+	  * |-----------------------------------------------------------| 
+	  */
+	
+//	@Test
+//	public void testCollisionDetectionGeneric() throws ModelException {
+//		Ship ship1 = facade.createShip(0, 0, 10, 0, 10, 0);
+//		Ship ship2 = facade.createShip(30, 0, 0, 0, 10, 0);
+//		double[] position1 = facade.getCollisionPosition(ship1, ship2);
+//		assertEquals(10, position1[0], EPSILON);
+//		assertEquals(0, position1[1], EPSILON);
+//		assertEquals(1, facade.getTimeToCollision(ship1, ship2), EPSILON);
+//		
+//		Ship ship3 = facade.createShip(0, 0, 10, 10, 10, 0);
+//		Ship ship4 = facade.createShip(50, 50, 0, 0, 10, 0);
+//		double[] position2 = facade.getCollisionPosition(ship3, ship4);
+//		assertEquals(40, position2[0], EPSILON);
+//		assertEquals(40, position2[1], EPSILON);
+//		assertEquals(3, facade.getTimeToCollision(ship1, ship2), EPSILON);
+//		
+//		Ship ship5 = new Ship(0, 0, 100, 100, 10, 0);
+//		Ship ship6 = new Ship(100, -100, 50, 50, 1, Math.PI);
+//
+//	}
+	
 }

@@ -595,6 +595,7 @@ public class Ship {
 	 * 			the ship to which you want to know the distance.
 	 * 
 	 * @return	For the current ship, returns the distance between the current ship and a given ship.
+	 * 			If the two ships have the same position, the method returns zero.
 	 * 
 	 * @throws 	IllegalArgumentException
 	 * 			The other ship was null.
@@ -704,9 +705,13 @@ public class Ship {
 		if (time == Double.POSITIVE_INFINITY)
 			return null;
 		
-		double newPositionX = getPositionX() + getVelocityX() * time;
-		double newPositionY = getPositionY() + getVelocityY() * time;
-		double[] vector = {newPositionX, newPositionY};
+		double newPositionX1 = this.getPositionX() + this.getVelocityX() * time;
+		double newPositionY1 = this.getPositionY() + this.getVelocityY() * time;
+		double newPositionX2 = ship.getPositionX() + ship.getVelocityX() * time;
+		double newPositionY2 = ship.getPositionY() + ship.getVelocityY() * time;
+		
+		double angle = Math.atan(Math.abs(newPositionY2 - newPositionY1) / Math.abs(newPositionX2 - newPositionX1));
+		double[] vector = {newPositionX1 + this.getRadius() * Math.cos(angle), newPositionY1 + this.getRadius() * Math.sin(angle)};
 		return vector;
 	}
 	
