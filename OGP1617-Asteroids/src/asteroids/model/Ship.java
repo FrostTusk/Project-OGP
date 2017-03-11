@@ -612,8 +612,12 @@ public class Ship {
 		distanceY = Math.sqrt(Math.pow(this.getPositionY() - ship.getPositionY(), 2));
 		
 		// use formula of Pythagoras to calculate total distance between centers of the ships
-		distance = Math.sqrt(Math.pow(distanceX + distanceY, 2));
+		distance = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
 		
+		// The distance between a ship and itself is 0.
+		if (distance == 0)
+			return 0;
+					
 		// use the sizes of the ships to calculate distance between edges
 		distance = distance - this.getRadius() - ship.getRadius();
 		return distance;

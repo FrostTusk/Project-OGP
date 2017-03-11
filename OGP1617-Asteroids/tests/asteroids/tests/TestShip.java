@@ -366,11 +366,10 @@ public class TestShip {
 	  * |-------------------------------------------------------| 
 	  */
 	
-	@Test(expected = ModelException.class)
-	public void testDistanceGeneric() throws ModelException {
-		Ship ship1 = null;
-		Ship ship2 = facade.createShip(100, 100, 30, -15, 20, 0);
-		assertFalse(facade.overlap(ship1, ship2));
+	@Test
+	public void testDistanceSameShip() throws ModelException {
+		Ship ship1 = facade.createShip(100, 100, 30, -15, 20, 0);
+		assertEquals(0, facade.getDistanceBetween(ship1, ship1), EPSILON);
 	}
 	
 	@Test(expected = ModelException.class)
