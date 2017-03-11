@@ -19,7 +19,6 @@ import be.kuleuven.cs.som.annotate.*;
  * 6. Methods that handle Moving, Turning and Accelerating
  * 7. Methods that handle Calculating Distance, Overlap, and Collision Detection
  * 8. Helper Methods
- * 
  */
 
 /**
@@ -217,6 +216,7 @@ public class Ship {
 			return false;	
 	}
 	
+	
 	/**
 	 * Set the position of this ship to the given position.
 	 * 
@@ -323,6 +323,7 @@ public class Ship {
 		return true;
 	}
 	
+	
 	/**
 	 * Set the X and Y velocity of this ship to the given velocities.
 	 * 
@@ -392,6 +393,7 @@ public class Ship {
 			return true;
 		return false;
 	}
+	
 	
 	/**
 	 * Set the orientation of this ship to the given orientation.
@@ -727,11 +729,11 @@ public class Ship {
 	
 	
 	
-	/*
-	  * |-------------------------------------------|
-	  * | 8. The next methods are helper methods.	|
-	  * |-------------------------------------------| 
-	  */
+		/*
+		  * |-------------------------------------------|
+		  * | 8. The next methods are helper methods.	|
+		  * |-------------------------------------------| 
+		  */
 	
 	
 	

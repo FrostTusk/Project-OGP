@@ -13,6 +13,22 @@ import asteroids.facade.Facade;
 import asteroids.part1.facade.IFacade;
 import asteroids.util.ModelException;
 
+/*
+ * Tests Index:
+ * 1. Tests for Initialization.
+ * 2. Tests for Position.
+ * 3. Tests for Speed.
+ * 4. Tests for Radius.
+ * 5. Tests for Orientation.
+ * 6. Tests for Move.
+ * 7. Tests for Thrust.
+ * 8. Tests for Turn.
+ * 9. Tests for Distance.
+ * 10. Tests for Overlap.
+ * 11. Tests for Collision Detection.
+ * 
+ */
+
 public class TestShip {
 
 	private static final double EPSILON = 0.0001;
@@ -98,7 +114,6 @@ public class TestShip {
 	public void testCreateShipXYIsPosInfinity() throws ModelException {
 		facade.createShip(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, 10, -10, 20, Math.PI);
 	}
-
 	
 	 /*
 	  * |---------------------------------------|
