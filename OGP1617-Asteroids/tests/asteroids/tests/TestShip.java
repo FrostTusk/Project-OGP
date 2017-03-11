@@ -279,5 +279,55 @@ public class TestShip {
 	  * |-------------------------------------------| 
 	  */	
 	
-	// DIT IS EEN TEST
+	@Test
+	public void testTurn() throws ModelException {
+		Ship ship = facade.createShip(100, 100, 30, -15, 20, 0);
+		facade.turn(ship, Math.PI);
+		assertNotNull(facade.getShipOrientation(ship));
+		assertEquals(Math.PI, facade.getShipOrientation(ship), EPSILON);
+	}
+
+	@Test
+	public void testTurnOisZero() throws ModelException {
+		Ship ship = facade.createShip(100, 100, 30, -15, 20, 0);
+		facade.turn(ship, 0);
+		assertNotNull(facade.getShipOrientation(ship));
+		assertEquals(0, facade.getShipOrientation(ship), EPSILON);
+	}
+	
+	@Test
+	public void testTurnOisNeg() throws ModelException {
+		Ship ship = facade.createShip(100, 100, 30, -15, 20, Math.PI);
+		facade.turn(ship, -Math.PI);
+		assertNotNull(facade.getShipOrientation(ship));
+		assertEquals(0, facade.getShipOrientation(ship), EPSILON);
+	}
+	
+	@Test(expected = ModelException.class)
+	public void testTurnOisNaN() throws ModelException {
+		Ship ship = facade.createShip(100, 100, 30, -15, 20, Math.PI);
+		facade.turn(ship, Double.NaN);
+	}
+	
+	@Test(expected = ModelException.class)
+	public void testTurnOisNegInfinity() throws ModelException {
+		Ship ship = facade.createShip(100, 100, 30, -15, 20, Math.PI);
+		facade.turn(ship, Double.NEGATIVE_INFINITY);
+	}
+	
+	@Test
+	public void testTurnOOverflow() throws ModelException {
+		Ship ship = facade.createShip(100, 100, 30, -15, 20, 2*Math.PI);
+		facade.turn(ship, Math.PI);
+		assertNotNull(facade.getShipOrientation(ship));
+		assertEquals(Math.PI, facade.getShipOrientation(ship), EPSILON);
+	}
+	
+	@Test
+	public void testTurnOUnderflow() throws ModelException {
+		Ship ship = facade.createShip(100, 100, 30, -15, 20, 0);
+		facade.turn(ship, -2*Math.PI);
+		assertNotNull(facade.getShipOrientation(ship));
+		assertEquals(0, facade.getShipOrientation(ship), EPSILON);
+	}
 }
