@@ -200,6 +200,17 @@ public class TestShip {
 	  * |-------------------------------------------| 
 	  */	
 	
+	@Test
+	public void testCreateShipOGeneric() throws ModelException {
+		Ship ship1 = facade.createShip(100, 200, 100, 200, 20, 2*Math.PI);
+		assertEquals(2*Math.PI, facade.getShipOrientation(ship1), EPSILON);
+		
+		Ship ship2 = facade.createShip(100, 200, 100, 200, 20, 0);
+		assertEquals(0, facade.getShipOrientation(ship2), EPSILON);
+		
+		Ship ship3 = facade.createShip(100, 200, 100, 200, 20, Math.PI);
+		assertEquals(Math.PI, facade.getShipOrientation(ship3), EPSILON);
+	}
 	
 	@Test(expected = ModelException.class)
 	public void testCreateShipOisNeg() throws ModelException {
@@ -210,7 +221,6 @@ public class TestShip {
 	public void testCreateShipOisNaN() throws ModelException {
 		facade.createShip(100, 200, 10, -10, 0, Double.NaN);
 	}
-	
 	
 	 /*
 	  * |-------------------------------------------|

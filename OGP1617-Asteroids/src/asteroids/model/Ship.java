@@ -580,7 +580,7 @@ public class Ship {
 	 *       
 	 */
 	public void thrust(double acceleration) {
-		if (acceleration < 0)
+		if (! (acceleration > 0))
 			acceleration = 0;
 		
 		double newVelocityX = getVelocityX() + acceleration * Math.cos(getOrientation());
