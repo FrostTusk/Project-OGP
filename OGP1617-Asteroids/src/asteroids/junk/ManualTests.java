@@ -1,3 +1,5 @@
+package asteroids.junk;
+import asteroids.model.Ship;
 
 public class ManualTests {
 	private static double pi = Math.PI;
@@ -67,12 +69,11 @@ public class ManualTests {
 		System.out.format("VelocityX = %f%n", ship.getVelocityX());
 		System.out.format("VelocityY = %f%n", ship.getVelocityY());
 		System.out.format("Orientation = %f%n", ship.getOrientation());
-		System.out.format("Shape = %f%n", ship.getShape());
+		System.out.format("Shape = %f%n", ship.getRadius());
 		System.out.format("Speed = %f%n", ship.getSpeed());
 		
 		if (debug) {
 			System.out.println("Advanced:");
-			System.out.format("PI = %f%n", ship.getPI());
 			System.out.format("MinPositionX = %f%n", ship.getMinPositionX());
 			System.out.format("MinPositionY = %f%n", ship.getMinPositionY());
 			System.out.format("MaxPositionX = %f%n", ship.getMaxPositionX());

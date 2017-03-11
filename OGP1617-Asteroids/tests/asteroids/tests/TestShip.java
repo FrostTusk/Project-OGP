@@ -280,7 +280,82 @@ public class TestShip {
 		Ship ship = facade.createShip(100, 100, 30, -15, 20, 0);
 		facade.move(ship, Double.POSITIVE_INFINITY);
 	}
-
+	
+	/*
+	  * |-----------------------------------------------------------|
+	  * | 7. The next tests test the Thrust method.					|
+	  * |-----------------------------------------------------------| 
+	  */
+	
+	@Test
+	public void testThrustX() throws ModelException {
+		Ship ship = facade.createShip(100, 100, 0, 0, 20, 0);
+		facade.thrust(ship, 10);
+		assertNotNull(facade.getShipVelocity(ship));
+		assertEquals(10, facade.getShipVelocity(ship)[0], EPSILON);
+		assertEquals(0, facade.getShipVelocity(ship)[1], EPSILON);
+	}
+	
+	@Test
+	public void testThrustY() throws ModelException {
+		Ship ship = facade.createShip(100, 100, 0, 0, 20, (Math.PI)/2);
+		facade.thrust(ship, 15);
+		assertNotNull(facade.getShipVelocity(ship));
+		assertEquals(0, facade.getShipVelocity(ship)[0], EPSILON);
+		assertEquals(15, facade.getShipVelocity(ship)[1], EPSILON);
+	}
+	
+	@Test
+	public void testThrustNeg() throws ModelException {
+		Ship ship = facade.createShip(100, 100, 0, 0, 20, 0);
+		facade.thrust(ship, -10);
+		assertNotNull(facade.getShipVelocity(ship));
+		assertEquals(0, facade.getShipVelocity(ship)[0], EPSILON);
+		assertEquals(0, facade.getShipVelocity(ship)[1], EPSILON);
+	}
+	
+	@Test
+	public void testThrustXWhithMovingStart() throws ModelException {
+		Ship ship = facade.createShip(100, 100, 10, 10, 20, 0);
+		facade.thrust(ship, 5);
+		assertNotNull(facade.getShipVelocity(ship));
+		assertEquals(15, facade.getShipVelocity(ship)[0], EPSILON);
+		assertEquals(10, facade.getShipVelocity(ship)[1], EPSILON);
+	}
+	
+	@Test
+	public void testThrustYWhithMovingStart() throws ModelException {
+		Ship ship = facade.createShip(100, 100, 10, 10, 20, (Math.PI)/2);
+		facade.thrust(ship, 7);
+		assertNotNull(facade.getShipVelocity(ship));
+		assertEquals(10, facade.getShipVelocity(ship)[0], EPSILON);
+		assertEquals(17, facade.getShipVelocity(ship)[1], EPSILON);
+	}
+	
+	@Test
+	public void testThrustNaN() throws ModelException {
+		Ship ship = facade.createShip(100, 100, 0, 0, 20, 0);
+		facade.thrust(ship, Double.NaN);
+		assertEquals(0, facade.getShipVelocity(ship)[0], EPSILON);
+		assertEquals(0, facade.getShipVelocity(ship)[1], EPSILON);
+	}
+	
+	@Test
+	public void testThrustPosInfinity() throws ModelException {
+		Ship ship = facade.createShip(100, 100, 0, 0, 20, 0);
+		facade.thrust(ship, Double.POSITIVE_INFINITY);
+		assertEquals(0, facade.getShipVelocity(ship)[0], EPSILON);
+		assertEquals(0, facade.getShipVelocity(ship)[1], EPSILON);
+	}
+	
+	@Test
+	public void testThrustNegInfinity() throws ModelException {
+		Ship ship = facade.createShip(100, 100, 0, 0, 20, 0);
+		facade.thrust(ship, Double.NEGATIVE_INFINITY);
+		assertEquals(0, facade.getShipVelocity(ship)[0], EPSILON);
+		assertEquals(0, facade.getShipVelocity(ship)[1], EPSILON);
+	}
+	
 	 /*
 	  * |-------------------------------------------|
 	  * | 8. The next tests test the Turn method.	|
