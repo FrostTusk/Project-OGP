@@ -7,16 +7,6 @@ import be.kuleuven.cs.som.annotate.*;
 *		1. 	min/maxPosX/Y = the min/max X/Y position
 *		2.	constantMaxSpeed = the maximum speed this ship can achieve.
 *		3.	minRadius =  the minimum radius for each ship.
-*		
-*	2. Vragen:
-*		1. Documentation
-*		2. @Raw/@Basic
-*		3. JUnit	
-*		4. Exporting to JAR
-*	
-*	3. TODO:
-*		1. TestSuite 
-*		2. Finish up Documentation
 */
 
 /*

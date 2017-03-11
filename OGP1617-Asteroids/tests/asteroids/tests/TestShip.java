@@ -330,4 +330,10 @@ public class TestShip {
 		assertNotNull(facade.getShipOrientation(ship));
 		assertEquals(0, facade.getShipOrientation(ship), EPSILON);
 	}
+	
+	 /*
+	  * |-------------------------------------------------------|
+	  * | 7. The next tests test the Distance method method.	|
+	  * |-------------------------------------------------------| 
+	  */	
 }

@@ -1,0 +1,8 @@
+1. Vragen:
+	1. Documentation
+	2. @Raw/@Basic
+	3. JUnit
+	4. Exporting to JAR
+2. TODO:
+	1. TestSuite
+	2. Proofread
