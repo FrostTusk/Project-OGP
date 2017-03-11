@@ -27,7 +27,7 @@ public class TestShip {
 	
 	 /*
 	  * |-------------------------------------------|
-	  * | 2. The next test test the Initialization.	|
+	  * | 1. The next test test the Initialization.	|
 	  * |-------------------------------------------| 
 	  */	
 	
@@ -174,6 +174,12 @@ public class TestShip {
 	  * |---------------------------------------| 
 	  */	
 	
+	@Test
+	public void testCreateShipRadiusGeneric() throws ModelException {
+		Ship ship = facade.createShip(100, 200, 10, -10, 50, Math.PI);
+		assertNotNull(facade.getShipRadius(ship));
+		assertEquals(50, facade.getShipRadius(ship), EPSILON);
+	}
 	
 	@Test(expected = ModelException.class)
 	public void testCreateShipRadiusZero() throws ModelException {
@@ -195,7 +201,6 @@ public class TestShip {
 		facade.createShip(100, 200, 10, -10, Double.POSITIVE_INFINITY, Math.PI);
 	}
 	
-	
 	 /*
 	  * |-------------------------------------------|
 	  * | 5. The next tests test the Orientation.	|
@@ -204,14 +209,15 @@ public class TestShip {
 	
 	@Test
 	public void testCreateShipOGeneric() throws ModelException {
-		Ship ship1 = facade.createShip(100, 200, 100, 200, 20, 2*Math.PI);
-		assertEquals(2*Math.PI, facade.getShipOrientation(ship1), EPSILON);
-		
-		Ship ship2 = facade.createShip(100, 200, 100, 200, 20, 0);
-		assertEquals(0, facade.getShipOrientation(ship2), EPSILON);
-		
-		Ship ship3 = facade.createShip(100, 200, 100, 200, 20, Math.PI);
-		assertEquals(Math.PI, facade.getShipOrientation(ship3), EPSILON);
+		Ship ship1 = facade.createShip(100, 200, 100, 200, 20, 0);
+		assertNotNull(facade.getShipOrientation(ship1));
+		assertEquals(0, facade.getShipOrientation(ship1), EPSILON);
+		Ship ship2 = facade.createShip(100, 200, 100, 200, 20, Math.PI);
+		assertNotNull(facade.getShipOrientation(ship2));
+		assertEquals(Math.PI, facade.getShipOrientation(ship2), EPSILON);
+		Ship ship3 = facade.createShip(100, 200, 100, 200, 20, 2*Math.PI);
+		assertNotNull(facade.getShipOrientation(ship3));
+		assertEquals(2*Math.PI, facade.getShipOrientation(ship3), EPSILON);
 	}
 	
 	@Test(expected = ModelException.class)
@@ -232,7 +238,7 @@ public class TestShip {
 
 	
 	@Test
-	public void testMove() throws ModelException {
+	public void testMoveGeneric() throws ModelException {
 		Ship ship = facade.createShip(100, 100, 30, -15, 20, 0);
 		facade.move(ship, 1);
 		double[] position = facade.getShipPosition(ship);
@@ -277,7 +283,7 @@ public class TestShip {
 
 	 /*
 	  * |-------------------------------------------|
-	  * | 6. The next tests test the Turn method.	|
+	  * | 8. The next tests test the Turn method.	|
 	  * |-------------------------------------------| 
 	  */	
 	
@@ -333,9 +339,50 @@ public class TestShip {
 		assertEquals(0, facade.getShipOrientation(ship), EPSILON);
 	}
 	
+	
 	 /*
 	  * |-----------------------------------------------|
-	  * | 6. The next tests test the Overlap method.	|
+	  * | 9. The next tests test the Distance method.	|
+	  * |-----------------------------------------------| 
+	  */
+	
+	@Test
+	public void testDistanceIsPositive() throws ModelException {
+		Ship ship2 = facade.createShip(130, 0, 0, 0, 10, 0);;
+		Ship ship1 = facade.createShip(100, 0, 0, 0, 10, 0);
+		assertEquals(10, facade.getDistanceBetween(ship1, ship2), EPSILON);
+	}
+	
+	@Test
+	public void testDistanceIsNegative() throws ModelException {
+		Ship ship2 = facade.createShip(105, 100, 0, 0, 10, 0);;
+		Ship ship1 = facade.createShip(100, 100, 0, 0, 10, 0);
+		assertEquals(-15, facade.getDistanceBetween(ship1, ship2), EPSILON);
+	}
+	
+	@Test
+	public void testDistanceSameShip() throws ModelException {
+		Ship ship1 = facade.createShip(100, 100, 30, -15, 20, 0);
+		assertEquals(0, facade.getDistanceBetween(ship1, ship1), EPSILON);
+	}
+	
+	@Test(expected = ModelException.class)
+	public void testDistanceShip1IsNull() throws ModelException {
+		Ship ship1 = null;
+		Ship ship2 = facade.createShip(100, 100, 30, -15, 20, 0);
+		assertEquals(0, facade.getDistanceBetween(ship1, ship2), EPSILON);
+	}
+	
+	@Test(expected = ModelException.class)
+	public void testDistanceShip2IsNull() throws ModelException {
+		Ship ship1 = facade.createShip(100, 100, 30, -15, 20, 0);
+		Ship ship2 = null;
+		assertEquals(0, facade.getDistanceBetween(ship1, ship2), EPSILON);
+	}
+	
+	 /*
+	  * |-----------------------------------------------|
+	  * | 10. The next tests test the Overlap method.	|
 	  * |-----------------------------------------------| 
 	  */	
 	
@@ -353,35 +400,29 @@ public class TestShip {
 		assertFalse(facade.overlap(ship1, ship2));
 	}
 	
+	@Test
+	public void testTurnSameShip() throws ModelException {
+		Ship ship1 = facade.createShip(0, 0, 30, -15, 10, 0);
+		assertTrue(facade.overlap(ship1, ship1));
+	}
+	
 	@Test(expected = ModelException.class)
-	public void testTurnOverlapShipIsNull() throws ModelException {
+	public void testTurnOverlapShip1IsNull() throws ModelException {
 		Ship ship1 = null;
 		Ship ship2 = facade.createShip(100, 100, 30, -15, 20, 0);
 		assertFalse(facade.overlap(ship1, ship2));
 	}
 	
-	 /*
-	  * |-----------------------------------------------|
-	  * | 7. The next tests test the Distance method.	|
-	  * |-----------------------------------------------| 
-	  */
-	
-	@Test
-	public void testDistanceSameShip() throws ModelException {
-		Ship ship1 = facade.createShip(100, 100, 30, -15, 20, 0);
-		assertEquals(0, facade.getDistanceBetween(ship1, ship1), EPSILON);
-	}
-	
 	@Test(expected = ModelException.class)
-	public void testDistanceShipIsNull() throws ModelException {
-		Ship ship1 = null;
-		Ship ship2 = facade.createShip(100, 100, 30, -15, 20, 0);
-		assertEquals(0, facade.getDistanceBetween(ship1, ship2), EPSILON);
+	public void testTurnOverlapShip2IsNull() throws ModelException {
+		Ship ship1 = facade.createShip(100, 100, 30, -15, 20, 0);
+		Ship ship2 = null;
+		assertFalse(facade.overlap(ship1, ship2));
 	}
-	
-	 /*
+
+	/*
 	  * |-----------------------------------------------------------|
-	  * | 7. The next tests test the Collision Detection methods.	|
+	  * | 11. The next tests test the Collision Detection methods.	|
 	  * |-----------------------------------------------------------| 
 	  */
 	
