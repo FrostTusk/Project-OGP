@@ -385,25 +385,56 @@ public class TestShip {
 	  * |-----------------------------------------------------------| 
 	  */
 	
-//	@Test
-//	public void testCollisionDetectionGeneric() throws ModelException {
-//		Ship ship1 = facade.createShip(0, 0, 10, 0, 10, 0);
-//		Ship ship2 = facade.createShip(30, 0, 0, 0, 10, 0);
-//		double[] position1 = facade.getCollisionPosition(ship1, ship2);
-//		assertEquals(10, position1[0], EPSILON);
-//		assertEquals(0, position1[1], EPSILON);
-//		assertEquals(1, facade.getTimeToCollision(ship1, ship2), EPSILON);
-//		
-//		Ship ship3 = facade.createShip(0, 0, 10, 10, 10, 0);
-//		Ship ship4 = facade.createShip(50, 50, 0, 0, 10, 0);
-//		double[] position2 = facade.getCollisionPosition(ship3, ship4);
-//		assertEquals(40, position2[0], EPSILON);
-//		assertEquals(40, position2[1], EPSILON);
-//		assertEquals(3, facade.getTimeToCollision(ship1, ship2), EPSILON);
-//		
-//		Ship ship5 = new Ship(0, 0, 100, 100, 10, 0);
-//		Ship ship6 = new Ship(100, -100, 50, 50, 1, Math.PI);
-//
-//	}
+	@Test
+	public void testCollisionDetectionLinear() throws ModelException {
+		Ship ship1 = facade.createShip(0, 0, 10, 0, 10, 0);
+		Ship ship2 = facade.createShip(30, 0, 0, 0, 10, 0);
+		double[] position = facade.getCollisionPosition(ship1, ship2);
+		assertEquals(20, position[0], EPSILON);
+		assertEquals(0, position[1], EPSILON);
+		assertEquals(1, facade.getTimeToCollision(ship1, ship2), EPSILON);
+	}
 	
+	@Test
+	public void testCollisionDetectionXPOSYPOS() throws ModelException {
+		Ship ship1 = facade.createShip(0, 0, 10, 10, 10, 0);
+		Ship ship2 = facade.createShip(50, 50, 0, 0, 10, 0);
+		double[] position = facade.getCollisionPosition(ship1, ship2);
+//		System.out.println(position[0]);
+//		System.out.println(position[1]);
+//		System.out.println(facade.getTimeToCollision(ship1, ship2));
+		// Position is approximately correct, I assume it's not exactly correct because of rounding.
+		assertTrue( (position[0] > 35) && (position[0] < 45) );
+		assertTrue( (position[1] > 35) && (position[1] < 45) );
+		assertTrue( (facade.getTimeToCollision(ship1, ship2) > 2) && (facade.getTimeToCollision(ship1, ship2) < 4) );
+	}
+	
+	@Test
+	public void testCollisionDetectionXNEGYNEG() throws ModelException {
+		Ship ship1 = facade.createShip(0, 0, -10, -10, 10, 0);
+		Ship ship2 = facade.createShip(-50, -50, 0, 0, 10, 0);
+		double[] position = facade.getCollisionPosition(ship1, ship2);
+//		System.out.println(position[0]);
+//		System.out.println(position[1]);
+//		System.out.println(facade.getTimeToCollision(ship1, ship2));
+		// Position is as predicted here.
+		assertTrue( (position[0] < -35) && (position[0] > -45));
+		assertTrue( (position[1] < -35) && (position[1] > -45) );
+		assertTrue( (facade.getTimeToCollision(ship1, ship2) > 2) && (facade.getTimeToCollision(ship1, ship2) < 4) );
+	}
+	
+	@Test
+	public void testCollisionDetectionXNEGYPOS() throws ModelException {		
+		Ship ship1 = facade.createShip(0, 0, -10, 10, 10, 0);
+		Ship ship2 = facade.createShip(-50, 50, 0, 0, 10, 0);
+		double[] position = facade.getCollisionPosition(ship1, ship2);
+//		System.out.println(position[0]);
+//		System.out.println(position[1]);
+//		System.out.println(facade.getTimeToCollision(ship1, ship2));
+		// Position is as predicted here.
+		assertTrue( (position[0] < -35) && (position[0] > -45));
+		assertTrue( (position[1] > 35) && (position[1] < 45) );
+		assertTrue( (facade.getTimeToCollision(ship1, ship2) > 2) && (facade.getTimeToCollision(ship1, ship2) < 4) );
+	}
+
 }

@@ -674,12 +674,11 @@ public class Ship {
 			return Double.POSITIVE_INFINITY;
 		
 		double omega = this.getRadius() + ship.getRadius();
-		double d = (Math.pow(evaluateScalar(deltaR, deltaV), 2) - evaluateScalar(deltaV)*(evaluateScalar(deltaR) - Math.pow(omega, 2)));
+		double d = (Math.pow(evaluateScalar(deltaV, deltaR), 2) - evaluateScalar(deltaV)*(evaluateScalar(deltaR) - Math.pow(omega, 2)));
 		if (d <= 0)
 			return Double.POSITIVE_INFINITY;
 		
-
-		double deltaT = -(evaluateScalar(deltaV, deltaR) + Math.sqrt(d)) / evaluateScalar(deltaV);
+		double deltaT = -( (evaluateScalar(deltaV, deltaR) + Math.sqrt(d)) / evaluateScalar(deltaV) );
 		return deltaT;
 	}
 	
@@ -710,8 +709,19 @@ public class Ship {
 		double newPositionX2 = ship.getPositionX() + ship.getVelocityX() * time;
 		double newPositionY2 = ship.getPositionY() + ship.getVelocityY() * time;
 		
-		double angle = Math.atan(Math.abs(newPositionY2 - newPositionY1) / Math.abs(newPositionX2 - newPositionX1));
-		double[] vector = {newPositionX1 + this.getRadius() * Math.cos(angle), newPositionY1 + this.getRadius() * Math.sin(angle)};
+		double signX1 = 1;
+		if (newPositionX1 < 0)
+			signX1 = -1;
+		double signY1 = 1;
+		if (newPositionY1 < 0)
+			signY1 = -1;
+		
+		// Calculate the angle between the x component of the vector between newPosition1 and newPosition2.
+		// This angle is the same as the one between the collisionPosition vector (out of the first ship) and it's x component.
+		double angle = Math.atan( Math.abs(newPositionY2 - newPositionY1) / Math.abs(newPositionX2 - newPositionX1) );
+		// Calculate the exact position vector of the collision point by using the angle that has just been calculated
+		// and the first ship's new position vector.
+		double[] vector = {newPositionX1 + signX1 * this.getRadius() * Math.cos(angle), newPositionY1 + signY1 * this.getRadius() * Math.sin(angle)};
 		return vector;
 	}
 	
