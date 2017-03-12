@@ -15,18 +15,17 @@ import asteroids.util.ModelException;
 
 /*
  * Tests Index:
- * 1. Tests for Initialization.
- * 2. Tests for Position.
- * 3. Tests for Speed.
- * 4. Tests for Radius.
- * 5. Tests for Orientation.
- * 6. Tests for Move.
- * 7. Tests for Thrust.
- * 8. Tests for Turn.
- * 9. Tests for Distance.
- * 10. Tests for Overlap.
- * 11. Tests for Collision Detection.
- * 
+ * 1. Tests for Initialization
+ * 2. Tests for Position
+ * 3. Tests for Speed
+ * 4. Tests for Radius
+ * 5. Tests for Orientation
+ * 6. Tests for Move
+ * 7. Tests for Thrust
+ * 8. Tests for Turn
+ * 9. Tests for Distance
+ * 10. Tests for Overlap
+ * 11. Tests for Collision Detection
  */
 
 public class TestShip {
@@ -57,6 +56,9 @@ public class TestShip {
 		assertEquals(100, position[0], EPSILON);
 		assertEquals(200, position[1], EPSILON);
 		assertEquals(20, facade.getShipRadius(ship), EPSILON);
+		ship = facade.createShip();
+		assertNotNull(ship);
+		assertEquals(10, facade.getShipRadius(ship), EPSILON);
 	}
 
 	
@@ -549,7 +551,7 @@ public class TestShip {
 //		System.out.println(position[1]);
 //		System.out.println(facade.getTimeToCollision(ship1, ship2));
 		// Position is as predicted here.
-		assertTrue( (position[0] < -35) && (position[0] > -45));
+		assertTrue( (position[0] < -35) && (position[0] > -45) );
 		assertTrue( (position[1] < -35) && (position[1] > -45) );
 		assertTrue( (facade.getTimeToCollision(ship1, ship2) > 2) && (facade.getTimeToCollision(ship1, ship2) < 4) );
 	}

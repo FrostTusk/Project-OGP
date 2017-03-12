@@ -712,10 +712,10 @@ public class Ship {
 		double newPositionY2 = ship.getPositionY() + ship.getVelocityY() * time;
 		
 		double signX1 = 1;
-		if (newPositionX1 < 0)
+		if (newPositionX1 > newPositionX2)
 			signX1 = -1;
 		double signY1 = 1;
-		if (newPositionY1 < 0)
+		if (newPositionY1 > newPositionY2)
 			signY1 = -1;
 		
 		// Calculate the angle between the x component of the vector between newPosition1 and newPosition2.
