@@ -14,5 +14,4 @@ public class ModelException extends Exception {
   public ModelException(Throwable nested) {
     super(nested);
   }
-
 }
