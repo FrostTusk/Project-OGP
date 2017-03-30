@@ -19,6 +19,7 @@ import be.kuleuven.cs.som.annotate.*;
  * 6. Methods that handle Moving, Turning and Accelerating
  * 7. Methods that handle Calculating Distance, Overlap, and Collision Detection
  * 8. Helper Methods
+ * 9. Methods that handle the mass of the Ship
  */
 
 /**
@@ -33,6 +34,8 @@ import be.kuleuven.cs.som.annotate.*;
 *       	| isValidOrientation(getOrientation())
 * @invar  	Each ship can have its radius as radius.
 *       	| canHaveAsRadius(this.getRadius())
+* @invar  	Each ship must have a valid mass.
+*       	| canHaveAsMass(this.getMass())
 */
 
 public class Ship {
@@ -60,6 +63,8 @@ public class Ship {
 	 *         	The orientation for this new ship.
 	 * @param  	radius
 	 *         	The radius for this new ship.
+	 * @param  	mass
+	 *         	The mass for this new ship.
 	 * 
 	 * 
 	 * @pre    	The given orientation must be a valid orientation for any ship.
@@ -78,6 +83,9 @@ public class Ship {
 	 * @effect	The X and Y velocity of this new ship are set to
 	 *         	the given velocityX and velocityY.
 	 *         	| this.setVelocity(velocityX, velocityY)
+	 * @effect	The mass of this new ship is set to
+	 *         	the given mass.
+	 *         	| this.setMass(mass)
 	 *         	 
 	 * @throws 	IndexOutOfBoundsException
 	 *         	This new ship cannot have the given X and Y position as position.
@@ -86,7 +94,7 @@ public class Ship {
 	 *         	This new ship cannot have the given radius as its radius.
 	 *       	| ! canHaveAsRadius(this.getRadius())
 	 */
-	public Ship(double positionX, double positionY, double velocityX, double velocityY, double orientation, double radius)
+	public Ship(double positionX, double positionY, double velocityX, double velocityY, double orientation, double radius, double mass)
 		throws IndexOutOfBoundsException, IllegalArgumentException {
 		try {
 			this.setPosition(positionX, positionY);
@@ -103,6 +111,8 @@ public class Ship {
 		if (! canHaveAsRadius(radius))
 			throw new IllegalArgumentException();
 		this.radius = radius;
+		
+		setMass(mass);
 	}
 	
 	
@@ -763,4 +773,39 @@ public class Ship {
 		return vector1[0]*vector2[0] + vector1[1]*vector2[1];
 	}
 	
+	
+	/*
+	  * |---------------------------------------------------|
+	  * | 9. The next methods handle the mass of the ship.	|
+	  * |---------------------------------------------------| 
+	  */
+	
+	public double mass;
+	
+	public void setMass(double mass) {
+		if (mass < (4/3 * Math.PI * Math.pow(this.getRadius(), 3) * 1.42 * Math.pow(10, 12))) {
+			this.mass = (4/3 * Math.PI * Math.pow(this.getRadius(), 3) * 1.42 * Math.pow(10, 12));
+		}
+		else {
+			this.mass = mass;
+		}
+	}
+	
+	/**
+	 * Return the current mass of the ship.
+	 * @return	Returns the mass of the current ship.
+	 */
+	@Basic @Raw
+	public double getMass() {
+		return this.mass;
+	}
+	
+	/**
+	 * Return the current mass of the ship and its cargo.
+	 * @return	Returns the mass of the current ship + the mass of the objects on the ship.
+	 */
+	@Raw
+	public double getTotalMass() {
+		return this.getMass(); //TODO + mass of cargo
+	}
 }
