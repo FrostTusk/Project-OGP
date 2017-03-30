@@ -154,7 +154,7 @@ public class Ship {
 	/**
 	 * Return the X position of this ship.
 	 */
-	@Basic @Raw
+	@Basic 
 	public double getPositionX() {
 		return this.positionX;
 	}
@@ -247,7 +247,6 @@ public class Ship {
 	 *         	ship.
 	 *       	| ! isValidPosition(getPositionX(), getPositionY())
 	 */
-	@Raw
 	public void setPosition(double positionX, double positionY) 
 			throws IndexOutOfBoundsException {
 		if (! isValidPosition(positionX, positionY))
@@ -283,7 +282,7 @@ public class Ship {
 	/**
 	 * Return the velocity of this ship.
 	 */
-	@Basic @Raw
+	@Basic 
 	public double getVelocityX() {
 		return this.velocityX;
 	}
@@ -291,7 +290,7 @@ public class Ship {
 	/**
 	 * Return the velocity of this ship.
 	 */
-	@Basic @Raw
+	@Basic 
 	public double getVelocityY() {
 		return this.velocityY;
 	}
@@ -383,7 +382,7 @@ public class Ship {
 	/**
 	 * Return the orientation of this ship.
 	 */
-	@Basic @Raw
+	@Basic 
 	public double getOrientation() {
 		return this.orientation;
 	}
@@ -419,7 +418,6 @@ public class Ship {
 	 *         	orientation.
 	 *       	| new.getOrientation() == orientation
 	 */
-	@Raw
 	public void setOrientation(double orientation) {
 		assert isValidOrientation(orientation);
 		this.orientation = orientation;
@@ -456,7 +454,7 @@ public class Ship {
 	/**
 	 * Return the radius of this ship.
 	 */
-	@Basic @Immutable @Raw
+	@Basic  
 	public double getRadius() {
 		return this.radius;
 	}
@@ -471,7 +469,6 @@ public class Ship {
 	 * 			as a valid radius or not. true if it can, false if not.
 	 *       	| result == (POSITIVE_INFINITY > radius) && (radius >= this.getMinRadius())
 	*/
-	@Raw
 	public boolean canHaveAsRadius(double radius) {
 		if ( (Double.POSITIVE_INFINITY > radius) && (radius >= this.getMinRadius()) )
 			return true;
