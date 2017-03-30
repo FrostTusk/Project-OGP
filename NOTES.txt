@@ -1,7 +1,0 @@
-1. Vragen:
-	1. Documentation
-		1. Declarative
-		2. @Raw -> Wanneer niet bij Ship
-	2. Exporting to JAR
-2. TODO:
-	1. Proofread
