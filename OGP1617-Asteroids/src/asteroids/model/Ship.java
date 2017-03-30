@@ -95,12 +95,12 @@ public class Ship {
 	 *       	| ! canHaveAsRadius(this.getRadius())
 	 */
 	public Ship(double positionX, double positionY, double velocityX, double velocityY, double orientation, double radius, double mass)
-		throws IndexOutOfBoundsException, IllegalArgumentException {
+		throws IllegalArgumentException {
 		try {
 			this.setPosition(positionX, positionY);
 		}
-		catch (IndexOutOfBoundsException exc) {
-			throw new IndexOutOfBoundsException();
+		catch (IllegalArgumentException exc) {
+			throw new IllegalArgumentException();
 		}
 
 		setVelocity(velocityX, velocityY);
@@ -248,9 +248,9 @@ public class Ship {
 	 *       	| ! isValidPosition(getPositionX(), getPositionY())
 	 */
 	public void setPosition(double positionX, double positionY) 
-			throws IndexOutOfBoundsException {
+			throws IllegalArgumentException {
 		if (! isValidPosition(positionX, positionY))
-			throw new IndexOutOfBoundsException();
+			throw new IllegalArgumentException();
 		this.positionX = positionX;
 		this.positionY = positionY;
 	}
