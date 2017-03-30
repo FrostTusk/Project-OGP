@@ -1,9 +1,10 @@
-1. Vragen:
+1. Questions:
 	1. Documentation
 		1. Declarative
 		2. @Raw
 		3. @Imutable
 	2. Binary Relations
+	3. When to test facade
 
 2. TODO:
 	1. Proofread
@@ -19,4 +20,4 @@
 		1. Ship
 		2. Bullet
 		3. World
-	4. Wanneer testen in facade wanneer niet.
+
