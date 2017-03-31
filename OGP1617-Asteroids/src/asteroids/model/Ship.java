@@ -96,7 +96,7 @@ public class Ship {
 	public Ship(double positionX, double positionY, double velocityX, double velocityY, double orientation, double radius/*, double mass*/)
 		throws IllegalArgumentException {
 		try {
-			this.setPosition(positionX, positionY);
+			this.setPosition(new Position(positionX, positionY));
 		}
 		catch (IllegalArgumentException exc) {
 			throw new IllegalArgumentException();
@@ -122,107 +122,11 @@ public class Ship {
 		  * |-------------------------------------------------------| 
 		  */
 	
+	private Position position;
 	
-	
-	/**
-	 * Variable registering the X position of this ship.
-	 */
-	private double positionX;
-	/**
-	 * Variable registering the minimum X position of this ship.
-	 */
-	private final double minPositionX = Double.NEGATIVE_INFINITY;
-	/**
-	 * Variable registering the maximum X position of this ship.
-	 */
-	private final double maxPositionX = Double.POSITIVE_INFINITY;
-	/**
-	 * Variable registering the Y position of this ship.
-	 */
-	private double positionY;
-	/**
-	 * Variable registering the minimum Y position of this ship.
-	 */
-	private final double minPositionY = Double.NEGATIVE_INFINITY;
-	/**
-	 * Variable registering the maximum Y position of this ship.
-	 */
-	private final double maxPositionY = Double.POSITIVE_INFINITY;
-	
-	
-	/**
-	 * Return the X position of this ship.
-	 */
-	@Basic @Raw
-	public double getPositionX() {
-		return this.positionX;
-	}
-	
-	/**
-	 * Return the minimum X position of this ship.
-	 */
-	@Basic @Immutable @Raw
-	public double getMinPositionX() {
-		return this.minPositionX;
-	}
-	
-	/**
-	 * Return the max X position of this ship.
-	 */
-	@Basic @Immutable @Raw 
-	public double getMaxPositionX() {
-		return this.maxPositionX;
-	}
-	
-	/**
-	 * Return the Y position of this ship.
-	 */
-	@Basic @Raw
-	public double getPositionY() {
-		return this.positionY;
-	}
-	
-	/**
-	 * Return the minimum Y position of this ship.
-	 */
-	@Basic @Immutable @Raw
-	public double getMinPositionY() {
-		return this.minPositionY;
-	}
-	
-	/**
-	 * Return the max Y position of this ship.
-	 */
-	@Basic @Immutable @Raw 
-	public double getMaxPositionY() {
-		return this.maxPositionY;
-	}
-	
-	
-	/**
-	 * Check whether the given position is a valid position for
-	 * any ship.
-	 *  
-	 * @param  	positionX
-	 *         	The X position to check.
-	 * @param	positionY
-	 * 			The Y position to check.
-	 * @return	Returns whether or not the given position is a valid position.
-	 * 			true if it is, false if not.
-	 *       	| result == (! ( (java.lang.Double.isNaN(positionX)) || (java.lang.Double.isNaN(positionY)) ) &&
-	 *       	|			(this.getMinPositionX() < positionX) && (this.getMaxPositionX() > positionX) &&
-	 *			|			(this.getMinPositionY() < positionY) && (this.getMaxPositionY() > positionY)      
-	 */
-	public boolean isValidPosition(double positionX, double positionY) {
-		// A position has to be a number.
-		if ( (java.lang.Double.isNaN(positionX)) || (java.lang.Double.isNaN(positionY)) )
-			return false;
-		// A position cannot be smaller/bigger or equal to negative/positive infinity.
-		if ( (getMinPositionX() < positionX) && (getMaxPositionX() > positionX) &&
-				(getMinPositionY() < positionY) && (getMaxPositionY() > positionY) )
-			return true;
-		else
-			return false;	
+	@Basic 
+	private Position getPosition() {
+		return this.position;
 	}
 	
 	
@@ -246,12 +150,11 @@ public class Ship {
 	 *         	ship.
 	 *       	| ! isValidPosition(getPositionX(), getPositionY())
 	 */
-	public void setPosition(double positionX, double positionY) 
+	public void setPosition(Position position) 
 			throws IllegalArgumentException {
-		if (! isValidPosition(positionX, positionY))
+		if (! isValidPosition(position))
 			throw new IllegalArgumentException();
-		this.positionX = positionX;
-		this.positionY = positionY;
+		this.position = position;
 	}
 	
 	
@@ -558,11 +461,10 @@ public class Ship {
 		if (time < 0)
 			throw new IllegalArgumentException();
 		
-		double newPositionX = getPositionX() + getVelocityX() * time;
-		double newPositionY = getPositionY() + getVelocityY() * time;
+		Position newPosition = new Position(getPosition().getPositionX() + getVelocityX() * time, getPosition().getPositionY() + getVelocityY() * time);
 
 		try {
-			setPosition(newPositionX, newPositionY);
+			setPosition(newPosition);
 		}
 		catch (IndexOutOfBoundsException exc) {
 			throw new IndexOutOfBoundsException();
@@ -666,8 +568,8 @@ public class Ship {
 		if (ship == null) 
 			throw new IllegalArgumentException();
 		
-		distanceX = Math.sqrt(Math.pow(this.getPositionX() - ship.getPositionX(), 2));
-		distanceY = Math.sqrt(Math.pow(this.getPositionY() - ship.getPositionY(), 2));
+		distanceX = Math.sqrt(Math.pow(this.getPosition().getPositionX() - ship.getPosition().getPositionX(), 2));
+		distanceY = Math.sqrt(Math.pow(this.getPosition().getPositionY() - ship.getPosition().getPositionY(), 2));
 		
 		// use formula of Pythagoras to calculate total distance between centers of the ships
 		distance = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
@@ -725,7 +627,7 @@ public class Ship {
 		if (ship == null) 
 			throw new IllegalArgumentException();
 	
-		double[] deltaR = {ship.getPositionX() - this.getPositionX(), ship.getPositionY() - this.getPositionY()};
+		double[] deltaR = {ship.getPosition().getPositionX() - this.getPosition().getPositionX(), ship.getPosition().getPositionY() - this.getPosition().getPositionY()};
 		double[] deltaV = {ship.getVelocityX() - this.getVelocityX(), ship.getVelocityY() - this.getVelocityY()};
 		if (evaluateScalar(deltaR, deltaV) >= 0)
 			return Double.POSITIVE_INFINITY;
@@ -761,24 +663,22 @@ public class Ship {
 		if (time == Double.POSITIVE_INFINITY)
 			return null;
 		
-		double newPositionX1 = this.getPositionX() + this.getVelocityX() * time;
-		double newPositionY1 = this.getPositionY() + this.getVelocityY() * time;
-		double newPositionX2 = ship.getPositionX() + ship.getVelocityX() * time;
-		double newPositionY2 = ship.getPositionY() + ship.getVelocityY() * time;
+		Position newPosition1 = new Position(this.getPosition().getPositionX() + this.getVelocityX() * time, this.getPosition().getPositionY() + this.getVelocityY() * time);
+		Position newPosition2 = new Position(ship.getPosition().getPositionX() + ship.getVelocityX() * time, ship.getPosition().getPositionY() + ship.getVelocityY() * time);
 		
 		double signX1 = 1;
-		if (newPositionX1 > newPositionX2)
+		if (newPosition1.getPositionX() > newPosition2.getPositionX())
 			signX1 = -1;
 		double signY1 = 1;
-		if (newPositionY1 > newPositionY2)
+		if (newPosition1.getPositionY() > newPosition2.getPositionY())
 			signY1 = -1;
 		
 		// Calculate the angle between the x component of the vector between newPosition1 and newPosition2.
 		// This angle is the same as the one between the collisionPosition vector (out of the first ship) and it's x component.
-		double angle = Math.atan( Math.abs(newPositionY2 - newPositionY1) / Math.abs(newPositionX2 - newPositionX1) );
+		double angle = Math.atan( Math.abs(newPosition2.getPositionY() - newPosition1.getPositionY()) / Math.abs(newPosition2.getPositionX() - newPosition1.getPositionX()) );
 		// Calculate the exact position vector of the collision point by using the angle that has just been calculated
 		// and the first ship's new position vector.
-		double[] vector = {newPositionX1 + signX1 * this.getRadius() * Math.cos(angle), newPositionY1 + signY1 * this.getRadius() * Math.sin(angle)};
+		double[] vector = {newPosition1.getPositionX() + signX1 * this.getRadius() * Math.cos(angle), newPosition1.getPositionY() + signY1 * this.getRadius() * Math.sin(angle)};
 		return vector;
 	}
 	
