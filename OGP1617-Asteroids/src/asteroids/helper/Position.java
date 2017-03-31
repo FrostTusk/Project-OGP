@@ -1,12 +1,31 @@
-package asteroids.model;
+package asteroids.helper;
 
 import be.kuleuven.cs.som.annotate.*;
 
 // Helper class to store the data for positions
+/**
+ * @invar  	Each position must be a valid position.
+ *       	| this.isValidPosition(this.getPositionX(), this.getPositionY())
+ */
 @Value
 public class Position {
 	 
-
+	/**
+	 * Initialize this new bullet with given X and Y position, a given X and Y velocity, a given orientation, and a given radius.
+	 *
+	 * @param  	positionX
+	 *         	The X position for this new bullet.
+	 * @param  	positionY
+	 * 			The Y position of this new position
+	 * 
+	 * @effect 	The positions of this new bullet are set to
+	 *         	the given X position and Y position.
+	 *       	| this.setPosition(positionX, positionY)
+	 *         	 
+	 * @throws 	IllegalArgumentException
+	 *         	This new bullet cannot have the given X and Y position as position.
+	 *       	| ! this.getPosition().isValidPosition(positionX, positionY)
+	 */
 	public Position(double positionX, double positionY) throws IllegalArgumentException {
 		this.minPositionX = Double.NEGATIVE_INFINITY;
 		this.maxPositionX = Double.POSITIVE_INFINITY;
@@ -36,84 +55,84 @@ public class Position {
 		}
 	}
 	
+	
 	/**
-	 * Variable registering the X position of this ship.
+	 * Variable registering the X position of this position.
 	 */
 	private double positionX;
 	/**
-	 * Variable registering the minimum X position of this ship.
+	 * Variable registering the minimum X position of this position.
 	 */
 	private final double minPositionX;
 	/**
-	 * Variable registering the maximum X position of this ship.
+	 * Variable registering the maximum X position of this position.
 	 */
 	private final double maxPositionX;
 	/**
-	 * Variable registering the Y position of this ship.
+	 * Variable registering the Y position of this position.
 	 */
 	private double positionY;
 	/**
-	 * Variable registering the minimum Y position of this ship.
+	 * Variable registering the minimum Y position of this position.
 	 */
 	private final double minPositionY;
 	/**
-	 * Variable registering the maximum Y position of this ship.
+	 * Variable registering the maximum Y position of this position.
 	 */
 	private final double maxPositionY;
 	
 	
 	/**
-	 * Return the X position of this ship.
+	 * Return the X position of this position.
 	 */
-	@Basic 
+	@Basic @Immutable
 	public double getPositionX() {
 		return this.positionX;
 	}
 	
 	/**
-	 * Return the minimum X position of this ship.
+	 * Return the minimum X position of this position.
 	 */
-	@Basic @Immutable @Raw
+	@Basic @Immutable
 	public double getMinPositionX() {
 		return this.minPositionX;
 	}
 	
 	/**
-	 * Return the max X position of this ship.
+	 * Return the max X position of this position.
 	 */
-	@Basic @Immutable @Raw 
+	@Basic @Immutable
 	public double getMaxPositionX() {
 		return this.maxPositionX;
 	}
 	
 	/**
-	 * Return the Y position of this ship.
+	 * Return the Y position of this position.
 	 */
-	@Basic @Raw
+	@Basic @Immutable
 	public double getPositionY() {
 		return this.positionY;
 	}
 	
 	/**
-	 * Return the minimum Y position of this ship.
+	 * Return the minimum Y position of this position.
 	 */
-	@Basic @Immutable @Raw
+	@Basic @Immutable
 	public double getMinPositionY() {
 		return this.minPositionY;
 	}
 	
 	/**
-	 * Return the max Y position of this ship.
+	 * Return the max Y position of this position.
 	 */
-	@Basic @Immutable @Raw 
+	@Basic @Immutable
 	public double getMaxPositionY() {
 		return this.maxPositionY;
 	}
 	
 	
 	/**
-	 * Check whether the given position is a valid position for
-	 * any ship.
+	 * Check whether the given position is a valid position.
 	 *  
 	 * @param  	positionX
 	 *         	The X position to check.
@@ -122,14 +141,14 @@ public class Position {
 	 * @return	Returns whether or not the given position is a valid position.
 	 * 			true if it is, false if not.
 	 *       	| result == (! ( (java.lang.Double.isNaN(positionX)) || (java.lang.Double.isNaN(positionY)) ) &&
-	 *       	|			(this.getMinPositionX() < positionX) && (this.getMaxPositionX() > positionX) &&
-	 *			|			(this.getMinPositionY() < positionY) && (this.getMaxPositionY() > positionY)      
+	 *       	|			(this.getMinpositionX() < positionX) && (this.getMaxpositionX() > positionX) &&
+	 *			|			(this.getMinpositionY() < positionY) && (this.getMaxpositionY() > positionY)      
 	 */
-	private boolean isValidPosition(double positionX, double positionY) {
+	public boolean isValidPosition(double positionX, double positionY) {
 		// A position has to be a number.
 		if ( (java.lang.Double.isNaN(positionX)) || (java.lang.Double.isNaN(positionY)) )
 			return false;
-		// A position cannot be smaller/bigger or equal to negative/positive infinity.
+		// A position cannot be smaller/bigger or equal to it's lower and upper bounds.
 		if ( (getMinPositionX() < positionX) && (getMaxPositionX() > positionX) &&
 				(getMinPositionY() < positionY) && (getMaxPositionY() > positionY) )
 			return true;
@@ -139,24 +158,24 @@ public class Position {
 	
 	
 	/**
-	 * Set the position of this ship to the given position.
+	 * Set the position of this position to the given position.
 	 * 
 	 * @param  	positionX
-	 *         	The new X position for this ship.
+	 *         	The new X position for this position.
 	 * @param  	positionY
-	 * 		   	The new Y position for this ship.
+	 * 		   	The new Y position for this position.
 	 * 
-	 * @post   	The X position of this new ship is equal to
+	 * @post   	The X position of this new position is equal to
 	 *         	the given X position.
 	 *       	| new.getPositionX() == positionX
-	 * @post   	The Y position of this new ship is equal to
+	 * @post   	The Y position of this new position is equal to
 	 *         	the given Y position.
 	 *       	| new.getPositionY() == positionY
 	 *       
 	 * @throws 	IndexOutOfBoundsException
 	 *         	The given position is not a valid position for any
-	 *         	ship.
-	 *       	| ! isValidPosition(getPositionX(), getPositionY())
+	 *         	position.
+	 *       	| ! this.isValidPosition(getPositionX(), getPositionY())
 	 */
 	private void setPosition(double positionX, double positionY) 
 			throws IllegalArgumentException {
@@ -166,6 +185,4 @@ public class Position {
 		this.positionY = positionY;
 	}
 
-	
 }
-

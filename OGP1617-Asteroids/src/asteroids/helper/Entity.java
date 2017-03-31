@@ -1,4 +1,4 @@
-package asteroids.model;
+package asteroids.helper;
 
 public class Entity {
 

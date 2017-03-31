@@ -1,22 +1,126 @@
 package asteroids.model;
 
+import asteroids.helper.Position;
 import be.kuleuven.cs.som.annotate.*;
 
-public class Bullet {
+/* NOTES:
+*	1. Constants:
+*		1.	constantMaxSpeed = the maximum speed this bullet can achieve.
+*		2.	minRadius =  the minimum radius for each bullet.
+*/
 
+/*
+ * Methods Index:
+ * 1. Methods that handle the Initialization of the bullet
+ * 2. Methods that handle the Position of the bullet
+ * 3. Methods that handle the Speed of the bullet
+ * 4. Methods that handle the Radius of the bullet
+ * 5. Methods that handle the Mass of the bullet
+ * 6. Methods that handle Moving, Turning and Accelerating
+ * 7. Methods that handle Calculating Distance, Overlap, and Collision Detection
+ * 8. Helper Methods
+ */
+
+/**
+* @invar  	The position of each bullet must be a valid position for any
+*         	bullet.
+*       	| this.getPosition().isValidPosition(this.position.getPositionX(), this.position.getPositionY())
+* @invar  	The speed of each bullet must be a valid speed for any
+*         	bullet.
+*       	| this.isValidSpeed(getVelocityX(), getVelocityY())
+* @invar  	Each bullet can have its radius as radius.
+*       	| this.canHaveAsRadius(this.getRadius())
+* @invar  	Each bullet must have a valid mass.
+*       	| this.canHaveAsMass(this.getMass())
+*/
+public class Bullet {
+	
+			/*
+			 * |----------------------------------------------------------------|
+			 * | 1. The next method handles the Initialization of the bullet.	|
+			 * |----------------------------------------------------------------| 
+			 */
+
+	
+	/**
+	 * Initialize this new bullet with given X and Y position, a given X and Y velocity, a given orientation, and a given radius.
+	 *
+	 * @param  	positionX
+	 *         	The X position for this new bullet.
+	 * @param  	positionY
+	 * 			The Y position of this new bullet.
+	 * @param  	velocityX
+	 *         	The X velocity for this new bullet.
+	 * @param	velocityY
+	 * 			The Y velocity for this new bullet.
+	 * @param  	radius
+	 *         	The radius for this new bullet.
+	 * @param  	mass
+	 *         	The mass for this new bullet.
+	 * 
+	 * @post   	The radius of this new bullet is equal to the given
+	 *         	radius.
+	 *       	| new.getRadius() == radius
+	 *       
+	 * @effect 	The positions of this new bullet are set to
+	 *         	the given X position and Y position.
+	 *       	| this.setPosition(positionX, positionY)
+	 * @effect	The X and Y velocity of this new bullet are set to
+	 *         	the given velocityX and velocityY.
+	 *         	| this.setVelocity(velocityX, velocityY)
+	 * @effect	The mass of this new bullet is set to
+	 *         	the given mass.
+	 *         	| this.setMass(mass)
+	 *         	 
+	 * @throws 	IndexOutOfBoundsException
+	 *         	This new bullet cannot have the given X and Y position as position.
+	 *       	| ! this.getPosition().isValidPosition(positionX, positionY)
+	 * @throws 	IllegalArgumentException
+	 *         	This new bullet cannot have the given radius as its radius.
+	 *       	| ! this.canHaveAsRadius(this.getRadius())
+	 */
+	public Bullet(double positionX, double positionY, double velocityX, double velocityY, double radius)
+		throws IllegalArgumentException {
+		try {
+			this.setPosition(positionX, positionY);
+		}
+		catch (IllegalArgumentException exc) {
+			throw new IllegalArgumentException();
+		}
+
+		this.setVelocity(velocityX, velocityY);
 		
+		
+		if (! canHaveAsRadius(radius))
+			throw new IllegalArgumentException();
+		this.radius = radius;
+		
+	}
+	
+	
+
+			/*
+			 * |--------------------------------------------------------|
+			 * | 2. The next methods handle the Position of the bullet.	|
+			 * |--------------------------------------------------------| 
+			 */
+	
+	
+	
 	/**
 	 * Variable registering the position of this bullet.
 	 */
 	private Position position;
 	
+	
 	/**
 	 * Return the position of this bullet.
 	 */
-	@Basic 
+	@Basic @Raw
 	public Position getPosition() {
 		return this.position;
 	}
+	
 	
 	/**
 	 * Set the position of this bullet to the given position.
@@ -36,7 +140,7 @@ public class Bullet {
 	 * @throws 	IllegalArgumentException
 	 *         	The given position is not a valid position for any
 	 *         	bullet.
-	 *       	| ! Position(positionX, PositonY).isValidPosition(positionX, positonY)
+	 *       	| ! this.getPosition().isValidPosition(positionX, positonY)
 	 */
 	public void setPosition(double positionX, double positionY) 
 			throws IllegalArgumentException {
@@ -50,11 +154,11 @@ public class Bullet {
 
 	
 	
-	 /*
-	  * |-------------------------------------------------------|
-	  * | 3. The next methods handle the Speed of the Bullet.	|
-	  * |-------------------------------------------------------| 
-	  */
+			/*
+			 * |--------------------------------------------------------|
+			 * | 3. The next methods handle the Speed of the bullet.	|
+			 * |--------------------------------------------------------| 
+			 */
 	
 	
 	
@@ -75,7 +179,7 @@ public class Bullet {
 	/**
 	 * Return the X velocity of this bullet.
 	 */
-	@Basic 
+	@Basic @Raw
 	public double getVelocityX() {
 		return this.velocityX;
 	}
@@ -83,7 +187,7 @@ public class Bullet {
 	/**
 	 * Return the Y velocity of this bullet.
 	 */
-	@Basic 
+	@Basic @Raw
 	public double getVelocityY() {
 		return this.velocityY;
 	}
@@ -158,26 +262,27 @@ public class Bullet {
 	}
 	
 	
+	
 		 /*
 		  * |-------------------------------------------------------|
-		  * | 5. The next methods handle the Radius of the Ship.	|
+		  * | 4. The next methods handle the Radius of the bullet.	|
 		  * |-------------------------------------------------------| 
 		  */
 	
 	
 	
 	/**
-	* Variable registering the radius of this ship.
+	* Variable registering the radius of this bullet.
 	*/
-	private final double radius = 0;
+	private final double radius;
 	/**
-	* Variable registering the minimum radius of this ship.
+	* Variable registering the minimum radius of this bullet.
 	*/
-	private final double minRadius = 10;
+	private final double minRadius = 1;
 	
 	
 	/**
-	*  Return the minimum radius of this ship.
+	*  Return the minimum radius of this bullet.
 	*/
 	@Basic @Immutable @Raw
 	public double getMinRadius() {
@@ -185,16 +290,16 @@ public class Bullet {
 	}
 	
 	/**
-	* Return the radius of this ship.
+	* Return the radius of this bullet.
 	*/
-	@Basic  
+	@Basic @Raw
 	public double getRadius() {
 		return this.radius;
 	}
 	
 	
 	/**
-	* Check whether this ship can have the given radius as its radius.
+	* Check whether this bullet can have the given radius as its radius.
 	*  
 	* @param  	radius
 	*         	The radius to check.
@@ -210,25 +315,25 @@ public class Bullet {
 	
 	
 	
-		/*
-		  * |-------------------------------------------------------|
-		  * | 5. The next methods handle the Radius of the Ship.	|
-		  * |-------------------------------------------------------| 
-		  */
+			/*
+		     * |----------------------------------------------------|
+		     * | 5. The next methods handle the Mass of the bullet.	|
+		     * |----------------------------------------------------| 
+		     */
 	
 	
 	
 	/**
-	 * Variable registering the mass of this ship.
+	 * Variable registering the mass of this bullet.
 	 */
 	public double mass;
 	
 	
 	/**
-	 * Return the current mass of the ship.
-	 * @return	Returns the mass of the current ship.
+	 * Return the current mass of the bullet.
+	 * @return	Returns the mass of the current bullet.
 	 */
-	@Basic
+	@Basic @Raw
 	public double getMass() {
 		return this.mass;
 	}
@@ -250,10 +355,11 @@ public class Bullet {
 	
 	
 	/**
-	 * Return the current mass of the ship and its cargo.
-	 * @return	Returns the mass of the current ship + the mass of the objects on the ship.
+	 * Return the current mass of the bullet and its cargo.
+	 * @return	Returns the mass of the current bullet + the mass of the objects on the bullet.
 	 */
 	public double getTotalMass() {
 		return this.getMass(); //TODO + mass of cargo
 	}
+	
 }

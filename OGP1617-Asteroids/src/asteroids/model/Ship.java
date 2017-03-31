@@ -16,10 +16,10 @@ import be.kuleuven.cs.som.annotate.*;
  * 3. Methods that handle the Speed of the Ship
  * 4. Methods that handle the Orientation of the Ship
  * 5. Methods that handle the Radius of the Ship
- * 6. Methods that handle Moving, Turning and Accelerating
- * 7. Methods that handle Calculating Distance, Overlap, and Collision Detection
- * 8. Helper Methods
- * 9. Methods that handle the mass of the Ship
+ * 6. Methods that handle the Mass of the ship
+ * 7. Methods that handle Moving, Turning and Accelerating
+ * 8. Methods that handle Calculating Distance, Overlap, and Collision Detection
+ * 9. Helper Methods
  */
 
 /**
@@ -37,14 +37,13 @@ import be.kuleuven.cs.som.annotate.*;
 * @invar  	Each ship must have a valid mass.
 *       	| canHaveAsMass(this.getMass())
 */
-
 public class Ship {
 	
 		/*
-		  * |---------------------------------------------------------------|
-		  * | 1. The next method handles the Initialization of the Ship.	|
-		  * |---------------------------------------------------------------| 
-		  */
+		 * |------------------------------------------------------------|
+		 * | 1. The next method handles the Initialization of the Ship.	|
+		 * |------------------------------------------------------------| 
+		 */
 	
 	
 	
@@ -154,7 +153,7 @@ public class Ship {
 	/**
 	 * Return the X position of this ship.
 	 */
-	@Basic 
+	@Basic @Raw
 	public double getPositionX() {
 		return this.positionX;
 	}
@@ -282,7 +281,7 @@ public class Ship {
 	/**
 	 * Return the velocity of this ship.
 	 */
-	@Basic 
+	@Basic @Raw
 	public double getVelocityX() {
 		return this.velocityX;
 	}
@@ -290,7 +289,7 @@ public class Ship {
 	/**
 	 * Return the velocity of this ship.
 	 */
-	@Basic 
+	@Basic @Raw
 	public double getVelocityY() {
 		return this.velocityY;
 	}
@@ -382,7 +381,7 @@ public class Ship {
 	/**
 	 * Return the orientation of this ship.
 	 */
-	@Basic 
+	@Basic @Raw
 	public double getOrientation() {
 		return this.orientation;
 	}
@@ -454,7 +453,7 @@ public class Ship {
 	/**
 	 * Return the radius of this ship.
 	 */
-	@Basic  
+	@Basic @Raw
 	public double getRadius() {
 		return this.radius;
 	}
@@ -477,9 +476,58 @@ public class Ship {
 	
 	
 	
+	/*
+	  * |---------------------------------------------------|
+	  * | 6. The next methods handle the mass of the ship.	|
+	  * |---------------------------------------------------| 
+	  */
+	
+	
+	
+	/**
+	 * Variable registering the mass of this ship.
+	 */
+	public double mass;
+	
+	
+	/**
+	 * Return the current mass of the ship.
+	 * @return	Returns the mass of the current ship.
+	 */
+	@Basic @Raw
+	public double getMass() {
+		return this.mass;
+	}
+	
+	
+	public boolean isValidMass(double mass) {
+		return mass > ( 4/3 * Math.PI * Math.pow(this.getRadius(), 3) * (1.42 * Math.pow(10, 12)) );
+	}
+	
+	
+	public void setMass(double mass) {
+		if (isValidMass(mass)) {
+			this.mass = mass;
+		}
+		else {
+			this.mass = (4/3 * Math.PI * Math.pow(this.getRadius(), 3) * 1.42 * Math.pow(10, 12));
+		}
+	}
+	
+	
+	/**
+	 * Return the current mass of the ship and its cargo.
+	 * @return	Returns the mass of the current ship + the mass of the objects on the ship.
+	 */
+	public double getTotalMass() {
+		return this.getMass(); //TODO + mass of cargo
+	}
+	
+	
+	
 		 /*
 		  * |---------------------------------------------------------------|
-		  * | 6. The next methods handle Moving, Turning and Accelerating.	|
+		  * | 7. The next methods handle Moving, Turning and Accelerating.	|
 		  * |---------------------------------------------------------------| 
 		  */
 	
@@ -591,7 +639,7 @@ public class Ship {
 	
 		/*
 		  * |---------------------------------------------------------------------------------------|
-		  * | 7. The next methods handle Calculating Distance, Overlap, and Collision Detection.	|
+		  * | 8. The next methods handle Calculating Distance, Overlap, and Collision Detection.	|
 		  * |---------------------------------------------------------------------------------------| 
 		  */
 	
@@ -735,57 +783,7 @@ public class Ship {
 	}
 	
 	
-	
-	
-	/*
-	  * |---------------------------------------------------|
-	  * | 8. The next methods handle the mass of the ship.	|
-	  * |---------------------------------------------------| 
-	  */
-	
-	
-	
-	/**
-	 * Variable registering the mass of this ship.
-	 */
-	public double mass;
-	
-	
-	/**
-	 * Return the current mass of the ship.
-	 * @return	Returns the mass of the current ship.
-	 */
-	@Basic
-	public double getMass() {
-		return this.mass;
-	}
-	
-	
-	public boolean isValidMass(double mass) {
-		return mass > ( 4/3 * Math.PI * Math.pow(this.getRadius(), 3) * (1.42 * Math.pow(10, 12)) );
-	}
-	
-	
-	public void setMass(double mass) {
-		if (isValidMass(mass)) {
-			this.mass = mass;
-		}
-		else {
-			this.mass = (4/3 * Math.PI * Math.pow(this.getRadius(), 3) * 1.42 * Math.pow(10, 12));
-		}
-	}
-	
-	
-	/**
-	 * Return the current mass of the ship and its cargo.
-	 * @return	Returns the mass of the current ship + the mass of the objects on the ship.
-	 */
-	public double getTotalMass() {
-		return this.getMass(); //TODO + mass of cargo
-	}
-	
-	
-	
+
 	/*
 	  * |-------------------------------------------|
 	  * | 9. The next methods are helper methods.	|
