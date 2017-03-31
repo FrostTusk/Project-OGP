@@ -5,9 +5,8 @@ import be.kuleuven.cs.som.annotate.*;
 
 /* NOTES:
 *	1. Constants:
-*		1. 	min/maxPosX/Y = the min/max X/Y position
-*		2.	constantMaxSpeed = the maximum speed this ship can achieve.
-*		3.	minRadius =  the minimum radius for each ship.
+*		1.	constantMaxSpeed = the maximum speed this ship can achieve.
+*		2.	minRadius =  the minimum radius for each ship.
 */
 
 /*
@@ -724,3 +723,4 @@ public class Ship {
 	}
 	
 }
+ 
