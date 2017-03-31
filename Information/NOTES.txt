@@ -5,7 +5,8 @@
 		3. @Imutable
 	2. Binary Relations
 	3. When to test facade
-
+	4. Hoe class position doen
+		1. Wat met documentatie in Ship?
 2. TODO:
 	1. Proofread
 	2. Ship Class

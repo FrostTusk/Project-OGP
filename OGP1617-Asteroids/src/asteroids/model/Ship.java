@@ -94,7 +94,7 @@ public class Ship {
 	 *         	This new ship cannot have the given radius as its radius.
 	 *       	| ! canHaveAsRadius(this.getRadius())
 	 */
-	public Ship(double positionX, double positionY, double velocityX, double velocityY, double orientation, double radius, double mass)
+	public Ship(double positionX, double positionY, double velocityX, double velocityY, double orientation, double radius/*, double mass*/)
 		throws IllegalArgumentException {
 		try {
 			this.setPosition(positionX, positionY);
@@ -112,7 +112,7 @@ public class Ship {
 			throw new IllegalArgumentException();
 		this.radius = radius;
 		
-		setMass(mass);
+//		setMass(mass);
 	}
 	
 	
@@ -327,7 +327,7 @@ public class Ship {
 	public boolean isValidSpeed(double velocityX, double velocityY) {
 		if ( (java.lang.Double.isNaN(velocityX)) || (java.lang.Double.isNaN(velocityY)) )
 			return false;
-		if (Math.sqrt((velocityX * velocityX) + (velocityY * velocityY)) > constantMaxSpeed)
+		if (Math.sqrt((velocityX * velocityX) + (velocityY * velocityY)) > getConstantMaxSpeed())
 			return false;
 		return true;
 	}
@@ -736,14 +736,64 @@ public class Ship {
 	
 	
 	
-		/*
-		  * |-------------------------------------------|
-		  * | 8. The next methods are helper methods.	|
-		  * |-------------------------------------------| 
-		  */
+	
+	/*
+	  * |---------------------------------------------------|
+	  * | 8. The next methods handle the mass of the ship.	|
+	  * |---------------------------------------------------| 
+	  */
 	
 	
 	
+	/**
+	 * Variable registering the mass of this ship.
+	 */
+	public double mass;
+	
+	
+	/**
+	 * Return the current mass of the ship.
+	 * @return	Returns the mass of the current ship.
+	 */
+	@Basic
+	public double getMass() {
+		return this.mass;
+	}
+	
+	
+	public boolean isValidMass(double mass) {
+		return mass > ( 4/3 * Math.PI * Math.pow(this.getRadius(), 3) * (1.42 * Math.pow(10, 12)) );
+	}
+	
+	
+	public void setMass(double mass) {
+		if (isValidMass(mass)) {
+			this.mass = mass;
+		}
+		else {
+			this.mass = (4/3 * Math.PI * Math.pow(this.getRadius(), 3) * 1.42 * Math.pow(10, 12));
+		}
+	}
+	
+	
+	/**
+	 * Return the current mass of the ship and its cargo.
+	 * @return	Returns the mass of the current ship + the mass of the objects on the ship.
+	 */
+	public double getTotalMass() {
+		return this.getMass(); //TODO + mass of cargo
+	}
+	
+	
+	
+	/*
+	  * |-------------------------------------------|
+	  * | 9. The next methods are helper methods.	|
+	  * |-------------------------------------------| 
+	  */
+
+
+
 	/**
 	 * Calculates the cross product with a vector and itself.
 	 * 
@@ -770,39 +820,4 @@ public class Ship {
 		return vector1[0]*vector2[0] + vector1[1]*vector2[1];
 	}
 	
-	
-	/*
-	  * |---------------------------------------------------|
-	  * | 9. The next methods handle the mass of the ship.	|
-	  * |---------------------------------------------------| 
-	  */
-	
-	public double mass;
-	
-	public void setMass(double mass) {
-		if (mass < (4/3 * Math.PI * Math.pow(this.getRadius(), 3) * 1.42 * Math.pow(10, 12))) {
-			this.mass = (4/3 * Math.PI * Math.pow(this.getRadius(), 3) * 1.42 * Math.pow(10, 12));
-		}
-		else {
-			this.mass = mass;
-		}
-	}
-	
-	/**
-	 * Return the current mass of the ship.
-	 * @return	Returns the mass of the current ship.
-	 */
-	@Basic @Raw
-	public double getMass() {
-		return this.mass;
-	}
-	
-	/**
-	 * Return the current mass of the ship and its cargo.
-	 * @return	Returns the mass of the current ship + the mass of the objects on the ship.
-	 */
-	@Raw
-	public double getTotalMass() {
-		return this.getMass(); //TODO + mass of cargo
-	}
 }
