@@ -3,6 +3,7 @@ package asteroids.helper;
 import be.kuleuven.cs.som.annotate.*;
 
 // Helper class to store the data for positions
+
 /**
  * @invar  	Each position must be a valid position.
  *       	| this.isValidPosition(this.getPositionX(), this.getPositionY())
@@ -11,20 +12,21 @@ import be.kuleuven.cs.som.annotate.*;
 public class Position {
 	 
 	/**
-	 * Initialize this new bullet with given X and Y position, a given X and Y velocity, a given orientation, and a given radius.
+	 * Initialize this new position with given X and Y position and default values for
+	 * the minimum and maximum position.
 	 *
 	 * @param  	positionX
 	 *         	The X position for this new bullet.
 	 * @param  	positionY
 	 * 			The Y position of this new position
 	 * 
-	 * @effect 	The positions of this new bullet are set to
+	 * @effect 	The positions of this new position are set to
 	 *         	the given X position and Y position.
 	 *       	| this.setPosition(positionX, positionY)
 	 *         	 
 	 * @throws 	IllegalArgumentException
 	 *         	This new bullet cannot have the given X and Y position as position.
-	 *       	| ! this.getPosition().isValidPosition(positionX, positionY)
+	 *       	| ! this.isValidPosition(this.getPositionX, this.getPositionY)
 	 */
 	public Position(double positionX, double positionY) throws IllegalArgumentException {
 		this.minPositionX = Double.NEGATIVE_INFINITY;
@@ -40,6 +42,30 @@ public class Position {
 		}
 	}
 	
+	/**
+	 * Initialize this new position with given X and Y position, a given X minimum and maximum, and a given Y minimum and maximum.
+	 *
+	 * @param  	positionX
+	 *         	The X position of this new position.
+	 * @param  	positionY
+	 * 			The Y position of this new position.
+	 * @param	minPositionX
+	 * 			The minimum X position of this new position.
+	 * @param	maxPositionX
+	 * 			The maximum X position of this new position.
+	 * @param	minPositionY
+	 * 			The minimum Y position of this new position.
+	 * @param	maxPositionY
+	 * 			The maximum Y position of this new position.
+	 * 
+	 * @effect 	The positions of this new position are set to
+	 *         	the given X position and Y position.
+	 *       	| this.setPosition(positionX, positionY)
+	 *         	 
+	 * @throws 	IllegalArgumentException
+	 *         	This new position cannot have the given X and Y position as position.
+	 *       	| ! this.isValidPosition(this.getPositionX, this.getPositionY)
+	 */
 	public Position(double positionX, double positionY,
 			double minPositionX, double maxPositionX, double minPositionY, double maxPositionY) throws IllegalArgumentException {
 		this.minPositionX = minPositionX;
@@ -85,7 +111,7 @@ public class Position {
 	/**
 	 * Return the X position of this position.
 	 */
-	@Basic @Immutable
+	@Basic @Immutable @Raw
 	public double getPositionX() {
 		return this.positionX;
 	}
@@ -93,7 +119,7 @@ public class Position {
 	/**
 	 * Return the minimum X position of this position.
 	 */
-	@Basic @Immutable
+	@Basic @Immutable @Raw
 	public double getMinPositionX() {
 		return this.minPositionX;
 	}
@@ -101,7 +127,7 @@ public class Position {
 	/**
 	 * Return the max X position of this position.
 	 */
-	@Basic @Immutable
+	@Basic @Immutable @Raw
 	public double getMaxPositionX() {
 		return this.maxPositionX;
 	}
@@ -109,7 +135,7 @@ public class Position {
 	/**
 	 * Return the Y position of this position.
 	 */
-	@Basic @Immutable
+	@Basic @Immutable @Raw
 	public double getPositionY() {
 		return this.positionY;
 	}
@@ -117,7 +143,7 @@ public class Position {
 	/**
 	 * Return the minimum Y position of this position.
 	 */
-	@Basic @Immutable
+	@Basic @Immutable @Raw
 	public double getMinPositionY() {
 		return this.minPositionY;
 	}
@@ -125,7 +151,7 @@ public class Position {
 	/**
 	 * Return the max Y position of this position.
 	 */
-	@Basic @Immutable
+	@Basic @Immutable @Raw
 	public double getMaxPositionY() {
 		return this.maxPositionY;
 	}
