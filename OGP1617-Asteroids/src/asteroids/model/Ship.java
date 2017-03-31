@@ -1,5 +1,6 @@
 package asteroids.model;
 
+import asteroids.helper.Position;
 import be.kuleuven.cs.som.annotate.*;
 
 /* NOTES:
@@ -96,7 +97,7 @@ public class Ship {
 	public Ship(double positionX, double positionY, double velocityX, double velocityY, double orientation, double radius/*, double mass*/)
 		throws IllegalArgumentException {
 		try {
-			this.setPosition(new Position(positionX, positionY));
+			this.setPosition(positionX, positionY);
 		}
 		catch (IllegalArgumentException exc) {
 			throw new IllegalArgumentException();
@@ -125,7 +126,7 @@ public class Ship {
 	private Position position;
 	
 	@Basic 
-	private Position getPosition() {
+	public Position getPosition() {
 		return this.position;
 	}
 	
@@ -150,11 +151,14 @@ public class Ship {
 	 *         	ship.
 	 *       	| ! isValidPosition(getPositionX(), getPositionY())
 	 */
-	public void setPosition(Position position) 
+	public void setPosition(double positionX, double positionY) 
 			throws IllegalArgumentException {
-		if (! isValidPosition(position))
+		try {
+			this.position = new Position(positionX, positionY);
+		}
+		catch(IllegalArgumentException exc) {
 			throw new IllegalArgumentException();
-		this.position = position;
+		}
 	}
 	
 	
@@ -461,10 +465,11 @@ public class Ship {
 		if (time < 0)
 			throw new IllegalArgumentException();
 		
-		Position newPosition = new Position(getPosition().getPositionX() + getVelocityX() * time, getPosition().getPositionY() + getVelocityY() * time);
+		double newPositionX = getPosition().getPositionX() + getVelocityX() * time;
+		double newPositionY = getPosition().getPositionY() + getVelocityY() * time;
 
 		try {
-			setPosition(newPosition);
+			setPosition(newPositionX, newPositionY);
 		}
 		catch (IndexOutOfBoundsException exc) {
 			throw new IndexOutOfBoundsException();

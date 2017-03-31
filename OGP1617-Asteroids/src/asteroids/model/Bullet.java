@@ -82,7 +82,7 @@ public class Bullet {
 	public Bullet(double positionX, double positionY, double velocityX, double velocityY, double radius)
 		throws IllegalArgumentException {
 		try {
-			this.setPosition(positionX, positionY);
+			setPosition(positionX, positionY);
 		}
 		catch (IllegalArgumentException exc) {
 			throw new IllegalArgumentException();
@@ -308,7 +308,7 @@ public class Bullet {
 	*       	| result == (POSITIVE_INFINITY > radius) && (radius >= this.getMinRadius())
 	*/
 	public boolean canHaveAsRadius(double radius) {
-		if ( (Double.POSITIVE_INFINITY > radius) && (radius >= this.getMinRadius()) )
+		if ( (Double.POSITIVE_INFINITY > radius) && (radius >= getMinRadius()) )
 			return true;
 		return false;
 	}
@@ -340,7 +340,7 @@ public class Bullet {
 	
 	
 	public boolean isValidMass(double mass) {
-		return mass > ( 4/3 * Math.PI * Math.pow(this.getRadius(), 3) * (1.42 * Math.pow(10, 12)) );
+		return mass > ( 4/3 * Math.PI * Math.pow(getRadius(), 3) * (1.42 * Math.pow(10, 12)) );
 	}
 	
 	
@@ -349,7 +349,7 @@ public class Bullet {
 			this.mass = mass;
 		}
 		else {
-			this.mass = (4/3 * Math.PI * Math.pow(this.getRadius(), 3) * 1.42 * Math.pow(10, 12));
+			this.mass = (4/3 * Math.PI * Math.pow(getRadius(), 3) * 1.42 * Math.pow(10, 12));
 		}
 	}
 	
@@ -359,7 +359,7 @@ public class Bullet {
 	 * @return	Returns the mass of the current bullet + the mass of the objects on the bullet.
 	 */
 	public double getTotalMass() {
-		return this.getMass(); //TODO + mass of cargo
+		return getMass(); //TODO + mass of cargo
 	}
 	
 }

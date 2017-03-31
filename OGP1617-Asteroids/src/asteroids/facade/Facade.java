@@ -11,6 +11,7 @@ import asteroids.model.Bullet;
 import asteroids.model.Ship;
 import asteroids.model.World;
 
+
 public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 
 	@Override
@@ -39,8 +40,8 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 	@Override
 	public double[] getShipPosition(Ship ship) throws ModelException {
 		try {
-			double positionX = ship.getPositionX();
-			double positionY = ship.getPositionY();
+			double positionX = ship.getPosition().getPositionX();
+			double positionY = ship.getPosition().getPositionY();
 			double[] position = {positionX, positionY};
 			return position;
 		}

@@ -64,21 +64,21 @@ public class ManualTests {
 		if (debug)
 			System.out.println("Basic:");
 		
-		System.out.format("PositionX = %f%n", ship.getPositionX());
-		System.out.format("PositionY = %f%n", ship.getPositionY());
-		System.out.format("VelocityX = %f%n", ship.getVelocityX());
-		System.out.format("VelocityY = %f%n", ship.getVelocityY());
-		System.out.format("Orientation = %f%n", ship.getOrientation());
-		System.out.format("Shape = %f%n", ship.getRadius());
-		System.out.format("Speed = %f%n", ship.getSpeed());
+//		System.out.format("PositionX = %f%n", ship.getPositionX());
+//		System.out.format("PositionY = %f%n", ship.getPositionY());
+//		System.out.format("VelocityX = %f%n", ship.getVelocityX());
+//		System.out.format("VelocityY = %f%n", ship.getVelocityY());
+//		System.out.format("Orientation = %f%n", ship.getOrientation());
+//		System.out.format("Shape = %f%n", ship.getRadius());
+//		System.out.format("Speed = %f%n", ship.getSpeed());
 		
 		if (debug) {
-			System.out.println("Advanced:");
-			System.out.format("MinPositionX = %f%n", ship.getMinPositionX());
-			System.out.format("MinPositionY = %f%n", ship.getMinPositionY());
-			System.out.format("MaxPositionX = %f%n", ship.getMaxPositionX());
-			System.out.format("MaxPositionY = %f%n", ship.getMaxPositionY());
-			System.out.format("ConstantMaxSpeed = %f%n", ship.getConstantMaxSpeed());
+//			System.out.println("Advanced:");
+//			System.out.format("MinPositionX = %f%n", ship.getMinPositionX());
+//			System.out.format("MinPositionY = %f%n", ship.getMinPositionY());
+//			System.out.format("MaxPositionX = %f%n", ship.getMaxPositionX());
+//			System.out.format("MaxPositionY = %f%n", ship.getMaxPositionY());
+//			System.out.format("ConstantMaxSpeed = %f%n", ship.getConstantMaxSpeed());
 		}
 	}
 
