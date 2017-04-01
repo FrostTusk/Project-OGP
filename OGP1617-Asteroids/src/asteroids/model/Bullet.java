@@ -72,7 +72,7 @@ public class Bullet {
 	 *         	the given mass.
 	 *         	| this.setMass(mass)
 	 *         	 
-	 * @throws 	IndexOutOfBoundsException
+	 * @throws 	IllegalArgumentException
 	 *         	This new bullet cannot have the given X and Y position as position.
 	 *       	| ! this.getPosition().isValidPosition(positionX, positionY)
 	 * @throws 	IllegalArgumentException
@@ -232,7 +232,7 @@ public class Bullet {
 	
 	
 	/**
-	 * Set the X and Y velocity of this bullet to the given velocities.
+	 * Set the X and Y velocities of this bullet to the given velocities.
 	 * 
 	 * @param  	velocityX
 	 *         	The new X velocity for this bullet.
@@ -240,7 +240,7 @@ public class Bullet {
 	 *         	The new Y velocity for this bullet.
 	 *         
 	 * @post   	If the given velocities are valid velocities for any bullet (they make up a valid speed),
-	 *         	the X and Y velocity of this new bullet is equal to the given	X and Y velocity.
+	 *         	the X and Y velocities of this new bullet are equal to the given X and Y velocities.
 	 *       	| if (isValidVelocity(velocityX, velocityY)))
 	 *       	|   then new.getVelocityX() == velocityX
 	 *       	|		 new.getVelocityY() == velocityY

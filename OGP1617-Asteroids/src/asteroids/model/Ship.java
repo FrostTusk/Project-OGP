@@ -239,7 +239,7 @@ public class Ship {
 	
 	
 	/**
-	 * Set the X and Y velocity of this ship to the given velocities.
+	 * Set the X and Y velocities of this ship to the given velocities.
 	 * 
 	 * @param  	velocityX
 	 *         	The new X velocity for this ship.
@@ -247,7 +247,7 @@ public class Ship {
 	 *         	The new Y velocity for this ship.
 	 *         
 	 * @post   	If the given velocities are valid velocities for any ship (they make up a valid speed),
-	 *         	the X and Y velocity of this new ship is equal to the given	X and Y velocity.
+	 *         	the X and Y velocities of this new ship are equal to the given	X and Y velocities.
 	 *       	| if (isValidVelocity(velocityX, velocityY)))
 	 *       	|   then new.getVelocityX() == velocityX
 	 *       	|		 new.getVelocityY() == velocityY

@@ -1,5 +1,6 @@
 package asteroids.helper;
 
-public class Entity {
+public abstract class Entity {
+	
 
 }
