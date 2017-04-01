@@ -1,11 +1,16 @@
 package asteroids.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import asteroids.helper.Entity;
 import be.kuleuven.cs.som.annotate.*;
 
 /*
  * Methods Index:
  * 1. Methods that handle the Initialization of the World
  * 2. Methods that handle the Size of the World
+ * 3. Methods that handle the relation with Entities
  */
 
 /**
@@ -132,11 +137,51 @@ public class World {
 		double[] result = new double[2];
 		
 		if ( (width < 0) || (java.lang.Double.isNaN(width)) ) result[0] = 0;
-		else	result[0] = getUpperBound();
-		if ( (height < 0) || (java.lang.Double.isNaN(width)) )	result[1] = 0;
-		else	result[1] = getUpperBound();
+		else result[0] = getUpperBound();
+		if ( (height < 0) || (java.lang.Double.isNaN(width)) ) result[1] = 0;
+		else result[1] = getUpperBound();
 
 		return result;
 	}
+	
+	
+	
+	/*
+	 * |------------------------------------------------------------|
+	 * | 3. The next methods handle the relationship with Entities	|
+	 * |------------------------------------------------------------| 
+	 */
 
+
+	
+	private List<Entity> entities = new ArrayList<Entity>();
+	
+	public boolean containsEntity(Entity entity) {
+		return entities.contains(entity);
+	}
+	
+	
+	public void addEntity(Entity entity) throws NullPointerException, IllegalArgumentException {
+		if (entity == null) throw new NullPointerException();
+		if (entity.isInWorld(this)) {
+			try {
+				entity.setWorld(this);
+			}
+			catch (IllegalArgumentException exc){
+				throw new IllegalArgumentException();
+			}
+			entities.add(entity);
+		}
+		else throw new IllegalArgumentException();
+	}
+	
+	public void removeEntity(Entity entity) throws NullPointerException, IllegalArgumentException {
+		if (entity == null) throw new NullPointerException();
+		if ( (this.containsEntity(entity)) && (entity.getWorld() == this) ) {
+			entities.remove(entity);
+			entity.deSetWorld();
+		}
+		else throw new IllegalArgumentException();
+	}
+	
 }

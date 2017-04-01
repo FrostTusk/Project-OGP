@@ -1,5 +1,6 @@
 package asteroids.model;
 
+import asteroids.helper.Entity;
 import asteroids.helper.Position;
 import be.kuleuven.cs.som.annotate.*;
 
@@ -19,7 +20,8 @@ import be.kuleuven.cs.som.annotate.*;
  * 6. Methods that handle the Mass of the ship
  * 7. Methods that handle Moving, Turning and Accelerating
  * 8. Methods that handle Calculating Distance, Overlap, and Collision Detection
- * 9. Helper Methods
+ * 9. Methods that handle the relation with Worlds
+ * 10. Helper Methods
  */
 
 /**
@@ -37,7 +39,7 @@ import be.kuleuven.cs.som.annotate.*;
 * @invar  	Each ship must have a valid mass.
 *       	| canHaveAsMass(this.getMass())
 */
-public class Ship {
+public class Ship extends Entity{
 	
 		/*
 		 * |------------------------------------------------------------|
@@ -627,16 +629,16 @@ public class Ship {
 	 * 			The other ship was null.
 	 * 			| ship == null
 	 */
-	public double getTimeToCollision(Ship ship) throws IllegalArgumentException {
-		if (ship == null) 
+	public double getTimeToCollision(Entity entity) throws IllegalArgumentException {
+		if (entity == null) 
 			throw new IllegalArgumentException();
 	
-		double[] deltaR = {ship.getPosition().getPositionX() - this.getPosition().getPositionX(), ship.getPosition().getPositionY() - this.getPosition().getPositionY()};
-		double[] deltaV = {ship.getVelocityX() - this.getVelocityX(), ship.getVelocityY() - this.getVelocityY()};
+		double[] deltaR = {entity.getPosition().getPositionX() - this.getPosition().getPositionX(), entity.getPosition().getPositionY() - this.getPosition().getPositionY()};
+		double[] deltaV = {entity.getVelocityX() - this.getVelocityX(), entity.getVelocityY() - this.getVelocityY()};
 		if (evaluateScalar(deltaR, deltaV) >= 0)
 			return Double.POSITIVE_INFINITY;
 		
-		double omega = this.getRadius() + ship.getRadius();
+		double omega = this.getRadius() + entity.getRadius();
 		double d = (Math.pow(evaluateScalar(deltaV, deltaR), 2) - evaluateScalar(deltaV)*(evaluateScalar(deltaR) - Math.pow(omega, 2)));
 		if (d <= 0)
 			return Double.POSITIVE_INFINITY;
@@ -687,12 +689,49 @@ public class Ship {
 	}
 	
 	
+	
+			/*
+		     * |--------------------------------------------------------|
+		     * | 9. The next methods handle the relation with worlds.	|
+		     * |--------------------------------------------------------| 
+		     */
+	
+	
 
-	/*
-	  * |-------------------------------------------|
-	  * | 9. The next methods are helper methods.	|
-	  * |-------------------------------------------| 
-	  */
+	@Override
+	public World getWorld() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public void setWorld(World world) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void deSetWorld() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
+	@Override
+	public boolean isInWorld(World world) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	
+	
+			/*
+			 * |--------------------------------------------|
+			 * | 10. The next methods are helper methods.	|
+			 * |--------------------------------------------| 
+			 */
 
 
 

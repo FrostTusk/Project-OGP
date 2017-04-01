@@ -1,5 +1,6 @@
 package asteroids.model;
 
+import asteroids.helper.Entity;
 import asteroids.helper.Position;
 import be.kuleuven.cs.som.annotate.*;
 
@@ -16,9 +17,7 @@ import be.kuleuven.cs.som.annotate.*;
  * 3. Methods that handle the Speed of the bullet
  * 4. Methods that handle the Radius of the bullet
  * 5. Methods that handle the Mass of the bullet
- * 6. Methods that handle Moving, Turning and Accelerating
- * 7. Methods that handle Calculating Distance, Overlap, and Collision Detection
- * 8. Helper Methods
+ * 6. Methods that handle the relation with worlds
  */
 
 /**
@@ -33,7 +32,7 @@ import be.kuleuven.cs.som.annotate.*;
 * @invar  	Each bullet must have a valid mass.
 *       	| this.canHaveAsMass(this.getMass())
 */
-public class Bullet {
+public class Bullet extends Entity{
 	
 			/*
 			 * |----------------------------------------------------------------|
@@ -361,5 +360,48 @@ public class Bullet {
 	public double getTotalMass() {
 		return getMass(); //TODO + mass of cargo
 	}
+	
+	
+	
+			/*
+		     * |----------------------------------------------------|
+		     * | 6. The next methods handle relation with worlds.	|
+		     * |----------------------------------------------------| 
+		     */
+	
+	
+	
+	public double getTimeToCollision(Entity entity) {
+		return 0;
+	}
+
+
+	@Override
+	public World getWorld() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public void setWorld(World world) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void deSetWorld() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public boolean isInWorld(World world) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
 	
 }
