@@ -1,10 +1,12 @@
 package asteroids.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import asteroids.helper.Entity;
-
+import asteroids.helper.Position;
 import be.kuleuven.cs.som.annotate.*;
 
 /*
@@ -163,66 +165,90 @@ public class World {
 			 */
 
 
+	
 	/**
 	 * List holding all entities of this world.
 	 */
-	private List<Entity> entities = new ArrayList<Entity>();
+//	private List<Entity> entities = new ArrayList<Entity>();
+	
+	private Map<Position, Entity> entities = new HashMap<Position, Entity>();
+
 	
 	
 	/**
 	 * Check whether a given in entity is currently in this world.
-	 *  
-	 * @param	entity
-	 * 			The entity to check.
 	 * @see implementation
 	 */
 	@Basic @Raw
 	public boolean containsEntity(Entity entity) {
-		return entities.contains(entity);
+        try {
+           return entities.get(entity.getPosition()) == entity;
+        }
+        catch (NullPointerException exc) {
+            // Because the given purchase is raw, it is possible that
+            // it does not yet reference an effective share.
+//            assert (purchase == null) || (purchase.getShare() == null);
+            return false;
+        }
+//		return entities.contains(entity);
 	}
 	
 	/**
 	 * Check whether a given in entity can be in this world.
-	 *  
-	 * @param	entity
-	 * 			The entity to check.
 	 * @see implementation
 	 */
 	@Basic @Raw
 	public boolean canHaveAsEntity(Entity entity) {
-		if ( (!entities.contains(entity)) && (entity.canHaveAsWorld(this)) ) return true;
+		if ( (!containsEntity(entity)) && (entity.canHaveAsWorld(this)) ) return true;
 		return false;
 	}
 	
 	
 	/**
 	 * Add a given entity to this world.
-	 *  
-	 * @param	entity
-	 * 			The entity to check.
 	 * @see implementation
 	 */
 	@Basic @Raw
 	public void addEntity(Entity entity) throws NullPointerException, IllegalArgumentException {
 		if (entity == null) throw new NullPointerException();
+		// The world will always have final say as to what entities are in it.
+		// The entity can only set and deset worlds, but not recognize itself as actually being in a world.
+		// First we check if this world can have a given entity as entity, this will also check if the
+		// entity can have this world as world.
 		if (!canHaveAsEntity(entity)) {
+			// At this point we're sure that the entity can possibly be added to this world,
+			// the only thing that can go wrong now is if entity is already in a world.
 			try {
+				// We set the current world of the entity to this.
 				entity.setWorld(this);
 			}
 			catch (IllegalArgumentException exc) {
 				throw new IllegalArgumentException();
 			}
-			entities.add(entity);
+			// Finally we can add the entity to the entities list.
+			entities.put(entity.getPosition(), entity);
+//			entities.add(entity);
 		}
 		else throw new IllegalArgumentException();
 	}
 	
 	
+	/**
+	 * Remove a given entity from this world.
+	 * @see implementation
+	 */
+	@Basic @Raw
 	public void removeEntity(Entity entity) throws NullPointerException, IllegalArgumentException {
 		if (entity == null) throw new NullPointerException();
+		// The world will always have final say as to what entities are in it.
+		// The entity can only set and deset worlds, but not recognize itself as actually being in a world.
+		// Removing an entity is simpler than adding an entity. We only have to check if
+		// the entity is actually in the world and the world is actually the current world of the entity.
 		if ( (containsEntity(entity)) && (entity.getWorld() == this) ) {
-			entities.remove(entity);
+			// Now we know that we're in a valid situation and can break the relation.
+//			entities.remove(entity);
 			entity.deSetWorld();
+			entities.remove(entity.getPosition());
 		}
 		else throw new IllegalArgumentException();
 	}
@@ -236,7 +262,9 @@ public class World {
 			 */
 	
 	
-	
+	/**
+	 * Evolve the current world.
+	 */
 	public void evolve(double time) {
 		Entity[] collisionEntitiesMin = calculateFirstCollision();
 		double collisionTimeMin = collisionEntitiesMin[0].getTimeToCollision(collisionEntitiesMin[1]);
@@ -249,19 +277,25 @@ public class World {
 	}
 	
 	
+	/**
+	 * Update the position of all elements in the current world.
+	 */
 	public void update(double time) {
-		for (Entity entity: entities) {
+		for (Entity entity: entities.values()) {
 			System.out.println(entity);
 		}
 	}
 	
 	
+	/**
+	 * Calculate the first collision in the current world.
+	 */
 	public Entity[] calculateFirstCollision() {
 		double collisionTimeMin = -1;
 		Entity[] collisionEntitiesMin = new Entity[2];
 		
-		for (Entity entity1: entities) {
-			for (Entity entity2: entities) {
+		for (Entity entity1: entities.values()) {
+			for (Entity entity2: entities.values()) {
 				double collisionTimeTemp = entity1.getTimeToCollision(entity2);
 				if ( (collisionTimeTemp < collisionTimeMin) || (collisionTimeMin == -1 ) ) {
 					collisionTimeMin = collisionTimeTemp;
@@ -273,5 +307,20 @@ public class World {
 		//TODO check if entities collide with borders.
 		return collisionEntitiesMin;
 	}
+	
+	
+	
+			/*
+			 * |------------------------------------------------|
+			 * | 4. The next methods handle evolving the world.	|
+			 * |------------------------------------------------| 
+			 */
+
+	
+	
+	public Entity getEntityAtPosition(Position position) {
+		return entities.get(position);
+	}
+
 	
 }

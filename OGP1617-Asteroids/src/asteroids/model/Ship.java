@@ -663,8 +663,10 @@ public class Ship extends Entity {
 		if (entity == null) 
 			throw new IllegalArgumentException();
 	
-		double[] deltaR = {entity.getPosition().getPositionX() - this.getPosition().getPositionX(), entity.getPosition().getPositionY() - this.getPosition().getPositionY()};
-		double[] deltaV = {entity.getVelocityX() - this.getVelocityX(), entity.getVelocityY() - this.getVelocityY()};
+		double[] deltaR = {entity.getPosition().getPositionX() - this.getPosition().getPositionX(), 
+						   entity.getPosition().getPositionY() - this.getPosition().getPositionY()};
+		double[] deltaV = {entity.getVelocityX() - this.getVelocityX(), 
+						   entity.getVelocityY() - this.getVelocityY()};
 		if (helper.evaluateScalar(deltaR, deltaV) >= 0)
 			return Double.POSITIVE_INFINITY;
 		
@@ -699,8 +701,10 @@ public class Ship extends Entity {
 		if (time == Double.POSITIVE_INFINITY)
 			return null;
 		
-		Position newPosition1 = new Position(this.getPosition().getPositionX() + this.getVelocityX() * time, this.getPosition().getPositionY() + this.getVelocityY() * time);
-		Position newPosition2 = new Position(entity.getPosition().getPositionX() + entity.getVelocityX() * time, entity.getPosition().getPositionY() + entity.getVelocityY() * time);
+		Position newPosition1 = new Position(this.getPosition().getPositionX() + this.getVelocityX() * time, 
+											 this.getPosition().getPositionY() + this.getVelocityY() * time);
+		Position newPosition2 = new Position(entity.getPosition().getPositionX() + entity.getVelocityX() * time, 
+											 entity.getPosition().getPositionY() + entity.getVelocityY() * time);
 		
 		double signX1 = 1;
 		if (newPosition1.getPositionX() > newPosition2.getPositionX())
@@ -711,10 +715,12 @@ public class Ship extends Entity {
 		
 		// Calculate the angle between the x component of the vector between newPosition1 and newPosition2.
 		// This angle is the same as the one between the collisionPosition vector (out of the first ship) and it's x component.
-		double angle = Math.atan( Math.abs(newPosition2.getPositionY() - newPosition1.getPositionY()) / Math.abs(newPosition2.getPositionX() - newPosition1.getPositionX()) );
+		double angle = Math.atan( Math.abs(newPosition2.getPositionY() - newPosition1.getPositionY()) / 
+								  Math.abs(newPosition2.getPositionX() - newPosition1.getPositionX()) );
 		// Calculate the exact position vector of the collision point by using the angle that has just been calculated
 		// and the first ship's new position vector.
-		double[] vector = {newPosition1.getPositionX() + signX1 * this.getRadius() * Math.cos(angle), newPosition1.getPositionY() + signY1 * this.getRadius() * Math.sin(angle)};
+		double[] vector = {newPosition1.getPositionX() + signX1 * this.getRadius() * Math.cos(angle), 
+						   newPosition1.getPositionY() + signY1 * this.getRadius() * Math.sin(angle)};
 		return vector;
 	}
 	
