@@ -1,5 +1,7 @@
 package asteroids.helper;
 
+import java.util.List;
+
 /**
  * A helper class that includes tool box methods.
  */
@@ -9,6 +11,26 @@ public class Helper {
 	 * Initialize a new Helper.
 	 */
 	public Helper() {};
+	
+	
+	/**
+	 * Converts a given List to an array.
+	 * 
+	 * @param 	list
+	 * 			The list to be converted
+	 * 
+	 * @return	Returns the array made up by the elements in list.
+	 */	
+	public <T> Object[] convertListToArray(List<T> list) {
+		Object[] result = new Object[list.size()];
+		int count = 0;
+		for (Object object: list) {
+			result[count] = object;
+			count += 1;
+		}
+		return result;
+	}
+	
 
 	/**
 	 * Calculates the cross product with a vector and itself.

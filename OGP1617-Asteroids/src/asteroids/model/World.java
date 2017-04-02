@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import asteroids.helper.Entity;
+import asteroids.helper.Helper;
 import asteroids.helper.Position;
+
 import be.kuleuven.cs.som.annotate.*;
 
 /*
@@ -107,19 +109,6 @@ public class World {
 	
 	
 	/**
-	 * 
-	 * @param 	newUpperBound
-	 * 			The new upper bound for the width and height for every world.
-	 * 
-	 * @see implementation
-	 */
-	public void setUpperBound(double newUpperBound) {
-		upperBound = newUpperBound;
-		
-	}
-	
-	
-	/**
 	 * Check whether the given size is a valid size for
 	 * any world.
 	 *  
@@ -132,6 +121,19 @@ public class World {
 	*/
 	public static boolean isValidSize(double width, double height) {
 		return ( ( (width >= 0) && (width <= getUpperBound()) ) && ( (height >= 0) && (height <= getUpperBound()) ));
+	}
+	
+	
+	/**
+	 * 
+	 * @param 	newUpperBound
+	 * 			The new upper bound for the width and height for every world.
+	 * 
+	 * @see implementation
+	 */
+	public void setUpperBound(double newUpperBound) {
+		upperBound = newUpperBound;
+		
 	}
 	
 	
@@ -167,13 +169,10 @@ public class World {
 
 	
 	/**
-	 * List holding all entities of this world.
+	 * Map holding all entities of this world.
 	 */
-//	private List<Entity> entities = new ArrayList<Entity>();
-	
 	private Map<Position, Entity> entities = new HashMap<Position, Entity>();
 
-	
 	
 	/**
 	 * Check whether a given in entity is currently in this world.
@@ -185,12 +184,11 @@ public class World {
            return entities.get(entity.getPosition()) == entity;
         }
         catch (NullPointerException exc) {
-            // Because the given purchase is raw, it is possible that
-            // it does not yet reference an effective share.
-//            assert (purchase == null) || (purchase.getShare() == null);
+//             //Because the given purchase is raw, it is possible that
+//             //it does not yet reference an effective share.
+//          assert (purchase == null) || (purchase.getShare() == null);
             return false;
         }
-//		return entities.contains(entity);
 	}
 	
 	/**
@@ -201,9 +199,9 @@ public class World {
 	public boolean canHaveAsEntity(Entity entity) {
 		if ( (!containsEntity(entity)) && (entity.canHaveAsWorld(this)) ) return true;
 		return false;
-	}
+	}	
 	
-	
+
 	/**
 	 * Add a given entity to this world.
 	 * @see implementation
@@ -217,7 +215,7 @@ public class World {
 		// entity can have this world as world.
 		if (!canHaveAsEntity(entity)) {
 			// At this point we're sure that the entity can possibly be added to this world,
-			// the only thing that can go wrong now is if entity is already in a world.
+			// the only thing that can go wrong now is if the entity is already in a world.
 			try {
 				// We set the current world of the entity to this.
 				entity.setWorld(this);
@@ -227,11 +225,9 @@ public class World {
 			}
 			// Finally we can add the entity to the entities list.
 			entities.put(entity.getPosition(), entity);
-//			entities.add(entity);
 		}
 		else throw new IllegalArgumentException();
 	}
-	
 	
 	/**
 	 * Remove a given entity from this world.
@@ -243,10 +239,9 @@ public class World {
 		// The world will always have final say as to what entities are in it.
 		// The entity can only set and deset worlds, but not recognize itself as actually being in a world.
 		// Removing an entity is simpler than adding an entity. We only have to check if
-		// the entity is actually in the world and the world is actually the current world of the entity.
+		// the entity is actually in the world and the world is  the current world of the entity.
 		if ( (containsEntity(entity)) && (entity.getWorld() == this) ) {
-			// Now we know that we're in a valid situation and can break the relation.
-//			entities.remove(entity);
+			// Now we know that we're in a valid situation and can break the association.
 			entity.deSetWorld();
 			entities.remove(entity.getPosition());
 		}
@@ -260,6 +255,7 @@ public class World {
 			 * | 4. The next methods handle evolving the world.	|
 			 * |------------------------------------------------| 
 			 */
+	
 	
 	
 	/**
@@ -311,16 +307,54 @@ public class World {
 	
 	
 			/*
-			 * |------------------------------------------------|
-			 * | 4. The next methods handle evolving the world.	|
-			 * |------------------------------------------------| 
+			 * |----------------------------------------------------|
+			 * | 5. The next methods handle queries of the world.	|
+			 * |----------------------------------------------------| 
 			 */
 
 	
 	
 	public Entity getEntityAtPosition(Position position) {
-		return entities.get(position);
+		try {
+			return entities.get(position);
+		}
+		catch (NullPointerException exc) {
+			return null;
+		}
+	}
+	
+	public Entity[] getAllEntities() {
+		Entity[] entitiesResult = new Entity[entities.size()];
+		int current = 0;
+		for (Entity entity: entities.values()) {
+			entitiesResult[current] = entity;
+			current += 1;
+		}
+		return entitiesResult;
+	}
+	
+	public Ship[] getAllShips() {
+		Helper helper = new Helper();
+		Entity[] entitiesResult = getAllEntities();
+		
+		List<Ship> shipsResult = new ArrayList<Ship>();
+		for (int i = 0; i < entitiesResult.length; i++) { 
+			if (entitiesResult[i].toString()/*.getType()*/== "Ship") shipsResult.add((Ship)entitiesResult[i]);
+		}
+		
+		return (Ship[])helper.convertListToArray(shipsResult);
+	}
+	
+	public Bullet[] getAllBullets() {
+		Helper helper = new Helper();
+		Entity[] entitiesResult = getAllEntities();
+		
+		List<Bullet> bulletsResult = new ArrayList<Bullet>();
+		for (int i = 0; i < entitiesResult.length; i++) { 
+			if (entitiesResult[i].toString()/*.getType()*/== "Ship") bulletsResult.add((Bullet)entitiesResult[i]);
+		}
+		
+		return (Bullet[])helper.convertListToArray(bulletsResult);
 	}
 
-	
 }

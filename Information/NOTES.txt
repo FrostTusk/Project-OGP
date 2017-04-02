@@ -7,6 +7,7 @@
 	3. When to test facade
 	4. Hoe class position doen
 		1. Wat met documentatie in Ship?
+	5. Wat is en waarom een type parameter?
 
 2. TODO:
 	1. Proofread
@@ -20,6 +21,7 @@
 	5. Part 2 TestSuite
 		1. Ship
 		2. Bullet
+
 		3. World
 	6. Verander IllegalArgumentException -> NullPointerException (ook in facade)
 

@@ -204,7 +204,6 @@ public class Bullet extends Entity {
 		return this.constantMaxSpeed;
 	}
 
-	
 	/**
 	 * Return the current speed of the bullet.
 	 * @return	Returns the speed of the current bullet.
@@ -345,6 +344,14 @@ public class Bullet extends Entity {
 		return this.mass;
 	}
 	
+	/**
+	 * Return the current mass of the bullet and its cargo.
+	 * @return	Returns the mass of the current bullet + the mass of the objects on the bullet.
+	 */
+	public double getTotalMass() {
+		return getMass(); //TODO + mass of cargo
+	}
+	
 	
 	public boolean isValidMass(double mass) {
 		return mass > ( 4/3 * Math.PI * Math.pow(getRadius(), 3) * (1.42 * Math.pow(10, 12)) );
@@ -358,15 +365,6 @@ public class Bullet extends Entity {
 		else {
 			this.mass = (4/3 * Math.PI * Math.pow(getRadius(), 3) * 1.42 * Math.pow(10, 12));
 		}
-	}
-	
-	
-	/**
-	 * Return the current mass of the bullet and its cargo.
-	 * @return	Returns the mass of the current bullet + the mass of the objects on the bullet.
-	 */
-	public double getTotalMass() {
-		return getMass(); //TODO + mass of cargo
 	}
 	
 	
@@ -415,9 +413,15 @@ public class Bullet extends Entity {
 	 *         
 	 * @see implementation
 	 */
-	@Raw
+	@Override @Raw
 	public boolean canHaveAsWorld(World world) throws IllegalArgumentException, NullPointerException {
 		if ((getWorld() != null) && (isInWorld(world)) ) return true;
+		return false;
+	}
+	
+	@Override
+	public boolean isInWorld(World world) {
+		// TODO Auto-generated method stub
 		return false;
 	}
 	
@@ -437,7 +441,6 @@ public class Bullet extends Entity {
 		this.world = world;
 	}
 	
-	
 	/**
 	 * Remove the current world as world for this bullet.
 	 *      
@@ -450,10 +453,17 @@ public class Bullet extends Entity {
 	}
 
 
-	@Override
-	public boolean isInWorld(World world) {
-		// TODO Auto-generated method stub
-		return false;
+
+			/*
+		     * |----------------------------------------|
+		     * | 8. Methods that handle other things.	|
+		     * |----------------------------------------| 
+		     */
+	
+	
+	
+	public String getType() {
+		return "Bullet";
 	}
 	
 }
