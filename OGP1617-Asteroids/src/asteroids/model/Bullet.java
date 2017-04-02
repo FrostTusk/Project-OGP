@@ -1,6 +1,7 @@
 package asteroids.model;
 
 import asteroids.helper.Entity;
+import asteroids.helper.Helper;
 import asteroids.helper.Position;
 
 import be.kuleuven.cs.som.annotate.*;
@@ -44,7 +45,7 @@ public class Bullet extends Entity {
 			 * |----------------------------------------------------------------| 
 			 */
 
-	
+	private Helper helper = new Helper();
 	
 	/**
 	 * Initialize this new bullet with given X and Y position, a given X and Y velocity, a given orientation, and a given radius.

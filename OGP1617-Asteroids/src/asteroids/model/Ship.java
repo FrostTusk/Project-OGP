@@ -7,10 +7,9 @@ import asteroids.helper.Position;
 import be.kuleuven.cs.som.annotate.*;
 
 
-/* NOTES:
-*	1. Constants:
-*		1.	constantMaxSpeed = the maximum speed this ship can achieve.
-*		2.	minRadius =  the minimum radius for each ship.
+/* Constants:
+*	1.	constantMaxSpeed = the maximum speed this bullet can achieve.
+*	2.	minRadius =  the minimum radius for each bullet.
 */
 
 /*
@@ -22,8 +21,10 @@ import be.kuleuven.cs.som.annotate.*;
  * 5. Methods that handle the Radius of the Ship
  * 6. Methods that handle the Mass of the ship
  * 7. Methods that handle Moving, Turning and Accelerating
- * 8. Methods that handle Calculating Distance, Overlap, and Collision Detection
- * 9. Methods that handle the relation with Worlds
+ * 8. Methods that handle Calculating Distance and Overlap
+ * 9. Methods that handle Collision Detection
+ * 10. Methods that handle the relation with Worlds
+ * 11. Helper Methods
  */
 
 /**
@@ -51,6 +52,7 @@ public class Ship extends Entity {
 		 * |------------------------------------------------------------| 
 		 */
 	
+	private Helper helper = new Helper();
 	
 	
 	/**
@@ -574,11 +576,11 @@ public class Ship extends Entity {
 	
 	
 	
-		/*
-		  * |---------------------------------------------------------------------------------------|
-		  * | 8. The next methods handle Calculating Distance, Overlap, and Collision Detection.	|
-		  * |---------------------------------------------------------------------------------------| 
-		  */
+			/*
+			 * |----------------------------------------------------------------|
+			 * | 8. The next methods handle Calculating Distance and Overlap.	|
+			 * |----------------------------------------------------------------| 
+			 */
 	
 	
 	
@@ -617,6 +619,15 @@ public class Ship extends Entity {
 		distance = distance - this.getRadius() - entity.getRadius();
 		return distance;
 	}
+
+	
+	
+			/*
+			 * |----------------------------------------------------|
+			 * | 9. The next methods handle Collision Detection.	|
+			 * |----------------------------------------------------| 
+			 */
+	
 	
 	
 	/**
@@ -659,7 +670,6 @@ public class Ship extends Entity {
 	 * 			| entity == null
 	 */
 	public double getTimeToCollision(Entity entity) throws IllegalArgumentException {
-		Helper helper = new Helper();
 		if (entity == null) 
 			throw new IllegalArgumentException();
 	
@@ -667,6 +677,7 @@ public class Ship extends Entity {
 						   entity.getPosition().getPositionY() - this.getPosition().getPositionY()};
 		double[] deltaV = {entity.getVelocityX() - this.getVelocityX(), 
 						   entity.getVelocityY() - this.getVelocityY()};
+		
 		if (helper.evaluateScalar(deltaR, deltaV) >= 0)
 			return Double.POSITIVE_INFINITY;
 		
@@ -675,8 +686,7 @@ public class Ship extends Entity {
 		if (d <= 0)
 			return Double.POSITIVE_INFINITY;
 		
-		double deltaT = -( (helper.evaluateScalar(deltaV, deltaR) + Math.sqrt(d)) / helper.evaluateScalar(deltaV) );
-		return deltaT;
+		return -( (helper.evaluateScalar(deltaV, deltaR) + Math.sqrt(d)) / helper.evaluateScalar(deltaV) );
 	}
 	
 	
@@ -696,7 +706,6 @@ public class Ship extends Entity {
 	public double[] getCollisionPosition(Entity entity) throws IllegalArgumentException {
 		if (entity == null) 
 			throw new IllegalArgumentException();
-		
 		double time = getTimeToCollision(entity);
 		if (time == Double.POSITIVE_INFINITY)
 			return null;
@@ -706,21 +715,18 @@ public class Ship extends Entity {
 		Position newPosition2 = new Position(entity.getPosition().getPositionX() + entity.getVelocityX() * time, 
 											 entity.getPosition().getPositionY() + entity.getVelocityY() * time);
 		
-		double signX1 = 1;
-		if (newPosition1.getPositionX() > newPosition2.getPositionX())
-			signX1 = -1;
-		double signY1 = 1;
-		if (newPosition1.getPositionY() > newPosition2.getPositionY())
-			signY1 = -1;
+		// Calculate the correct signs TODO: Leg dit verder uit
+		double[] signs = calculateSigns(newPosition1, newPosition2);
 		
 		// Calculate the angle between the x component of the vector between newPosition1 and newPosition2.
 		// This angle is the same as the one between the collisionPosition vector (out of the first ship) and it's x component.
 		double angle = Math.atan( Math.abs(newPosition2.getPositionY() - newPosition1.getPositionY()) / 
 								  Math.abs(newPosition2.getPositionX() - newPosition1.getPositionX()) );
+		
 		// Calculate the exact position vector of the collision point by using the angle that has just been calculated
 		// and the first ship's new position vector.
-		double[] vector = {newPosition1.getPositionX() + signX1 * this.getRadius() * Math.cos(angle), 
-						   newPosition1.getPositionY() + signY1 * this.getRadius() * Math.sin(angle)};
+		double[] vector = {newPosition1.getPositionX() + signs[0] * this.getRadius() * Math.cos(angle), 
+						   newPosition1.getPositionY() + signs[1] * this.getRadius() * Math.sin(angle)};
 		return vector;
 	}
 	
@@ -762,9 +768,9 @@ public class Ship extends Entity {
 	
 	
 			/*
-		     * |--------------------------------------------------------|
-		     * | 9. The next methods handle the relation with worlds.	|
-		     * |--------------------------------------------------------| 
+		     * |------------------------------------------------------------|
+		     * | 10. The next methods handle the association with worlds.	|
+		     * |------------------------------------------------------------| 
 		     */
 	
 	
@@ -833,12 +839,35 @@ public class Ship extends Entity {
 
 
 
-	/*
-     * |--------------------------------------------|
-     * | 10. The next methods are Helper Methods.	|
-     * |--------------------------------------------| 
-     */
+			/*
+		     * |--------------------------------------------|
+		     * | 11. The next methods are Helper Methods.	|
+		     * |--------------------------------------------| 
+		     */
 	
+	
+	
+	/**
+	 * A method that returns the signs to be used in the getCollisionPosition() method.
+	 * 
+	 * @param 	position1
+	 * 			The first position to be used in the formula.
+	 * @param 	position2
+	 * 			The second position to be used in the formula.
+	 * 
+	 * @return The signs to be used in the getCollisionPosition() method
+	 */
+	public double[] calculateSigns(Position position1, Position position2) {
+		double signX1 = 1;
+		if (position1.getPositionX() > position2.getPositionX())
+			signX1 = -1;
+		double signY1 = 1;
+		if (position1.getPositionY() > position2.getPositionY())
+			signY1 = -1;
+		
+		double[] result = {signX1, signY1};
+		return result;
+	}
 	
 	
 	public String getType() {
