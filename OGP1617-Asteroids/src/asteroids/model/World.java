@@ -11,12 +11,17 @@ import asteroids.helper.Position;
 
 import be.kuleuven.cs.som.annotate.*;
 
+/* Constants:
+*	1.	upperBound = the maximum height/width of a world.
+*/
+
 /*
  * Methods Index:
  * 1. Methods that handle the Initialization of the World
  * 2. Methods that handle the Size of the World
  * 3. Methods that handle the relation with Entities
  * 4. Methods that handle evolving the world
+ * 5. Methods that handle queries of the world
  */
 
 /**

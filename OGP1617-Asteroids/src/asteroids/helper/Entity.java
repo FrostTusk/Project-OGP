@@ -34,5 +34,5 @@ public abstract class Entity {
 	
 
 	
-//	public abstract String getType();
+	public abstract String getType();
 }

@@ -5,10 +5,9 @@ import asteroids.helper.Position;
 
 import be.kuleuven.cs.som.annotate.*;
 
-/* NOTES:
-*	1. Constants:
-*		1.	constantMaxSpeed = the maximum speed this bullet can achieve.
-*		2.	minRadius =  the minimum radius for each bullet.
+/* Constants:
+*	1.	constantMaxSpeed = the maximum speed this bullet can achieve.
+*	2.	minRadius =  the minimum radius for each bullet.
 */
 
 /*
@@ -18,7 +17,9 @@ import be.kuleuven.cs.som.annotate.*;
  * 3. Methods that handle the Speed of the bullet
  * 4. Methods that handle the Radius of the bullet
  * 5. Methods that handle the Mass of the bullet
- * 6. Methods that handle the relation with worlds
+ * 6. Methods that handle Collision Detection
+ * 7. Methods that handle the association with worlds
+ * 8. Helper Methods
  */
 
 /**
@@ -384,9 +385,9 @@ public class Bullet extends Entity {
 	
 	
 			/*
-		     * |----------------------------------------------------|
-		     * | 7. The next methods handle relation with worlds.	|
-		     * |----------------------------------------------------| 
+		     * |------------------------------------------------------------|
+		     * | 7. The next methods handle the association with worlds.	|
+		     * |------------------------------------------------------------| 
 		     */
 	
 	
@@ -455,9 +456,9 @@ public class Bullet extends Entity {
 
 
 			/*
-		     * |----------------------------------------|
-		     * | 8. Methods that handle other things.	|
-		     * |----------------------------------------| 
+		     * |--------------------------------------------|
+		     * | 8. The next methods are Helper Methods.	|
+		     * |--------------------------------------------| 
 		     */
 	
 	

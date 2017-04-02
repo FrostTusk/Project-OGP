@@ -760,6 +760,7 @@ public class Ship extends Entity {
 	}
 	
 	
+	
 			/*
 		     * |--------------------------------------------------------|
 		     * | 9. The next methods handle the relation with worlds.	|
@@ -767,29 +768,63 @@ public class Ship extends Entity {
 		     */
 	
 	
-
+	
+	/**
+	 * Variable registering the world of this bullet.
+	 */
 	public World world = null;
 	
 	
-	@Override
+	/**
+	* Return the world of this bullet.
+	*/
+	@Basic @Override @Raw
 	public World getWorld() {
 		return this.world;
 	}
 
-
+	
+	/**
+	 * Check whether this bullet can have the given world as world. 
+	 *  
+	 * @param  	world
+	 *         	The world to check.
+	 *         
+	 * @see implementation
+	 */
+	@Override @Raw
 	public boolean canHaveAsWorld(World world) throws IllegalArgumentException, NullPointerException {
 		if ((getWorld() != null) && (isInWorld(world)) ) return true;
 		return false;
 	}
 	
-	
 	@Override
+	public boolean isInWorld(World world) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	
+	/**
+	 * Set a given world as world for this bullet.
+	 *  
+	 * @param  	world
+	 *         	The world to set as world for this bullet.
+	 *         
+	 * @see implementation
+	 */
+	@Override @Raw
 	public void setWorld(World world) throws IllegalArgumentException, NullPointerException {
 		if (world ==  null) throw new NullPointerException();
 		if (!canHaveAsWorld(world)) throw new IllegalArgumentException();
 		this.world = world;
 	}
-
+	
+	/**
+	 * Remove the current world as world for this bullet.
+	 *      
+	 * @see implementation
+	 */
 	@Override
 	public void deSetWorld() throws NullPointerException {
 		if (getWorld() ==  null) throw new NullPointerException();
@@ -797,11 +832,18 @@ public class Ship extends Entity {
 	}
 
 
-	@Override
-	public boolean isInWorld(World world) {
-		// TODO Auto-generated method stub
-		return false;
-	}	
+
+	/*
+     * |--------------------------------------------|
+     * | 10. The next methods are Helper Methods.	|
+     * |--------------------------------------------| 
+     */
+	
+	
+	
+	public String getType() {
+		return "Ship";
+	}
 	
 }
  
