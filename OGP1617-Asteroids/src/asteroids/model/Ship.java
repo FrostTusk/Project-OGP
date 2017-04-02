@@ -413,11 +413,35 @@ public class Ship extends Entity {
 	}
 	
 	
+	/**
+	 * Check whether the given mass is a valid mass for this ship.
+	 *  
+	 * @param  	mass
+	 * 			the mass to check
+	 * @return	Returns whether or not the mass is a valid mass for this ship
+	 * 			or not. true if it is, false if not.
+	 *       	| result == (mass > ( 4/3 * Math.PI * Math.pow(this.getRadius(), 3) * (1.42 * Math.pow(10, 12)) ))
+	 */
 	public boolean isValidMass(double mass) {
 		return mass > ( 4/3 * Math.PI * Math.pow(this.getRadius(), 3) * (1.42 * Math.pow(10, 12)) );
 	}
 	
 	
+	/**
+	 * Set the mass of this ship to the given mass.
+	 * 
+	 * @param  	mass
+	 * 			the new mass for this ship
+	 *         
+	 * @post   	If the given mass is a valid mass for this ship,
+	 *         	the mass of this ship is set to the given mass.
+	 *       	| if (isValidMass(mass)))
+	 *       	|   then new.getMass() == mass
+	 * @post	If the given mass isn't valid, the mass
+	 * 			of this new ship will be equal to (4/3 * Math.PI * Math.pow(this.getRadius(), 3) * 1.42 * Math.pow(10, 12)).
+	 *       	| if (! isValidMass(mass)))
+	 *       	|   then new.getMass() == (4/3 * Math.PI * Math.pow(this.getRadius(), 3) * 1.42 * Math.pow(10, 12))
+	 */
 	public void setMass(double mass) {
 		if (isValidMass(mass)) {
 			this.mass = mass;
@@ -559,28 +583,28 @@ public class Ship extends Entity {
 	
 	
 	/**
-	 * Gets the distance between this ship and another given ship.
+	 * Gets the distance between this ship and another given entity.
 	 * 
-	 * @param  	ship
-	 * 			the ship to which you want to know the distance.
+	 * @param  	entity
+	 * 			the entity to which you want to know the distance.
 	 * 
-	 * @return	For the current ship, returns the distance between the current ship and a given ship.
-	 * 			If the two ships have the same position, the method returns zero.
+	 * @return	For the current ship, returns the distance between the current ship and a given entity.
+	 * 			If the two entities have the same position, the method returns zero.
 	 * 
 	 * @throws 	IllegalArgumentException
-	 * 			The other ship was null.
-	 * 			| ship == null
+	 * 			The other entity was null.
+	 * 			| entity == null
 	 */
-	public double getDistanceBetween(Ship ship) throws IllegalArgumentException {
+	public double getDistanceBetween(Entity entity) throws IllegalArgumentException {
 		double distance;	// distance between the ships
 		double distanceX;	// distance between the x-coordinates of the ships
 		double distanceY;	// distance between the y-coordinates of the ships
 		
-		if (ship == null) 
+		if (entity == null) 
 			throw new IllegalArgumentException();
 		
-		distanceX = Math.sqrt(Math.pow(this.getPosition().getPositionX() - ship.getPosition().getPositionX(), 2));
-		distanceY = Math.sqrt(Math.pow(this.getPosition().getPositionY() - ship.getPosition().getPositionY(), 2));
+		distanceX = Math.sqrt(Math.pow(this.getPosition().getPositionX() - entity.getPosition().getPositionX(), 2));
+		distanceY = Math.sqrt(Math.pow(this.getPosition().getPositionY() - entity.getPosition().getPositionY(), 2));
 		
 		// use formula of Pythagoras to calculate total distance between centers of the ships
 		distance = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
@@ -590,30 +614,30 @@ public class Ship extends Entity {
 			return 0;
 					
 		// use the sizes of the ships to calculate distance between edges
-		distance = distance - this.getRadius() - ship.getRadius();
+		distance = distance - this.getRadius() - entity.getRadius();
 		return distance;
 	}
 	
 	
 	/**
-	 * Returns true if the ships overlap, false if they don't.
+	 * Returns true if the entities overlap, false if they don't.
 	 * 
-	 * @param 	ship
-	 * 			the ship of which you want to if it it overlaps this ship.
+	 * @param 	entity
+	 * 			the entity of which you want to if it it overlaps this ship.
 	 * 
-	 * @return	For the current ship, returns true if it overlaps with the given ship,
+	 * @return	For the current ship, returns true if it overlaps with the given entity,
 	 * 			false if it does not.
-	 * 			| result == this.getDistanceBetween(ship) =< 0
+	 * 			| result == this.getDistanceBetween(entity) =< 0
 	 * 
 	 * @throws 	IllegalArgumentException
-	 * 			the other ship was null.
-	 * 			| ship == null
+	 * 			the other entity was null.
+	 * 			| entity == null
 	 */
-	public boolean overlap(Ship ship) throws IllegalArgumentException {
-		if (ship == null) 
+	public boolean overlap(Entity entity) throws IllegalArgumentException {
+		if (entity == null) 
 			throw new IllegalArgumentException();
 
-		if (this.getDistanceBetween(ship) <= 0)
+		if (this.getDistanceBetween(entity) <= 0)
 			return true;
 		else 
 			return false;
@@ -621,18 +645,18 @@ public class Ship extends Entity {
 	
 	
 	/**
-	 * Gets the time to collision between this ship and a given ship.
+	 * Gets the time to collision between this ship and a given entity.
 	 * 
-	 * @param  	ship
-	 * 			The ship of which the collision time needs to be calculated.
+	 * @param  	entity
+	 * 			The entity of which the collision time needs to be calculated.
 	 * 
 	 * @return	The time returned will be larger than 0 and will be equal to
-	 * 			the time needed for both ships to reach a position where they
+	 * 			the time needed for both entities to reach a position where they
 	 * 			will collide with each other.
 	 * 
 	 * @throws 	IllegalArgumentException
-	 * 			The other ship was null.
-	 * 			| ship == null
+	 * 			The other entity was null.
+	 * 			| entity == null
 	 */
 	public double getTimeToCollision(Entity entity) throws IllegalArgumentException {
 		Helper helper = new Helper();
@@ -655,28 +679,28 @@ public class Ship extends Entity {
 	
 	
 	/**
-	 * Gets the collision position between this and a given ship.
+	 * Gets the collision position between this and a given entity.
 	 * 
-	 * @param  	ship
-	 * 			the ship to which you want to know the collision position.
+	 * @param  	entity
+	 * 			the entity to which you want to know the collision position.
 	 * 
-	 * @return	The position returned will be the position where both ships
+	 * @return	The position returned will be the position where both entities
 	 * 			collide with each other. The method returns null if they never collide.
 	 * 
 	 * @throws 	IllegalArgumentException
-	 * 			The other ship was null.
-	 * 			| ship == null
+	 * 			The other entity was null.
+	 * 			| entity == null
 	 */
-	public double[] getCollisionPosition(Ship ship) throws IllegalArgumentException {
-		if (ship == null) 
+	public double[] getCollisionPosition(Entity entity) throws IllegalArgumentException {
+		if (entity == null) 
 			throw new IllegalArgumentException();
 		
-		double time = getTimeToCollision(ship);
+		double time = getTimeToCollision(entity);
 		if (time == Double.POSITIVE_INFINITY)
 			return null;
 		
 		Position newPosition1 = new Position(this.getPosition().getPositionX() + this.getVelocityX() * time, this.getPosition().getPositionY() + this.getVelocityY() * time);
-		Position newPosition2 = new Position(ship.getPosition().getPositionX() + ship.getVelocityX() * time, ship.getPosition().getPositionY() + ship.getVelocityY() * time);
+		Position newPosition2 = new Position(entity.getPosition().getPositionX() + entity.getVelocityX() * time, entity.getPosition().getPositionY() + entity.getVelocityY() * time);
 		
 		double signX1 = 1;
 		if (newPosition1.getPositionX() > newPosition2.getPositionX())
@@ -694,6 +718,40 @@ public class Ship extends Entity {
 		return vector;
 	}
 	
+	
+	public void collide(Entity entity) {
+		double[] position = getCollisionPosition(entity);
+		
+		if(entity.getClass().equals(World.class)) {
+			if (position[1] == this.world.getHeight()) {
+				velocityX = this.getVelocityX();
+				velocityY = - this.getVelocityY();
+			}
+			else if (position[0] == this.world.getWidth()) {
+				velocityX = - this.getVelocityX();
+				velocityY = this.getVelocityY();
+			}
+			
+			this.setVelocity(velocityX, velocityY);
+		}
+		
+		else if (entity.getClass().equals(Ship.class)) {
+			double J = (2 * this.getMass() * ((Ship) entity).getMass() * (this.getSpeed() - ((Ship) entity).getSpeed()) * (this.getRadius() - ((Ship) entity).getRadius()) / (this.getRadius() * (this.getMass() + ((Ship) entity).getMass())));
+			
+			double Jx1 = J * (this.getPosition().getPositionX() - ((Ship) entity).getPosition().getPositionX()) / this.getRadius();
+			double Jy1 = J * (this.getPosition().getPositionY() - ((Ship) entity).getPosition().getPositionY()) / this.getRadius();
+		
+			this.setVelocity(this.getVelocityX() + Jx1/this.getMass(), this.getVelocityY() + Jy1/this.getMass());
+			
+			double Jx2 = J * (((Ship) entity).getPosition().getPositionX() - this.getPosition().getPositionX()) / ((Ship) entity).getRadius();
+			double Jy2 = J * (((Ship) entity).getPosition().getPositionY() - this.getPosition().getPositionY()) / ((Ship) entity).getRadius();
+			
+			((Ship) entity).setVelocity(((Ship) entity).getVelocityX() + Jx2/((Ship) entity).getMass(), ((Ship) entity).getVelocityY() + Jy2 / ((Ship) entity).getMass());
+		}
+		else if (entity.getClass().equals(Bullet.class)) {
+			//TODO: hier zijn de verbanden tussen bullet en ship nodig
+		}
+	}
 	
 	
 			/*
