@@ -22,4 +22,5 @@ public abstract class Entity {
 	
 	public abstract boolean isInWorld(World world);
 	
+	public abstract boolean canHaveAsWorld(World world);
 }

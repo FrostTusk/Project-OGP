@@ -107,7 +107,7 @@ public class World {
 	/**
 	 * 
 	 * @param 	newUpperBound
-	 * 			The new upper bound for the widt and height for every world.
+	 * 			The new upper bound for the width and height for every world.
 	 * 
 	 * @see implementation
 	 */
@@ -116,8 +116,9 @@ public class World {
 		
 	}
 	
+	
 	/**
-	 * Check whether the given s is a valid s for
+	 * Check whether the given size is a valid size for
 	 * any world.
 	 *  
 	 * @param	width
@@ -125,8 +126,7 @@ public class World {
 	 * @param	height
 	 * 			The height to check.
 	 *         
-	 * @return 
-	 *       | result == 
+	 * @see implementation
 	*/
 	public static boolean isValidSize(double width, double height) {
 		return ( ( (width >= 0) && (width <= getUpperBound()) ) && ( (height >= 0) && (height <= getUpperBound()) ));
@@ -169,17 +169,40 @@ public class World {
 	private List<Entity> entities = new ArrayList<Entity>();
 	
 	
+	/**
+	 * Check whether a given in entity is currently in this world.
+	 *  
+	 * @param	entity
+	 * 			The entity to check.
+	 * @see implementation
+	 */
+	@Basic @Raw
 	public boolean containsEntity(Entity entity) {
 		return entities.contains(entity);
 	}
 	
-	
+	/**
+	 * Check whether a given in entity can be in this world.
+	 *  
+	 * @param	entity
+	 * 			The entity to check.
+	 * @see implementation
+	 */
+	@Basic @Raw
 	public boolean canHaveAsEntity(Entity entity) {
-		if (!entities.contains(entity)) return true;
+		if ( (!entities.contains(entity)) && (entity.canHaveAsWorld(this)) ) return true;
 		return false;
 	}
 	
 	
+	/**
+	 * Add a given entity to this world.
+	 *  
+	 * @param	entity
+	 * 			The entity to check.
+	 * @see implementation
+	 */
+	@Basic @Raw
 	public void addEntity(Entity entity) throws NullPointerException, IllegalArgumentException {
 		if (entity == null) throw new NullPointerException();
 		if (!canHaveAsEntity(entity)) {
