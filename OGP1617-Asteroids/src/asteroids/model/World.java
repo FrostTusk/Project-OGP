@@ -65,6 +65,13 @@ public class World {
 	}
 	
 	
+	public void terminate() {
+		for (Entity entity: entities.values()) {
+			removeEntity(entity);
+		}
+	}
+	
+	
 	
 			/*
 			 * |----------------------------------------------------|
@@ -344,7 +351,7 @@ public class World {
 		
 		List<Ship> shipsResult = new ArrayList<Ship>();
 		for (int i = 0; i < entitiesResult.length; i++) { 
-			if (entitiesResult[i].toString()/*.getType()*/== "Ship") shipsResult.add((Ship)entitiesResult[i]);
+			if (entitiesResult[i].getType() == "Ship") shipsResult.add((Ship)entitiesResult[i]);
 		}
 		
 		return (Ship[])helper.convertListToArray(shipsResult);
@@ -356,10 +363,11 @@ public class World {
 		
 		List<Bullet> bulletsResult = new ArrayList<Bullet>();
 		for (int i = 0; i < entitiesResult.length; i++) { 
-			if (entitiesResult[i].toString()/*.getType()*/== "Ship") bulletsResult.add((Bullet)entitiesResult[i]);
+			if (entitiesResult[i].getType() == "Bullet") bulletsResult.add((Bullet)entitiesResult[i]);
 		}
 		
 		return (Bullet[])helper.convertListToArray(bulletsResult);
 	}
-
+	
+	
 }
