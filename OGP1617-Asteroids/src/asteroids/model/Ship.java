@@ -1,8 +1,11 @@
 package asteroids.model;
 
 import asteroids.helper.Entity;
+import asteroids.helper.Helper;
 import asteroids.helper.Position;
+
 import be.kuleuven.cs.som.annotate.*;
+
 
 /* NOTES:
 *	1. Constants:
@@ -21,10 +24,11 @@ import be.kuleuven.cs.som.annotate.*;
  * 7. Methods that handle Moving, Turning and Accelerating
  * 8. Methods that handle Calculating Distance, Overlap, and Collision Detection
  * 9. Methods that handle the relation with Worlds
- * 10. Helper Methods
  */
 
 /**
+ * A class of ships.
+ * 
 * @invar  	The position of each ship must be a valid position for any
 *         	ship.
 *       	| isValidPosition(getPositionX(), getPositionY())
@@ -39,7 +43,7 @@ import be.kuleuven.cs.som.annotate.*;
 * @invar  	Each ship must have a valid mass.
 *       	| canHaveAsMass(this.getMass())
 */
-public class Ship extends Entity{
+public class Ship extends Entity {
 	
 		/*
 		 * |------------------------------------------------------------|
@@ -630,20 +634,21 @@ public class Ship extends Entity{
 	 * 			| ship == null
 	 */
 	public double getTimeToCollision(Entity entity) throws IllegalArgumentException {
+		Helper helper = new Helper();
 		if (entity == null) 
 			throw new IllegalArgumentException();
 	
 		double[] deltaR = {entity.getPosition().getPositionX() - this.getPosition().getPositionX(), entity.getPosition().getPositionY() - this.getPosition().getPositionY()};
 		double[] deltaV = {entity.getVelocityX() - this.getVelocityX(), entity.getVelocityY() - this.getVelocityY()};
-		if (evaluateScalar(deltaR, deltaV) >= 0)
+		if (helper.evaluateScalar(deltaR, deltaV) >= 0)
 			return Double.POSITIVE_INFINITY;
 		
 		double omega = this.getRadius() + entity.getRadius();
-		double d = (Math.pow(evaluateScalar(deltaV, deltaR), 2) - evaluateScalar(deltaV)*(evaluateScalar(deltaR) - Math.pow(omega, 2)));
+		double d = (Math.pow(helper.evaluateScalar(deltaV, deltaR), 2) - helper.evaluateScalar(deltaV)*(helper.evaluateScalar(deltaR) - Math.pow(omega, 2)));
 		if (d <= 0)
 			return Double.POSITIVE_INFINITY;
 		
-		double deltaT = -( (evaluateScalar(deltaV, deltaR) + Math.sqrt(d)) / evaluateScalar(deltaV) );
+		double deltaT = -( (helper.evaluateScalar(deltaV, deltaR) + Math.sqrt(d)) / helper.evaluateScalar(deltaV) );
 		return deltaT;
 	}
 	
@@ -698,68 +703,40 @@ public class Ship extends Entity{
 	
 	
 
+	public World world = null;
+	
+	
 	@Override
 	public World getWorld() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.world;
 	}
 
 
-	@Override
-	public void setWorld(World world) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	@Override
-	public void deSetWorld() {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	
-	@Override
-	public boolean isInWorld(World world) {
-		// TODO Auto-generated method stub
+	public boolean canHaveAsWorld(World world) throws IllegalArgumentException, NullPointerException {
+		if ((getWorld() != null) && (isInWorld(world)) ) return true;
 		return false;
 	}
 	
 	
-	
-			/*
-			 * |--------------------------------------------|
-			 * | 10. The next methods are helper methods.	|
-			 * |--------------------------------------------| 
-			 */
-
-
-
-	/**
-	 * Calculates the cross product with a vector and itself.
-	 * 
-	 * @param 	vector1
-	 * 		  	The vector to be used.
-	 * 
-	 * @return	Returns the cross product of the given vector with itself.
-	 */
-	public double evaluateScalar(double[] vector) {
-		return Math.pow(vector[0], 2) + Math.pow(vector[1], 2);
+	@Override
+	public void setWorld(World world) throws IllegalArgumentException, NullPointerException {
+		if (world ==  null) throw new NullPointerException();
+		if (!canHaveAsWorld(world)) throw new IllegalArgumentException();
+		this.world = world;
 	}
-	
-	/**
-	 * Calculates the cross product between two vectors.
-	 * 
-	 * @param 	vector1
-	 * 		  	The first vector to be used.
-	 * @param 	vector2
-	 * 		  	The second vector to be used.
-	 * 
-	 * @return	Returns the cross product of two given vectors.
-	 */
-	public double evaluateScalar(double[] vector1, double[] vector2) {
-		return vector1[0]*vector2[0] + vector1[1]*vector2[1];
+
+	@Override
+	public void deSetWorld() throws NullPointerException {
+		if (getWorld() ==  null) throw new NullPointerException();
+		this.world = null;
 	}
+
+
+	@Override
+	public boolean isInWorld(World world) {
+		// TODO Auto-generated method stub
+		return false;
+	}	
 	
 }
  

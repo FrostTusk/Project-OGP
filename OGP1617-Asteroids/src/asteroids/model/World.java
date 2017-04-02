@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import asteroids.helper.Entity;
+
 import be.kuleuven.cs.som.annotate.*;
 
 /*
@@ -11,9 +12,12 @@ import be.kuleuven.cs.som.annotate.*;
  * 1. Methods that handle the Initialization of the World
  * 2. Methods that handle the Size of the World
  * 3. Methods that handle the relation with Entities
+ * 4. Methods that handle evolving the world
  */
 
 /**
+ * A class of worlds.
+ * 
  * @invar  	The size of each world must be a valid size for any
  *         	world.
  *       	| isValidSize(getWidth(), getHeight())
@@ -162,9 +166,15 @@ public class World {
 	}
 	
 	
+	public boolean canHaveAsEntity(Entity entity) {
+		if (!entities.contains(entity)) return true;
+		return false;
+	}
+	
+	
 	public void addEntity(Entity entity) throws NullPointerException, IllegalArgumentException {
 		if (entity == null) throw new NullPointerException();
-		if (entity.isInWorld(this)) {
+		if (!canHaveAsEntity(entity)) {
 			try {
 				entity.setWorld(this);
 			}
@@ -179,11 +189,58 @@ public class World {
 	
 	public void removeEntity(Entity entity) throws NullPointerException, IllegalArgumentException {
 		if (entity == null) throw new NullPointerException();
-		if ( (this.containsEntity(entity)) && (entity.getWorld() == this) ) {
+		if ( (containsEntity(entity)) && (entity.getWorld() == this) ) {
 			entities.remove(entity);
 			entity.deSetWorld();
 		}
 		else throw new IllegalArgumentException();
+	}
+	
+	
+	
+			/*
+			 * |------------------------------------------------|
+			 * | 4. The next methods handle evolving the world.	|
+			 * |------------------------------------------------| 
+			 */
+	
+	
+	
+	public void evolve(double time) {
+		Entity[] collisionEntitiesMin = calculateFirstCollision();
+		double collisionTimeMin = collisionEntitiesMin[0].getTimeToCollision(collisionEntitiesMin[1]);
+		if ( collisionTimeMin < time) {
+			update(collisionTimeMin);
+			// Resolve Collision
+			evolve(time-collisionTimeMin);
+		}
+		update(time);
+	}
+	
+	
+	public void update(double time) {
+		for (Entity entity: entities) {
+			System.out.println(entity);
+		}
+	}
+	
+	
+	public Entity[] calculateFirstCollision() {
+		double collisionTimeMin = -1;
+		Entity[] collisionEntitiesMin = new Entity[2];
+		
+		for (Entity entity1: entities) {
+			for (Entity entity2: entities) {
+				double collisionTimeTemp = entity1.getTimeToCollision(entity2);
+				if ( (collisionTimeTemp < collisionTimeMin) || (collisionTimeMin == -1 ) ) {
+					collisionTimeMin = collisionTimeTemp;
+					collisionEntitiesMin[0] = entity1;
+					collisionEntitiesMin[1] = entity2;
+				}
+			}
+		}
+		//TODO check if entities collide with borders.
+		return collisionEntitiesMin;
 	}
 	
 }

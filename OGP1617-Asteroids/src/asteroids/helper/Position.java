@@ -2,9 +2,9 @@ package asteroids.helper;
 
 import be.kuleuven.cs.som.annotate.*;
 
-// Helper class to store the data for positions
-
 /**
+ * A class of positions.
+ * 
  * @invar  	Each position must be a valid position.
  *       	| this.isValidPosition(this.getPositionX(), this.getPositionY())
  */

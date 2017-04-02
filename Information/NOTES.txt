@@ -7,12 +7,12 @@
 	3. When to test facade
 	4. Hoe class position doen
 		1. Wat met documentatie in Ship?
+
 2. TODO:
 	1. Proofread
 	2. Ship Class
-		1. Mass
-		2. Collision Update
-		3. Ownership -> Relations
+		1. Collision Update
+		2. Ownership -> Relations
 			1. Bullet
 			2. World
 	3. Bullet Class
@@ -21,5 +21,6 @@
 		1. Ship
 		2. Bullet
 		3. World
-test
+	6. Verander IllegalArgumentException -> NullPointerException (ook in facade)
+
 

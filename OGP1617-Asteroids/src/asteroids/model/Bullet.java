@@ -2,6 +2,7 @@ package asteroids.model;
 
 import asteroids.helper.Entity;
 import asteroids.helper.Position;
+
 import be.kuleuven.cs.som.annotate.*;
 
 /* NOTES:
@@ -21,6 +22,8 @@ import be.kuleuven.cs.som.annotate.*;
  */
 
 /**
+ * A class of bullets.
+ * 
 * @invar  	The position of each bullet must be a valid position for any
 *         	bullet.
 *       	| this.getPosition().isValidPosition(this.position.getPositionX(), this.position.getPositionY())
@@ -32,7 +35,7 @@ import be.kuleuven.cs.som.annotate.*;
 * @invar  	Each bullet must have a valid mass.
 *       	| this.canHaveAsMass(this.getMass())
 */
-public class Bullet extends Entity{
+public class Bullet extends Entity {
 	
 			/*
 			 * |----------------------------------------------------------------|
@@ -40,6 +43,7 @@ public class Bullet extends Entity{
 			 * |----------------------------------------------------------------| 
 			 */
 
+	
 	
 	/**
 	 * Initialize this new bullet with given X and Y position, a given X and Y velocity, a given orientation, and a given radius.
@@ -141,6 +145,7 @@ public class Bullet extends Entity{
 	 *         	bullet.
 	 *       	| ! this.getPosition().isValidPosition(positionX, positonY)
 	 */
+	@Raw
 	public void setPosition(double positionX, double positionY) 
 			throws IllegalArgumentException {
 		try {
@@ -204,6 +209,7 @@ public class Bullet extends Entity{
 	 * Return the current speed of the bullet.
 	 * @return	Returns the speed of the current bullet.
 	 */
+	@Raw
 	public double getSpeed() {
 		return Math.sqrt((getVelocityX() * getVelocityX()) + (getVelocityY() * getVelocityY()));
 	}
@@ -220,7 +226,8 @@ public class Bullet extends Entity{
 	 * 			or not. true if it is, false if not.
 	 *       	| result == (! (isNaN(velocityX)) || (isNaN(velocityY)) ) &&
 	 *       				Math.sqrt((velocityX * velocityX) + (velocityY * velocityY)) > constantMaxSpeed
-	*/
+	 */
+	@Raw
 	public boolean isValidSpeed(double velocityX, double velocityY) {
 		if ( (java.lang.Double.isNaN(velocityX)) || (java.lang.Double.isNaN(velocityY)) )
 			return false;
@@ -249,6 +256,7 @@ public class Bullet extends Entity{
 	 *       	|   then new.getVelocityX() == 0
 	 *       	|		 new.getVelocityY() == 0
 	 */
+	@Raw
 	public void setVelocity(double velocityX, double velocityY) {
 		if (isValidSpeed(velocityX, velocityY)) {
 			this.velocityX = velocityX;
@@ -306,6 +314,7 @@ public class Bullet extends Entity{
 	* 			as a valid radius or not. true if it can, false if not.
 	*       	| result == (POSITIVE_INFINITY > radius) && (radius >= this.getMinRadius())
 	*/
+	@Raw
 	public boolean canHaveAsRadius(double radius) {
 		if ( (Double.POSITIVE_INFINITY > radius) && (radius >= getMinRadius()) )
 			return true;
@@ -365,7 +374,7 @@ public class Bullet extends Entity{
 	
 			/*
 		     * |----------------------------------------------------|
-		     * | 6. The next methods handle relation with worlds.	|
+		     * | 6. The next methods handle Collision Detection.	|
 		     * |----------------------------------------------------| 
 		     */
 	
@@ -374,26 +383,42 @@ public class Bullet extends Entity{
 	public double getTimeToCollision(Entity entity) {
 		return 0;
 	}
-
-
+	
+	
+	
+			/*
+		     * |----------------------------------------------------|
+		     * | 7. The next methods handle relation with worlds.	|
+		     * |----------------------------------------------------| 
+		     */
+	
+	
+	
+	public World world = null;
+	
 	@Override
 	public World getWorld() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.world;
 	}
 
-
-	@Override
-	public void setWorld(World world) {
-		// TODO Auto-generated method stub
-		
+	
+	public boolean canHaveAsWorld(World world) throws IllegalArgumentException, NullPointerException {
+		if ((getWorld() != null) && (isInWorld(world)) ) return true;
+		return false;
 	}
-
+	
 
 	@Override
-	public void deSetWorld() {
-		// TODO Auto-generated method stub
-		
+	public void setWorld(World world) throws IllegalArgumentException, NullPointerException {
+		if (world ==  null) throw new NullPointerException();
+		if (!canHaveAsWorld(world)) throw new IllegalArgumentException();
+		this.world = world;
+	}
+	
+	@Override
+	public void deSetWorld() throws NullPointerException {
+		if (getWorld() ==  null) throw new NullPointerException();
+		this.world = null;
 	}
 
 
@@ -402,6 +427,5 @@ public class Bullet extends Entity{
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
 	
 }
