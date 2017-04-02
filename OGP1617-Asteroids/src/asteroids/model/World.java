@@ -104,6 +104,13 @@ public class World {
 	}
 	
 	
+	/**
+	 * 
+	 * @param 	newUpperBound
+	 * 			The new upper bound for the widt and height for every world.
+	 * 
+	 * @see implementation
+	 */
 	public void setUpperBound(double newUpperBound) {
 		upperBound = newUpperBound;
 		
@@ -122,7 +129,6 @@ public class World {
 	 *       | result == 
 	*/
 	public static boolean isValidSize(double width, double height) {
-		
 		return ( ( (width >= 0) && (width <= getUpperBound()) ) && ( (height >= 0) && (height <= getUpperBound()) ));
 	}
 	
@@ -157,7 +163,9 @@ public class World {
 			 */
 
 
-	
+	/**
+	 * List holding all entities of this world.
+	 */
 	private List<Entity> entities = new ArrayList<Entity>();
 	
 	

@@ -174,7 +174,7 @@ public class Position {
 		// A position has to be a number.
 		if ( (java.lang.Double.isNaN(positionX)) || (java.lang.Double.isNaN(positionY)) )
 			return false;
-		// A position cannot be smaller/bigger or equal to it's lower and upper bounds.
+		// A position cannot be smaller/bigger or equal to its lower and upper bounds.
 		if ( (getMinPositionX() < positionX) && (getMaxPositionX() > positionX) &&
 				(getMinPositionY() < positionY) && (getMaxPositionY() > positionY) )
 			return true;

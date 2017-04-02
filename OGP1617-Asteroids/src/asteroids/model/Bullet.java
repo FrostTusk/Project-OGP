@@ -119,7 +119,7 @@ public class Bullet extends Entity {
 	/**
 	 * Return the position of this bullet.
 	 */
-	@Basic @Raw
+	@Basic @Override @Raw 
 	public Position getPosition() {
 		return this.position;
 	}
@@ -183,7 +183,7 @@ public class Bullet extends Entity {
 	/**
 	 * Return the X velocity of this bullet.
 	 */
-	@Basic @Raw
+	@Basic @Override @Raw
 	public double getVelocityX() {
 		return this.velocityX;
 	}
@@ -191,7 +191,7 @@ public class Bullet extends Entity {
 	/**
 	 * Return the Y velocity of this bullet.
 	 */
-	@Basic @Raw
+	@Basic @Override @Raw
 	public double getVelocityY() {
 		return this.velocityY;
 	}
@@ -299,7 +299,7 @@ public class Bullet extends Entity {
 	/**
 	* Return the radius of this bullet.
 	*/
-	@Basic @Raw
+	@Basic @Override @Raw
 	public double getRadius() {
 		return this.radius;
 	}
@@ -339,7 +339,6 @@ public class Bullet extends Entity {
 	
 	/**
 	 * Return the current mass of the bullet.
-	 * @return	Returns the mass of the current bullet.
 	 */
 	@Basic @Raw
 	public double getMass() {
@@ -393,28 +392,57 @@ public class Bullet extends Entity {
 		     */
 	
 	
-	
+	/**
+	 * Variable registering the world of this bullet.
+	 */
 	public World world = null;
 	
-	@Override
+	
+	/**
+	* Return the world of this bullet.
+	*/
+	@Basic @Override @Raw
 	public World getWorld() {
 		return this.world;
 	}
 
 	
+	/**
+	 * Check whether this bullet can have the given world as world. 
+	 *  
+	 * @param  	world
+	 *         	The world to check.
+	 *         
+	 * @see implementation
+	 */
+	@Raw
 	public boolean canHaveAsWorld(World world) throws IllegalArgumentException, NullPointerException {
 		if ((getWorld() != null) && (isInWorld(world)) ) return true;
 		return false;
 	}
 	
-
-	@Override
+	
+	/**
+	 * Set a given world as world for this bullet.
+	 *  
+	 * @param  	world
+	 *         	The world to set as world for this bullet.
+	 *         
+	 * @see implementation
+	 */
+	@Override @Raw
 	public void setWorld(World world) throws IllegalArgumentException, NullPointerException {
 		if (world ==  null) throw new NullPointerException();
 		if (!canHaveAsWorld(world)) throw new IllegalArgumentException();
 		this.world = world;
 	}
 	
+	
+	/**
+	 * Remove the current world as world for this bullet.
+	 *      
+	 * @see implementation
+	 */
 	@Override
 	public void deSetWorld() throws NullPointerException {
 		if (getWorld() ==  null) throw new NullPointerException();

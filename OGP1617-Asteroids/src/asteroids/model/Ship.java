@@ -217,6 +217,7 @@ public class Ship extends Entity {
 	/**
 	 * Return the current speed of the ship.
 	 * @return	Returns the speed of the current ship.
+	 * 			| result == Math.sqrt((this.getVelocityX() * this.getVelocityX()) + (this.getVelocityY() * this.getVelocityY()))
 	 */
 	public double getSpeed() {
 		return Math.sqrt((getVelocityX() * getVelocityX()) + (getVelocityY() * getVelocityY()));
@@ -234,7 +235,7 @@ public class Ship extends Entity {
 	 * 			or not. true if it is, false if not.
 	 *       	| result == (! (isNaN(velocityX)) || (isNaN(velocityY)) ) &&
 	 *       				Math.sqrt((velocityX * velocityX) + (velocityY * velocityY)) > constantMaxSpeed
-	*/
+	 */
 	public boolean isValidSpeed(double velocityX, double velocityY) {
 		if ( (java.lang.Double.isNaN(velocityX)) || (java.lang.Double.isNaN(velocityY)) )
 			return false;
