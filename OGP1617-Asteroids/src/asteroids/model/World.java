@@ -146,15 +146,16 @@ public class World {
 	
 	
 	
-	/*
-	 * |------------------------------------------------------------|
-	 * | 3. The next methods handle the relationship with Entities	|
-	 * |------------------------------------------------------------| 
-	 */
+			/*
+			 * |------------------------------------------------------------|
+			 * | 3. The next methods handle the relationship with Entities	|
+			 * |------------------------------------------------------------| 
+			 */
 
 
 	
 	private List<Entity> entities = new ArrayList<Entity>();
+	
 	
 	public boolean containsEntity(Entity entity) {
 		return entities.contains(entity);
@@ -167,13 +168,14 @@ public class World {
 			try {
 				entity.setWorld(this);
 			}
-			catch (IllegalArgumentException exc){
+			catch (IllegalArgumentException exc) {
 				throw new IllegalArgumentException();
 			}
 			entities.add(entity);
 		}
 		else throw new IllegalArgumentException();
 	}
+	
 	
 	public void removeEntity(Entity entity) throws NullPointerException, IllegalArgumentException {
 		if (entity == null) throw new NullPointerException();
