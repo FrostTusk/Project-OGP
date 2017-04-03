@@ -350,20 +350,36 @@ public class Bullet extends Entity {
 		return this.mass;
 	}
 	
+	
 	/**
-	 * Return the current mass of the bullet and its cargo.
-	 * @return	Returns the mass of the current bullet + the mass of the objects on the bullet.
+	 * Check whether the given mass is a valid mass for this bullet.
+	 *  
+	 * @param  	mass
+	 * 			the mass to check
+	 * @return	Returns whether or not the mass is a valid mass for this bullet
+	 * 			or not. true if it is, false if not.
+	 *       	| result == (mass > ( 4/3 * Math.PI * Math.pow(getRadius(), 3) * (1.42 * Math.pow(10, 12)) ))
 	 */
-	public double getTotalMass() {
-		return getMass(); //TODO + mass of cargo
-	}
-	
-	
 	public boolean isValidMass(double mass) {
 		return mass > ( 4/3 * Math.PI * Math.pow(getRadius(), 3) * (1.42 * Math.pow(10, 12)) );
 	}
 	
 	
+	/**
+	 * Set the mass of this bullet to the given mass.
+	 * 
+	 * @param  	mass
+	 * 			the new mass for this bullet
+	 *         
+	 * @post   	If the given mass is a valid mass for this bullet,
+	 *         	the mass of this bullet is set to the given mass.
+	 *       	| if (isValidMass(mass)))
+	 *       	|   then new.getMass() == mass
+	 * @post	If the given mass isn't valid, the mass
+	 * 			of this bullet will be equal to (4/3 * Math.PI * Math.pow(getRadius(), 3) * 1.42 * Math.pow(10, 12)).
+	 *       	| if (! isValidMass(mass)))
+	 *       	|   then new.getMass() == (4/3 * Math.PI * Math.pow(getRadius(), 3) * 1.42 * Math.pow(10, 12))
+	 */
 	public void setMass(double mass) {
 		if (isValidMass(mass)) {
 			this.mass = mass;

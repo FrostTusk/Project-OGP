@@ -619,6 +619,36 @@ public class Ship extends Entity {
 		distance = distance - this.getRadius() - entity.getRadius();
 		return distance;
 	}
+	
+	
+	/**
+	 * Gets the distance between this ship and a world
+	 * 
+	 * @param 	world
+	 * 			the world to which to calculate the distance
+	 * 
+	 * @return 	distance[]
+	 * 			the distances between the center of the ship and the boundaries of the world
+	 * 
+	 * @post	distance[0] is equal to the shortest distance between the center of this ship and the vertical boundary of the world
+	 * 			distance[1] is equal to the shortest distance between the center of this ship and the horizontal boundary of the world
+	 */
+	public double[] getDistanceBetween(World world) {
+		double[] distance = {Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY};	// distance between the ship and the boundaries
+		
+		distance[0] = this.getPosition().getPositionX() - world.getWidth();
+		if (world.getWidth() > distance[0]) {
+			distance[0] = this.getPosition().getPositionX();
+		}
+		
+		distance[1] = this.getPosition().getPositionY() - world.getHeight();
+		if (world.getHeight() > distance[1]) {
+			distance[1] = this.getPosition().getPositionY();
+		}
+					
+		return distance;
+	}
+	
 
 	
 	
@@ -691,6 +721,57 @@ public class Ship extends Entity {
 	
 	
 	/**
+	 * Gets the time to collision between this ship and a given world.
+	 * 
+	 * @param  	world
+	 * 			The world to which the collision time needs to be calculated.
+	 * 
+	 * @return	The time returned will be larger than 0 and will be equal to
+	 * 			the time needed for the entity to reach a position where it apparently collides with the boundaries of the world
+	 * 
+	 * @post	The time returned will be equal to the time needed for this ship to collide with the world's boundaries.
+	 * 			If the ship never collides with the boundary, the returned time will be infinity.
+	 * 
+	 */
+	public double getTimeToCollision(World world) {
+		
+		position = this.getPosition();
+		velocityX = this.getVelocityX();
+		velocityY = this.getVelocityY();
+		
+		double[] distance;
+		
+		distance = getDistanceBetween(world);
+		
+		
+		double time1 = distance[0] / this.getVelocityX();
+		if (distance[1] + this.getVelocityY() * time1 > world.getHeight()) {
+			return Double.POSITIVE_INFINITY;
+		}
+		if (distance[1] + this.getVelocityY() * time1 < 0) {
+			return Double.POSITIVE_INFINITY;
+		}
+		
+		double time2 = distance[1] / this.getVelocityY();
+		if (distance[0] + this.getVelocityX() * time2 > world.getWidth()) {
+			return Double.POSITIVE_INFINITY;
+		}
+		if (distance[0] + this.getVelocityX() * time2 < 0) {
+			return Double.POSITIVE_INFINITY;
+		}
+		
+		double time = time1;
+		if (time1 > time2) {
+			time = time2;
+		}
+		
+					
+		return time;
+	
+	}
+	
+	
+	/**
 	 * Gets the collision position between this and a given entity.
 	 * 
 	 * @param  	entity
@@ -730,24 +811,45 @@ public class Ship extends Entity {
 		return vector;
 	}
 	
+
+	/**
+	 * Gets the collision position between this and a given world.
+	 * 
+	 * @param  	world
+	 * 			the world to which you want to know the collision position.
+	 * 
+	 * @return	The position returned will be the position where this ship and the world
+	 * 			collide with each other. The method returns null if they never collide.
+	 * 
+	 * @post	vector contains the position where this ship and the world will collide, if any.
+	 * 			vector is null if they never collide.
+	 */
+	public double[] getCollisionPosition(World world) {
+		double vector[] = null;
+		
+		return vector;	
+	}
+	
+	
+	public void collide(World world) {
+		double[] position = getCollisionPosition(world);
+		if (position[1] == this.world.getHeight() || position[1] == 0) {
+			velocityX = this.getVelocityX();
+			velocityY = - this.getVelocityY();
+		}
+		else if (position[0] == this.world.getWidth() || position[0] == 0) {
+			velocityX = - this.getVelocityX();
+			velocityY = this.getVelocityY();
+		}
+			
+			this.setVelocity(velocityX, velocityY);
+	}
+	
 	
 	public void collide(Entity entity) {
 		double[] position = getCollisionPosition(entity);
 		
-		if(entity.getClass().equals(World.class)) {
-			if (position[1] == this.world.getHeight()) {
-				velocityX = this.getVelocityX();
-				velocityY = - this.getVelocityY();
-			}
-			else if (position[0] == this.world.getWidth()) {
-				velocityX = - this.getVelocityX();
-				velocityY = this.getVelocityY();
-			}
-			
-			this.setVelocity(velocityX, velocityY);
-		}
-		
-		else if (entity.getClass().equals(Ship.class)) {
+		if (entity.getClass().equals(Ship.class)) {
 			double J = (2 * this.getMass() * ((Ship) entity).getMass() * (this.getSpeed() - ((Ship) entity).getSpeed()) * (this.getRadius() - ((Ship) entity).getRadius()) / (this.getRadius() * (this.getMass() + ((Ship) entity).getMass())));
 			
 			double Jx1 = J * (this.getPosition().getPositionX() - ((Ship) entity).getPosition().getPositionX()) / this.getRadius();
@@ -806,16 +908,26 @@ public class Ship extends Entity {
 	
 	@Override
 	public boolean isInWorld(World world) {
-		// TODO Auto-generated method stub
+		try {
+			if (world.containsEntity(this)) {
+				return true;
+			}
+		}
+		catch (NullPointerException exc) {
+//          //Because the given purchase is raw, it is possible that
+//          //it does not yet reference an effective share.
+//       assert (purchase == null) || (purchase.getShare() == null);
+         return false;
+		}
 		return false;
 	}
 	
 	
 	/**
-	 * Set a given world as world for this bullet.
+	 * Set a given world as world for this ship.
 	 *  
 	 * @param  	world
-	 *         	The world to set as world for this bullet.
+	 *         	The world to set as world for this ship.
 	 *         
 	 * @see implementation
 	 */
