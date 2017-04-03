@@ -143,6 +143,7 @@ public class World {
 	 * 
 	 * @see implementation
 	 */
+	// TODO Moet deze methode wel public zijn?
 	public void setUpperBound(double newUpperBound) {
 		upperBound = newUpperBound;
 		
@@ -160,12 +161,12 @@ public class World {
 	 * @see implementation
 	 */
 	public double[] calculateDefaultSize(double width, double height) {
-		double[] result = new double[2];
+		double[] result = {width, height};
 		
 		if ( (width < 0) || (java.lang.Double.isNaN(width)) ) result[0] = 0;
-		else result[0] = getUpperBound();
+		else if (width > getUpperBound()) result[0] = getUpperBound();
 		if ( (height < 0) || (java.lang.Double.isNaN(width)) ) result[1] = 0;
-		else result[1] = getUpperBound();
+		else if (height > getUpperBound()) result[1] = getUpperBound();
 
 		return result;
 	}

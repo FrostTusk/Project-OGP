@@ -41,11 +41,13 @@ public class TestShip {
 	}
 
 	
-	 /*
-	  * |-------------------------------------------|
-	  * | 1. The next test test the Initialization.	|
-	  * |-------------------------------------------| 
-	  */	
+	
+			/*
+			 * |--------------------------------------------|
+			 * | 1. The next test test the Initialization.	|
+			 * |--------------------------------------------| 
+			 */	
+	
 	
 	
 	@Test
@@ -63,18 +65,21 @@ public class TestShip {
 	}
 
 	
-	 /*
-	  * |---------------------------------------|
-	  * | 2. The next tests test the Position.	|
-	  * |---------------------------------------| 
-	  */	
+	
+			/*
+			 * |----------------------------------------|
+			 * | 2. The next tests test the Position.	|
+			 * |----------------------------------------| 
+			 */	
 
+	
 	
 	@Test(expected = ModelException.class)
 	public void testCreateShipPosShipIsNull() throws ModelException {
 		Ship ship = null;
 		facade.getShipPosition(ship);
 	}
+	
 	
 	@Test
 	public void testCreatShipPosGeneric() throws ModelException {
@@ -104,6 +109,7 @@ public class TestShip {
 		assertEquals(0, position5[1], EPSILON);
 	}
 	
+	
 	@Test(expected = ModelException.class)
 	public void testCreateShipXIsPosInfinity() throws ModelException {
 		facade.createShip(Double.POSITIVE_INFINITY, 200, 10, -10, 20, Math.PI);
@@ -118,6 +124,7 @@ public class TestShip {
 	public void testCreateShipXIsNan() throws ModelException {
 		facade.createShip(Double.NaN, 200, 10, -10, 20, Math.PI);
 	}
+	
 	
 	@Test(expected = ModelException.class)
 	public void testCreateShipYIsPosInfinity() throws ModelException {
@@ -134,14 +141,15 @@ public class TestShip {
 		facade.createShip(200, Double.NaN, 10, -10, 20, Math.PI);
 	}
 	
-	@Test(expected = ModelException.class)
-	public void testCreateShipXYIsNegInfinity() throws ModelException {
-		facade.createShip(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, 10, -10, 20, Math.PI);
-	}
 	
 	@Test(expected = ModelException.class)
 	public void testCreateShipXYIsPosInfinity() throws ModelException {
 		facade.createShip(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, 10, -10, 20, Math.PI);
+	}
+	
+	@Test(expected = ModelException.class)
+	public void testCreateShipXYIsNegInfinity() throws ModelException {
+		facade.createShip(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, 10, -10, 20, Math.PI);
 	}
 	
 	@Test(expected = ModelException.class)
@@ -150,11 +158,13 @@ public class TestShip {
 	}
 	
 	
-	 /*
-	  * |---------------------------------------|
-	  * | 3. The next tests test the Speed.		|
-	  * |---------------------------------------| 
-	  */	
+	
+			/*
+			 * |------------------------------------|
+			 * | 3. The next tests test the Speed.	|
+			 * |------------------------------------| 
+			 */	
+	
 	
 	
 	@Test(expected = ModelException.class)
@@ -162,6 +172,7 @@ public class TestShip {
 		Ship ship = null;
 		facade.getShipVelocity(ship);
 	}
+	
 	
 	@Test
 	public void testCreatShipVelGeneric() throws ModelException {
@@ -191,12 +202,14 @@ public class TestShip {
 		assertEquals(0, velocity5[1], EPSILON);
 	}
 	
+	
 	@Test
 	public void testCreateShipVelOverflow() throws ModelException {
 		Ship ship = facade.createShip(200, 200, 500000, 500000, 20, Math.PI);
 		assertEquals(0, facade.getShipVelocity(ship)[0], EPSILON);
 		assertEquals(0, facade.getShipVelocity(ship)[1], EPSILON);
 	}
+	
 	
 	@Test
 	public void testCreateShipVXIsPosInfinity() throws ModelException {
@@ -216,6 +229,7 @@ public class TestShip {
 		assertEquals(0, facade.getShipVelocity(ship)[0], EPSILON);
 	}
 	
+	
 	@Test
 	public void testCreateShipVYIsPosInfinity() throws ModelException {
 		Ship ship = facade.createShip(200, 200, 10, Double.POSITIVE_INFINITY, 20, Math.PI);
@@ -234,6 +248,14 @@ public class TestShip {
 		assertEquals(0, facade.getShipVelocity(ship)[1], EPSILON);
 	}
 	
+	
+	@Test
+	public void testCreateShipVXYIsPosInfinity() throws ModelException {
+		Ship ship = facade.createShip(200, 200, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, 20, Math.PI);
+		assertEquals(0, facade.getShipVelocity(ship)[0], EPSILON);
+		assertEquals(0, facade.getShipVelocity(ship)[1], EPSILON);
+	}
+	
 	@Test
 	public void testCreateShipVXYIsNegInfinity() throws ModelException {
 		Ship ship = facade.createShip(-200, 200, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, 20, Math.PI);
@@ -242,13 +264,6 @@ public class TestShip {
 	}
 	
 	@Test
-	public void testCreateShipVXYIsPosInfinity() throws ModelException {
-		Ship ship = facade.createShip(200, 200, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, 20, Math.PI);
-		assertEquals(0, facade.getShipVelocity(ship)[0], EPSILON);
-		assertEquals(0, facade.getShipVelocity(ship)[1], EPSILON);
-	}
-
-	@Test
 	public void testCreateShipVXYIsNan() throws ModelException {
 		Ship ship = facade.createShip(-200, 200, Double.NaN, Double.NaN, 20, Math.PI);
 		assertEquals(0, facade.getShipVelocity(ship)[0], EPSILON);
@@ -256,11 +271,13 @@ public class TestShip {
 	}
 	
 	
-	 /*
-	  * |---------------------------------------|
-	  * | 4. The next tests test the Radius.	|
-	  * |---------------------------------------| 
-	  */	
+	
+			/*
+			 * |------------------------------------|
+			 * | 4. The next tests test the Radius.	|
+			 * |------------------------------------| 
+			 */	
+	
 	
 	
 	@Test(expected = ModelException.class)
@@ -269,12 +286,14 @@ public class TestShip {
 		facade.getShipRadius(ship);
 	}
 	
+	
 	@Test
 	public void testCreateShipRadiusGeneric() throws ModelException {
 		Ship ship = facade.createShip(100, 200, 10, -10, 50, Math.PI);
 		assertNotNull(facade.getShipRadius(ship));
 		assertEquals(50, facade.getShipRadius(ship), EPSILON);
 	}
+	
 	
 	@Test(expected = ModelException.class)
 	public void testCreateShipRadiusNegative() throws ModelException {
