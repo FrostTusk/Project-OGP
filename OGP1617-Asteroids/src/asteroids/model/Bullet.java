@@ -1,7 +1,6 @@
 package asteroids.model;
 
 import asteroids.helper.Entity;
-//import asteroids.helper.Helper;
 import asteroids.helper.Position;
 
 import be.kuleuven.cs.som.annotate.*;
@@ -19,8 +18,9 @@ import be.kuleuven.cs.som.annotate.*;
  * 4. Methods that handle the Radius of the bullet
  * 5. Methods that handle the Mass of the bullet
  * 6. Methods that handle Collision Detection
- * 7. Methods that handle the association with worlds
- * 8. Helper Methods
+ * 7. Methods that handle the association with Worlds
+ * 8. Methods that handle the association with Ships
+ * 9. Helper Methods
  */
 
 /**
@@ -103,8 +103,9 @@ public class Bullet extends Entity {
 	}
 	
 	
-	public void Terminate() {
-		if (this.getWorld() != null) world.removeEntity(this);
+	public void terminate() {
+		if (getWorld() != null) world.removeEntity(this);
+		if (getShip() != null) this.setShip(null);
 	}
 	
 
@@ -411,7 +412,7 @@ public class Bullet extends Entity {
 	/**
 	 * Variable registering the world of this bullet.
 	 */
-	public World world = null;
+	private World world = null;
 	
 	
 	/**
@@ -471,10 +472,40 @@ public class Bullet extends Entity {
 	}
 
 
+	
+			/*
+		     * |--------------------------------------------------------|
+		     * | 8. The next methods handle the association with ships.	|
+		     * |--------------------------------------------------------| 
+		     */
+	
+	
+	
+	
+	private Ship ship = null;
+	
+	
+	public Ship getShip() {
+		return this.ship;
+	}
+	
+	
+	public boolean canHaveAsShip(Ship ship) {
+		return ( (getShip() == null) && (getWorld() == null) );
+	}
+	
+	
+	public void setShip(Ship ship) throws IllegalArgumentException, NullPointerException {
+		if (ship == null) throw new NullPointerException();
+		if (canHaveAsShip(ship)) this.ship = ship;
+		else throw new IllegalArgumentException();
+	}
+	
+	
 
 			/*
 		     * |--------------------------------------------|
-		     * | 8. The next methods are Helper Methods.	|
+		     * | 9. The next methods are Helper Methods.	|
 		     * |--------------------------------------------| 
 		     */
 	

@@ -23,9 +23,10 @@ import be.kuleuven.cs.som.annotate.*;
  * 7. Methods that handle Moving, Turning and Accelerating
  * 8. Methods that handle Calculating Distance and Overlap
  * 9. Methods that handle Collision Detection
- * 10. Methods that handle resolving Collisions
- * 11. Methods that handle the relation with Worlds
- * 12. Helper Methods
+ * 10. Methods that handle Resolving Collisions
+ * 11. Methods that handle the association with Worlds
+ * 12. Methods that handle the association with Bullets
+ * 13. Helper Methods
  */
 
 /**
@@ -124,12 +125,19 @@ public class Ship extends Entity {
 	}
 	
 	
+	public void terminate() {
+		if (getWorld() != null) world.removeEntity(this);
+	}
+	
+	
 	
 		 /*
 		  * |-------------------------------------------------------|
 		  * | 2. The next methods handle the Position of the Ship.	|
 		  * |-------------------------------------------------------| 
 		  */
+	
+	
 	
 	private Position position;
 	
@@ -392,11 +400,11 @@ public class Ship extends Entity {
 	
 	
 	
-	/*
-	  * |---------------------------------------------------|
-	  * | 6. The next methods handle the mass of the ship.	|
-	  * |---------------------------------------------------| 
-	  */
+			/*
+			 * |----------------------------------------------------|
+			 * | 6. The next methods handle the mass of the ship.	|
+			 * |----------------------------------------------------| 
+			 */
 	
 	
 	
@@ -468,7 +476,7 @@ public class Ship extends Entity {
 	
 	
 	/**
-	 * Change the position of the spacecraft based on the current
+	 * Change the position of the ship based on the current
 	 * position, velocity and a given time duration time.
 	 * 
 	 * @param  	time
@@ -640,16 +648,6 @@ public class Ship extends Entity {
 		return distance;
 	}
 	
-
-	
-	
-				/*
-				 * |----------------------------------------------------|
-				 * | 9. The next methods handle Collision Detection.	|
-				 * |----------------------------------------------------| 
-				 */
-	
-	
 	
 	/**
 	 * Returns true if the entities overlap, false if they don't.
@@ -674,6 +672,18 @@ public class Ship extends Entity {
 		else 
 			return false;
 	}
+	
+	
+	
+				/*
+				 * |----------------------------------------------------|
+				 * | 9. The next methods handle Collision Detection.	|
+				 * |----------------------------------------------------| 
+				 */
+	
+	
+	
+	// TODO Entities only collide if they're in the same world.
 	
 	
 	/**
@@ -811,9 +821,7 @@ public class Ship extends Entity {
 	public void resolveCollision(Entity entity) {
 		
 		if (entity.getType() == "Ship") resolveCollisionShip((Ship)entity);
-		else if (entity.getClass().equals(Bullet.class)) {
-			//TODO: hier zijn de verbanden tussen bullet en ship nodig
-		}
+		else if (entity.getType() == "Bullet") resolveCollisionBullet((Bullet) entity);
 	}
 
 	public void resolveCollision(World world) {
@@ -839,6 +847,15 @@ public class Ship extends Entity {
 		double Jy2 = J * (ship.getPosition().getPositionY() - this.getPosition().getPositionY()) / ship.getRadius();
 		
 		ship.setVelocity(ship.getVelocityX() + Jx2/ship.getMass(), ship.getVelocityY() + Jy2 / ship.getMass());
+	}
+	
+	public void resolveCollisionBullet(Bullet bullet) {
+		if (bullet.getShip() == this) reloadBullet(bullet);
+		else {
+			this.terminate();
+			bullet.terminate();
+		}
+		
 	}
 	
 	
@@ -924,10 +941,24 @@ public class Ship extends Entity {
 	}
 
 
+	
+			/*
+		     * |------------------------------------------------------------|
+		     * | 12. The next methods handle the association with bullets.	|
+		     * |------------------------------------------------------------| 
+		     */
+	
+	
+	
+	public void reloadBullet(Bullet bullet) {
+		
+	}
+	
+	
 
 			/*
 		     * |--------------------------------------------|
-		     * | 12. The next methods are Helper Methods.	|
+		     * | 13. The next methods are Helper Methods.	|
 		     * |--------------------------------------------| 
 		     */
 	

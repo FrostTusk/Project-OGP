@@ -326,11 +326,11 @@ public class TestShip {
 	}
 	
 	
-	 /*
-	  * |-------------------------------------------|
-	  * | 5. The next tests test the Orientation.	|
-	  * |-------------------------------------------| 
-	  */	
+			/*
+			 * |--------------------------------------------|
+			 * | 5. The next tests test the Orientation.	|
+			 * |--------------------------------------------| 
+			 */	
 	
 	
 	@Test(expected = ModelException.class)
@@ -338,6 +338,7 @@ public class TestShip {
 		Ship ship = null;
 		facade.getShipOrientation(ship);
 	}
+	
 	
 	@Test
 	public void testCreateShipOGeneric() throws ModelException {
@@ -351,6 +352,7 @@ public class TestShip {
 		assertNotNull(facade.getShipOrientation(ship3));
 		assertEquals(2*Math.PI, facade.getShipOrientation(ship3), EPSILON);
 	}
+	
 	
 	@Test(expected = ModelException.class)
 	public void testCreateShipOisNeg() throws ModelException {
@@ -378,11 +380,12 @@ public class TestShip {
 	}
 		
 	
-	 /*
-	  * |-------------------------------------------|
-	  * | 6. The next tests test the Move method.	|
-	  * |-------------------------------------------| 
-	  */	
+	
+			/*
+			 * |--------------------------------------------|
+			 * | 6. The next tests test the Move method.	|
+			 * |--------------------------------------------| 
+			 */	
 
 	
 	@Test(expected = ModelException.class)
@@ -390,6 +393,7 @@ public class TestShip {
 		Ship ship = null;
 		facade.move(ship, 1);
 	}
+	
 	
 	@Test
 	public void testMoveGeneric() throws ModelException {
@@ -401,11 +405,13 @@ public class TestShip {
 		assertEquals(85, position[1], EPSILON);
 	}
 	
+	
 	@Test(expected = ModelException.class)
 	public void testMoveTisNeg() throws ModelException {
 		Ship ship = facade.createShip(100, 100, 30, -15, 20, 0);
 		facade.move(ship, -1);
 	}
+	
 	
 	@Test
 	public void testMoveTisZero() throws ModelException {
@@ -416,6 +422,7 @@ public class TestShip {
 		assertEquals(100, position[0], EPSILON);
 		assertEquals(100, position[1], EPSILON);
 	}
+	
 	
 	@Test(expected = ModelException.class)
 	public void testMoveTisPosInfinity() throws ModelException {
@@ -436,11 +443,13 @@ public class TestShip {
 	}
 	
 	
-	/*
-	  * |-----------------------------------------------------------|
-	  * | 7. The next tests test the Thrust method.					|
-	  * |-----------------------------------------------------------| 
-	  */
+	
+			/*
+			 * |--------------------------------------------|
+			 * | 7. The next tests test the Thrust method.	|
+			 * |--------------------------------------------| 
+			 */
+	
 	
 	
 	@Test
@@ -460,7 +469,7 @@ public class TestShip {
 		assertEquals(0, facade.getShipVelocity(ship)[0], EPSILON);
 		assertEquals(15, facade.getShipVelocity(ship)[1], EPSILON);
 	}
-	
+		
 	@Test
 	public void testThrustNeg() throws ModelException {
 		Ship ship = facade.createShip(100, 100, 100, 100, 20, 0);

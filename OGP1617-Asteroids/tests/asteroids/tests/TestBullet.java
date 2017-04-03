@@ -41,6 +41,7 @@ public class TestBullet {
 //		bullet.getPosition();
 //	}
 	
+	
 	@Test
 	public void testCreatBulletPosGeneric() throws ModelException {
 		Bullet bullet1 = new Bullet(100, 200, 10, -10, 20);
@@ -128,6 +129,7 @@ public class TestBullet {
 //		Bullet bullet = null;
 //		bullet.getSpeed();
 //	}
+	
 	
 	@Test
 	public void testCreatBulletVelGeneric() throws ModelException {
