@@ -381,12 +381,8 @@ public class Bullet extends Entity {
 	 *       	|   then new.getMass() == (4/3 * Math.PI * Math.pow(getRadius(), 3) * 1.42 * Math.pow(10, 12))
 	 */
 	public void setMass(double mass) {
-		if (isValidMass(mass)) {
-			this.mass = mass;
-		}
-		else {
-			this.mass = (4/3 * Math.PI * Math.pow(getRadius(), 3) * 1.42 * Math.pow(10, 12));
-		}
+		if (isValidMass(mass)) this.mass = mass;
+		else this.mass = (4/3 * Math.PI * Math.pow(getRadius(), 3) * 1.42 * Math.pow(10, 12));
 	}
 	
 	

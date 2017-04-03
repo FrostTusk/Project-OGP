@@ -23,8 +23,9 @@ import be.kuleuven.cs.som.annotate.*;
  * 7. Methods that handle Moving, Turning and Accelerating
  * 8. Methods that handle Calculating Distance and Overlap
  * 9. Methods that handle Collision Detection
- * 10. Methods that handle the relation with Worlds
- * 11. Helper Methods
+ * 10. Methods that handle resolving Collisions
+ * 11. Methods that handle the relation with Worlds
+ * 12. Helper Methods
  */
 
 /**
@@ -414,6 +415,13 @@ public class Ship extends Entity {
 		return this.mass;
 	}
 	
+	/**
+	 * Return the current mass of the ship and its cargo.
+	 * @return	Returns the mass of the current ship + the mass of the objects on the ship.
+	 */
+	public double getTotalMass() {
+		return this.getMass(); //TODO + mass of cargo
+	}
 	
 	/**
 	 * Check whether the given mass is a valid mass for this ship.
@@ -445,25 +453,12 @@ public class Ship extends Entity {
 	 *       	|   then new.getMass() == (4/3 * Math.PI * Math.pow(this.getRadius(), 3) * 1.42 * Math.pow(10, 12))
 	 */
 	public void setMass(double mass) {
-		if (isValidMass(mass)) {
-			this.mass = mass;
-		}
-		else {
-			this.mass = (4/3 * Math.PI * Math.pow(this.getRadius(), 3) * 1.42 * Math.pow(10, 12));
-		}
+		if (isValidMass(mass)) this.mass = mass;
+		else this.mass = (4/3 * Math.PI * Math.pow(this.getRadius(), 3) * 1.42 * Math.pow(10, 12));
 	}
 	
 	
-	/**
-	 * Return the current mass of the ship and its cargo.
-	 * @return	Returns the mass of the current ship + the mass of the objects on the ship.
-	 */
-	public double getTotalMass() {
-		return this.getMass(); //TODO + mass of cargo
-	}
-	
-	
-	
+
 		 /*
 		  * |---------------------------------------------------------------|
 		  * | 7. The next methods handle Moving, Turning and Accelerating.	|
@@ -637,26 +632,22 @@ public class Ship extends Entity {
 		double[] distance = {Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY};	// distance between the ship and the boundaries
 		
 		distance[0] = this.getPosition().getPositionX() - world.getWidth();
-		if (world.getWidth() > distance[0]) {
-			distance[0] = this.getPosition().getPositionX();
-		}
-		
+		if (world.getWidth() > distance[0]) distance[0] = this.getPosition().getPositionX();
+			
 		distance[1] = this.getPosition().getPositionY() - world.getHeight();
-		if (world.getHeight() > distance[1]) {
-			distance[1] = this.getPosition().getPositionY();
-		}
-					
+		if (world.getHeight() > distance[1]) distance[1] = this.getPosition().getPositionY();
+							
 		return distance;
 	}
 	
 
 	
 	
-			/*
-			 * |----------------------------------------------------|
-			 * | 9. The next methods handle Collision Detection.	|
-			 * |----------------------------------------------------| 
-			 */
+				/*
+				 * |----------------------------------------------------|
+				 * | 9. The next methods handle Collision Detection.	|
+				 * |----------------------------------------------------| 
+				 */
 	
 	
 	
@@ -719,7 +710,6 @@ public class Ship extends Entity {
 		return -( (helper.evaluateScalar(deltaV, deltaR) + Math.sqrt(d)) / helper.evaluateScalar(deltaV) );
 	}
 	
-	
 	/**
 	 * Gets the time to collision between this ship and a given world.
 	 * 
@@ -733,40 +723,19 @@ public class Ship extends Entity {
 	 * 			If the ship never collides with the boundary, the returned time will be infinity.
 	 * 
 	 */
-	public double getTimeToCollision(World world) {
-		
-		position = this.getPosition();
-		velocityX = this.getVelocityX();
-		velocityY = this.getVelocityY();
-		
-		double[] distance;
-		
-		distance = getDistanceBetween(world);
-		
+	public double getTimeToCollision(World world) {		
+		double[] distance = getDistanceBetween(world);
 		
 		double time1 = distance[0] / this.getVelocityX();
-		if (distance[1] + this.getVelocityY() * time1 > world.getHeight()) {
-			return Double.POSITIVE_INFINITY;
-		}
-		if (distance[1] + this.getVelocityY() * time1 < 0) {
-			return Double.POSITIVE_INFINITY;
-		}
-		
+		if (distance[1] + this.getVelocityY() * time1 > world.getHeight()) return Double.POSITIVE_INFINITY;
+		if (distance[1] + this.getVelocityY() * time1 < 0) return Double.POSITIVE_INFINITY;
+			
 		double time2 = distance[1] / this.getVelocityY();
-		if (distance[0] + this.getVelocityX() * time2 > world.getWidth()) {
-			return Double.POSITIVE_INFINITY;
-		}
-		if (distance[0] + this.getVelocityX() * time2 < 0) {
-			return Double.POSITIVE_INFINITY;
-		}
-		
-		double time = time1;
-		if (time1 > time2) {
-			time = time2;
-		}
-		
-					
-		return time;
+		if (distance[0] + this.getVelocityX() * time2 > world.getWidth()) return Double.POSITIVE_INFINITY;
+		if (distance[0] + this.getVelocityX() * time2 < 0) return Double.POSITIVE_INFINITY;
+
+		if (time1 > time2) return time2;		
+		return time1;
 	
 	}
 	
@@ -811,7 +780,6 @@ public class Ship extends Entity {
 		return vector;
 	}
 	
-
 	/**
 	 * Gets the collision position between this and a given world.
 	 * 
@@ -829,49 +797,55 @@ public class Ship extends Entity {
 		
 		return vector;	
 	}
+
 	
 	
-	public void collide(World world) {
-		double[] position = getCollisionPosition(world);
-		if (position[1] == this.world.getHeight() || position[1] == 0) {
-			velocityX = this.getVelocityX();
-			velocityY = - this.getVelocityY();
-		}
-		else if (position[0] == this.world.getWidth() || position[0] == 0) {
-			velocityX = - this.getVelocityX();
-			velocityY = this.getVelocityY();
-		}
-			
-			this.setVelocity(velocityX, velocityY);
-	}
+			/*
+			 * |----------------------------------------------------|
+			 * | 10. The next methods handle resolving Collisions.	|
+			 * |----------------------------------------------------| 
+			 */
+
+
 	
-	
-	public void collide(Entity entity) {
-		double[] position = getCollisionPosition(entity);
+	public void resolveCollision(Entity entity) {
 		
-		if (entity.getClass().equals(Ship.class)) {
-			double J = (2 * this.getMass() * ((Ship) entity).getMass() * (this.getSpeed() - ((Ship) entity).getSpeed()) * (this.getRadius() - ((Ship) entity).getRadius()) / (this.getRadius() * (this.getMass() + ((Ship) entity).getMass())));
-			
-			double Jx1 = J * (this.getPosition().getPositionX() - ((Ship) entity).getPosition().getPositionX()) / this.getRadius();
-			double Jy1 = J * (this.getPosition().getPositionY() - ((Ship) entity).getPosition().getPositionY()) / this.getRadius();
-		
-			this.setVelocity(this.getVelocityX() + Jx1/this.getMass(), this.getVelocityY() + Jy1/this.getMass());
-			
-			double Jx2 = J * (((Ship) entity).getPosition().getPositionX() - this.getPosition().getPositionX()) / ((Ship) entity).getRadius();
-			double Jy2 = J * (((Ship) entity).getPosition().getPositionY() - this.getPosition().getPositionY()) / ((Ship) entity).getRadius();
-			
-			((Ship) entity).setVelocity(((Ship) entity).getVelocityX() + Jx2/((Ship) entity).getMass(), ((Ship) entity).getVelocityY() + Jy2 / ((Ship) entity).getMass());
-		}
+		if (entity.getType() == "Ship") resolveCollisionShip((Ship)entity);
 		else if (entity.getClass().equals(Bullet.class)) {
 			//TODO: hier zijn de verbanden tussen bullet en ship nodig
 		}
+	}
+
+	public void resolveCollision(World world) {
+		double[] position = getCollisionPosition(world);
+		
+		if (position[0] == this.world.getWidth() || position[0] == 0) setVelocity(getVelocityX(), -getVelocityY());
+		else if (position[0] == this.world.getHeight() || position[1] == 0) setVelocity(-getVelocityX(), getVelocityY());
+	}
+	
+	
+	public void resolveCollisionShip(Ship ship) {
+		// See page 12, TODO zeker dat omega this.getRadius() is en niet this.getRadius() + entity.getRadius()
+		// TODO delta V is niet getSpeed => zie collision detection
+		double J = (2 * this.getMass() * ship.getMass() * (this.getSpeed() - ship.getSpeed()) * (this.getRadius() - ship.getRadius()) 
+				/ (this.getRadius() * (this.getMass() + ship.getMass())));
+		
+		double Jx1 = J * (this.getPosition().getPositionX() - ship.getPosition().getPositionX()) / this.getRadius();
+		double Jy1 = J * (this.getPosition().getPositionY() - ship.getPosition().getPositionY()) / this.getRadius();
+	
+		this.setVelocity(this.getVelocityX() + Jx1/this.getMass(), this.getVelocityY() + Jy1/this.getMass());
+		
+		double Jx2 = J * (ship.getPosition().getPositionX() - this.getPosition().getPositionX()) / ship.getRadius();
+		double Jy2 = J * (ship.getPosition().getPositionY() - this.getPosition().getPositionY()) / ship.getRadius();
+		
+		ship.setVelocity(ship.getVelocityX() + Jx2/ship.getMass(), ship.getVelocityY() + Jy2 / ship.getMass());
 	}
 	
 	
 	
 			/*
 		     * |------------------------------------------------------------|
-		     * | 10. The next methods handle the association with worlds.	|
+		     * | 11. The next methods handle the association with worlds.	|
 		     * |------------------------------------------------------------| 
 		     */
 	
@@ -953,7 +927,7 @@ public class Ship extends Entity {
 
 			/*
 		     * |--------------------------------------------|
-		     * | 11. The next methods are Helper Methods.	|
+		     * | 12. The next methods are Helper Methods.	|
 		     * |--------------------------------------------| 
 		     */
 	

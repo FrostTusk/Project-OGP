@@ -12,11 +12,13 @@ public abstract class Entity {
 	
 	public abstract double getVelocityY();
 	
+	public abstract double getSpeed();
 	
 	
 	public abstract double getRadius();
 	
 	
+	public abstract double getMass();
 	
 	public abstract double getTimeToCollision(Entity entity);
 
