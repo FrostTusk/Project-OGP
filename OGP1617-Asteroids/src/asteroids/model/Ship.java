@@ -500,8 +500,8 @@ public class Ship extends Entity {
 		if (time < 0)
 			throw new IllegalArgumentException();
 		
-		double newPositionX = getPosition().getPositionX() + getVelocityX() * time;
-		double newPositionY = getPosition().getPositionY() + getVelocityY() * time;
+		double newPositionX = helper.calculatePosition(this, time)[0];
+		double newPositionY = helper.calculatePosition(this, time)[1];
 
 		try {
 			setPosition(newPositionX, newPositionY);
@@ -637,14 +637,19 @@ public class Ship extends Entity {
 	 * 			distance[1] is equal to the shortest distance between the center of this ship and the horizontal boundary of the world
 	 */
 	public double[] getDistanceBetween(World world) {
-		double[] distance = {Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY};	// distance between the ship and the boundaries
+		double[] distance = {Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY};
+		if (getWorld() != world) return distance;
 		
-		distance[0] = this.getPosition().getPositionX() - world.getWidth();
-		if (world.getWidth() > distance[0]) distance[0] = this.getPosition().getPositionX();
-			
-		distance[1] = this.getPosition().getPositionY() - world.getHeight();
-		if (world.getHeight() > distance[1]) distance[1] = this.getPosition().getPositionY();
-							
+		if (getPosition().getPositionX() < (world.getWidth() / 2) )
+			distance[0] = getPosition().getPositionX();
+		else
+			distance[0] = world.getWidth() - getPosition().getPositionX();
+		
+		if (getPosition().getPositionY() < (world.getHeight() / 2) )
+			distance[1] = getPosition().getPositionY();
+		else
+			distance[1] = world.getWidth() - getPosition().getPositionY();
+		
 		return distance;
 	}
 	
@@ -735,6 +740,8 @@ public class Ship extends Entity {
 	 */
 	public double getTimeToCollision(World world) {		
 		double[] distance = getDistanceBetween(world);
+		if ( (distance[0] == Double.POSITIVE_INFINITY) || (distance[1] == Double.POSITIVE_INFINITY) )
+			return Double.POSITIVE_INFINITY;
 		
 		double time1 = distance[0] / this.getVelocityX();
 		if (distance[1] + this.getVelocityY() * time1 > world.getHeight()) return Double.POSITIVE_INFINITY;
@@ -770,10 +777,8 @@ public class Ship extends Entity {
 		if (time == Double.POSITIVE_INFINITY)
 			return null;
 		
-		Position newPosition1 = new Position(this.getPosition().getPositionX() + this.getVelocityX() * time, 
-											 this.getPosition().getPositionY() + this.getVelocityY() * time);
-		Position newPosition2 = new Position(entity.getPosition().getPositionX() + entity.getVelocityX() * time, 
-											 entity.getPosition().getPositionY() + entity.getVelocityY() * time);
+		Position newPosition1 = new Position(helper.calculatePosition(this, time)[0], helper.calculatePosition(this, time)[1]);
+		Position newPosition2 = new Position(helper.calculatePosition(entity, time)[0], helper.calculatePosition(entity, time)[1]); 
 		
 		// Calculate the correct signs TODO: Leg dit verder uit
 		double[] signs = calculateSigns(newPosition1, newPosition2);
@@ -802,8 +807,19 @@ public class Ship extends Entity {
 	 * @post	vector contains the position where this ship and the world will collide, if any.
 	 * 			vector is null if they never collide.
 	 */
-	public double[] getCollisionPosition(World world) {
-		double vector[] = null;
+	public double[] getCollisionPosition(World world) {	
+		double vector[] = {Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY};
+
+		double time = getTimeToCollision(world);
+		if (time != Double.POSITIVE_INFINITY) {
+			vector[0] = helper.calculatePosition(this, time)[0];
+			vector[1] = helper.calculatePosition(this, time)[1];
+			
+			if (vector[0] + this.getRadius() == world.getWidth()) vector[0] += this.getRadius();
+			else if (vector[0] - this.getRadius() == 0) vector[0] = 0;
+			else if (vector[1] + this.getRadius() == world.getHeight()) vector[1] += this.getRadius();
+			else if (vector[1] - this.getRadius() == 0) vector[1] = 0;
+		}
 		
 		return vector;	
 	}
@@ -819,7 +835,6 @@ public class Ship extends Entity {
 
 	
 	public void resolveCollision(Entity entity) {
-		
 		if (entity.getType() == "Ship") resolveCollisionShip((Ship)entity);
 		else if (entity.getType() == "Bullet") resolveCollisionBullet((Bullet) entity);
 	}

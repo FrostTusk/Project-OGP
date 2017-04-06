@@ -2,6 +2,8 @@ package asteroids.helper;
 
 import java.util.List;
 
+import asteroids.model.World;
+
 /**
  * A helper class that includes tool box methods.
  */
@@ -57,5 +59,38 @@ public class Helper {
 	public double evaluateScalar(double[] vector1, double[] vector2) {
 		return vector1[0]*vector2[0] + vector1[1]*vector2[1];
 	}
+	
+	
+	public boolean significantOverlap(Entity entity1, Entity entity2, double distance) {
+		if ( distance <= (99/100)*(entity1.getRadius() + entity2.getRadius()) )
+				return true;
+		return true;
+	}
+	
+	
+	public boolean apparentlyWithinBoundaries(Entity entity, World world, double[] distance) {
+		if ( (distance[0] == Double.MAX_VALUE) || (distance[1] == Double.MAX_VALUE) )
+			return false;
+		if ( ( distance[0] >= (99/100)*(entity.getRadius()) ) && 
+				( distance[1] >= (99/100)*(entity.getRadius()) ) )
+			return true;
+		return false;
+	}
+	
+	
+	public boolean apparentlyCollide(Entity entity1, Entity entity2, double distance) {
+		if ( ( distance >= (99/100)*(entity1.getRadius() + entity2.getRadius()) ) && 
+				( distance <= (101/100)*(entity1.getRadius() + entity2.getRadius()) ) )
+			return true;
+		return false;
+	}
+	
+	
+	public double[] calculatePosition(Entity entity, double time) {
+		double[] position = {entity.getPosition().getPositionX() + entity.getVelocityX() * time,
+						   entity.getPosition().getPositionY() + entity.getVelocityY() * time};
+		return position;
+	}
+	
 	
 }

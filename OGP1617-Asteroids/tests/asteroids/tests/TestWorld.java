@@ -28,7 +28,7 @@ public class TestWorld {
 	}
 	
 	
-	// TODO when entitites are finished, check this test.
+	// TODO when entities are finished, check this test.
 	@Test
 	public void testCreateWorldTerminateWorld() throws ModelException {
 		World world = new World(-15, -10);
