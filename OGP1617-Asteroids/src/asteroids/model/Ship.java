@@ -777,21 +777,21 @@ public class Ship extends Entity {
 		if (time == Double.POSITIVE_INFINITY)
 			return null;
 		
-		Position newPosition1 = new Position(helper.calculatePosition(this, time)[0], helper.calculatePosition(this, time)[1]);
-		Position newPosition2 = new Position(helper.calculatePosition(entity, time)[0], helper.calculatePosition(entity, time)[1]); 
+		double[] newPosition1 = {helper.calculatePosition(this, time)[0], helper.calculatePosition(this, time)[1]};
+		double[] newPosition2 = {helper.calculatePosition(entity, time)[0], helper.calculatePosition(entity, time)[1]}; 
 		
 		// Calculate the correct signs TODO: Leg dit verder uit
 		double[] signs = calculateSigns(newPosition1, newPosition2);
 		
 		// Calculate the angle between the x component of the vector between newPosition1 and newPosition2.
 		// This angle is the same as the one between the collisionPosition vector (out of the first ship) and it's x component.
-		double angle = Math.atan( Math.abs(newPosition2.getPositionY() - newPosition1.getPositionY()) / 
-								  Math.abs(newPosition2.getPositionX() - newPosition1.getPositionX()) );
+		double angle = Math.atan( Math.abs(newPosition2[1] - newPosition1[1]) / 
+								  Math.abs(newPosition2[0] - newPosition1[0]) );
 		
 		// Calculate the exact position vector of the collision point by using the angle that has just been calculated
 		// and the first ship's new position vector.
-		double[] vector = {newPosition1.getPositionX() + signs[0] * this.getRadius() * Math.cos(angle), 
-						   newPosition1.getPositionY() + signs[1] * this.getRadius() * Math.sin(angle)};
+		double[] vector = {newPosition1[0] + signs[0] * this.getRadius() * Math.cos(angle), 
+						   newPosition1[1] + signs[1] * this.getRadius() * Math.sin(angle)};
 		return vector;
 	}
 	
@@ -832,13 +832,27 @@ public class Ship extends Entity {
 			 * |----------------------------------------------------| 
 			 */
 
-
 	
+
+	/**
+	 * Resolves the collision between this ship and a given entity.
+	 * @param 	entity
+	 * 			The entity to be used.
+	 * 
+	 * @see implementation
+	 */
 	public void resolveCollision(Entity entity) {
 		if (entity.getType() == "Ship") resolveCollisionShip((Ship)entity);
 		else if (entity.getType() == "Bullet") resolveCollisionBullet((Bullet) entity);
 	}
 
+	/**
+	 * Resolves the collision between this ship and a given world.
+	 * @param 	world
+	 * 			The world to be used.
+	 * 
+	 * @see implementation
+	 */
 	public void resolveCollision(World world) {
 		double[] position = getCollisionPosition(world);
 		
@@ -846,7 +860,13 @@ public class Ship extends Entity {
 		else if (position[0] == this.world.getHeight() || position[1] == 0) setVelocity(-getVelocityX(), getVelocityY());
 	}
 	
-	
+	/**
+	 * Resolves the collision between this ship and a given ship.
+	 * @param 	ship
+	 * 			The ship to be used.
+	 * 
+	 * @see implementation
+	 */
 	public void resolveCollisionShip(Ship ship) {
 		// See page 12, TODO zeker dat omega this.getRadius() is en niet this.getRadius() + entity.getRadius()
 		// TODO delta V is niet getSpeed => zie collision detection
@@ -864,6 +884,13 @@ public class Ship extends Entity {
 		ship.setVelocity(ship.getVelocityX() + Jx2/ship.getMass(), ship.getVelocityY() + Jy2 / ship.getMass());
 	}
 	
+	/**
+	 * Resolves the collision between this ship and a given bullet.
+	 * @param 	bullet
+	 * 			The bullet to be used.
+	 * 
+	 * @see implementation
+	 */
 	public void resolveCollisionBullet(Bullet bullet) {
 		if (bullet.getShip() == this) reloadBullet(bullet);
 		else {
@@ -899,7 +926,7 @@ public class Ship extends Entity {
 
 	
 	/**
-	 * Check whether this bullet can have the given world as world. 
+	 * Check whether this ship can have the given world as world. 
 	 *  
 	 * @param  	world
 	 *         	The world to check.
@@ -912,6 +939,14 @@ public class Ship extends Entity {
 		return false;
 	}
 	
+	/**
+	 * Check whether this ship is currently located in a given world. 
+	 *  
+	 * @param  	world
+	 *         	The world to check.
+	 *         
+	 * @see implementation
+	 */
 	@Override
 	public boolean isInWorld(World world) {
 		try {
@@ -925,6 +960,7 @@ public class Ship extends Entity {
 //       assert (purchase == null) || (purchase.getShare() == null);
          return false;
 		}
+		// TODO Deze methode zou eigenlijk de positie moeten checken en stuff.
 		return false;
 	}
 	
@@ -965,6 +1001,14 @@ public class Ship extends Entity {
 	
 	
 	
+	/**
+	 * Reload a given bullet into this ship.
+	 *  
+	 * @param  	bullet
+	 *         	The bullet to reload.
+	 *         
+	 * @see implementation
+	 */
 	public void reloadBullet(Bullet bullet) {
 		
 	}
@@ -989,12 +1033,12 @@ public class Ship extends Entity {
 	 * 
 	 * @return The signs to be used in the getCollisionPosition() method
 	 */
-	public double[] calculateSigns(Position position1, Position position2) {
+	public double[] calculateSigns(double[] position1, double[] position2) {
 		double signX1 = 1;
-		if (position1.getPositionX() > position2.getPositionX())
+		if (position1[0] > position2[0])
 			signX1 = -1;
 		double signY1 = 1;
-		if (position1.getPositionY() > position2.getPositionY())
+		if (position1[1] > position2[1])
 			signY1 = -1;
 		
 		double[] result = {signX1, signY1};
@@ -1002,6 +1046,12 @@ public class Ship extends Entity {
 	}
 	
 	
+	/**
+	 * Returns the type of this class in string format.
+	 * 
+	 * @see implementation
+	 */
+	@Override
 	public String getType() {
 		return "Ship";
 	}

@@ -16,6 +16,25 @@ public class Helper {
 	
 	
 	/**
+	 * Calculates the position of an entity after a given time.
+	 * The result is not returned as a Position Object because this
+	 * method should not throw an exception if the position is not valid.
+	 * 
+	 * @param 	entity1
+	 * 		  	The first entity to be used.
+	 * @param 	time
+	 * 			The time to be used.
+	 * 
+	 * @return	the position after the given time.
+	 */
+	public double[] calculatePosition(Entity entity, double time) {
+		double[] position = {entity.getPosition().getPositionX() + entity.getVelocityX() * time,
+						   	 entity.getPosition().getPositionY() + entity.getVelocityY() * time};
+		return position;
+	}
+	
+	
+	/**
 	 * Converts a given List to an array.
 	 * 
 	 * @param 	list
@@ -61,6 +80,18 @@ public class Helper {
 	}
 	
 	
+	/**
+	 * Calculates if two entities overlap significantly.
+	 * 
+	 * @param 	entity1
+	 * 		  	The first entity to be used.
+	 * @param 	entity2
+	 * 		  	The second entity to be used.
+	 * @param	distance
+	 * 			The distance between the centers of the entities.
+	 * 
+	 * @return	true if they overlap significantly, false if they do not.
+	 */
 	public boolean significantOverlap(Entity entity1, Entity entity2, double distance) {
 		if ( distance <= (99/100)*(entity1.getRadius() + entity2.getRadius()) )
 				return true;
@@ -68,6 +99,20 @@ public class Helper {
 	}
 	
 	
+	/**
+	 * Calculates if an entity is apparently within the boundaries of a world.
+	 * 
+	 * @param 	entity
+	 * 		  	The entity to be used.
+	 * @param 	world
+	 * 		  	The world to be used.
+	 * @param	distance
+	 * 			The shortest distance between the entity and the boundaries of the world.
+	 * 			distance[0] = the x distance
+	 * 			distance[1] = the y distance
+	 * 
+	 * @return	true if the entity is apparently in the boundaries, false if it is not.
+	 */
 	public boolean apparentlyWithinBoundaries(Entity entity, World world, double[] distance) {
 		if ( (distance[0] == Double.MAX_VALUE) || (distance[1] == Double.MAX_VALUE) )
 			return false;
@@ -78,19 +123,23 @@ public class Helper {
 	}
 	
 	
+	/**
+	 * Calculates if two entities apparently collide.
+	 * 
+	 * @param 	entity1
+	 * 		  	The first entity to be used.
+	 * @param 	entity2
+	 * 		  	The second entity to be used.
+	 * @param	distance
+	 * 			The distance between the centers of the entities.
+	 * 
+	 * @return	true if they apparently collide, false if they do not.
+	 */
 	public boolean apparentlyCollide(Entity entity1, Entity entity2, double distance) {
 		if ( ( distance >= (99/100)*(entity1.getRadius() + entity2.getRadius()) ) && 
 				( distance <= (101/100)*(entity1.getRadius() + entity2.getRadius()) ) )
 			return true;
 		return false;
 	}
-	
-	
-	public double[] calculatePosition(Entity entity, double time) {
-		double[] position = {entity.getPosition().getPositionX() + entity.getVelocityX() * time,
-						   entity.getPosition().getPositionY() + entity.getVelocityY() * time};
-		return position;
-	}
-	
 	
 }

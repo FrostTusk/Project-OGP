@@ -7,6 +7,7 @@
 		1. Wat met documentatie in Ship?
 		2. Exception gethrowed bij aanmaak position, what happens?
 	5. Wat is en waarom een type parameter?
+	6. Nieuwe methodes in Ship class => Volledige Documentatie?
 
 2. TODO:
 	1. Proofread
@@ -22,5 +23,6 @@
 		2. Bullet
 		3. World
 	6. Verander IllegalArgumentException -> NullPointerException (ook in facade)
+	7. DOCUMENTATIE, VEEL DOCUMENTATIE
 
 
