@@ -1,5 +1,7 @@
 package asteroids.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import asteroids.helper.Entity;
 import asteroids.helper.Helper;
 import asteroids.helper.Position;
@@ -1000,6 +1002,34 @@ public class Ship extends Entity {
 		     */
 	
 	
+	private List<Bullet> bullets = new ArrayList<Bullet>();
+	
+	
+	public boolean canHaveAsBullet(Bullet bullet) {
+		if (bullets.contains(bullet))
+			return false;
+		if (bullet.canHaveAsShip(this))
+			return true;
+		return false;
+	}
+	
+	
+	public void addBullet(Bullet bullet) {
+		bullets.add(bullet);
+	}
+	
+	public void removeBullet(Bullet bullet) {
+		bullets.remove(bullet);
+	}
+	
+	
+	public void loadBullet(Bullet bullet) throws IllegalArgumentException {
+		if (!canHaveAsBullet(bullet))
+			throw new IllegalArgumentException();
+		addBullet(bullet);
+		bullet.setShip(this);
+	}
+	
 	
 	/**
 	 * Reload a given bullet into this ship.
@@ -1010,11 +1040,33 @@ public class Ship extends Entity {
 	 * @see implementation
 	 */
 	public void reloadBullet(Bullet bullet) {
-		
+		loadBullet(bullet);
 	}
 	
 	
+	public void fireBullet() {
+		fireBullet(bullets.get(0));
+	}
 
+	public void fireBullet(Bullet bulletRequest) {
+		Bullet bullet = bulletRequest;
+		if (getWorld() == null) return;
+		if (!bullets.contains(bullet)) bullet = bullets.remove(0);
+		else bullets.remove(bullet);
+		
+		// TODO speed/direction stuff
+		// TODO resolve collisions
+		bullet.setShip(null);
+		try {
+		bullet.setWorld(getWorld());
+		}
+		catch (IllegalArgumentException exc) {
+			bullet.terminate();
+		}
+	}
+	
+	
+	
 			/*
 		     * |--------------------------------------------|
 		     * | 13. The next methods are Helper Methods.	|

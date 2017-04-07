@@ -440,7 +440,11 @@ public class Bullet extends Entity {
 	
 	@Override
 	public boolean isInWorld(World world) {
-		// TODO Auto-generated method stub
+		if ( (this.getPosition().getPositionX() - this.getRadius() >= 0) &&
+			 (this.getPosition().getPositionX() + this.getRadius() <= world.getWidth()) &&
+			 (this.getPosition().getPositionY() - this.getRadius() >= 0) &&
+			 (this.getPosition().getPositionY() + this.getRadius() <= world.getHeight()) )
+			return true;
 		return false;
 	}
 	
