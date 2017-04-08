@@ -7,6 +7,7 @@ import asteroids.util.ModelException;
 import java.util.Collection;
 import java.util.Set;
 
+import asteroids.helper.Position;
 import asteroids.model.Bullet;
 import asteroids.model.Ship;
 import asteroids.model.World;
@@ -340,20 +341,33 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 
 	@Override
 	public void terminateWorld(World world) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		try {
+			world.terminate();
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}		
 	}
 
 	@Override
 	public boolean isTerminatedWorld(World world) throws ModelException {
-		// TODO Auto-generated method stub
-		return false;
+		try {
+			return world.isTerminated();
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}	
 	}
 
 	@Override
 	public double[] getWorldSize(World world) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			double[] size = {world.getWidth(), world.getHeight()};
+			return size;
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}	
 	}
 
 	@Override
@@ -370,26 +384,54 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 
 	@Override
 	public void addShipToWorld(World world, Ship ship) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		try {
+			world.addEntity(ship);
+		}
+		catch (IllegalArgumentException exc) {
+			throw new ModelException(exc);
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}	
 	}
 
 	@Override
 	public void removeShipFromWorld(World world, Ship ship) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		try {
+			world.removeEntity(ship);
+		}
+		catch (IllegalArgumentException exc) {
+			throw new ModelException(exc);
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
 	public void addBulletToWorld(World world, Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		try {
+			world.addEntity(bullet);
+		}
+		catch (IllegalArgumentException exc) {
+			throw new ModelException(exc);
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
 	public void removeBulletFromWorld(World world, Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		try {
+			world.addEntity(bullet);
+		}
+		catch (IllegalArgumentException exc) {
+			throw new ModelException(exc);
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
@@ -406,8 +448,15 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 
 	@Override
 	public void loadBulletOnShip(Ship ship, Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		try {
+			ship.loadBullet(bullet);
+		}
+		catch (IllegalArgumentException exc) {
+			throw new ModelException(exc);
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
@@ -424,8 +473,15 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 
 	@Override
 	public void fireBullet(Ship ship) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		try {
+			ship.fireBullet();
+		}
+		catch (IllegalArgumentException exc) {
+			throw new ModelException(exc);
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
@@ -472,8 +528,15 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 
 	@Override
 	public Object getEntityAt(World world, double x, double y) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return world.getEntityAtPosition(new Position(x, y));
+		}
+		catch (IllegalArgumentException exc) {
+			throw new ModelException(exc);
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override

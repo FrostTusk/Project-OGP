@@ -79,6 +79,20 @@ public class World {
 	
 	
 	/**
+	 * Variable registering if this world is terminated or not.
+	 */
+	private boolean isTerminated = false;
+	
+	
+	/**
+	 * Return the whether or not this world is terminated.
+	 */
+	@Basic @Raw
+	public boolean isTerminated() {
+		return this.isTerminated;
+	}
+	
+	/**
 	 * Terminates this world. Breaks up any associations with entities.
 	 * Prepares this object for the garbage collector.
 	 * @see implementation
