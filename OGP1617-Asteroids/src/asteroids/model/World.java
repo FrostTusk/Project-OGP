@@ -17,11 +17,15 @@ import be.kuleuven.cs.som.annotate.*;
 
 /*
  * Methods Index:
- * 1. Methods that handle the Initialization of the World
- * 2. Methods that handle the Size of the World
- * 3. Methods that handle the relation with Entities
- * 4. Methods that handle evolving the world
- * 5. Methods that handle queries of the world
+ * #1# Basic Methods
+ * 		1. Methods that handle the Initialization of the World
+ * 		2. Methods that handle the Size of the World
+ * #2# Association Methods
+ * 		3. Methods that handle the relation with Entities
+ * #3# Advanced Methods
+ * 		4. Methods that handle evolving the world
+ * #4# Query Methods
+ * 		5. Methods that handle queries of the world
  */
 
 /**
@@ -32,12 +36,20 @@ import be.kuleuven.cs.som.annotate.*;
  *       	| isValidSize(getWidth(), getHeight())
  */
 public class World {
-
+	
 		/*
-		 * |----------------------------------------------------------------|
-		 * | 1. The next method handles the Initialization of the World.	|
-		 * |----------------------------------------------------------------| 
-		 */
+	     * |----------------------------|
+	     * | #Header-1# Basic Methods.	|
+	     * |----------------------------| 
+	     */
+	
+	
+	
+			/*
+			 * |--------------------------------------------------------------------------------|
+			 * | 1. The next method handles the Initialization and Termination of the World.	|
+			 * |--------------------------------------------------------------------------------| 
+			 */
 	
 	
 	
@@ -49,13 +61,12 @@ public class World {
 	 * @param	height
 	 * 			The height for this new world.
 	 * 
-	 * @post   	If the given s is a valid s for any world,
-	 *         	the s of this new world is equal to the given
-	 *        	s. Otherwise, the s of this new world is equal
-	 *        	to default_value_Java.
-	 *       	| if (isValidPropertyName_Java(propertyName_Java))
-	 *       	|   then new.getPropertyName_Java() == propertyName_Java
-	 *       	|   else new.getPropertyName_Java() == default_value_Java
+	 * @post	TODO see implementation ?
+	 *       	| if (isValidSize(width, height))
+	 *       	|   	new.getWidth() == width
+	 *       	|		new.getHeight() == height
+	 *       	| else  new.getWidth() == calculateDefaultSiz(width, height)[0]
+	 *       	|		new.getHeight() == calculateDefaultSiz(width, height)[1]
 	 */
 	public World(double width, double height) {
 		double[] temp = {width, height};
@@ -65,10 +76,14 @@ public class World {
 	}
 	
 	
+	/**
+	 * Terminates this world. Breaks up any associations with entities.
+	 * Prepares this object for the garbage collector.
+	 * @see implementation
+	 */
 	public void terminate() {
-		for (Entity entity: entities.values()) {
+		for (Entity entity: entities.values()) 
 			removeEntity(entity);
-		}
 	}
 	
 	
@@ -131,6 +146,7 @@ public class World {
 	 *         
 	 * @see implementation
 	*/
+	@Raw
 	public static boolean isValidSize(double width, double height) {
 		return ( ( (width >= 0) && (width <= getUpperBound()) ) && ( (height >= 0) && (height <= getUpperBound()) ));
 	}
@@ -144,6 +160,7 @@ public class World {
 	 * @see implementation
 	 */
 	// TODO Should this method be public?
+	// TODO Is this raw
 	public void setUpperBound(double newUpperBound) {
 		upperBound = newUpperBound;
 		
@@ -173,9 +190,17 @@ public class World {
 	
 	
 	
+		/*
+	     * |------------------------------------|
+	     * | #Header-2# Association Methods.	|
+	     * |------------------------------------| 
+	     */
+	
+	
+	
 			/*
 			 * |------------------------------------------------------------|
-			 * | 3. The next methods handle the relationship with Entities	|
+			 * | 3. The next methods handle the relationship with Entities.	|
 			 * |------------------------------------------------------------| 
 			 */
 
@@ -188,10 +213,28 @@ public class World {
 
 	
 	/**
-	 * Check whether a given in entity is currently in this world.
+	 * Check whether a given in entity can be in this world.
+	 * 
+	 * @param	entity
+	 * 			The entity to be checked.
+	 * 
 	 * @see implementation
 	 */
-	@Basic @Raw
+	@Raw
+	public boolean canHaveAsEntity(Entity entity) {
+		if ( (!containsEntity(entity)) && (entity.canHaveAsWorld(this)) ) return true;
+		return false;
+	}	
+	
+	/**
+	 * Check whether a given in entity is currently in this world.
+	 * 
+	 *@param	entity
+	 * 			The entity to be checked.
+	 * 
+	 * @see implementation
+	 */
+	@Raw
 	public boolean containsEntity(Entity entity) {
         try {
            return entities.get(entity.getPosition()) == entity;
@@ -204,22 +247,16 @@ public class World {
         }
 	}
 	
-	/**
-	 * Check whether a given in entity can be in this world.
-	 * @see implementation
-	 */
-	@Basic @Raw
-	public boolean canHaveAsEntity(Entity entity) {
-		if ( (!containsEntity(entity)) && (entity.canHaveAsWorld(this)) ) return true;
-		return false;
-	}	
-	
 
 	/**
 	 * Add a given entity to this world.
+	 * 
+	 * @param	entity
+	 * 			The entity to be added.
+	 * 
 	 * @see implementation
 	 */
-	@Basic @Raw
+	@Raw
 	public void addEntity(Entity entity) throws NullPointerException, IllegalArgumentException {
 		if (entity == null) throw new NullPointerException();
 		// The world will always have final say as to what entities are in it.
@@ -244,9 +281,13 @@ public class World {
 	
 	/**
 	 * Remove a given entity from this world.
+	 * 
+	 * @param	entity
+	 * 			The entity to be removed.
+	 * 
 	 * @see implementation
 	 */
-	@Basic @Raw
+	@Raw
 	public void removeEntity(Entity entity) throws NullPointerException, IllegalArgumentException {
 		if (entity == null) throw new NullPointerException();
 		// The world will always have final say as to what entities are in it.
@@ -263,6 +304,14 @@ public class World {
 	
 	
 	
+		/*
+	     * |--------------------------------|
+	     * | #Header-3# Advanced Methods.	|
+	     * |--------------------------------| 
+	     */
+
+
+
 			/*
 			 * |------------------------------------------------|
 			 * | 4. The next methods handle evolving the world.	|
@@ -273,6 +322,9 @@ public class World {
 	
 	/**
 	 * Evolve the current world.
+	 * 
+	 * @param	time
+	 * 			the time over which the world will evolve.
 	 */
 	public void evolve(double time) {
 		Entity[] collisionEntitiesMin = calculateFirstCollision();
@@ -288,8 +340,12 @@ public class World {
 	
 	/**
 	 * Update the position of all elements in the current world.
+	 * Helper method of evolve().
+	 * 
+	 * @param	time
+	 * 			the time over which the world has to be updated.
 	 */
-	public void update(double time) {
+	private void update(double time) {
 		for (Entity entity: entities.values()) {
 			System.out.println(entity);
 		}
@@ -313,9 +369,17 @@ public class World {
 				}
 			}
 		}
-		//TODO check if entities collide with borders.
+		// TODO check if entities collide with borders.
 		return collisionEntitiesMin;
 	}
+	
+	
+		
+		/*
+	     * |----------------------------|
+	     * | #Header-4# Query Methods.	|
+	     * |----------------------------| 
+	     */
 	
 	
 	
@@ -363,12 +427,10 @@ public class World {
 		Entity[] entitiesResult = getAllEntities();
 		
 		List<Bullet> bulletsResult = new ArrayList<Bullet>();
-		for (int i = 0; i < entitiesResult.length; i++) { 
+		for (int i = 0; i < entitiesResult.length; i++) 
 			if (entitiesResult[i].getType() == "Bullet") bulletsResult.add((Bullet)entitiesResult[i]);
-		}
 		
 		return (Bullet[])helper.convertListToArray(bulletsResult);
 	}
-	
 	
 }

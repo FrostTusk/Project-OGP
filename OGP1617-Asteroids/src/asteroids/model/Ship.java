@@ -17,7 +17,7 @@ import be.kuleuven.cs.som.annotate.*;
 /*
  * Methods Index:
  * #1# Basic Methods
- * 		1. Methods that handle the Initialization of the Ship
+ * 		1. Methods that handle the Initialization and Termination of the Ship
  * 		2. Methods that handle the Position of the Ship
  * 		3. Methods that handle the Speed of the Ship
  * 		4. Methods that handle the Orientation of the Ship
@@ -64,9 +64,9 @@ public class Ship extends Entity {
 	
 	
 			/*
-			 * |------------------------------------------------------------|
-			 * | 1. The next method handles the Initialization of the Ship.	|
-			 * |------------------------------------------------------------| 
+			 * |----------------------------------------------------------------------------|
+			 * | 1. The next method handles the Initialization and Termination of the Ship.	|
+			 * |----------------------------------------------------------------------------| 
 			 */
 	
 	
