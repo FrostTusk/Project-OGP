@@ -4,15 +4,41 @@ import java.util.List;
 
 import asteroids.model.World;
 
+/*
+ * Methods Index:
+ * 	1. Methods that handle the Initialization of the Helper
+ * 	2. Generic tool-box methods
+ * 	3. Approximation Methods
+ */
+
 /**
- * A helper class that includes tool box methods.
+ * A helper class that includes tool-box methods such as convert a list to an array,
+ * calculate a position, evaluate the cross (scalar) product. This class also
+ * includes the requested approximation methods.
  */
 public class Helper {
 	
+			/*
+		     * |----------------------------------------------------------------|
+		     * | 1. The next method handles the Initialization of the Helper.	|
+		     * |----------------------------------------------------------------| 
+		     */
+	
+	
+	
 	/**
-	 * Initialize a new Helper.
+	 * Initializes a new helper.
 	 */
 	public Helper() {};
+	
+	
+	
+			/*
+		     * |----------------------------------------------------|
+		     * | 2. The next methods are generic tool-box methods.	|
+		     * |----------------------------------------------------| 
+		     */
+
 	
 	
 	/**
@@ -20,8 +46,8 @@ public class Helper {
 	 * The result is not returned as a Position Object because this
 	 * method should not throw an exception if the position is not valid.
 	 * 
-	 * @param 	entity1
-	 * 		  	The first entity to be used.
+	 * @param 	entity
+	 * 		  	The entity to be used.
 	 * @param 	time
 	 * 			The time to be used.
 	 * 
@@ -40,7 +66,7 @@ public class Helper {
 	 * @param 	list
 	 * 			The list to be converted
 	 * 
-	 * @return	Returns the array made up by the elements in list.
+	 * @return	Returns an array made up by the elements in list.
 	 */	
 	public <T> Object[] convertListToArray(List<T> list) {
 		Object[] result = new Object[list.size()];
@@ -56,7 +82,7 @@ public class Helper {
 	/**
 	 * Calculates the cross product with a vector and itself.
 	 * 
-	 * @param 	vector1
+	 * @param 	vector
 	 * 		  	The vector to be used.
 	 * 
 	 * @return	Returns the cross product of the given vector with itself.
@@ -78,6 +104,15 @@ public class Helper {
 	public double evaluateScalar(double[] vector1, double[] vector2) {
 		return vector1[0]*vector2[0] + vector1[1]*vector2[1];
 	}
+	
+	
+	
+			/*
+			 * |------------------------------------------------|
+		     * | 3. The next methods are approximation methods.	|
+		     * |------------------------------------------------| 
+		     */
+	
 	
 	
 	/**

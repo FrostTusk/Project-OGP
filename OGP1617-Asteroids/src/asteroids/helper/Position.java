@@ -3,7 +3,10 @@ package asteroids.helper;
 import be.kuleuven.cs.som.annotate.*;
 
 /**
- * A class of positions.
+ * A class of positions. Each position has an X and Y position.
+ * Each position also has a maximum and minimum value (both exclusive) for it's x and y positions. 
+ * By default this value will be +/- Infinity for maximum and minimum respectively.
+ * This is because a position cannot be equal to infinity.
  * 
  * @invar  	Each position must be a valid position.
  *       	| this.isValidPosition(this.getPositionX(), this.getPositionY())
@@ -25,8 +28,8 @@ public class Position {
 	 *       	| this.setPosition(positionX, positionY)
 	 *         	 
 	 * @throws 	IllegalArgumentException
-	 *         	This new bullet cannot have the given X and Y position as position.
-	 *       	| ! this.isValidPosition(this.getPositionX, this.getPositionY)
+	 *         	This new position cannot have the given X and Y position as position.
+	 *       	| ! this.isValidPosition(positionX, positionY)
 	 */
 	public Position(double positionX, double positionY) throws IllegalArgumentException {
 		this.minPositionX = Double.NEGATIVE_INFINITY;
@@ -43,7 +46,8 @@ public class Position {
 	}
 	
 	/**
-	 * Initialize this new position with given X and Y position, a given X minimum and maximum, and a given Y minimum and maximum.
+	 * Initialize this new position with given X and Y position, 
+	 * a given X minimum and maximum value, and a given Y minimum and maximum value.
 	 *
 	 * @param  	positionX
 	 *         	The X position of this new position.
@@ -64,7 +68,7 @@ public class Position {
 	 *         	 
 	 * @throws 	IllegalArgumentException
 	 *         	This new position cannot have the given X and Y position as position.
-	 *       	| ! this.isValidPosition(this.getPositionX, this.getPositionY)
+	 *       	| ! this.isValidPosition(positionX, positionY)
 	 */
 	public Position(double positionX, double positionY,
 			double minPositionX, double maxPositionX, double minPositionY, double maxPositionY) throws IllegalArgumentException {
@@ -178,8 +182,7 @@ public class Position {
 		if ( (getMinPositionX() < positionX) && (getMaxPositionX() > positionX) &&
 				(getMinPositionY() < positionY) && (getMaxPositionY() > positionY) )
 			return true;
-		else
-			return false;	
+		return false;	
 	}
 	
 	
@@ -198,14 +201,13 @@ public class Position {
 	 *         	the given Y position.
 	 *       	| new.getPositionY() == positionY
 	 *       
-	 * @throws 	IndexOutOfBoundsException
-	 *         	The given position is not a valid position for any
+	 * @throws 	IllegalArgumentException
+	 *         	The given positions cannot be a valid position for any
 	 *         	position.
-	 *       	| ! this.isValidPosition(getPositionX(), getPositionY())
+	 *       	| ! this.isValidPosition(positionX, positionY)
 	 */
-	private void setPosition(double positionX, double positionY) 
-			throws IllegalArgumentException {
-		if (! isValidPosition(positionX, positionY))
+	private void setPosition(double positionX, double positionY) throws IllegalArgumentException {
+		if (! isValidPosition(positionX, positionY)) 
 			throw new IllegalArgumentException();
 		this.positionX = positionX;
 		this.positionY = positionY;

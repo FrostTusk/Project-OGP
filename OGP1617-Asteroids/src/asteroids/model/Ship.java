@@ -10,25 +10,30 @@ import be.kuleuven.cs.som.annotate.*;
 
 
 /* Constants:
-*	1.	constantMaxSpeed = the maximum speed this bullet can achieve.
-*	2.	minRadius =  the minimum radius for each bullet.
+*	1.	constantMaxSpeed = the maximum speed this ship can achieve.
+*	2.	minRadius =  the minimum radius for each ship.
 */
 
 /*
  * Methods Index:
- * 1. Methods that handle the Initialization of the Ship
- * 2. Methods that handle the Position of the Ship
- * 3. Methods that handle the Speed of the Ship
- * 4. Methods that handle the Orientation of the Ship
- * 5. Methods that handle the Radius of the Ship
- * 6. Methods that handle the Mass of the ship
- * 7. Methods that handle Moving, Turning and Accelerating
- * 8. Methods that handle Calculating Distance and Overlap
- * 9. Methods that handle Collision Detection
- * 10. Methods that handle Resolving Collisions
- * 11. Methods that handle the association with Worlds
- * 12. Methods that handle the association with Bullets
- * 13. Helper Methods
+ * #1# Basic Methods
+ * 		1. Methods that handle the Initialization of the Ship
+ * 		2. Methods that handle the Position of the Ship
+ * 		3. Methods that handle the Speed of the Ship
+ * 		4. Methods that handle the Orientation of the Ship
+ * 		5. Methods that handle the Radius of the Ship
+ * 		6. Methods that handle the Mass of the ship
+ * #2# Association Methods
+ * 		7. Methods that handle the association with Worlds
+ * 		8. Methods that handle the association with Bullets
+ * #3# Advanced Methods
+ * 		9. Methods that handle Moving, Turning and Accelerating
+ * 		10. Methods that handle Calculating Distance and Overlap
+ * #4# Collision Detection Methods
+ * 		11. Methods that handle Collision Detection
+ * 		12. Methods that handle Resolving Collisions
+ * #5# Other Methods
+ *		13. Helper Methods
  */
 
 /**
@@ -51,10 +56,20 @@ import be.kuleuven.cs.som.annotate.*;
 public class Ship extends Entity {
 	
 		/*
-		 * |------------------------------------------------------------|
-		 * | 1. The next method handles the Initialization of the Ship.	|
-		 * |------------------------------------------------------------| 
-		 */
+	     * |----------------------------|
+	     * | #Header-1# Basic Methods.	|
+	     * |----------------------------| 
+	     */
+	
+	
+	
+			/*
+			 * |------------------------------------------------------------|
+			 * | 1. The next method handles the Initialization of the Ship.	|
+			 * |------------------------------------------------------------| 
+			 */
+	
+	
 	
 	private Helper helper = new Helper();
 	
@@ -468,12 +483,245 @@ public class Ship extends Entity {
 	}
 	
 	
+	
+		/*
+	     * |------------------------------------|
+	     * | #Header-2# Association Methods.	|
+	     * |------------------------------------| 
+	     */
+	
+	
+	
+			/*
+		     * |------------------------------------------------------------|
+		     * | 7. The next methods handle the association with worlds.	|
+		     * |------------------------------------------------------------| 
+		     */
+	
+	
+	
+	/**
+	* Variable registering the world of this ship.
+	*/
+	public World world = null;
+	
+	
+	/**
+	* Return the world associated with this ship.
+	*/
+	@Basic @Override @Raw
+	public World getWorld() {
+		return this.world;
+	}
+	
+	
+	/**
+	* Check whether this ship can have the given world as world. 
+	*  
+	* @param  	world
+	*         	The world to check.
+	*         
+	* @see implementation
+	*/
+	@Override @Raw
+	public boolean canHaveAsWorld(World world) throws IllegalArgumentException, NullPointerException {
+		if ((getWorld() != null) && (isInWorld(world)) ) return true;
+		return false;
+	}
+	
+	/**
+	* Check whether this ship is currently located in a given world. 
+	* This method only checks if the shape of the ship is located in a given world,
+	* it does not check if it's associated with the given world.
+	*  
+	* @param  	world
+	*         	The world to check.
+	*         
+	* @see implementation
+	*/
+	@Override @Raw
+	public boolean isInWorld(World world) {
+		try {
+			if (world.containsEntity(this)) {
+				return true;
+			}
+		}
+		catch (NullPointerException exc) {
+		//  //Because the given purchase is raw, it is possible that
+		//  //it does not yet reference an effective share.
+		//assert (purchase == null) || (purchase.getShare() == null);
+		 return false;
+		}
+		// TODO These methods should check position/shape in boundaries of world.
+	return false;
+	}
+	
+	
+	/**
+	* Set a given world as world for this ship.
+	*  
+	* @param  	world
+	*         	The world to set as world for this ship.
+	*         
+	* @see implementation
+	*/
+	@Override @Raw
+	public void setWorld(World world) throws IllegalArgumentException, NullPointerException {
+		if (world ==  null) throw new NullPointerException();
+		if (!canHaveAsWorld(world)) throw new IllegalArgumentException();
+		this.world = world;
+	}
+	
+	/**
+	* Remove the current world as world for this ship.
+	*      
+	* @see implementation
+	*/
+	@Override
+	public void deSetWorld() throws NullPointerException {
+		if (getWorld() ==  null) throw new NullPointerException();
+		this.world = null;
+	}
+	
+	
+	
+		/*
+	     * |------------------------------------------------------------|
+	     * | 8. The next methods handle the association with bullets.	|
+	     * |------------------------------------------------------------| 
+	     */
+	
+	
+	/**
+	* Variable registering the bullets of this ship.
+	*/
+	private List<Bullet> bullets = new ArrayList<Bullet>();
+	
+	
+	/**
+	* Check whether this ship can have the given bullet as a bullet. 
+	*
+	* @param  	bullet
+	*         	The bullet to check.
+	*         
+	* @see implementation
+	*/
+	@Raw
+	public boolean canHaveAsBullet(Bullet bullet) {
+		if (bullets.contains(bullet))
+			return false;
+		if (bullet.canHaveAsShip(this))
+			return true;
+		return false;
+	}
+	
+	
+	/**
+	* Add a given bullet to this ship's collection of bullets. 
+	*
+	* @param  	bullet
+	*         	The bullet to be added.
+	*         
+	* @see implementation
+	*/
+	public void addBullet(Bullet bullet) {
+		bullets.add(bullet);
+	}
+	
+	/**
+	* Remove a given bullet from this ship's collection of bullets. 
+	*
+	* @param  	bullet
+	*         	The bullet to be removed.
+	*         
+	* @see implementation
+	*/
+	public void removeBullet(Bullet bullet) {
+		bullets.remove(bullet);
+	}
+	
+	
+	/**
+	* Load a given bullet into this ship.
+	*  
+	* @param  	bullet
+	*         	The bullet to be loaded.
+	*         
+	* @see implementation
+	*/
+	public void loadBullet(Bullet bullet) throws IllegalArgumentException {
+		if (!canHaveAsBullet(bullet))
+			throw new IllegalArgumentException();
+		addBullet(bullet);
+		bullet.setShip(this);
+	}
+	
+	
+	/**
+	* Reload a given bullet into this ship.
+	*  
+	* @param  	bullet
+	*         	The bullet to be reloaded.
+	*         
+	* @see implementation
+	*/
+	public void reloadBullet(Bullet bullet) {
+		loadBullet(bullet);
+	}
+	
+	
+	/**
+	* Fires a bullet out of the collection of bullets.
+	*     
+	* @see implementation
+	*/
+	public void fireBullet() {
+		if (bullets.size() > 0)
+			fireBullet(bullets.get(0));
+	}
+	
+	/**
+	* Fires a requested bullet out of the collection of bullets.
+	*     
+	* @param	bulletRequest
+	* 			The bullet requested to be fired.
+	* 
+	* @see implementation
+	*/
+	public void fireBullet(Bullet bulletRequest) {
+		Bullet bullet = bulletRequest;
+		if (getWorld() == null) return;
+		
+		if (!bullets.contains(bullet)) 
+			if (bullets.size() > 0) bullet = bullets.remove(0);
+			else return;
+		else bullets.remove(bullet);
+			
+		// TODO speed/direction stuff
+		// TODO resolve collisions
+		bullet.setShip(null);
+		try {
+		bullet.setWorld(getWorld());
+		}
+		catch (IllegalArgumentException exc) {
+			bullet.terminate();
+		}
+	}
 
-		 /*
-		  * |---------------------------------------------------------------|
-		  * | 7. The next methods handle Moving, Turning and Accelerating.	|
-		  * |---------------------------------------------------------------| 
-		  */
+	
+	
+		/*
+	     * |--------------------------------|
+	     * | #Header-3# Advanced Methods.	|
+	     * |--------------------------------| 
+	     */
+	
+	
+			/*
+			 * |----------------------------------------------------------------|
+			 * | 9. The next methods handle Moving, Turning and Accelerating.	|
+			 * |----------------------------------------------------------------| 
+			 */
 	
 	
 	
@@ -583,7 +831,7 @@ public class Ship extends Entity {
 	
 			/*
 			 * |----------------------------------------------------------------|
-			 * | 8. The next methods handle Calculating Distance and Overlap.	|
+			 * | 10. The next methods handle Calculating Distance and Overlap.	|
 			 * |----------------------------------------------------------------| 
 			 */
 	
@@ -682,9 +930,17 @@ public class Ship extends Entity {
 	
 	
 	
+		/*
+	     * |--------------------------------------------|
+	     * | #Header-4# Collision Detection Methods.	|
+	     * |--------------------------------------------| 
+	     */
+	
+	
+	
 				/*
 				 * |----------------------------------------------------|
-				 * | 9. The next methods handle Collision Detection.	|
+				 * | 11. The next methods handle Collision Detection.	|
 				 * |----------------------------------------------------| 
 				 */
 	
@@ -692,6 +948,37 @@ public class Ship extends Entity {
 	
 	// TODO Entities only collide if they're in the same world.
 	
+	
+	/**
+	 * Gets the time to collision between this ship and a given world.
+	 * 
+	 * @param  	world
+	 * 			The world to which the collision time needs to be calculated.
+	 * 
+	 * @return	The time returned will be larger than 0 and will be equal to
+	 * 			the time needed for the entity to reach a position where it apparently collides with the boundaries of the world
+	 * 
+	 * @post	The time returned will be equal to the time needed for this ship to collide with the world's boundaries.
+	 * 			If the ship never collides with the boundary, the returned time will be infinity.
+	 * 
+	 */
+	public double getTimeToCollision(World world) {		
+		double[] distance = getDistanceBetween(world);
+		if ( (distance[0] == Double.POSITIVE_INFINITY) || (distance[1] == Double.POSITIVE_INFINITY) )
+			return Double.POSITIVE_INFINITY;
+		
+		double time1 = distance[0] / this.getVelocityX();
+		if (distance[1] + this.getVelocityY() * time1 > world.getHeight()) return Double.POSITIVE_INFINITY;
+		if (distance[1] + this.getVelocityY() * time1 < 0) return Double.POSITIVE_INFINITY;
+			
+		double time2 = distance[1] / this.getVelocityY();
+		if (distance[0] + this.getVelocityX() * time2 > world.getWidth()) return Double.POSITIVE_INFINITY;
+		if (distance[0] + this.getVelocityX() * time2 < 0) return Double.POSITIVE_INFINITY;
+
+		if (time1 > time2) return time2;		
+		return time1;
+	
+	}
 	
 	/**
 	 * Gets the time to collision between this ship and a given entity.
@@ -727,76 +1014,7 @@ public class Ship extends Entity {
 		return -( (helper.evaluateScalar(deltaV, deltaR) + Math.sqrt(d)) / helper.evaluateScalar(deltaV) );
 	}
 	
-	/**
-	 * Gets the time to collision between this ship and a given world.
-	 * 
-	 * @param  	world
-	 * 			The world to which the collision time needs to be calculated.
-	 * 
-	 * @return	The time returned will be larger than 0 and will be equal to
-	 * 			the time needed for the entity to reach a position where it apparently collides with the boundaries of the world
-	 * 
-	 * @post	The time returned will be equal to the time needed for this ship to collide with the world's boundaries.
-	 * 			If the ship never collides with the boundary, the returned time will be infinity.
-	 * 
-	 */
-	public double getTimeToCollision(World world) {		
-		double[] distance = getDistanceBetween(world);
-		if ( (distance[0] == Double.POSITIVE_INFINITY) || (distance[1] == Double.POSITIVE_INFINITY) )
-			return Double.POSITIVE_INFINITY;
-		
-		double time1 = distance[0] / this.getVelocityX();
-		if (distance[1] + this.getVelocityY() * time1 > world.getHeight()) return Double.POSITIVE_INFINITY;
-		if (distance[1] + this.getVelocityY() * time1 < 0) return Double.POSITIVE_INFINITY;
-			
-		double time2 = distance[1] / this.getVelocityY();
-		if (distance[0] + this.getVelocityX() * time2 > world.getWidth()) return Double.POSITIVE_INFINITY;
-		if (distance[0] + this.getVelocityX() * time2 < 0) return Double.POSITIVE_INFINITY;
 
-		if (time1 > time2) return time2;		
-		return time1;
-	
-	}
-	
-	
-	/**
-	 * Gets the collision position between this and a given entity.
-	 * 
-	 * @param  	entity
-	 * 			the entity to which you want to know the collision position.
-	 * 
-	 * @return	The position returned will be the position where both entities
-	 * 			collide with each other. The method returns null if they never collide.
-	 * 
-	 * @throws 	IllegalArgumentException
-	 * 			The other entity was null.
-	 * 			| entity == null
-	 */
-	public double[] getCollisionPosition(Entity entity) throws IllegalArgumentException {
-		if (entity == null) 
-			throw new IllegalArgumentException();
-		double time = getTimeToCollision(entity);
-		if (time == Double.POSITIVE_INFINITY)
-			return null;
-		
-		double[] newPosition1 = {helper.calculatePosition(this, time)[0], helper.calculatePosition(this, time)[1]};
-		double[] newPosition2 = {helper.calculatePosition(entity, time)[0], helper.calculatePosition(entity, time)[1]}; 
-		
-		// Calculate the correct signs TODO: Leg dit verder uit
-		double[] signs = calculateSigns(newPosition1, newPosition2);
-		
-		// Calculate the angle between the x component of the vector between newPosition1 and newPosition2.
-		// This angle is the same as the one between the collisionPosition vector (out of the first ship) and it's x component.
-		double angle = Math.atan( Math.abs(newPosition2[1] - newPosition1[1]) / 
-								  Math.abs(newPosition2[0] - newPosition1[0]) );
-		
-		// Calculate the exact position vector of the collision point by using the angle that has just been calculated
-		// and the first ship's new position vector.
-		double[] vector = {newPosition1[0] + signs[0] * this.getRadius() * Math.cos(angle), 
-						   newPosition1[1] + signs[1] * this.getRadius() * Math.sin(angle)};
-		return vector;
-	}
-	
 	/**
 	 * Gets the collision position between this and a given world.
 	 * 
@@ -825,29 +1043,55 @@ public class Ship extends Entity {
 		
 		return vector;	
 	}
-
+	
+	/**
+	 * Gets the collision position between this and a given entity.
+	 * 
+	 * @param  	entity
+	 * 			the entity to which you want to know the collision position.
+	 * 
+	 * @return	The position returned will be the position where both entities
+	 * 			collide with each other. The method returns null if they never collide.
+	 * 
+	 * @throws 	IllegalArgumentException
+	 * 			The other entity was null.
+	 * 			| entity == null
+	 */
+	public double[] getCollisionPosition(Entity entity) throws IllegalArgumentException {
+		if (entity == null) 
+			throw new IllegalArgumentException();
+		double time = getTimeToCollision(entity);
+		if (time == Double.POSITIVE_INFINITY)
+			return null;
+		
+		double[] newPosition1 = {helper.calculatePosition(this, time)[0], helper.calculatePosition(this, time)[1]};
+		double[] newPosition2 = {helper.calculatePosition(entity, time)[0], helper.calculatePosition(entity, time)[1]}; 
+		
+		// Calculate the correct signs TODO Explain further (why)
+		double[] signs = calculateSigns(newPosition1, newPosition2);
+		
+		// Calculate the angle between the x component of the vector between newPosition1 and newPosition2.
+		// This angle is the same as the one between the collisionPosition vector (out of the first ship) and it's x component.
+		double angle = Math.atan( Math.abs(newPosition2[1] - newPosition1[1]) / 
+								  Math.abs(newPosition2[0] - newPosition1[0]) );
+		
+		// Calculate the exact position vector of the collision point by using the angle that has just been calculated
+		// and the first ship's new position vector.
+		double[] vector = {newPosition1[0] + signs[0] * this.getRadius() * Math.cos(angle), 
+						   newPosition1[1] + signs[1] * this.getRadius() * Math.sin(angle)};
+		return vector;
+	}
+	
 	
 	
 			/*
 			 * |----------------------------------------------------|
-			 * | 10. The next methods handle resolving Collisions.	|
+			 * | 12. The next methods handle resolving Collisions.	|
 			 * |----------------------------------------------------| 
 			 */
 
 	
-
-	/**
-	 * Resolves the collision between this ship and a given entity.
-	 * @param 	entity
-	 * 			The entity to be used.
-	 * 
-	 * @see implementation
-	 */
-	public void resolveCollision(Entity entity) {
-		if (entity.getType() == "Ship") resolveCollisionShip((Ship)entity);
-		else if (entity.getType() == "Bullet") resolveCollisionBullet((Bullet) entity);
-	}
-
+	
 	/**
 	 * Resolves the collision between this ship and a given world.
 	 * @param 	world
@@ -862,6 +1106,19 @@ public class Ship extends Entity {
 		else if (position[0] == this.world.getHeight() || position[1] == 0) setVelocity(-getVelocityX(), getVelocityY());
 	}
 	
+	/**
+	 * Resolves the collision between this ship and a given entity.
+	 * @param 	entity
+	 * 			The entity to be used.
+	 * 
+	 * @see implementation
+	 */
+	public void resolveCollision(Entity entity) {
+		if (entity.getType() == "Ship") resolveCollisionShip((Ship)entity);
+		else if (entity.getType() == "Bullet") resolveCollisionBullet((Bullet) entity);
+	}
+
+
 	/**
 	 * Resolves the collision between this ship and a given ship.
 	 * @param 	ship
@@ -902,168 +1159,13 @@ public class Ship extends Entity {
 		
 	}
 	
-	
-	
-			/*
-		     * |------------------------------------------------------------|
-		     * | 11. The next methods handle the association with worlds.	|
-		     * |------------------------------------------------------------| 
-		     */
-	
-	
-	
-	/**
-	 * Variable registering the world of this bullet.
-	 */
-	public World world = null;
-	
-	
-	/**
-	* Return the world of this bullet.
-	*/
-	@Basic @Override @Raw
-	public World getWorld() {
-		return this.world;
-	}
 
 	
-	/**
-	 * Check whether this ship can have the given world as world. 
-	 *  
-	 * @param  	world
-	 *         	The world to check.
-	 *         
-	 * @see implementation
-	 */
-	@Override @Raw
-	public boolean canHaveAsWorld(World world) throws IllegalArgumentException, NullPointerException {
-		if ((getWorld() != null) && (isInWorld(world)) ) return true;
-		return false;
-	}
-	
-	/**
-	 * Check whether this ship is currently located in a given world. 
-	 *  
-	 * @param  	world
-	 *         	The world to check.
-	 *         
-	 * @see implementation
-	 */
-	@Override
-	public boolean isInWorld(World world) {
-		try {
-			if (world.containsEntity(this)) {
-				return true;
-			}
-		}
-		catch (NullPointerException exc) {
-//          //Because the given purchase is raw, it is possible that
-//          //it does not yet reference an effective share.
-//       assert (purchase == null) || (purchase.getShare() == null);
-         return false;
-		}
-		// TODO Deze methode zou eigenlijk de positie moeten checken en stuff.
-		return false;
-	}
-	
-	
-	/**
-	 * Set a given world as world for this ship.
-	 *  
-	 * @param  	world
-	 *         	The world to set as world for this ship.
-	 *         
-	 * @see implementation
-	 */
-	@Override @Raw
-	public void setWorld(World world) throws IllegalArgumentException, NullPointerException {
-		if (world ==  null) throw new NullPointerException();
-		if (!canHaveAsWorld(world)) throw new IllegalArgumentException();
-		this.world = world;
-	}
-	
-	/**
-	 * Remove the current world as world for this bullet.
-	 *      
-	 * @see implementation
-	 */
-	@Override
-	public void deSetWorld() throws NullPointerException {
-		if (getWorld() ==  null) throw new NullPointerException();
-		this.world = null;
-	}
-
-
-	
-			/*
-		     * |------------------------------------------------------------|
-		     * | 12. The next methods handle the association with bullets.	|
-		     * |------------------------------------------------------------| 
-		     */
-	
-	
-	private List<Bullet> bullets = new ArrayList<Bullet>();
-	
-	
-	public boolean canHaveAsBullet(Bullet bullet) {
-		if (bullets.contains(bullet))
-			return false;
-		if (bullet.canHaveAsShip(this))
-			return true;
-		return false;
-	}
-	
-	
-	public void addBullet(Bullet bullet) {
-		bullets.add(bullet);
-	}
-	
-	public void removeBullet(Bullet bullet) {
-		bullets.remove(bullet);
-	}
-	
-	
-	public void loadBullet(Bullet bullet) throws IllegalArgumentException {
-		if (!canHaveAsBullet(bullet))
-			throw new IllegalArgumentException();
-		addBullet(bullet);
-		bullet.setShip(this);
-	}
-	
-	
-	/**
-	 * Reload a given bullet into this ship.
-	 *  
-	 * @param  	bullet
-	 *         	The bullet to reload.
-	 *         
-	 * @see implementation
-	 */
-	public void reloadBullet(Bullet bullet) {
-		loadBullet(bullet);
-	}
-	
-	
-	public void fireBullet() {
-		fireBullet(bullets.get(0));
-	}
-
-	public void fireBullet(Bullet bulletRequest) {
-		Bullet bullet = bulletRequest;
-		if (getWorld() == null) return;
-		if (!bullets.contains(bullet)) bullet = bullets.remove(0);
-		else bullets.remove(bullet);
-		
-		// TODO speed/direction stuff
-		// TODO resolve collisions
-		bullet.setShip(null);
-		try {
-		bullet.setWorld(getWorld());
-		}
-		catch (IllegalArgumentException exc) {
-			bullet.terminate();
-		}
-	}
+	/*
+     * |----------------------------|
+     * | #Header-5# Other Methods.	|
+     * |----------------------------| 
+     */
 	
 	
 	

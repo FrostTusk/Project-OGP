@@ -143,7 +143,7 @@ public class World {
 	 * 
 	 * @see implementation
 	 */
-	// TODO Moet deze methode wel public zijn?
+	// TODO Should this method be public?
 	public void setUpperBound(double newUpperBound) {
 		upperBound = newUpperBound;
 		
@@ -223,7 +223,7 @@ public class World {
 	public void addEntity(Entity entity) throws NullPointerException, IllegalArgumentException {
 		if (entity == null) throw new NullPointerException();
 		// The world will always have final say as to what entities are in it.
-		// The entity can only set and deset worlds, but not recognize itself as actually being in a world.
+		// The entity can only set and de-set worlds, but not recognize itself as actually being in a world.
 		// First we check if this world can have a given entity as entity, this will also check if the
 		// entity can have this world as world.
 		if (!canHaveAsEntity(entity)) {
@@ -250,7 +250,7 @@ public class World {
 	public void removeEntity(Entity entity) throws NullPointerException, IllegalArgumentException {
 		if (entity == null) throw new NullPointerException();
 		// The world will always have final say as to what entities are in it.
-		// The entity can only set and deset worlds, but not recognize itself as actually being in a world.
+		// The entity can only set and de-set worlds, but not recognize itself as actually being in a world.
 		// Removing an entity is simpler than adding an entity. We only have to check if
 		// the entity is actually in the world and the world is  the current world of the entity.
 		if ( (containsEntity(entity)) && (entity.getWorld() == this) ) {
