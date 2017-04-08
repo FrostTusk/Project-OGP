@@ -53,6 +53,8 @@ public class World {
 	
 	
 	
+	private Helper helper = new Helper();
+	
 	/**
 	 * Initialize this new world with given width and height.
 	 * 
@@ -327,8 +329,13 @@ public class World {
 	 * 			the time over which the world will evolve.
 	 */
 	public void evolve(double time) {
+		double collisionTimeMin;
 		Entity[] collisionEntitiesMin = calculateFirstCollision();
-		double collisionTimeMin = collisionEntitiesMin[0].getTimeToCollision(collisionEntitiesMin[1]);
+		if ( collisionEntitiesMin[0] == collisionEntitiesMin[1] )
+			collisionTimeMin = collisionEntitiesMin[0].getTimeToCollision(this);
+		else
+			collisionTimeMin = collisionEntitiesMin[0].getTimeToCollision(collisionEntitiesMin[1]);
+	
 		if ( collisionTimeMin < time) {
 			update(collisionTimeMin);
 			// Resolve Collision
@@ -347,7 +354,9 @@ public class World {
 	 */
 	private void update(double time) {
 		for (Entity entity: entities.values()) {
-			System.out.println(entity);
+			this.removeEntity(entity);
+			entity.move(time);
+			this.addEntity(entity);
 		}
 	}
 	
@@ -369,7 +378,16 @@ public class World {
 				}
 			}
 		}
-		// TODO check if entities collide with borders.
+		
+		for (Entity entity: entities.values()) {
+			double collisionTimeTemp = entity.getTimeToCollision(this);
+			if (collisionTimeTemp < collisionTimeMin) {
+				collisionTimeMin = collisionTimeTemp;
+				collisionEntitiesMin[0] = entity;
+				collisionEntitiesMin[1] = entity;
+			}
+		}
+		
 		return collisionEntitiesMin;
 	}
 	
@@ -391,6 +409,15 @@ public class World {
 
 	
 	
+	/**
+	 * Returns the entity that is registered with the given position.
+	 * 
+	 * @param	position
+	 * 			The position of the entity to be returned.
+	 * 
+	 * @see implementation
+	 */
+	// TODO Is this @Basic? @Raw?
 	public Entity getEntityAtPosition(Position position) {
 		try {
 			return entities.get(position);
@@ -400,6 +427,11 @@ public class World {
 		}
 	}
 	
+	/**
+	 * Returns all entities registered in this world.
+	 * 
+	 * @see implementation
+	 */
 	public Entity[] getAllEntities() {
 		Entity[] entitiesResult = new Entity[entities.size()];
 		int current = 0;
@@ -410,26 +442,43 @@ public class World {
 		return entitiesResult;
 	}
 	
+	/**
+	 * Returns all ships registered in this world.
+	 * 
+	 * @see implementation
+	 */
 	public Ship[] getAllShips() {
-		Helper helper = new Helper();
+		// First get all the entities registered in this world
 		Entity[] entitiesResult = getAllEntities();
 		
+		// Create a temporary List that will include all the bullet entities.
+		// We have to create this list because we have no idea how many bullets are
+		// in the total amount of entities.
 		List<Ship> shipsResult = new ArrayList<Ship>();
-		for (int i = 0; i < entitiesResult.length; i++) { 
+		for (int i = 0; i < entitiesResult.length; i++) 
 			if (entitiesResult[i].getType() == "Ship") shipsResult.add((Ship)entitiesResult[i]);
-		}
 		
+		// Convert the List to an array using the helper class.
 		return (Ship[])helper.convertListToArray(shipsResult);
 	}
 	
+	/**
+	 * Returns all bullets registered in this world.
+	 * 
+	 * @see implementation
+	 */
 	public Bullet[] getAllBullets() {
-		Helper helper = new Helper();
+		// First get all the entities registered in this world
 		Entity[] entitiesResult = getAllEntities();
 		
+		// Create a temporary List that will include all the bullet entities.
+		// We have to create this list because we have no idea how many bullets are
+		// in the total amount of entities.
 		List<Bullet> bulletsResult = new ArrayList<Bullet>();
 		for (int i = 0; i < entitiesResult.length; i++) 
 			if (entitiesResult[i].getType() == "Bullet") bulletsResult.add((Bullet)entitiesResult[i]);
 		
+		// Convert the List to an array using the helper class.
 		return (Bullet[])helper.convertListToArray(bulletsResult);
 	}
 	

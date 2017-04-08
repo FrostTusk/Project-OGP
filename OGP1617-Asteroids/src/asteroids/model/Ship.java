@@ -2,6 +2,7 @@ package asteroids.model;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import asteroids.helper.Entity;
 import asteroids.helper.Helper;
 import asteroids.helper.Position;
@@ -62,7 +63,6 @@ public class Ship extends Entity {
 	     */
 	
 	
-	
 			/*
 			 * |----------------------------------------------------------------------------|
 			 * | 1. The next method handles the Initialization and Termination of the Ship.	|
@@ -71,6 +71,9 @@ public class Ship extends Entity {
 	
 	
 	
+	/**
+	 * Variable registering the helper for this ship.
+	 */
 	private Helper helper = new Helper();
 	
 	
@@ -113,12 +116,12 @@ public class Ship extends Entity {
 	 *         	the given mass.
 	 *         	| this.setMass(mass)
 	 *         	 
-	 * @throws 	IndexOutOfBoundsException
-	 *         	This new ship cannot have the given X and Y position as position.
-	 *       	| ! canHaveAsPosition(positionX, positionY)
 	 * @throws 	IllegalArgumentException
-	 *         	This new ship cannot have the given radius as its radius.
-	 *       	| ! canHaveAsRadius(this.getRadius())
+	 *         	This new bullet cannot have the given X and Y position as position.
+	 *       	| ! this.getPosition().isValidPosition(positionX, positionY)
+	 * @throws 	IllegalArgumentException
+	 *         	This new bullet cannot have the given radius as its radius.
+	 *       	| ! this.canHaveAsRadius(this.getRadius())
 	 */
 	public Ship(double positionX, double positionY, double velocityX, double velocityY, double orientation, double radius/*, double mass*/)
 		throws IllegalArgumentException {
@@ -142,6 +145,11 @@ public class Ship extends Entity {
 	}
 	
 	
+	/**
+	 * Terminates this ship. Breaks up any associations with entities and worlds.
+	 * Prepares this object for the garbage collector.
+	 * @see implementation
+	 */
 	public void terminate() {
 		if (getWorld() != null) world.removeEntity(this);
 	}
@@ -155,35 +163,42 @@ public class Ship extends Entity {
 		  */
 	
 	
-	
+	/**
+	 * Variable registering the current position of this ship.
+	 */
 	private Position position;
 	
-	@Basic 
+	
+	/**
+	 * Return the current position of this ship.
+	 */
+	@Basic @Override @Raw 
 	public Position getPosition() {
 		return this.position;
 	}
 	
 	
 	/**
-	 * Set the position of this ship to the given position.
+	 * Set the position of this bullet to the given position.
 	 * 
 	 * @param  	positionX
-	 *         	The new X position for this ship.
+	 *         	The new X position for this bullet.
 	 * @param  	positionY
-	 * 		   	The new Y position for this ship.
+	 * 		   	The new Y position for this bullet.
 	 * 
-	 * @post   	The X position of this new ship is equal to
+	 * @post   	The X position of this new bullet is equal to
 	 *         	the given X position.
-	 *       	| new.getPositionX() == positionX
-	 * @post   	The Y position of this new ship is equal to
+	 *       	| new.getPosition().getPositonX() == positionX
+	 * @post   	The Y position of this new bullet is equal to
 	 *         	the given Y position.
-	 *       	| new.getPositionY() == positionY
+	 *       	| new.getPosition().getPositionY() == positionY
 	 *       
-	 * @throws 	IndexOutOfBoundsException
+	 * @throws 	IllegalArgumentException
 	 *         	The given position is not a valid position for any
-	 *         	ship.
-	 *       	| ! isValidPosition(getPositionX(), getPositionY())
+	 *         	bullet.
+	 *       	| ! this.getPosition().isValidPosition(positionX, positonY)
 	 */
+	@Raw
 	public void setPosition(double positionX, double positionY) 
 			throws IllegalArgumentException {
 		try {
@@ -221,7 +236,7 @@ public class Ship extends Entity {
 	/**
 	 * Return the velocity of this ship.
 	 */
-	@Basic @Raw
+	@Basic @Override @Raw
 	public double getVelocityX() {
 		return this.velocityX;
 	}
@@ -229,7 +244,7 @@ public class Ship extends Entity {
 	/**
 	 * Return the velocity of this ship.
 	 */
-	@Basic @Raw
+	@Basic @Override @Raw
 	public double getVelocityY() {
 		return this.velocityY;
 	}
@@ -247,6 +262,7 @@ public class Ship extends Entity {
 	 * @return	Returns the speed of the current ship.
 	 * 			| result == Math.sqrt((this.getVelocityX() * this.getVelocityX()) + (this.getVelocityY() * this.getVelocityY()))
 	 */
+	@Raw
 	public double getSpeed() {
 		return Math.sqrt((getVelocityX() * getVelocityX()) + (getVelocityY() * getVelocityY()));
 	}
@@ -264,6 +280,7 @@ public class Ship extends Entity {
 	 *       	| result == (! (isNaN(velocityX)) || (isNaN(velocityY)) ) &&
 	 *       				Math.sqrt((velocityX * velocityX) + (velocityY * velocityY)) > constantMaxSpeed
 	 */
+	@Raw
 	public boolean isValidSpeed(double velocityX, double velocityY) {
 		if ( (java.lang.Double.isNaN(velocityX)) || (java.lang.Double.isNaN(velocityY)) )
 			return false;
@@ -292,6 +309,7 @@ public class Ship extends Entity {
 	 *       	|   then new.getVelocityX() == 0
 	 *       	|		 new.getVelocityY() == 0
 	 */
+	@Raw
 	public void setVelocity(double velocityX, double velocityY) {
 		if (isValidSpeed(velocityX, velocityY)) {
 			this.velocityX = velocityX;
@@ -337,6 +355,7 @@ public class Ship extends Entity {
 	 * 			or not. true if it is, false if not.
 	 *       	| result == (orientation <= 2*Math.PI) && (orientation >= 0)
 	*/
+	@Raw
 	public boolean isValidOrientation(double orientation) {
 		if ( (orientation <= 2*Math.PI) && (orientation >= 0) )
 			return true;
@@ -358,6 +377,7 @@ public class Ship extends Entity {
 	 *         	orientation.
 	 *       	| new.getOrientation() == orientation
 	 */
+	@Raw
 	public void setOrientation(double orientation) {
 		assert isValidOrientation(orientation);
 		this.orientation = orientation;
@@ -394,7 +414,7 @@ public class Ship extends Entity {
 	/**
 	 * Return the radius of this ship.
 	 */
-	@Basic @Raw
+	@Basic @Override @Raw
 	public double getRadius() {
 		return this.radius;
 	}
@@ -408,7 +428,8 @@ public class Ship extends Entity {
 	 * @return	Returns whether or not the given radius can be used 
 	 * 			as a valid radius or not. true if it can, false if not.
 	 *       	| result == (POSITIVE_INFINITY > radius) && (radius >= this.getMinRadius())
-	*/
+	 */
+	@Raw
 	public boolean canHaveAsRadius(double radius) {
 		if ( (Double.POSITIVE_INFINITY > radius) && (radius >= this.getMinRadius()) )
 			return true;
@@ -433,7 +454,6 @@ public class Ship extends Entity {
 	
 	/**
 	 * Return the current mass of the ship.
-	 * @return	Returns the mass of the current ship.
 	 */
 	@Basic @Raw
 	public double getMass() {
@@ -444,6 +464,7 @@ public class Ship extends Entity {
 	 * Return the current mass of the ship and its cargo.
 	 * @return	Returns the mass of the current ship + the mass of the objects on the ship.
 	 */
+	@Raw
 	public double getTotalMass() {
 		return this.getMass(); //TODO + mass of cargo
 	}
@@ -457,6 +478,7 @@ public class Ship extends Entity {
 	 * 			or not. true if it is, false if not.
 	 *       	| result == (mass > ( 4/3 * Math.PI * Math.pow(this.getRadius(), 3) * (1.42 * Math.pow(10, 12)) ))
 	 */
+	@Raw
 	public boolean isValidMass(double mass) {
 		return mass > ( 4/3 * Math.PI * Math.pow(this.getRadius(), 3) * (1.42 * Math.pow(10, 12)) );
 	}
@@ -477,6 +499,7 @@ public class Ship extends Entity {
 	 *       	| if (! isValidMass(mass)))
 	 *       	|   then new.getMass() == (4/3 * Math.PI * Math.pow(this.getRadius(), 3) * 1.42 * Math.pow(10, 12))
 	 */
+	@Raw
 	public void setMass(double mass) {
 		if (isValidMass(mass)) this.mass = mass;
 		else this.mass = (4/3 * Math.PI * Math.pow(this.getRadius(), 3) * 1.42 * Math.pow(10, 12));
@@ -489,7 +512,6 @@ public class Ship extends Entity {
 	     * | #Header-2# Association Methods.	|
 	     * |------------------------------------| 
 	     */
-	
 	
 	
 			/*
@@ -541,19 +563,12 @@ public class Ship extends Entity {
 	*/
 	@Override @Raw
 	public boolean isInWorld(World world) {
-		try {
-			if (world.containsEntity(this)) {
+		if ( (this.getPosition().getPositionX() - this.getRadius() >= 0) &&
+				 (this.getPosition().getPositionX() + this.getRadius() <= world.getWidth()) &&
+				 (this.getPosition().getPositionY() - this.getRadius() >= 0) &&
+				 (this.getPosition().getPositionY() + this.getRadius() <= world.getHeight()) )
 				return true;
-			}
-		}
-		catch (NullPointerException exc) {
-		//  //Because the given purchase is raw, it is possible that
-		//  //it does not yet reference an effective share.
-		//assert (purchase == null) || (purchase.getShare() == null);
-		 return false;
-		}
-		// TODO These methods should check position/shape in boundaries of world.
-	return false;
+			return false;
 	}
 	
 	
@@ -577,7 +592,7 @@ public class Ship extends Entity {
 	*      
 	* @see implementation
 	*/
-	@Override
+	@Override // TODO @Raw?
 	public void deSetWorld() throws NullPointerException {
 		if (getWorld() ==  null) throw new NullPointerException();
 		this.world = null;
@@ -590,6 +605,7 @@ public class Ship extends Entity {
 	     * | 8. The next methods handle the association with bullets.	|
 	     * |------------------------------------------------------------| 
 	     */
+	
 	
 	
 	/**
@@ -746,6 +762,7 @@ public class Ship extends Entity {
 	 *         	The time was less than 0.
 	 *       	| time < 0
 	 */
+	@Override
 	public void move(double time) throws IllegalArgumentException, IndexOutOfBoundsException {
 		if (time < 0)
 			throw new IllegalArgumentException();
@@ -850,6 +867,7 @@ public class Ship extends Entity {
 	 * 			The other entity was null.
 	 * 			| entity == null
 	 */
+	@Raw
 	public double getDistanceBetween(Entity entity) throws IllegalArgumentException {
 		double distance;	// distance between the ships
 		double distanceX;	// distance between the x-coordinates of the ships
@@ -886,6 +904,7 @@ public class Ship extends Entity {
 	 * @post	distance[0] is equal to the shortest distance between the center of this ship and the vertical boundary of the world
 	 * 			distance[1] is equal to the shortest distance between the center of this ship and the horizontal boundary of the world
 	 */
+	@Raw
 	public double[] getDistanceBetween(World world) {
 		double[] distance = {Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY};
 		if (getWorld() != world) return distance;
@@ -918,6 +937,7 @@ public class Ship extends Entity {
 	 * 			the other entity was null.
 	 * 			| entity == null
 	 */
+	@Raw
 	public boolean overlap(Entity entity) throws IllegalArgumentException {
 		if (entity == null) 
 			throw new IllegalArgumentException();
@@ -935,7 +955,6 @@ public class Ship extends Entity {
 	     * | #Header-4# Collision Detection Methods.	|
 	     * |--------------------------------------------| 
 	     */
-	
 	
 	
 				/*
@@ -962,6 +981,7 @@ public class Ship extends Entity {
 	 * 			If the ship never collides with the boundary, the returned time will be infinity.
 	 * 
 	 */
+	@Override @Raw
 	public double getTimeToCollision(World world) {		
 		double[] distance = getDistanceBetween(world);
 		if ( (distance[0] == Double.POSITIVE_INFINITY) || (distance[1] == Double.POSITIVE_INFINITY) )
@@ -994,6 +1014,7 @@ public class Ship extends Entity {
 	 * 			The other entity was null.
 	 * 			| entity == null
 	 */
+	@Override @Raw
 	public double getTimeToCollision(Entity entity) throws IllegalArgumentException {
 		if (entity == null) 
 			throw new IllegalArgumentException();
@@ -1027,6 +1048,7 @@ public class Ship extends Entity {
 	 * @post	vector contains the position where this ship and the world will collide, if any.
 	 * 			vector is null if they never collide.
 	 */
+	@Raw
 	public double[] getCollisionPosition(World world) {	
 		double vector[] = {Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY};
 
@@ -1057,6 +1079,7 @@ public class Ship extends Entity {
 	 * 			The other entity was null.
 	 * 			| entity == null
 	 */
+	@Raw
 	public double[] getCollisionPosition(Entity entity) throws IllegalArgumentException {
 		if (entity == null) 
 			throw new IllegalArgumentException();
@@ -1161,12 +1184,11 @@ public class Ship extends Entity {
 	
 
 	
-	/*
-     * |----------------------------|
-     * | #Header-5# Other Methods.	|
-     * |----------------------------| 
-     */
-	
+		/*
+	     * |----------------------------|
+	     * | #Header-5# Other Methods.	|
+	     * |----------------------------| 
+	     */
 	
 	
 			/*
@@ -1179,6 +1201,7 @@ public class Ship extends Entity {
 	
 	/**
 	 * A method that returns the signs to be used in the getCollisionPosition() method.
+	 * Helper method for getCollisionPosition().
 	 * 
 	 * @param 	position1
 	 * 			The first position to be used in the formula.
@@ -1187,6 +1210,7 @@ public class Ship extends Entity {
 	 * 
 	 * @return The signs to be used in the getCollisionPosition() method
 	 */
+	@Raw
 	public double[] calculateSigns(double[] position1, double[] position2) {
 		double signX1 = 1;
 		if (position1[0] > position2[0])
@@ -1205,7 +1229,7 @@ public class Ship extends Entity {
 	 * 
 	 * @see implementation
 	 */
-	@Override
+	@Override @Raw
 	public String getType() {
 		return "Ship";
 	}

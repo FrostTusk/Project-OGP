@@ -1,6 +1,7 @@
 1. Questions:
 	1. Documentation
-		1. Declarative
+		1. Declarative => no idea how to do it for getDistance/getTimeTo?
+		2. @Raw => for setters?
 	2. Binary Relations
 	3. When to test facade
 	4. Hoe class position doen
@@ -8,6 +9,7 @@
 		2. Exception gethrowed bij aanmaak position, what happens?
 	5. Wat is en waarom een type parameter?
 	6. Nieuwe methodes in Ship class => Volledige Documentatie?
+	7. Ship + Entity herschrijven naar entity?
 
 2. TODO:
 	1. Proofread

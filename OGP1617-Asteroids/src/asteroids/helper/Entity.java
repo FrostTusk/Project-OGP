@@ -20,8 +20,7 @@ public abstract class Entity {
 	public abstract double getMass();
 	
 	
-	public abstract double getTimeToCollision(Entity entity);
-
+	
 	
 	public abstract World getWorld();
 	
@@ -33,6 +32,20 @@ public abstract class Entity {
 	
 	public abstract void deSetWorld();
 	
+	
+	
+	
+	public abstract void move(double time);
+	
+	
+	
+	public abstract double getTimeToCollision(World world);
+	
+	public abstract double getTimeToCollision(Entity entity);
 
+	
+	
+	
 	public abstract String getType();
+
 }

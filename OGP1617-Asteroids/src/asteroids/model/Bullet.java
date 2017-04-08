@@ -12,15 +12,23 @@ import be.kuleuven.cs.som.annotate.*;
 
 /*
  * Methods Index:
- * 1. Methods that handle the Initialization of the bullet
- * 2. Methods that handle the Position of the bullet
- * 3. Methods that handle the Speed of the bullet
- * 4. Methods that handle the Radius of the bullet
- * 5. Methods that handle the Mass of the bullet
- * 6. Methods that handle Collision Detection
- * 7. Methods that handle the association with Worlds
- * 8. Methods that handle the association with Ships
- * 9. Helper Methods
+ * #1# Basic Methods
+ * 		1. Methods that handle the Initialization and Termination of the Bullet
+ * 		2. Methods that handle the Position of the Bullet
+ * 		3. Methods that handle the Speed of the Bullet
+ * 		4. Methods that handle the Radius of the Bullet
+ * 		5. Methods that handle the Mass of the Bullet
+ * #2# Association Methods
+ * 		6. Methods that handle the association with Worlds
+ * 		7. Methods that handle the association with Bullets
+ * #3# Advanced Methods
+ * 		8. Methods that handle Moving and Accelerating
+ * 		9. Methods that handle Calculating Distance and Overlap
+ * #4# Collision Detection Methods
+ * 		10. Methods that handle Collision Detection
+ * 		11. Methods that handle Resolving Collisions
+ * #5# Other Methods
+ *		12. Helper Methods
  */
 
 /**
@@ -39,12 +47,22 @@ import be.kuleuven.cs.som.annotate.*;
 */
 public class Bullet extends Entity {
 	
+		/*
+	     * |----------------------------|
+	     * | #Header-1# Basic Methods.	|
+	     * |----------------------------| 
+	     */
+	
+	
 			/*
 			 * |----------------------------------------------------------------|
 			 * | 1. The next method handles the Initialization of the bullet.	|
 			 * |----------------------------------------------------------------| 
 			 */
 
+	
+	
+	
 //	private Helper helper = new Helper();
 	
 	/**
@@ -103,6 +121,11 @@ public class Bullet extends Entity {
 	}
 	
 	
+	/**
+	 * Terminates this bullet. Breaks up any associations with entities and worlds.
+	 * Prepares this object for the garbage collector.
+	 * @see implementation
+	 */
 	public void terminate() {
 		if (getWorld() != null) world.removeEntity(this);
 		if (getShip() != null) this.setShip(null);
@@ -118,13 +141,13 @@ public class Bullet extends Entity {
 	
 	
 	/**
-	 * Variable registering the position of this bullet.
+	 * Variable registering the current position of this ship.
 	 */
 	private Position position;
 	
 	
 	/**
-	 * Return the position of this bullet.
+	 * Return the current position of this bullet.
 	 */
 	@Basic @Override @Raw 
 	public Position getPosition() {
@@ -275,13 +298,13 @@ public class Bullet extends Entity {
 	}
 	
 	
-	
-		 /*
-		  * |-------------------------------------------------------|
-		  * | 4. The next methods handle the Radius of the bullet.	|
-		  * |-------------------------------------------------------| 
-		  */
-	
+		
+			 /*
+			  * |-------------------------------------------------------|
+			  * | 4. The next methods handle the Radius of the bullet.	|
+			  * |-------------------------------------------------------| 
+			  */
+		
 	
 	
 	/**
@@ -361,6 +384,7 @@ public class Bullet extends Entity {
 	 * 			or not. true if it is, false if not.
 	 *       	| result == (mass > ( 4/3 * Math.PI * Math.pow(getRadius(), 3) * (1.42 * Math.pow(10, 12)) ))
 	 */
+	@Raw
 	public boolean isValidMass(double mass) {
 		return mass > ( 4/3 * Math.PI * Math.pow(getRadius(), 3) * (1.42 * Math.pow(10, 12)) );
 	}
@@ -381,6 +405,7 @@ public class Bullet extends Entity {
 	 *       	| if (! isValidMass(mass)))
 	 *       	|   then new.getMass() == (4/3 * Math.PI * Math.pow(getRadius(), 3) * 1.42 * Math.pow(10, 12))
 	 */
+	@Raw
 	public void setMass(double mass) {
 		if (isValidMass(mass)) this.mass = mass;
 		else this.mass = (4/3 * Math.PI * Math.pow(getRadius(), 3) * 1.42 * Math.pow(10, 12));
@@ -388,30 +413,24 @@ public class Bullet extends Entity {
 	
 	
 	
-			/*
-		     * |----------------------------------------------------|
-		     * | 6. The next methods handle Collision Detection.	|
-		     * |----------------------------------------------------| 
-		     */
-	
-	
-	
-	public double getTimeToCollision(Entity entity) {
-		return 0;
-	}
-	
+		/*
+	     * |------------------------------------|
+	     * | #Header-2# Association Methods.	|
+	     * |------------------------------------| 
+	     */
 	
 	
 			/*
 		     * |------------------------------------------------------------|
-		     * | 7. The next methods handle the association with worlds.	|
+		     * | 6. The next methods handle the association with worlds.	|
 		     * |------------------------------------------------------------| 
 		     */
 	
 	
+	
 	/**
-	 * Variable registering the world of this bullet.
-	 */
+	* Variable registering the world of this bullet.
+	*/
 	private World world = null;
 	
 	
@@ -422,23 +441,33 @@ public class Bullet extends Entity {
 	public World getWorld() {
 		return this.world;
 	}
-
+	
 	
 	/**
-	 * Check whether this bullet can have the given world as world. 
-	 *  
-	 * @param  	world
-	 *         	The world to check.
-	 *         
-	 * @see implementation
-	 */
+	* Check whether this bullet can have the given world as world. 
+	*  
+	* @param  	world
+	*         	The world to check.
+	*         
+	* @see implementation
+	*/
 	@Override @Raw
 	public boolean canHaveAsWorld(World world) throws IllegalArgumentException, NullPointerException {
 		if ((getWorld() != null) && (isInWorld(world)) ) return true;
 		return false;
 	}
 	
-	@Override
+	/**
+	* Check whether this bullet is currently located in a given world. 
+	* This method only checks if the shape of the bullet is located in a given world,
+	* it does not check if it's associated with the given world.
+	*  
+	* @param  	world
+	*         	The world to check.
+	*         
+	* @see implementation
+	*/
+	@Override @Raw
 	public boolean isInWorld(World world) {
 		if ( (this.getPosition().getPositionX() - this.getRadius() >= 0) &&
 			 (this.getPosition().getPositionX() + this.getRadius() <= world.getWidth()) &&
@@ -450,61 +479,128 @@ public class Bullet extends Entity {
 	
 	
 	/**
-	 * Set a given world as world for this bullet.
-	 *  
-	 * @param  	world
-	 *         	The world to set as world for this bullet.
-	 *         
-	 * @see implementation
-	 */
+	* Set a given world as world for this bullet.
+	*  
+	* @param  	world
+	*         	The world to set as world for this bullet.
+	*         
+	* @see implementation
+	*/
 	@Override @Raw
 	public void setWorld(World world) throws IllegalArgumentException, NullPointerException {
 		if (world ==  null) throw new NullPointerException();
 		if (!canHaveAsWorld(world)) throw new IllegalArgumentException();
-		this.world = world;
+	this.world = world;
 	}
 	
 	/**
-	 * Remove the current world as world for this bullet.
-	 *      
-	 * @see implementation
-	 */
-	@Override
+	* Remove the current world as world for this bullet.
+	*      
+	* @see implementation
+	*/
+	@Override // TODO @Raw?
 	public void deSetWorld() throws NullPointerException {
 		if (getWorld() ==  null) throw new NullPointerException();
 		this.world = null;
 	}
-
-
-	
-			/*
-		     * |--------------------------------------------------------|
-		     * | 8. The next methods handle the association with ships.	|
-		     * |--------------------------------------------------------| 
-		     */
 	
 	
 	
+		/*
+	     * |--------------------------------------------------------|
+	     * | 7. The next methods handle the association with ships.	|
+	     * |--------------------------------------------------------| 
+	     */
 	
+	
+	
+	/**
+	* Variable registering the ship of this bullet.
+	*/
 	private Ship ship = null;
 	
 	
+	/**
+	* Return the ship of this bullet.
+	*/
+	@Basic @Raw
 	public Ship getShip() {
 		return this.ship;
 	}
 	
 	
+	/**
+	* Check whether this bullet can have the given ship as ship. 
+	*  
+	* @param  	ship
+	*         	The ship to check.
+	*         
+	* @see implementation
+	*/
+	@Raw
 	public boolean canHaveAsShip(Ship ship) {
 		return ( (getShip() == null) && (getWorld() == null) );
 	}
 	
 	
+	/**
+	* Set a given ship as ship for this bullet.
+	*  
+	* @param  	ship
+	*         	The ship to set as ship for this bullet.
+	*         
+	* @see implementation
+	*/
+	@Raw
 	public void setShip(Ship ship) throws IllegalArgumentException, NullPointerException {
 		if (ship == null) throw new NullPointerException();
 		if (canHaveAsShip(ship)) this.ship = ship;
 		else throw new IllegalArgumentException();
 	}
 	
+	
+	
+		/*
+	     * |--------------------------------|
+	     * | #Header-3# Advanced Methods.	|
+	     * |--------------------------------| 
+	     */
+
+	
+			/*
+			 * |----------------------------------------------------------------|
+			 * | 8. The next methods handle Moving, Turning and Accelerating.	|
+			 * |----------------------------------------------------------------| 
+			 */
+	
+	
+	
+	@Override
+	public void move(double time) {
+		// TODO Auto-generated method stub
+	}
+	
+	
+	
+			/*
+		     * |----------------------------------------------------|
+		     * | 9. The next methods handle Collision Detection.	|
+		     * |----------------------------------------------------| 
+		     */
+	
+	
+	
+	@Raw @Override
+	public double getTimeToCollision(World world) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+	@Raw @Override
+	public double getTimeToCollision(Entity entity) {
+		return 0;
+	}
+
 	
 
 			/*
@@ -515,6 +611,7 @@ public class Bullet extends Entity {
 	
 	
 	
+	@Raw @Override
 	public String getType() {
 		return "Bullet";
 	}
