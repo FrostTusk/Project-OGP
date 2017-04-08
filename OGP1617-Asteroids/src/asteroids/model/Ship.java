@@ -146,13 +146,32 @@ public class Ship extends Entity {
 	
 	
 	/**
+	 * Variable registering if this ship is terminated or not.
+	 */
+	private boolean isTerminated = false;
+	
+	
+	/**
+	 * Return the whether or not this ship is terminated.
+	 */
+	@Basic @Raw
+	public boolean isTerminated() {
+		return this.isTerminated;
+	}
+	
+	
+	/**
 	 * Terminates this ship. Breaks up any associations with entities and worlds.
 	 * Prepares this object for the garbage collector.
 	 * @see implementation
 	 */
 	public void terminate() {
 		if (getWorld() != null) world.removeEntity(this);
+		this.isTerminated = true;
 	}
+	
+	
+
 	
 	
 	

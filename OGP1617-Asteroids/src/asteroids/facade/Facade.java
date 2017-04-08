@@ -184,14 +184,23 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 
 	@Override
 	public void terminateShip(Ship ship) throws ModelException {
-		// TODO Auto-generated method stub
+		try {
+			ship.terminate();
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 		
 	}
 
 	@Override
 	public boolean isTerminatedShip(Ship ship) throws ModelException {
-		// TODO Auto-generated method stub
-		return false;
+		try {
+			return ship.isTerminated();
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
@@ -202,8 +211,12 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 
 	@Override
 	public World getShipWorld(Ship ship) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return ship.getWorld();
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
@@ -233,32 +246,58 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 
 	@Override
 	public void terminateBullet(Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		try {
+			bullet.terminate();
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
 	public boolean isTerminatedBullet(Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
-		return false;
+		try {
+			return bullet.isTerminated();
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
 	public double[] getBulletPosition(Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			double[] position = {bullet.getPosition().getPositionX(), bullet.getPosition().getPositionY()};
+			return position;
+		}
+		catch (IllegalArgumentException exc) {
+			throw new ModelException(exc);
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
 	public double[] getBulletVelocity(Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			double[] velocity = {bullet.getVelocityX(), bullet.getVelocityY()};
+			return velocity;
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
+
 	}
 
 	@Override
 	public double getBulletRadius(Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
-		return 0;
+		try {
+			return bullet.getRadius();
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
@@ -269,14 +308,22 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 
 	@Override
 	public World getBulletWorld(Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return bullet.getWorld();
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
 	public Ship getBulletShip(Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return bullet.getShip();
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override

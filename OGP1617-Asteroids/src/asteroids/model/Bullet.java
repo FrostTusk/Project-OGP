@@ -122,6 +122,21 @@ public class Bullet extends Entity {
 	
 	
 	/**
+	 * Variable registering if this bullet is terminated or not.
+	 */
+	private boolean isTerminated = false;
+	
+	
+	/**
+	 * Return the whether or not this bullet is terminated.
+	 */
+	@Basic @Raw
+	public boolean isTerminated() {
+		return this.isTerminated;
+	}
+	
+	
+	/**
 	 * Terminates this bullet. Breaks up any associations with entities and worlds.
 	 * Prepares this object for the garbage collector.
 	 * @see implementation
