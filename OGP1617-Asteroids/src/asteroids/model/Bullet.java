@@ -8,8 +8,9 @@ import be.kuleuven.cs.som.annotate.*;
 
 /* Constants:
 *	1.	constantMaxSpeed = the maximum speed this bullet can achieve.
-*	2.	minRadius =  the minimum radius for each bullet.
+*	2.	minRadius = the minimum radius for each bullet.
 *	3.	density = the density for this bullet.
+*	4. 	boundaryCollisionMax = the maximum amount of collision with a boundary for this bullet
 */
 
 /*
@@ -95,10 +96,7 @@ public class Bullet extends Entity {
 	 * @effect	The X and Y velocity of this new bullet are set to
 	 *         	the given velocityX and velocityY.
 	 *         	| this.setVelocity(velocityX, velocityY)
-	 * @effect	The mass of this new bullet is set to
-	 *         	the given mass.
-	 *         	| this.setMass(mass)
-	 *         	 
+	 *                  	 
 	 * @throws 	IllegalArgumentException
 	 *         	This new bullet cannot have the given X and Y position as position.
 	 *       	| ! this.getPosition().isValidPosition(positionX, positionY)
@@ -122,8 +120,10 @@ public class Bullet extends Entity {
 			throw new IllegalArgumentException();
 		this.radius = radius;
 		
+		this.setDensity(7.8 * Math.pow(10, 12));
+		this.setMass();
 		
-		
+		this.setBoundaryCollisionMax(3);
 	}
 	
 	
@@ -388,7 +388,7 @@ public class Bullet extends Entity {
 	/**
 	 * Variable registering the density of this bullet.
 	 */
-	private double density = 7.8 * Math.pow(10, 12);
+	private double density;
 	
 	
 	/**
@@ -417,7 +417,7 @@ public class Bullet extends Entity {
 	 * @see implementation
 	 */
 	@Raw
-	public void setMass(double mass) {
+	public void setMass() {
 		this.mass = (4/3) * Math.PI * Math.pow(getRadius(), 3) * (density);
 	}
 	
@@ -941,32 +941,60 @@ public class Bullet extends Entity {
 	
 	
 	
-	private boolean maxHasBeenSet = false;
+	/**
+	 * Variable registering the maximum amount of boundary collisions allowed for this bullet.
+	 */
+	private double boundaryCollisionMax;
+	/**
+	 * Variable registering the amount of times this bullet has hit a boundary.
+	 */
 	private double boundaryCollisionCounter = 0;
-	private double boundaryCollisionMax = 3;
+
 	
 	
-	public boolean maxHasBeenSet() {
-		return maxHasBeenSet;
-	}
-	
-	public double getBoundaryCollisionCounter() {
-		return this.boundaryCollisionCounter;
-	}
-	
+	/**
+	* Return the maximum amount of times this bullet can collide with a boundary.
+	*/
+	@Basic @Raw
 	public double getBoundaryCollisionMax() {
 		return this.boundaryCollisionMax;
 	}
 	
+	/**
+	* Return the amount of times this bullet has collided with a boundary.
+	*/
+	@Basic @Raw
+	public double getBoundaryCollisionCounter() {
+		return this.boundaryCollisionCounter;
+	}
 	
+	
+	/**
+	* Set a given maximum as maximum amount collisions for this bullet.
+	*  
+	* @param  	maximum
+	*         	The amount to which the maximum needs to be set
+	*         
+	* @see implementation
+	*/
+	@Raw
+	private void setBoundaryCollisionMax(double maximum) {
+		this.boundaryCollisionMax = maximum;
+	}
+	
+	/**
+	* Set the boundary collision counter to a certain amount.
+	*  
+	* @param  	amount
+	*         	The amount to which the boundary collision counter needs to be set
+	*         
+	* @see implementation
+	*/
+	@Raw
 	private void setBoundaryCollisionCounter(double amount) {
 		this.boundaryCollisionCounter = amount;
 	}
-	
-	public void setBoundaryCollisionMax(double max) {
-		if (!maxHasBeenSet) this.boundaryCollisionMax = max;
-	}
-	
+
 	
 	/**
 	* Resolves the collision between this ship and a given world.

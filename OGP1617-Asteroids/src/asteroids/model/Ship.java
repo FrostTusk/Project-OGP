@@ -6,13 +6,14 @@ import java.util.List;
 import asteroids.helper.Entity;
 import asteroids.helper.Helper;
 import asteroids.helper.Position;
-
+import asteroids.helper.Thruster;
 import be.kuleuven.cs.som.annotate.*;
 
 
 /* Constants:
 *	1.	constantMaxSpeed = the maximum speed this ship can achieve.
-*	2.	minRadius =  the minimum radius for each ship.
+*	2.	minRadius = the minimum radius for each ship.
+*	3. 	force = the force of this ship.
 */
 
 /*
@@ -29,12 +30,13 @@ import be.kuleuven.cs.som.annotate.*;
  * 		8. Methods that handle the association with Bullets
  * #3# Advanced Methods
  * 		9. Methods that handle Moving, Turning and Accelerating
- * 		10. Methods that handle Calculating Distance and Overlap
+ * 		10. Methods that handle the Thruster
+ * 		11. Methods that handle Calculating Distance and Overlap
  * #4# Collision Detection Methods
- * 		11. Methods that handle Collision Detection
- * 		12. Methods that handle Resolving Collisions
+ * 		12. Methods that handle Collision Detection
+ * 		13. Methods that handle Resolving Collisions
  * #5# Other Methods
- *		13. Helper Methods
+ *		14. Helper Methods
  */
 
 /**
@@ -877,8 +879,46 @@ public class Ship extends Entity {
 	
 	
 			/*
+			 * |--------------------------------------------|
+			 * | 10. The next methods handle the Thruster.	|
+			 * |--------------------------------------------| 
+			 */
+	
+	
+	
+	private double force = 1.1 * Math.pow(10, 12);
+	
+	private Thruster thruster;
+	
+	
+	public double getForce() {
+		return this.force;
+	}
+	
+	public boolean getThrustStatus() {
+		return this.thruster.getThrustStatus();
+	}
+	
+	public double getAcceleration() {
+		return getForce() / getTotalMass();
+	}
+	
+	
+	public void thrustOn() {
+		this.thruster.thrustOn();
+		thrust(getAcceleration());
+	}
+	
+	public void thrustOff() {
+		this.thruster.thrustOff();
+	}
+
+	
+	
+	
+			/*
 			 * |----------------------------------------------------------------|
-			 * | 10. The next methods handle Calculating Distance and Overlap.	|
+			 * | 11. The next methods handle Calculating Distance and Overlap.	|
 			 * |----------------------------------------------------------------| 
 			 */
 	
@@ -989,7 +1029,7 @@ public class Ship extends Entity {
 	
 				/*
 				 * |----------------------------------------------------|
-				 * | 11. The next methods handle Collision Detection.	|
+				 * | 12. The next methods handle Collision Detection.	|
 				 * |----------------------------------------------------| 
 				 */
 	
@@ -1139,7 +1179,7 @@ public class Ship extends Entity {
 	
 			/*
 			 * |----------------------------------------------------|
-			 * | 12. The next methods handle resolving Collisions.	|
+			 * | 13. The next methods handle resolving Collisions.	|
 			 * |----------------------------------------------------| 
 			 */
 
@@ -1223,7 +1263,7 @@ public class Ship extends Entity {
 	
 			/*
 		     * |--------------------------------------------|
-		     * | 13. The next methods are Helper Methods.	|
+		     * | 14. The next methods are Helper Methods.	|
 		     * |--------------------------------------------| 
 		     */
 	

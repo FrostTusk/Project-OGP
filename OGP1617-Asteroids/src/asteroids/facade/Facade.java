@@ -213,8 +213,12 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 
 	@Override
 	public double getShipMass(Ship ship) throws ModelException {
-		// TODO Auto-generated method stub
-		return 0;
+		try {
+			return ship.getMass();
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
@@ -248,8 +252,15 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 	@Override
 	public Bullet createBullet(double x, double y, double xVelocity, double yVelocity, double radius)
 			throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return new Bullet(x, y, xVelocity, yVelocity, radius);
+		}
+		catch (IllegalArgumentException exc) {
+			throw new ModelException(exc);
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
@@ -310,8 +321,12 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 
 	@Override
 	public double getBulletMass(Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
-		return 0;
+		try {
+			return bullet.getMass();
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
