@@ -734,17 +734,17 @@ public class Ship extends Entity {
 			if (bullets.size() > 0) bullet = bullets.remove(0);
 			else return;
 		else bullets.remove(bullet);
-			
-		// TODO speed/direction stuff
 		
 		bullet.setSource(this);
 		
-		bullet.setPosition(getPosition().getPositionX() + getRadius() * Math.cos(getOrientation()), 
-				getPosition().getPositionY() + getRadius() * Math.sin(getOrientation()));
-		// BEZIG
-//		bullet.setVelocity( , );
+		bullet.setPosition(getPosition().getPositionX() + getRadius() * Math.cos(getOrientation()) + bullet.getRadius() * Math.cos(getOrientation()), 
+				getPosition().getPositionY() + getRadius() * Math.sin(getOrientation()) + bullet.getRadius() * Math.sin(getOrientation()));
+
+		for (Entity entity : world.getAllEntities()) {
+			if (bullet.overlap(entity)) bullet.resolveCollision(entity);
+		}
+		//TODO: set velocity to 250 km/s in right irection
 		
-		// TODO resolve collisions
 		bullet.setShip(null);
 		try {
 		bullet.setWorld(getWorld());
