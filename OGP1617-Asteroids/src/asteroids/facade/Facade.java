@@ -179,7 +179,6 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 	@Override
 	public Ship createShip(double x, double y, double xVelocity, double yVelocity, double radius, double direction,
 			double mass) throws ModelException {
-		// TODO Auto-generated method stub
 		try {
 			return new Ship(x, y, xVelocity, yVelocity, direction, radius, mass);
 		}
@@ -347,8 +346,12 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 
 	@Override
 	public World createWorld(double width, double height) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return new World(width, height);
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
