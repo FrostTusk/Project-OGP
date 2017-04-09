@@ -118,6 +118,8 @@ public class Bullet extends Entity {
 			throw new IllegalArgumentException();
 		this.radius = radius;
 		
+		
+		
 	}
 	
 	
@@ -378,7 +380,7 @@ public class Bullet extends Entity {
 	/**
 	 * Variable registering the mass of this bullet.
 	 */
-	public double mass;
+	private double mass;
 	
 	
 	/**
@@ -391,39 +393,16 @@ public class Bullet extends Entity {
 	
 	
 	/**
-	 * Check whether the given mass is a valid mass for this bullet.
-	 *  
-	 * @param  	mass
-	 * 			the mass to check
-	 * @return	Returns whether or not the mass is a valid mass for this bullet
-	 * 			or not. true if it is, false if not.
-	 *       	| result == (mass > ( 4/3 * Math.PI * Math.pow(getRadius(), 3) * (1.42 * Math.pow(10, 12)) ))
-	 */
-	@Raw
-	public boolean isValidMass(double mass) {
-		return mass > ( 4/3 * Math.PI * Math.pow(getRadius(), 3) * (1.42 * Math.pow(10, 12)) );
-	}
-	
-	
-	/**
 	 * Set the mass of this bullet to the given mass.
 	 * 
 	 * @param  	mass
 	 * 			the new mass for this bullet
 	 *         
-	 * @post   	If the given mass is a valid mass for this bullet,
-	 *         	the mass of this bullet is set to the given mass.
-	 *       	| if (isValidMass(mass)))
-	 *       	|   then new.getMass() == mass
-	 * @post	If the given mass isn't valid, the mass
-	 * 			of this bullet will be equal to (4/3 * Math.PI * Math.pow(getRadius(), 3) * 1.42 * Math.pow(10, 12)).
-	 *       	| if (! isValidMass(mass)))
-	 *       	|   then new.getMass() == (4/3 * Math.PI * Math.pow(getRadius(), 3) * 1.42 * Math.pow(10, 12))
+	 * @see implementation
 	 */
 	@Raw
 	public void setMass(double mass) {
-		if (isValidMass(mass)) this.mass = mass;
-		else this.mass = (4/3 * Math.PI * Math.pow(getRadius(), 3) * 1.42 * Math.pow(10, 12));
+		this.mass = (4/3) * Math.PI * Math.pow(getRadius(), 3) * (7.8 * Math.pow(10, 12));
 	}
 	
 	
@@ -530,10 +509,34 @@ public class Bullet extends Entity {
 	
 	
 	/**
+	 * Variable registering whether or not this bullet has been fired.
+	 */
+	private boolean hasBeenFired = false;
+	/**
+	 * Variable registering the source ship of this bullet.
+	 */
+	private Ship source;
+	/**
 	* Variable registering the ship of this bullet.
 	*/
 	private Ship ship = null;
 	
+	
+	/**
+	* Return whether or not this bullet has already been fired.
+	*/
+	@Basic @Raw
+	public boolean hasBeenFired() {
+		return this.hasBeenFired;
+	}
+	
+	/**
+	* Return the source of this bullet.
+	*/
+	@Basic @Raw
+	public Ship getSource() {
+		return this.source;
+	}
 	
 	/**
 	* Return the ship of this bullet.
@@ -543,6 +546,19 @@ public class Bullet extends Entity {
 		return this.ship;
 	}
 	
+	
+	/**
+	* Check whether this bullet can have the given ship as source. 
+	*  
+	* @param  	ship
+	*         	The ship to check.
+	*         
+	* @see implementation
+	*/
+	@Raw
+	public boolean canHaveAsSource(Ship ship) {
+		return (!hasBeenFired) && (getShip() == ship);
+	}
 	
 	/**
 	* Check whether this bullet can have the given ship as ship. 
@@ -557,6 +573,22 @@ public class Bullet extends Entity {
 		return ( (getShip() == null) && (getWorld() == null) );
 	}
 	
+	
+	/**
+	* Set a given ship as source for this bullet.
+	*  
+	* @param  	ship
+	*         	The ship to set as ship for this bullet.
+	*         
+	* @see implementation
+	*/
+	@Raw
+	public void setSource(Ship ship) {
+		if (canHaveAsSource(ship)) {
+			this.hasBeenFired = true;
+			this.source = ship;
+		}
+	}
 	
 	/**
 	* Set a given ship as ship for this bullet.

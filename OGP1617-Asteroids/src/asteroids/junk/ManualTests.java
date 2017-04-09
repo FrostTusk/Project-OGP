@@ -9,30 +9,30 @@ public class ManualTests {
 		boolean debug = false;
 		
 		System.out.println("Ship 1:");
-		Ship ship1 = new Ship(0, 0, 100, 100, 0, 20);
+		Ship ship1 = new Ship(0, 0, 100, 100, 0, 20, 1);
 		runTestSingle(ship1, debug);
 		System.out.println("Ship 2:");
-		Ship ship2 = new Ship(100, 100, 50, 50, 0, 10);
+		Ship ship2 = new Ship(100, 100, 50, 50, 0, 10, 1);
 		runTestSingle(ship2, debug);
 		System.out.println("");
 		runTestDouble(ship1, ship2, debug);
 		System.out.println("");
 		
 		System.out.println("Ship 3:");
-		Ship ship3 = new Ship(0, 0, 100, 100, 0, 1);
+		Ship ship3 = new Ship(0, 0, 100, 100, 0, 1, 1);
 		runTestSingle(ship3, debug);
 		System.out.println("Ship 4:");
-		Ship ship4 = new Ship(100, 100, 50, 50, 0, 1);
+		Ship ship4 = new Ship(100, 100, 50, 50, 0, 1, 1);
 		runTestSingle(ship4, debug);
 		System.out.println("");
 		runTestDouble(ship3, ship4, debug);
 		System.out.println("");
 		
 		System.out.println("Ship 5:");
-		Ship ship5 = new Ship(0, 0, 100, 100, 0, 1);
+		Ship ship5 = new Ship(0, 0, 100, 100, 0, 1, 1);
 		runTestSingle(ship5, debug);
 		System.out.println("Ship 6:");
-		Ship ship6 = new Ship(100, -100, 50, 50, pi, 1);
+		Ship ship6 = new Ship(100, -100, 50, 50, pi, 1, 1);
 		runTestSingle(ship6, debug);
 		System.out.println("");
 		runTestDouble(ship5, ship6, debug);

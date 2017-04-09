@@ -15,17 +15,17 @@ import asteroids.model.World;
 
 public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 
-	@Override
+	@Deprecated @Override
 	public Ship createShip() throws ModelException {
 		// ship parameters = positionX, positionY, velocityX, velocityY, orientation, radius.
-		return new Ship(0, 0, 0, 0, 0, 10);
+		return new Ship(0, 0, 0, 0, 0, 10, 1);
 	}
 
-	@Override
+	@Deprecated @Override
 	public Ship createShip(double x, double y, double xVelocity, double yVelocity, double radius, double orientation)
 			throws ModelException {
 		try {
-			return new Ship(x, y, xVelocity, yVelocity, orientation, radius);
+			return new Ship(x, y, xVelocity, yVelocity, orientation, radius, 1);
 		}
 		catch (IllegalArgumentException exc) {
 			throw new ModelException(exc);
@@ -180,7 +180,15 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 	public Ship createShip(double x, double y, double xVelocity, double yVelocity, double radius, double direction,
 			double mass) throws ModelException {
 		// TODO Auto-generated method stub
-		return null;
+		try {
+			return new Ship(x, y, xVelocity, yVelocity, direction, radius, mass);
+		}
+		catch (IllegalArgumentException exc) {
+			throw new ModelException(exc);
+		}
+		catch (AssertionError exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
@@ -329,8 +337,12 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 
 	@Override
 	public Ship getBulletSource(Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return bullet.getSource();
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override

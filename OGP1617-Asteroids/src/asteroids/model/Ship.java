@@ -78,7 +78,7 @@ public class Ship extends Entity {
 	
 	
 	/**
-	 * Initialize this new ship with given X and Y position, a given X and Y velocity, a given orientation, and a given radius.
+	 * Initialize this new ship with given X and Y position, a given X and Y velocity, a given orientation,  a given radius, and a given mass.
 	 *
 	 * @param  	positionX
 	 *         	The X position for this new ship.
@@ -123,7 +123,7 @@ public class Ship extends Entity {
 	 *         	This new bullet cannot have the given radius as its radius.
 	 *       	| ! this.canHaveAsRadius(this.getRadius())
 	 */
-	public Ship(double positionX, double positionY, double velocityX, double velocityY, double orientation, double radius/*, double mass*/)
+	public Ship(double positionX, double positionY, double velocityX, double velocityY, double orientation, double radius, double mass)
 		throws IllegalArgumentException {
 		try {
 			this.setPosition(positionX, positionY);
@@ -141,7 +141,7 @@ public class Ship extends Entity {
 			throw new IllegalArgumentException();
 		this.radius = radius;
 		
-//		setMass(mass);
+		setMass(mass);
 	}
 	
 	
@@ -171,15 +171,13 @@ public class Ship extends Entity {
 	}
 	
 	
-
-	
-	
 	
 		 /*
 		  * |-------------------------------------------------------|
 		  * | 2. The next methods handle the Position of the Ship.	|
 		  * |-------------------------------------------------------| 
 		  */
+	
 	
 	
 	/**
@@ -404,11 +402,11 @@ public class Ship extends Entity {
 	
 	
 	
-		 /*
-		  * |-------------------------------------------------------|
-		  * | 5. The next methods handle the Radius of the Ship.	|
-		  * |-------------------------------------------------------| 
-		  */
+			/*
+			 * |----------------------------------------------------|
+			 * | 5. The next methods handle the Radius of the Ship.	|
+			 * |----------------------------------------------------| 
+			 */
 	
 	
 	
@@ -468,7 +466,7 @@ public class Ship extends Entity {
 	/**
 	 * Variable registering the mass of this ship.
 	 */
-	public double mass;
+	private double mass;
 	
 	
 	/**
@@ -495,11 +493,11 @@ public class Ship extends Entity {
 	 * 			the mass to check
 	 * @return	Returns whether or not the mass is a valid mass for this ship
 	 * 			or not. true if it is, false if not.
-	 *       	| result == (mass > ( 4/3 * Math.PI * Math.pow(this.getRadius(), 3) * (1.42 * Math.pow(10, 12)) ))
+	 *       	| result == (mass > (4/3) * Math.PI * Math.pow(this.getRadius(), 3) * (1.42 * Math.pow(10, 12)) )
 	 */
 	@Raw
 	public boolean isValidMass(double mass) {
-		return mass > ( 4/3 * Math.PI * Math.pow(this.getRadius(), 3) * (1.42 * Math.pow(10, 12)) );
+		return mass > (4/3) * Math.PI * Math.pow(this.getRadius(), 3) * (1.42 * Math.pow(10, 12));
 	}
 	
 	
@@ -514,14 +512,14 @@ public class Ship extends Entity {
 	 *       	| if (isValidMass(mass)))
 	 *       	|   then new.getMass() == mass
 	 * @post	If the given mass isn't valid, the mass
-	 * 			of this new ship will be equal to (4/3 * Math.PI * Math.pow(this.getRadius(), 3) * 1.42 * Math.pow(10, 12)).
-	 *       	| if (! isValidMass(mass)))
-	 *       	|   then new.getMass() == (4/3 * Math.PI * Math.pow(this.getRadius(), 3) * 1.42 * Math.pow(10, 12))
+	 * 			of this new ship will be equal to a default value.
+	 *       	| if (! isValidMass(mass))
+	 *       	|   then new.getMass() == (4/3) * Math.PI * Math.pow(this.getRadius(), 3) * 1.42 * Math.pow(10, 12)
 	 */
 	@Raw
 	public void setMass(double mass) {
 		if (isValidMass(mass)) this.mass = mass;
-		else this.mass = (4/3 * Math.PI * Math.pow(this.getRadius(), 3) * 1.42 * Math.pow(10, 12));
+		else this.mass = (4/3) * Math.PI * Math.pow(this.getRadius(), 3) * 1.42 * Math.pow(10, 12);
 	}
 	
 	
