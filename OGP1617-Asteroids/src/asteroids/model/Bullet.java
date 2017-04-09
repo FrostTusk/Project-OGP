@@ -933,6 +933,83 @@ public class Bullet extends Entity {
 
 	
 	
+			/*
+			 * |----------------------------------------------------|
+			 * | 12. The next methods handle resolving Collisions.	|
+			 * |----------------------------------------------------| 
+			 */
+	
+	
+	private double boundaryCollisionMax = 3;
+	private double boundaryCollisionCounter = 0;
+	
+	
+	public double getBoundaryCollisionCounter() {
+		return this.boundaryCollisionCounter;
+	}
+	
+	private void setBoundaryCollisionCounter() {
+		
+	}
+	
+	
+	/**
+	* Resolves the collision between this ship and a given world.
+	* @param 	world
+	* 			The world to be used.
+	* 
+	* @see implementation
+	*/
+	public void resolveCollision(World world) {
+		if (getBoundaryCollisionCounter() < this.boundaryCollisionMax) ;
+		double[] position = getCollisionPosition(world);
+		
+		if (position[0] == this.world.getWidth() || position[0] == 0) setVelocity(getVelocityX(), -getVelocityY());
+		else if (position[0] == this.world.getHeight() || position[1] == 0) setVelocity(-getVelocityX(), getVelocityY());
+	}
+	
+	/**
+	* Resolves the collision between this ship and a given entity.
+	* @param 	entity
+	* 			The entity to be used.
+	* 
+	* @see implementation
+	*/
+	public void resolveCollision(Entity entity) {
+		if (entity.getType() == "Ship") resolveCollisionShip((Ship)entity);
+		else if (entity.getType() == "Bullet") resolveCollisionBullet((Bullet) entity);
+	}
+	
+	
+	/**
+	* Resolves the collision between this ship and a given ship.
+	* @param 	ship
+	* 			The ship to be used.
+	* 
+	* @see implementation
+	*/
+	public void resolveCollisionShip(Ship ship) {
+		if (this.getShip() == ship) ship.reloadBullet(this);
+		else {
+			this.terminate();
+			ship.terminate();
+		}
+	}
+	
+	/**
+	* Resolves the collision between this ship and a given bullet.
+	* @param 	bullet
+	* 			The bullet to be used.
+	* 
+	* @see implementation
+	*/
+	public void resolveCollisionBullet(Bullet bullet) {
+		this.terminate();
+		bullet.terminate();
+	}
+
+
+
 		/*
 	     * |----------------------------|
 	     * | #Header-5# Other Methods.	|
