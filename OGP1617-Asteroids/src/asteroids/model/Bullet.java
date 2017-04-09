@@ -940,16 +940,31 @@ public class Bullet extends Entity {
 			 */
 	
 	
-	private double boundaryCollisionMax = 3;
-	private double boundaryCollisionCounter = 0;
 	
+	private boolean maxHasBeenSet = false;
+	private double boundaryCollisionCounter = 0;
+	private double boundaryCollisionMax = 3;
+	
+	
+	public boolean maxHasBeenSet() {
+		return maxHasBeenSet;
+	}
 	
 	public double getBoundaryCollisionCounter() {
 		return this.boundaryCollisionCounter;
 	}
 	
-	private void setBoundaryCollisionCounter() {
-		
+	public double getBoundaryCollisionMax() {
+		return this.boundaryCollisionMax;
+	}
+	
+	
+	private void setBoundaryCollisionCounter(double amount) {
+		this.boundaryCollisionCounter = amount;
+	}
+	
+	public void setBoundaryCollisionMax(double max) {
+		if (!maxHasBeenSet) this.boundaryCollisionMax = max;
 	}
 	
 	
@@ -961,11 +976,14 @@ public class Bullet extends Entity {
 	* @see implementation
 	*/
 	public void resolveCollision(World world) {
-		if (getBoundaryCollisionCounter() < this.boundaryCollisionMax) ;
-		double[] position = getCollisionPosition(world);
-		
-		if (position[0] == this.world.getWidth() || position[0] == 0) setVelocity(getVelocityX(), -getVelocityY());
-		else if (position[0] == this.world.getHeight() || position[1] == 0) setVelocity(-getVelocityX(), getVelocityY());
+		setBoundaryCollisionCounter(getBoundaryCollisionCounter() + 1);
+		if (getBoundaryCollisionCounter() < getBoundaryCollisionMax()) {
+			double[] position = getCollisionPosition(world);
+			
+			if (position[0] == this.world.getWidth() || position[0] == 0) setVelocity(getVelocityX(), -getVelocityY());
+			else if (position[0] == this.world.getHeight() || position[1] == 0) setVelocity(-getVelocityX(), getVelocityY());
+		}
+		else this.terminate();
 	}
 	
 	/**
