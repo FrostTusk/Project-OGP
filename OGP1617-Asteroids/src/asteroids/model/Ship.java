@@ -483,7 +483,12 @@ public class Ship extends Entity {
 	 */
 	@Raw
 	public double getTotalMass() {
-		return this.getMass(); //TODO + mass of cargo
+		double totalMass = this.getMass();
+		
+		for (Bullet bullet : this.bullets) {
+			totalMass += bullet.getMass();
+		}
+		return totalMass;
 	}
 	
 	/**
@@ -731,6 +736,14 @@ public class Ship extends Entity {
 		else bullets.remove(bullet);
 			
 		// TODO speed/direction stuff
+		
+		bullet.setSource(this);
+		
+		bullet.setPosition(getPosition().getPositionX() + getRadius() * Math.cos(getOrientation()), 
+				getPosition().getPositionY() + getRadius() * Math.sin(getOrientation()));
+		// BEZIG
+//		bullet.setVelocity( , );
+		
 		// TODO resolve collisions
 		bullet.setShip(null);
 		try {
