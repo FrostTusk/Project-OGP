@@ -248,10 +248,10 @@ public class Ship extends Entity {
 	 * Variable registering the Y velocity of this ship.
 	 */
 	private double velocityY;
+	// #Constant-1#
 	/**
 	 * Variable registering the speed of light.
 	 */
-	// #Constant-1#
 	private double constantMaxSpeed = 300000;
 
 	
@@ -419,10 +419,10 @@ public class Ship extends Entity {
 	 * Variable registering the radius of this ship.
 	 */
 	private final double radius;
+	// #Constant-2#
 	/**
 	 * Variable registering the minimum radius of this ship.
 	 */
-	// #Constant-2#
 	private final double minRadius = 10;
 	
 	
@@ -437,7 +437,6 @@ public class Ship extends Entity {
 	/**
 	 * Return the radius of this ship.
 	 */
-	// #Constan-2t#
 	@Basic @Override @Raw
 	public double getRadius() {
 		return this.radius;
@@ -593,13 +592,6 @@ public class Ship extends Entity {
 	@Override @Raw
 	public boolean isInWorld(World world) {
 		return helper.apparentlyWithinBoundaries(this, world);
-//		if ( (this.getPosition().getPositionX() - this.getRadius() >= 0) &&
-//				 (this.getPosition().getPositionX() + this.getRadius() <= world.getWidth()) &&
-//				 (this.getPosition().getPositionY() - this.getRadius() >= 0) &&
-//				 (this.getPosition().getPositionY() + this.getRadius() <= world.getHeight()) )
-//				return true;
-//		else return helper.apparentlyWithinBoundaries(this, world, getDistanceBetween(world));
-//			return false;
 	}
 	
 	
@@ -664,10 +656,8 @@ public class Ship extends Entity {
 	*/
 	@Raw
 	public boolean canHaveAsBullet(Bullet bullet) {
-		if (bullets.contains(bullet))
-			return false;
-		if (bullet.canHaveAsShip(this))
-			return true;
+		if (bullets.contains(bullet)) return false;
+		if (bullet.canHaveAsShip(this)) return true;
 		return false;
 	}
 	
@@ -707,8 +697,7 @@ public class Ship extends Entity {
 	* @see implementation
 	*/
 	public void loadBullet(Bullet bullet) throws IllegalArgumentException {
-		if (!canHaveAsBullet(bullet))
-			throw new IllegalArgumentException();
+		if (!canHaveAsBullet(bullet)) throw new IllegalArgumentException();
 		addBullet(bullet);
 		bullet.setShip(this);
 	}
@@ -734,7 +723,6 @@ public class Ship extends Entity {
 	*/
 	public void fireBullet() {
 		if (bullets.size() > 0)
-//			fireBullet(bullets.get(0));
 			for (Bullet bullet: bullets) {
 				fireBullet(bullet);
 				break;
@@ -754,26 +742,23 @@ public class Ship extends Entity {
 		if (getWorld() == null) return;
 		
 		if (!bullets.contains(bullet)) {
-			if (!(bullets.size() > 0)) fireBullet();
+			fireBullet();
 			return;
 		}
-		else bullets.remove(bullet);
 		
+		bullets.remove(bullet);
 		bullet.setSource(this);
-		
 		bullet.setVelocity(250 * Math.cos(getOrientation()), 250 * Math.sin(getOrientation()));	
-		bullet.setPosition(getPosition().getPositionX() + getRadius() * Math.cos(getOrientation()) + bullet.getRadius() * Math.cos(getOrientation()), 
-				getPosition().getPositionY() + getRadius() * Math.sin(getOrientation()) + bullet.getRadius() * Math.sin(getOrientation()));
+		bullet.setPosition( getPosition().getPositionX() + getRadius() * Math.cos(getOrientation()) 
+								+ bullet.getRadius() * Math.cos(getOrientation()), 
+						    getPosition().getPositionY() + getRadius() * Math.sin(getOrientation()) 
+						    	+ bullet.getRadius() * Math.sin(getOrientation()) );
 
-		for (Entity entity : world.getAllEntities()) {
-			if (bullet.overlap(entity)) bullet.resolveCollision(entity);
-		}
-		
-		if (! bullet.isInWorld(world)) bullet.terminate();
-		
+		for (Entity entity : world.getAllEntities()) if (bullet.overlap(entity)) bullet.resolveCollision(entity);
+			
 		bullet.setShip(null);
 		try {
-		bullet.setWorld(getWorld());
+			bullet.setWorld(getWorld());
 		}
 		catch (IllegalArgumentException exc) {
 			bullet.terminate();
@@ -820,17 +805,16 @@ public class Ship extends Entity {
 	 */
 	@Override
 	public void move(double time) throws IllegalArgumentException, IndexOutOfBoundsException {
-		if (time < 0)
-			throw new IllegalArgumentException();
-		
+		if (time < 0) throw new IllegalArgumentException();
+			
 		double newPositionX = helper.calculatePosition(this, time)[0];
 		double newPositionY = helper.calculatePosition(this, time)[1];
 
 		try {
 			setPosition(newPositionX, newPositionY);
 		}
-		catch (IndexOutOfBoundsException exc) {
-			throw new IndexOutOfBoundsException();
+		catch (IllegalArgumentException exc) {
+			throw new IllegalArgumentException();
 		}
 	}
 	
@@ -864,10 +848,10 @@ public class Ship extends Entity {
 		assert isValidOrientation(Math.abs(angle));
 		
 		if (! isValidOrientation(getOrientation() + angle))
-			if (angle > 0)
+			if (angle > 0) 
 				this.setOrientation(orientation + angle - 2*Math.PI);
-			else
-				this.setOrientation(orientation + angle + 2*Math.PI);
+			else 
+				this.setOrientation(orientation + angle + 2*Math.PI);	
 		else
 			this.setOrientation(orientation + angle);
 	}
@@ -892,9 +876,8 @@ public class Ship extends Entity {
 	 *       
 	 */
 	public void thrust(double acceleration) {
-		if (! (acceleration > 0))
-			acceleration = 0;
-		
+		if (! (acceleration > 0)) acceleration = 0;
+			
 		double newVelocityX = getVelocityX() + acceleration * Math.cos(getOrientation());
 		double newVelocityY = getVelocityY() + acceleration * Math.sin(getOrientation());
 		setVelocity(newVelocityX, newVelocityY);
@@ -909,11 +892,10 @@ public class Ship extends Entity {
 			 */
 	
 	
-	
+	// #Constant-3#
 	/**
 	* Variable registering the force of this ship.
 	*/
-	// #Constant-3#
 	private double force = 1.1 * Math.pow(10, 12);
 	/**
 	* Variable registering the thruster of this ship.
@@ -1005,13 +987,12 @@ public class Ship extends Entity {
 	 */
 	@Raw
 	public double getDistanceBetween(Entity entity) throws IllegalArgumentException {
+		if (entity == null) throw new IllegalArgumentException();
+		
 		double distance;	// distance between the ship and entity
 		double distanceX;	// distance between the x-coordinates of the ship and entity
 		double distanceY;	// distance between the y-coordinates of the ship and entity
-		
-		if (entity == null) 
-			throw new IllegalArgumentException();
-		
+	
 		distanceX = Math.sqrt(Math.pow(this.getPosition().getPositionX() - entity.getPosition().getPositionX(), 2));
 		distanceY = Math.sqrt(Math.pow(this.getPosition().getPositionY() - entity.getPosition().getPositionY(), 2));
 		
@@ -1019,9 +1000,8 @@ public class Ship extends Entity {
 		distance = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
 		
 		// The distance between a ship and itself is 0.
-		if (distance == 0)
-			return 0;
-					
+		if (distance == 0) return 0;
+			
 		// use the sizes of the ships to calculate distance between edges
 		distance = distance - this.getRadius() - entity.getRadius();
 		return distance;
@@ -1075,9 +1055,7 @@ public class Ship extends Entity {
 	 */
 	@Raw
 	public boolean overlap(Entity entity) throws IllegalArgumentException {
-		if (entity == null) 
-			throw new IllegalArgumentException();
-
+		if (entity == null) throw new IllegalArgumentException();
 		return helper.significantOverlap(this, entity, this.getDistanceBetween(entity));
 	}
 	
@@ -1214,16 +1192,11 @@ public class Ship extends Entity {
 	 */
 	@Raw
 	public double[] getCollisionPosition(Entity entity) throws IllegalArgumentException {
-		if (entity == null) 
-			throw new IllegalArgumentException();
-		
-		double vector[] = {Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY};
-		if (! (this.getWorld() == entity.getWorld())) return vector;
-		
+		if (entity == null) throw new IllegalArgumentException();
+		if (! (this.getWorld() == entity.getWorld())) return null;
 		double time = getTimeToCollision(entity);
-		if (time == Double.POSITIVE_INFINITY)
-			return null;
-		
+		if (time == Double.POSITIVE_INFINITY) return null;
+			
 		double[] newPosition1 = {helper.calculatePosition(this, time)[0], helper.calculatePosition(this, time)[1]};
 		double[] newPosition2 = {helper.calculatePosition(entity, time)[0], helper.calculatePosition(entity, time)[1]}; 
 		
@@ -1237,8 +1210,8 @@ public class Ship extends Entity {
 		
 		// Calculate the exact position vector of the collision point by using the angle that has just been calculated
 		// and the first ship's new position vector.
-		vector[0] = newPosition1[0] + signs[0] * this.getRadius() * Math.cos(angle);
-		vector[1] = newPosition1[1] + signs[1] * this.getRadius() * Math.sin(angle);
+		double vector[] = {newPosition1[0] + signs[0] * this.getRadius() * Math.cos(angle), 
+						   newPosition1[1] + signs[1] * this.getRadius() * Math.sin(angle)};
 		return vector;
 	}
 	
@@ -1261,7 +1234,7 @@ public class Ship extends Entity {
 	 */
 	public void resolveCollision(World world) {
 		double[] position = getCollisionPosition(world);
-		
+		if (position == null) return;
 		if (position[0] == this.world.getWidth() || position[0] == 0) setVelocity(getVelocityX(), -getVelocityY());
 		else if (position[0] == this.world.getHeight() || position[1] == 0) setVelocity(-getVelocityX(), getVelocityY());
 	}
