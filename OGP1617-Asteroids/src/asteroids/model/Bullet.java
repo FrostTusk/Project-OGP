@@ -280,6 +280,13 @@ public class Bullet extends Entity {
 		}
 	}
 	
+	public void resetSource(Ship ship) {
+		if (ship == null) throw new NullPointerException();
+		if ( (!this.overlap(ship)) || (this.getSource() != ship) ) throw new IllegalArgumentException();
+		this.hasBeenFired = false;
+		this.setSource(null);
+	}
+	
 	/**
 	* Set a given ship as ship for this bullet.
 	*  

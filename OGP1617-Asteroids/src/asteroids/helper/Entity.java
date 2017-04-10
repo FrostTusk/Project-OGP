@@ -93,6 +93,8 @@ public abstract class Entity {
 	
 	/**
 	 * Terminates this entity.
+	 * 
+	 * @see implementation.
 	 */
 	// TODO Does abstract require extra documentation?
 	public abstract void terminate();
@@ -262,7 +264,7 @@ public abstract class Entity {
 	 * 			|	then new.getMaxSpeed() == speed
 	 * @post	If the given speed is not a valid maximum speed for any entity,
 	 * 			the maximum speed of this entity is equal to it's last maximum speed.
-	 * 			| if (!(isValidMaxSpeed(speed))
+	 * 			| if (! isValidMaxSpeed(speed))
 	 * 			|	then new.getMaxSpeed() == this.getMaxSpeed()	
 	 */
 	@Raw
@@ -345,6 +347,7 @@ public abstract class Entity {
 	*  
 	* @param  	radius
 	*         	The radius to check.
+	*         
 	* @return	Returns whether or not the given radius is a valid radius
 	* 			true if it is, false if not.
 	*       	| result == (POSITIVE_INFINITY > radius) && (radius >= this.getMinRadius())

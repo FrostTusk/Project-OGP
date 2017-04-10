@@ -5,36 +5,34 @@ import java.util.Set;
 
 import asteroids.helper.Entity;
 import asteroids.helper.Thruster;
+
 import be.kuleuven.cs.som.annotate.*;
 
 
 /* Constants:
-*	1.	constantMaxSpeed = the maximum speed this ship can achieve.
-*	2.	minRadius = the minimum radius for each ship.
-*	3. 	force = the force of this ship.
+*	1. 	force = the force of this ship.
 */
 
 /*
  * Methods Index:
  * #1# Basic Methods
  * 		1. Methods that handle the Initialization and Termination of the Ship
- * 		4. Methods that handle the Orientation of the Ship
- * 		5. Methods that handle the Radius of the Ship
- * 		6. Methods that handle the Mass of the ship
+ * 		2. Methods that handle the Orientation of the Ship
+ * 		3. Methods that handle the Mass of the ship
  * #2# Association Methods
- * 		7. Methods that handle the association with Worlds
- * 		8. Methods that handle the association with Bullets
+ * 		4. Methods that handle the association with Worlds
+ * 		5. Methods that handle the association with Bullets
  * #3# Advanced Methods
- * 		9. Methods that handle Turning and Accelerating
- * 		10. Methods that handle the Thruster
+ * 		6. Methods that handle Turning and Accelerating
+ * 		7. Methods that handle the Thruster
  * #4# Collision Detection Methods
- * 		13. Methods that handle Resolving Collisions
+ * 		8. Methods that handle Resolving Collisions
  * #5# Other Methods
- *		14. Helper Methods
+ *		9. Helper Methods
  */
 
 /**
- * A class of ships.
+ * A class of ships. //TODO Do we need to keep all these invariants?
  * 
 * @invar  	The position of each ship must be a valid position for any
 *         	ship.
@@ -108,32 +106,33 @@ public class Ship extends Entity {
 	 *         	 
 	 * @throws 	IllegalArgumentException
 	 *         	This new bullet cannot have the given X and Y position as position.
-	 *       	| ! this.getPosition().isValidPosition(positionX, positionY)
+	 *       	| ! this.getPosition().isValidPosition(positionX, positionY)	// TODO is this done right?
 	 * @throws 	IllegalArgumentException
 	 *         	This new bullet cannot have the given radius as its radius.
 	 *       	| ! this.canHaveAsRadius(this.getRadius())
 	 */
 	public Ship(double positionX, double positionY, double velocityX, double velocityY, double orientation, double radius, double mass)
 		throws IllegalArgumentException {
-		try {
+		this.minRadius = 10;	// First the constants are set.
+		this.setDensity(1.42 * Math.pow(10, 12));
+		this.setForce(1.1 * Math.pow(10, 12));
+		
+		try {	// Check if the position can be set.
 			this.setPosition(positionX, positionY);
 		}
 		catch (IllegalArgumentException exc) {
 			throw new IllegalArgumentException();
 		}
 
-		setVelocity(velocityX, velocityY);
+		setVelocity(velocityX, velocityY);	// Set the velocity.
 		
-		assert isValidOrientation(orientation);
+		assert isValidOrientation(orientation);	// Check if the orientation can be set.
 		this.setOrientation(orientation);
 		
-		this.minRadius = 10;
-		if (! canHaveAsRadius(radius))
-			throw new IllegalArgumentException();
+		if (! canHaveAsRadius(radius)) throw new IllegalArgumentException();	// Check if the radius can be set.
 		this.radius = radius;
 		
-		this.setDensity(1.42 * Math.pow(10, 12));
-		setMass(mass);
+		setMass(mass);	// Set the mass.
 	}
 	
 
@@ -146,16 +145,17 @@ public class Ship extends Entity {
 	@Override
 	public void terminate() {
 		if (getWorld() != null) world.removeEntity(this);
+		for (Bullet bullet: getAllBullets()) this.removeBullet(bullet);
 		this.isTerminated = true;
 	}
 	
 	
 	
-		 /*
-		  * |-----------------------------------------------------------|
-		  * | 2. The next methods handle the Orientation of the Ship.	|
-		  * |-----------------------------------------------------------| 
-		  */
+			/*
+			 * |------------------------------------------------------------|
+			 * | 2. The next methods handle the Orientation of the Ship.	|
+			 * |------------------------------------------------------------| 
+			 */
 	
 	
 	
@@ -223,15 +223,12 @@ public class Ship extends Entity {
 	
 	/**
 	 * Return the current mass of the ship and its cargo.
-	 * @return	Returns the mass of the current ship + the mass of the objects on the ship.
+	 * @return	Returns the mass of the current ship plus the mass of the objects on the ship.
 	 */
 	@Raw
 	public double getTotalMass() {
-		double totalMass = this.getMass();
-		
-		for (Bullet bullet : this.bullets) {
-			totalMass += bullet.getMass();
-		}
+		double totalMass = getMass();
+		for (Bullet bullet : this.bullets) totalMass += bullet.getMass();
 		return totalMass;
 	}
 	
@@ -243,11 +240,11 @@ public class Ship extends Entity {
 	 * 			the mass to check
 	 * @return	Returns whether or not the mass is a valid mass for this ship
 	 * 			or not. true if it is, false if not.
-	 *       	| result == (mass > (4/3) * Math.PI * Math.pow(this.getRadius(), 3) * (1.42 * Math.pow(10, 12)) )
+	 *       	| result == ( mass > (4/3) * Math.PI * Math.pow(this.getRadius(), 3) * this.getDensity )
 	 */
 	@Raw
 	public boolean isValidMass(double mass) {
-		return mass > (4/3) * Math.PI * Math.pow(this.getRadius(), 3) * (this.density);
+		return mass > (4/3) * Math.PI * Math.pow(getRadius(), 3) * getDensity();
 	}
 	
 	
@@ -258,18 +255,18 @@ public class Ship extends Entity {
 	 * 			the new mass for this ship
 	 *         
 	 * @post   	If the given mass is a valid mass for this ship,
-	 *         	the mass of this ship is set to the given mass.
-	 *       	| if (isValidMass(mass)))
+	 *         	the mass of this new ship is set to the given mass.
+	 *       	| if (isValidMass(mass))
 	 *       	|   then new.getMass() == mass
 	 * @post	If the given mass isn't valid, the mass
 	 * 			of this new ship will be equal to a default value.
 	 *       	| if (! isValidMass(mass))
-	 *       	|   then new.getMass() == (4/3) * Math.PI * Math.pow(this.getRadius(), 3) * 1.42 * Math.pow(10, 12)
+	 *       	|   then new.getMass() == (4/3) * Math.PI * Math.pow(this.getRadius(), 3) * this.getDensity()
 	 */
 	@Raw
 	public void setMass(double mass) {
 		if (isValidMass(mass)) this.mass = mass;
-		else this.mass = (4/3) * Math.PI * Math.pow(this.getRadius(), 3) * 1.42 * Math.pow(10, 12);
+		else this.mass = (4/3) * Math.PI * Math.pow(getRadius(), 3) * getDensity();
 	}
 	
 	
@@ -283,7 +280,7 @@ public class Ship extends Entity {
 	
 			/*
 		     * |------------------------------------------------------------|
-		     * | 7. The next methods handle the association with worlds.	|
+		     * | 4. The next methods handle the association with worlds.	|
 		     * |------------------------------------------------------------| 
 		     */
 	
@@ -304,11 +301,11 @@ public class Ship extends Entity {
 	
 
 	
-		/*
-	     * |------------------------------------------------------------|
-	     * | 8. The next methods handle the association with bullets.	|
-	     * |------------------------------------------------------------| 
-	     */
+			/*
+		     * |------------------------------------------------------------|
+		     * | 5. The next methods handle the association with bullets.	|
+		     * |------------------------------------------------------------| 
+		     */
 	
 	
 	
@@ -317,13 +314,20 @@ public class Ship extends Entity {
 	*/
 	private Set<Bullet> bullets = new HashSet<Bullet>();
 	
-	
+	/**
+	 * Return the collection of bullets of this ship.
+	 */
+	@Basic @Raw
 	public Set<Bullet> getAllBullets() {
-		return bullets;
+		return this.bullets;
 	}
 	
+	/**
+	 * Return the number of bullets on this ship.
+	 */
+	@Basic @Raw
 	public int getBulletsCount() {
-		return bullets.size();
+		return this.bullets.size();
 	}
 	
 	
@@ -337,22 +341,25 @@ public class Ship extends Entity {
 	*/
 	@Raw
 	public boolean canHaveAsBullet(Bullet bullet) {
-		if (bullets.contains(bullet)) return false;
-		if (bullet.canHaveAsShip(this)) return true;
+		if ( (this.bullets.contains(bullet)) || (bullet == null) ) return false;
+		if (bullet.canHaveAsShip(this)) return true; 
 		return false;
 	}
 	
 	
 	/**
 	* Add a given bullet to this ship's collection of bullets. 
-	*
+	* This method works immediately with the collection.
+	* Load 
 	* @param  	bullet
 	*         	The bullet to be added.
 	*         
 	* @see implementation
 	*/
-	public void addBullet(Bullet bullet) {
-		bullets.add(bullet);
+	@Raw
+	private void addBullet(Bullet bullet) {
+		this.bullets.add(bullet);
+		
 	}
 	
 	/**
@@ -363,9 +370,12 @@ public class Ship extends Entity {
 	*         
 	* @see implementation
 	*/
+	@Raw // TODO @Raw?
 	public void removeBullet(Bullet bullet) throws IllegalArgumentException {
-		if (!bullets.contains(bullet)) throw new IllegalArgumentException();
-		else bullets.remove(bullet);
+		if (!this.bullets.contains(bullet)) throw new IllegalArgumentException();
+		this.bullets.remove(bullet);
+		bullet.setShip(null);
+		// TODO bullet.setWorld(this.getWorld); ?
 	}
 	
 	
@@ -378,7 +388,7 @@ public class Ship extends Entity {
 	* @see implementation
 	*/
 	public void loadBullet(Bullet bullet) throws IllegalArgumentException {
-		if (!canHaveAsBullet(bullet)) throw new IllegalArgumentException();
+		if (!( (bullet.canHaveAsShip(this) && (canHaveAsBullet(bullet)) ) )) throw new IllegalArgumentException();
 		addBullet(bullet);
 		bullet.setShip(this);
 	}
@@ -391,8 +401,15 @@ public class Ship extends Entity {
 	*         	The bullet to be reloaded.
 	*         
 	* @see implementation
+	* 		// TODO declarative documentation.
 	*/
 	public void reloadBullet(Bullet bullet) {
+		try {
+			bullet.resetSource(this);
+		}
+		catch (IllegalArgumentException exc) {
+			return;
+		}
 		loadBullet(bullet);
 	}
 	
@@ -401,6 +418,7 @@ public class Ship extends Entity {
 	* Fires a bullet out of the collection of bullets.
 	*     
 	* @see implementation
+	* 		// TODO declarative documentation.
 	*/
 	public void fireBullet() {
 		if (bullets.size() > 0)
@@ -408,26 +426,27 @@ public class Ship extends Entity {
 				fireBullet(bullet);
 				break;
 			}
+		
 	}
 	
 	/**
 	* Fires a requested bullet out of the collection of bullets.
 	*     
-	* @param	bulletRequest
+	* @param	bullet
 	* 			The bullet requested to be fired.
 	* 
 	* @see implementation
+	* 		// TODO declarative documentation.
 	*/
-	public void fireBullet(Bullet bulletRequest) {
-		Bullet bullet = bulletRequest;
-		if (getWorld() == null) return;
+	public void fireBullet(Bullet bullet) {
+		if ( (this.getWorld() == null) || (bullet == null) ) return;
 		
 		if (!bullets.contains(bullet)) {
 			fireBullet();
 			return;
 		}
 		
-		bullets.remove(bullet);
+		this.removeBullet(bullet);
 		bullet.setSource(this);
 		bullet.setVelocity(250 * Math.cos(getOrientation()), 250 * Math.sin(getOrientation()));	
 		bullet.setPosition( getPosition().getPositionX() + getRadius() * Math.cos(getOrientation()) 
@@ -437,9 +456,8 @@ public class Ship extends Entity {
 
 		for (Entity entity : world.getAllEntities()) if (bullet.overlap(entity)) bullet.resolveCollision(entity);
 			
-		bullet.setShip(null);
 		try {
-			bullet.setWorld(getWorld());
+			bullet.setWorld(this.getWorld());
 		}
 		catch (IllegalArgumentException exc) {
 			bullet.terminate();
@@ -456,9 +474,9 @@ public class Ship extends Entity {
 	
 	
 			/*
-			 * |----------------------------------------------------------------|
-			 * | 9. The next methods handle Moving, Turning and Accelerating.	|
-			 * |----------------------------------------------------------------| 
+			 * |--------------------------------------------------------|
+			 * | 6. The next methods handle Turning and Accelerating.	|
+			 * |--------------------------------------------------------| 
 			 */
 	
 	
@@ -471,20 +489,20 @@ public class Ship extends Entity {
 	 *         
 	 * @pre    	The absolute value of the given angle must be a valid orientation for any
 	 *         	ship.
-	 *       	| isValidOrientation(angle)
+	 *       	| this.isValidOrientation(Math.abs(angle))
 	 *       
 	 * @post	The orientation of this ship is equal to the original orientation plus the given angle the
 	 * 			orientation plus the given angle is a valid angle.
-	 * 			| if (isValidOrientation(getOrientation() + angle))
+	 * 			| if (this.isValidOrientation(this.getOrientation() + angle))
 	 * 			|	then new.getOrientation() == this.getOrientation() + angle
 	 * @post   	The orientation of this ship is equal to the original orientation plus the given angle minus 2 times pi if the
 	 *         	orientation plus the given angle is not a valid angle and the given angle was larger than zero.
-	 *       	| if (! isValidOrientation(getOrientation() + angle))
+	 *       	| if (! this.isValidOrientation(this.getOrientation() + angle))
 	 *       	|	if (angle > 0)
 	 *       	|		then new.getOrientation() == this.getOrientation() + angle - 2*Math.PI
 	 * @post   	The orientation of this ship is equal to the original orientation plus the given angle plus 2 times pi if the
 	 *         	orientation plus the given angle is not a valid angle and the given angle was smaller than zero.
-	 *       	| if (! isValidOrientation(getOrientation() + angle))
+	 *       	| if (! this.isValidOrientation(this.getOrientation() + angle))
 	 *       	|	if (angle < 0)
 	 *       	|		then new.getOrientation() == this.getOrientation() + angle - 2*Math.PI
 	 */
@@ -531,17 +549,16 @@ public class Ship extends Entity {
 	
 			/*
 			 * |--------------------------------------------|
-			 * | 10. The next methods handle the Thruster.	|
+			 * | 7. The next methods handle the Thruster.	|
 			 * |--------------------------------------------| 
 			 */
 	
 	
 	
-	// #Constant-3#
 	/**
 	* Variable registering the force of this ship.
 	*/
-	private double force = 1.1 * Math.pow(10, 12);
+	private double force;	// #Constant-1#
 	/**
 	* Variable registering the thruster of this ship.
 	*/
@@ -618,7 +635,7 @@ public class Ship extends Entity {
 
 			/*
 			 * |----------------------------------------------------|
-			 * | 13. The next methods handle resolving Collisions.	|
+			 * | 8. The next methods handle resolving Collisions.	|
 			 * |----------------------------------------------------| 
 			 */
 
@@ -626,24 +643,31 @@ public class Ship extends Entity {
 	
 	/**
 	 * Resolves the collision between this ship and a given world.
+	 * 
 	 * @param 	world
 	 * 			The world to be used.
 	 * 
 	 * @see implementation
+	 * 		// TODO declarative documentation.
+	 * 		// TODO apparently collide?
 	 */
 	public void resolveCollision(World world) {
 		double[] position = getCollisionPosition(world);
-		if (position == null) return;
-		if (position[0] == this.world.getWidth() || position[0] == 0) setVelocity(getVelocityX(), -getVelocityY());
-		else if (position[0] == this.world.getHeight() || position[1] == 0) setVelocity(-getVelocityX(), getVelocityY());
+		if (position == null) return;	// There is no collision so the collision does not need to be resolved.
+		if (position[0] + this.getRadius() == this.world.getWidth() || position[0] - this.getRadius() == 0) 
+			setVelocity(getVelocityX(), -getVelocityY());
+		else if (position[0] + this.getRadius() == this.world.getHeight() || position[1] - this.getRadius() == 0) 
+			setVelocity(-getVelocityX(), getVelocityY());
 	}
 	
 	/**
 	 * Resolves the collision between this ship and a given entity.
+	 * 
 	 * @param 	entity
 	 * 			The entity to be used.
 	 * 
 	 * @see implementation
+	 * 		// TODO declarative documentation.
 	 */
 	public void resolveCollision(Entity entity) {
 		if (entity.getType() == "Ship") resolveCollisionShip((Ship)entity);
@@ -653,14 +677,17 @@ public class Ship extends Entity {
 
 	/**
 	 * Resolves the collision between this ship and a given ship.
+	 * 
 	 * @param 	ship
 	 * 			The ship to be used.
 	 * 
 	 * @see implementation
+	 * 		// TODO declarative documentation.
 	 */
 	public void resolveCollisionShip(Ship ship) {
 		double[] deltaV = {ship.getVelocityX() - getVelocityX(), ship.getVelocityY() - getVelocityY()};
-		double[] deltaR = {ship.getPosition().getPositionX() - getPosition().getPositionX(), ship.getPosition().getPositionY() - getPosition().getPositionY()};
+		double[] deltaR = {ship.getPosition().getPositionX() - getPosition().getPositionX(), 
+						   ship.getPosition().getPositionY() - getPosition().getPositionY()};
 		double deltaVR = deltaV[0] * deltaR[0] + deltaV[1] * deltaR[1];
 		
 		double J = (2 * getMass() * ship.getMass() * deltaVR) 
@@ -668,21 +695,21 @@ public class Ship extends Entity {
 		
 		double Jx1 = J * (this.getPosition().getPositionX() - ship.getPosition().getPositionX()) / (getRadius() + ship.getRadius());
 		double Jy1 = J * (this.getPosition().getPositionY() - ship.getPosition().getPositionY()) / (getRadius() + ship.getRadius());
-	
 		this.setVelocity(this.getVelocityX() + Jx1/this.getMass(), this.getVelocityY() + Jy1/this.getMass());
 		
 		double Jx2 = J * (ship.getPosition().getPositionX() - this.getPosition().getPositionX()) / (getRadius() + ship.getRadius());
 		double Jy2 = J * (ship.getPosition().getPositionY() - this.getPosition().getPositionY()) / (getRadius() + ship.getRadius());
-		
 		ship.setVelocity(ship.getVelocityX() + Jx2/ship.getMass(), ship.getVelocityY() + Jy2 / ship.getMass());
 	}
 	
 	/**
 	 * Resolves the collision between this ship and a given bullet.
+	 * 
 	 * @param 	bullet
 	 * 			The bullet to be used.
 	 * 
 	 * @see implementation
+	 * 		// TODO declarative documentation.
 	 */
 	public void resolveCollisionBullet(Bullet bullet) {
 		if (bullet.getSource() == this) reloadBullet(bullet);
@@ -690,7 +717,6 @@ public class Ship extends Entity {
 			this.terminate();
 			bullet.terminate();
 		}
-		
 	}
 	
 
@@ -704,18 +730,16 @@ public class Ship extends Entity {
 	
 			/*
 		     * |--------------------------------------------|
-		     * | 14. The next methods are Helper Methods.	|
+		     * | 9. The next methods are Helper Methods.	|
 		     * |--------------------------------------------| 
 		     */
 	
 
 	
 	/**
-	 * Returns the type of this class in string format.
-	 * 
-	 * @see implementation
+	 * Returns the type of this Ship Class in string format.
 	 */
-	@Override @Raw
+	@Basic @Override @Raw
 	public String getType() {
 		return "Ship";
 	}
