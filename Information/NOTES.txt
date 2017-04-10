@@ -2,6 +2,7 @@
 !	1. Documentation
 !		1. Declarative => no idea how to do it for getDistance/getTimeTo?
 !		2. @Raw => for setters?
+		3. @Raw => for abstract methods?
 !	2. Binary Relations => Who should initialize it first?
 !	3. When to test facade?
 !	4. What to do with Position Class?
@@ -10,6 +11,8 @@
 !	5. What is and why type parameter? => See Helper.
 !	6. New methods in Ship class => Full Documentation or also @see?
 !!!	7. Ship + Entity rewrite in entity?
+
+
 
 2. TODO:
 	1. Proofread

@@ -1,10 +1,48 @@
 package asteroids.helper;
 
 import asteroids.model.World;
-import be.kuleuven.cs.som.annotate.Basic;
-import be.kuleuven.cs.som.annotate.Immutable;
-import be.kuleuven.cs.som.annotate.Raw;
 
+import be.kuleuven.cs.som.annotate.*;
+
+/* Constants:
+*	1.	maxSpeed = the maximum speed this entity can achieve.
+*	2.	minRadius = the minimum radius for each entity.
+* 	3.	density = the density for this entity.
+*/
+
+/*
+ * Methods Index:
+ * #1# Basic Methods
+ * 		1. Methods that handle the Initialization and Termination of the Entity
+ * 		2.	Methods that handle the Position of the Entity
+ * 		3. Methods that handle the Speed of the Entity
+ * 		4. Methods that handle the Radius of the Entity
+ * 		5. Methods that handle the Mass of the Entity
+ * #2# Association Methods
+ * 		6. Methods that handle the association with Worlds
+ * #3# Advanced Methods
+ * 		7. Methods that handle Moving and Accelerating
+ * 		8. Methods that handle Calculating Distance and Overlap
+ * #4# Collision Detection Methods
+ * 		9. Methods that handle Collision Detection 
+ * #5# Other Methods
+ *		10. Helper Methods
+ */
+
+/**
+ * A class of entities.
+ * 
+* @invar  	The position of each entity must be a valid position for any
+*         	entity.
+*       	| isValidPosition(getPositionX(), getPositionY())
+* @invar  	The speed of each entity must be a valid speed for any
+*         	entity.
+*       	| isValidSpeed(getVelocityX(), getVelocityY())
+* @invar  	Each entity can have its radius as radius.
+*       	| canHaveAsRadius(this.getRadius())
+* @invar  	Each entity must have a valid mass.
+*       	| canHaveAsMass(this.getMass())
+*/
 public abstract class Entity {
 	
 	/*
@@ -128,7 +166,7 @@ public abstract class Entity {
 	/**
 	* Variable registering the max speed of this entity.
 	*/
-	private double constantMaxSpeed;	// #Constant-1#
+	private double maxSpeed;	// #Constant-1#
 	/**
 	* Variable registering the X velocity of this entity.
 	*/
@@ -144,7 +182,7 @@ public abstract class Entity {
 	*/
 	@Basic @Raw
 	public double getMaxSpeed() {
-		return this.constantMaxSpeed;
+		return this.maxSpeed;
 	}
 	
 	/**
@@ -202,7 +240,7 @@ public abstract class Entity {
 	* @return	Returns whether or not the speed made up of the given velocities is a valid speed
 	* 			or not. true if it is, false if not.
 	*       	| result == (! (isNaN(velocityX)) || (isNaN(velocityY)) ) &&
-	*       				Math.sqrt((velocityX * velocityX) + (velocityY * velocityY)) > constantMaxSpeed
+	*       				Math.sqrt((velocityX * velocityX) + (velocityY * velocityY)) > maxSpeed
 	*/
 	@Raw
 	public boolean isValidSpeed(double velocityX, double velocityY) {
@@ -229,7 +267,7 @@ public abstract class Entity {
 	 */
 	@Raw
 	public void setMaxpeed(double speed) {
-		if (isValidMaxSpeed(speed)) this.constantMaxSpeed = speed;
+		if (isValidMaxSpeed(speed)) this.maxSpeed = speed;
 	}
 	
 	/**
@@ -320,7 +358,7 @@ public abstract class Entity {
 	
 			/*
 			 * |----------------------------------------------------|
-			 * | 6. The next methods handle the mass of the Entity.	|
+			 * | 5. The next methods handle the mass of the Entity.	|
 			 * |----------------------------------------------------| 
 			 */
 	
@@ -369,18 +407,18 @@ public abstract class Entity {
 	
 	
 	
-	/*
-     * |------------------------------------|
-     * | #Header-2# Association Methods.	|
-     * |------------------------------------| 
-     */
-	
-	
-			/*
-		     * |------------------------------------------------------------|
-		     * | 7. The next methods handle the association with worlds.	|
-		     * |------------------------------------------------------------| 
-		     */
+		/*
+	     * |------------------------------------|
+	     * | #Header-2# Association Methods.	|
+	     * |------------------------------------| 
+	     */
+		
+		
+				/*
+			     * |------------------------------------------------------------|
+			     * | 6. The next methods handle the association with worlds.	|
+			     * |------------------------------------------------------------| 
+			     */
 
 
 
@@ -463,7 +501,7 @@ public abstract class Entity {
 
 			/*
 			 * |------------------------------------|
-			 * | 9. The next methods handle Moving.	|
+			 * | 7. The next methods handle Moving.	|
 			 * |------------------------------------| 
 			 */
 	
@@ -509,7 +547,7 @@ public abstract class Entity {
 	
 			/*
 			 * |----------------------------------------------------------------|
-			 * | 11. The next methods handle Calculating Distance and Overlap.	|
+			 * | 8. The next methods handle Calculating Distance and Overlap.	|
 			 * |----------------------------------------------------------------| 
 			 */
 	
@@ -600,9 +638,16 @@ public abstract class Entity {
 	
 	
 	
+		/*
+	     * |--------------------------------------------|
+	     * | #Header-4# Collision Detection Methods.	|
+	     * |--------------------------------------------| 
+	     */
+	
+	
 				/*
 				 * |----------------------------------------------------|
-				 * | 12. The next methods handle Collision Detection.	|
+				 * | 9. The next methods handle Collision Detection.	|
 				 * |----------------------------------------------------| 
 				 */
 	
@@ -742,6 +787,22 @@ public abstract class Entity {
 	}
 	
 	
+	
+		/*
+	     * |----------------------------|
+	     * | #Header-5# Other Methods.	|
+	     * |----------------------------| 
+	     */
+
+
+			/*
+		     * |--------------------------------------------|
+		     * | 10. The next methods are Helper Methods.	|
+		     * |--------------------------------------------| 
+		     */
+
+	
+	
 	/**
 	 * A method that returns the signs to be used in the getCollisionPosition() method.
 	 * Helper method for getCollisionPosition().
@@ -751,7 +812,7 @@ public abstract class Entity {
 	 * @param 	position2
 	 * 			The second position to be used in the formula.
 	 * 
-	 * @return The signs to be used in the getCollisionPosition() method
+	 * @return 	The signs to be used in the getCollisionPosition() method
 	 */
 	@Raw
 	public double[] calculateSigns(double[] position1, double[] position2) {
@@ -766,6 +827,11 @@ public abstract class Entity {
 		return result;
 	}
 	
+	/**
+	 * Returns the type of the class of this entity in string format.
+	 * 
+	 * @see implementation
+	 */
 	public abstract String getType();
 
 }
