@@ -1,30 +1,35 @@
 1. Questions:
-	1. Documentation
-		1. Declarative => no idea how to do it for getDistance/getTimeTo?
-		2. @Raw => for setters?
-	2. Binary Relations
-	3. When to test facade
-	4. Hoe class position doen
-		1. Wat met documentatie in Ship?
-		2. Exception gethrowed bij aanmaak position, what happens?
-	5. Wat is en waarom een type parameter?
-	6. Nieuwe methodes in Ship class => Volledige Documentatie?
-	7. Ship + Entity herschrijven naar entity?
+!	1. Documentation
+!		1. Declarative => no idea how to do it for getDistance/getTimeTo?
+!		2. @Raw => for setters?
+!	2. Binary Relations => Who should initialize it first?
+!	3. When to test facade?
+!	4. What to do with Position Class?
+!		1. What changes in terms of documentation with Ship?
+		2. Exception thrown at creation of Position? Should Ship cover it?
+!	5. What is and why type parameter? => See Helper.
+!	6. New methods in Ship class => Full Documentation or also @see?
+!!!	7. Ship + Entity rewrite in entity?
 
 2. TODO:
 	1. Proofread
 	2. Ship Class
-		1. Collision Update
-		2. Ownership -> Relations
-			1. Bullet
-			2. World
+		1. Proofread
 	3. Bullet Class
+		1. Proofread
 	4. World Class
 	5. Part 2 TestSuite
 		1. Ship
+			1. Create a seperate test suite (see bullet test suite)
+			2. Update the ship facade test suite
 		2. Bullet
+			1. Create bullet facade test suite
+			2. Update normal test suite
 		3. World
+			1. Create world facade test suite
+			2. Update normal test suite
 	6. Verander IllegalArgumentException -> NullPointerException (ook in facade)
+		=> Long term goal.
 	7. DOCUMENTATIE, VEEL DOCUMENTATIE
 
 

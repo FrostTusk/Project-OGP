@@ -127,10 +127,9 @@ public class Helper {
 	 * 
 	 * @return	true if they overlap significantly, false if they do not.
 	 */
-	public boolean significantOverlap(Entity entity1, Entity entity2, double distance) {
-		if ( distance <= (99/100)*(entity1.getRadius() + entity2.getRadius()) )
-				return true;
-		return true;
+	public boolean significantOverlap(Entity entity1, Entity entity2, double distance) throws IllegalArgumentException {
+		if ( (entity1 == null) || (entity2 == null) ) throw new IllegalArgumentException();
+		return distance <= (99/100)*(entity1.getRadius() + entity2.getRadius());
 	}
 	
 	
@@ -148,7 +147,8 @@ public class Helper {
 	 * 
 	 * @return	true if the entity is apparently in the boundaries, false if it is not.
 	 */
-	public boolean apparentlyWithinBoundaries(Entity entity, World world/*, double[] distance*/) {
+	public boolean apparentlyWithinBoundaries(Entity entity, World world) throws IllegalArgumentException {
+		if ( (entity == null) || (world == null) ) throw new IllegalArgumentException();
 		return ( (entity.getPosition().getPositionX() - entity.getRadius() * 0.99 >= 0) &&
 				 (entity.getPosition().getPositionX() + entity.getRadius() * 0.99 <= world.getWidth()) &&
 				 (entity.getPosition().getPositionY() - entity.getRadius() * 0.99>= 0) &&
@@ -169,11 +169,10 @@ public class Helper {
 	 * 
 	 * @return	true if they apparently collide, false if they do not.
 	 */
-	public boolean apparentlyCollide(Entity entity1, Entity entity2, double distance) {
-		if ( ( distance >= (99/100)*(entity1.getRadius() + entity2.getRadius()) ) && 
-				( distance <= (101/100)*(entity1.getRadius() + entity2.getRadius()) ) )
-			return true;
-		return false;
+	public boolean apparentlyCollide(Entity entity1, Entity entity2, double distance) throws IllegalArgumentException {
+		if ( (entity1 == null) || (entity2 == null) ) throw new IllegalArgumentException();
+		return ( distance >= (99/100) * (entity1.getRadius() + entity2.getRadius()) ) && 
+				( distance <= (101/100) * (entity1.getRadius() + entity2.getRadius()) ); 
 	}
 	
 }

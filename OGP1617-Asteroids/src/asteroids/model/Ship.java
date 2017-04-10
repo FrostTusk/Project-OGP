@@ -1106,7 +1106,6 @@ public class Ship extends Entity {
 
 		if (time1 > time2) return time2;		
 		return time1;
-	
 	}
 	
 	/**
