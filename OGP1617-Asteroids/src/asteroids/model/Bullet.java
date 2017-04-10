@@ -1,7 +1,6 @@
 package asteroids.model;
 
 import asteroids.helper.Entity;
-import asteroids.helper.Helper;
 import be.kuleuven.cs.som.annotate.*;
 
 /* Constants:
@@ -64,11 +63,6 @@ public class Bullet extends Entity {
 	
 	
 	/**
-	 * Variable registering the helper for this ship.
-	 */
-	private Helper helper = new Helper();
-	
-	/**
 	 * Initialize this new bullet with given X and Y position, a given X and Y velocity, a given orientation, and a given radius.
 	 *
 	 * @param  	positionX
@@ -113,7 +107,7 @@ public class Bullet extends Entity {
 
 		this.setVelocity(velocityX, velocityY);
 		
-		
+		this.minRadius = 1;
 		if (! canHaveAsRadius(radius))
 			throw new IllegalArgumentException();
 		this.radius = radius;
@@ -126,83 +120,19 @@ public class Bullet extends Entity {
 	
 	
 	/**
-	 * Variable registering if this bullet is terminated or not.
-	 */
-	private boolean isTerminated = false;
-	
-	
-	/**
-	 * Return the whether or not this bullet is terminated.
-	 */
-	@Basic @Raw
-	public boolean isTerminated() {
-		return this.isTerminated;
-	}
-	
-	
-	/**
 	 * Terminates this bullet. Breaks up any associations with entities and worlds.
 	 * Prepares this object for the garbage collector.
 	 * @see implementation
 	 */
+	@Override
 	public void terminate() {
+		if (isTerminated()) return;
 		if (getWorld() != null) world.removeEntity(this);
 		if (getShip() != null) this.setShip(null);
+		this.isTerminated = true;
 	}
 	
 
-	
-			 /*
-			  * |-------------------------------------------------------|
-			  * | 4. The next methods handle the Radius of the bullet.	|
-			  * |-------------------------------------------------------| 
-			  */
-		
-	
-	
-	/**
-	* Variable registering the radius of this bullet.
-	*/
-	private final double radius;
-	/**
-	* Variable registering the minimum radius of this bullet.
-	*/
-	private final double minRadius = 1;
-	
-	
-	/**
-	*  Return the minimum radius of this bullet.
-	*/
-	@Basic @Immutable @Raw
-	public double getMinRadius() {
-		return this.minRadius;
-	}
-	
-	/**
-	* Return the radius of this bullet.
-	*/
-	@Basic @Override @Raw
-	public double getRadius() {
-		return this.radius;
-	}
-	
-	
-	/**
-	* Check whether this bullet can have the given radius as its radius.
-	*  
-	* @param  	radius
-	*         	The radius to check.
-	* @return	Returns whether or not the given radius can be used 
-	* 			as a valid radius or not. true if it can, false if not.
-	*       	| result == (POSITIVE_INFINITY > radius) && (radius >= this.getMinRadius())
-	*/
-	@Raw
-	public boolean canHaveAsRadius(double radius) {
-		if ( (Double.POSITIVE_INFINITY > radius) && (radius >= getMinRadius()) )
-			return true;
-		return false;
-	}
-	
 	
 	
 			/*
@@ -211,33 +141,6 @@ public class Bullet extends Entity {
 		     * |----------------------------------------------------| 
 		     */
 	
-	
-	
-	/**
-	 * Variable registering the mass of this bullet.
-	 */
-	private double mass;
-	/**
-	 * Variable registering the density of this bullet.
-	 */
-	private double density;
-	
-	
-	/**
-	 * Return the current mass of the bullet.
-	 */
-	@Basic @Raw
-	public double getMass() {
-		return this.mass;
-	}
-	
-	/**
-	 * Return the current mass of the bullet.
-	 */
-	@Basic @Raw
-	public double getDensity() {
-		return this.density;
-	}
 	
 	
 	/**
@@ -253,19 +156,7 @@ public class Bullet extends Entity {
 		this.mass = (4/3) * Math.PI * Math.pow(getRadius(), 3) * (density);
 	}
 	
-	/**
-	 * Set the density of this bullet to the given density.
-	 * 
-	 * @param  	mass
-	 * 			the new mass for this bullet
-	 *         
-	 * @see implementation
-	 */
-	@Raw
-	private void setDensity(double density) {
-		this.density = density;
-	}
-	
+
 	
 	
 		/*
@@ -282,22 +173,7 @@ public class Bullet extends Entity {
 		     */
 	
 	
-	
-	/**
-	* Variable registering the world of this bullet.
-	*/
-	private World world = null;
-	
-	
-	/**
-	* Return the world of this bullet.
-	*/
-	@Basic @Override @Raw
-	public World getWorld() {
-		return this.world;
-	}
-	
-	
+		
 	/**
 	* Check whether this bullet can have the given world as world. 
 	*  
@@ -310,54 +186,6 @@ public class Bullet extends Entity {
 	public boolean canHaveAsWorld(World world) throws IllegalArgumentException, NullPointerException {
 		if ((getWorld() != null) && (isInWorld(world)) ) return true;
 		return false;
-	}
-	
-	/**
-	* Check whether this bullet is currently located in a given world. 
-	* This method only checks if the shape of the bullet is located in a given world,
-	* it does not check if it's associated with the given world.
-	*  
-	* @param  	world
-	*         	The world to check.
-	*         
-	* @see implementation
-	*/
-	@Override @Raw
-	public boolean isInWorld(World world) {
-		return helper.apparentlyWithinBoundaries(this, world);
-//		if ( (this.getPosition().getPositionX() - this.getRadius() * 0.99 >= 0) &&
-//			 (this.getPosition().getPositionX() + this.getRadius() * 0.99 <= world.getWidth()) &&
-//			 (this.getPosition().getPositionY() - this.getRadius() * 0.99 >= 0) &&
-//			 (this.getPosition().getPositionY() + this.getRadius() * 0.99 <= world.getHeight()) )
-//			return true;
-//		return false;
-	}
-	
-	
-	/**
-	* Set a given world as world for this bullet.
-	*  
-	* @param  	world
-	*         	The world to set as world for this bullet.
-	*         
-	* @see implementation
-	*/
-	@Override @Raw
-	public void setWorld(World world) throws IllegalArgumentException, NullPointerException {
-		if (world ==  null) throw new NullPointerException();
-		if (!canHaveAsWorld(world)) throw new IllegalArgumentException();
-	this.world = world;
-	}
-	
-	/**
-	* Remove the current world as world for this bullet.
-	*      
-	* @see implementation
-	*/
-	@Override // TODO @Raw?
-	public void deSetWorld() throws NullPointerException {
-		if (getWorld() ==  null) throw new NullPointerException();
-		this.world = null;
 	}
 	
 	

@@ -2,17 +2,40 @@ package asteroids.helper;
 
 import asteroids.model.World;
 import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.Immutable;
 import be.kuleuven.cs.som.annotate.Raw;
 
 public abstract class Entity {
-	
-//	public abstract Position getPosition();
-	
 	
 	/**
 	 * Variable registering the helper for this ship.
 	 */
 	protected Helper helper = new Helper();
+	
+	
+	public Entity() {
+		this.radius = 10;
+		this.minRadius = 10;
+	}
+	
+
+	/**
+	 * Variable registering if this ship is terminated or not.
+	 */
+	protected boolean isTerminated = false;
+	
+	
+	/**
+	 * Return the whether or not this ship is terminated.
+	 */
+	@Basic @Raw
+	public boolean isTerminated() {
+		return this.isTerminated;
+	}
+	
+	
+	public abstract void terminate();
+	
 	
 			 /*
 			  * |-------------------------------------------------------|
@@ -67,7 +90,6 @@ public abstract class Entity {
 			throw new IllegalArgumentException();
 		}
 	}
-	
 	
 	
 	
@@ -183,23 +205,179 @@ public abstract class Entity {
 	}
 	
 	
-	public abstract double getRadius();
+	
+			/*
+			 * |----------------------------------------------------|
+			 * | 5. The next methods handle the Radius of the Ship.	|
+			 * |----------------------------------------------------| 
+			 */
+
+
+
+	/**
+	* Variable registering the radius of this ship.
+	*/
+	protected double radius;
+	// #Constant-2#
+	/**
+	* Variable registering the minimum radius of this ship.
+	*/
+	protected double minRadius;
 	
 	
-	public abstract double getMass();
+	/**
+	*  Return the minimum radius of this ship.
+	*/
+	@Basic @Immutable @Raw
+	public double getMinRadius() {
+		return this.minRadius;
+	}
+	
+	/**
+	* Return the radius of this ship.
+	*/
+	@Basic @Raw
+	public double getRadius() {
+		return this.radius;
+	}
+	
+	
+	/**
+	* Check whether this ship can have the given radius as its radius.
+	*  
+	* @param  	radius
+	*         	The radius to check.
+	* @return	Returns whether or not the given radius can be used 
+	* 			as a valid radius or not. true if it can, false if not.
+	*       	| result == (POSITIVE_INFINITY > radius) && (radius >= this.getMinRadius())
+	*/
+	@Raw
+	public boolean canHaveAsRadius(double radius) {
+		if ( (Double.POSITIVE_INFINITY > radius) && (radius >= this.getMinRadius()) )
+			return true;
+		return false;
+	}
 	
 	
 	
+			/*
+			 * |----------------------------------------------------|
+			 * | 6. The next methods handle the mass of the ship.	|
+			 * |----------------------------------------------------| 
+			 */
 	
-	public abstract World getWorld();
+	
+	
+	/**
+	 * Variable registering the density of this bullet.
+	 */
+	protected double density;
+	/**
+	* Variable registering the mass of this ship.
+	*/
+	protected double mass;
+
+	
+	/**
+	 * Return the current mass of the bullet.
+	 */
+	@Basic @Raw
+	public double getDensity() {
+		return this.density;
+	}
+	
+	/**
+	* Return the current mass of the ship.
+	*/
+	@Basic @Raw
+	public double getMass() {
+	return this.mass;
+	}
+	
+	
+	/**
+	 * Set the density of this bullet to the given density.
+	 * 
+	 * @param  	mass
+	 * 			the new mass for this bullet
+	 *         
+	 * @see implementation
+	 */
+	@Raw
+	protected void setDensity(double density) {
+		this.density = density;
+	}
+	
+	
+	
+			/*
+		     * |------------------------------------------------------------|
+		     * | 7. The next methods handle the association with worlds.	|
+		     * |------------------------------------------------------------| 
+		     */
+
+
+
+	/**
+	* Variable registering the world of this ship.
+	*/
+	protected World world = null;
+	
+	
+	/**
+	* Return the world associated with this ship.
+	*/
+	@Basic @Raw
+	public World getWorld() {
+		return this.world;
+	}
+
 	
 	public abstract boolean canHaveAsWorld(World world);
 	
-	public abstract boolean isInWorld(World world);
 	
-	public abstract void setWorld(World world);
+	/**
+	* Check whether this ship is currently located in a given world. 
+	* This method only checks if the shape of the ship is located in a given world,
+	* it does not check if it's associated with the given world.
+	*  
+	* @param  	world
+	*         	The world to check.
+	*         
+	* @see implementation
+	*/
+	@Raw
+	public boolean isInWorld(World world) {
+		return helper.apparentlyWithinBoundaries(this, world);
+	}
 	
-	public abstract void deSetWorld();
+	
+	/**
+	* Set a given world as world for this ship.
+	*  
+	* @param  	world
+	*         	The world to set as world for this ship.
+	*         
+	* @see implementation
+	*/
+	@Raw
+	public void setWorld(World world) throws IllegalArgumentException, NullPointerException {
+		if (world ==  null) throw new NullPointerException();
+		if (!canHaveAsWorld(world)) throw new IllegalArgumentException();
+		this.world = world;
+	}
+	
+	/**
+	* Remove the current world as world for this ship.
+	*      
+	* @see implementation
+	*/
+	 // TODO @Raw?
+	public void deSetWorld() throws NullPointerException {
+		if (getWorld() ==  null) throw new NullPointerException();
+		this.world = null;
+	}
+	
 	
 	
 	

@@ -1,8 +1,6 @@
 package asteroids.model;
 
-//import java.util.ArrayList;
 import java.util.HashSet;
-//import java.util.List;
 import java.util.Set;
 
 import asteroids.helper.Entity;
@@ -20,8 +18,6 @@ import be.kuleuven.cs.som.annotate.*;
  * Methods Index:
  * #1# Basic Methods
  * 		1. Methods that handle the Initialization and Termination of the Ship
- * 		2. Methods that handle the Position of the Ship
- * 		3. Methods that handle the Speed of the Ship
  * 		4. Methods that handle the Orientation of the Ship
  * 		5. Methods that handle the Radius of the Ship
  * 		6. Methods that handle the Mass of the ship
@@ -29,11 +25,9 @@ import be.kuleuven.cs.som.annotate.*;
  * 		7. Methods that handle the association with Worlds
  * 		8. Methods that handle the association with Bullets
  * #3# Advanced Methods
- * 		9. Methods that handle Moving, Turning and Accelerating
+ * 		9. Methods that handle Turning and Accelerating
  * 		10. Methods that handle the Thruster
- * 		11. Methods that handle Calculating Distance and Overlap
  * #4# Collision Detection Methods
- * 		12. Methods that handle Collision Detection
  * 		13. Methods that handle Resolving Collisions
  * #5# Other Methods
  *		14. Helper Methods
@@ -133,34 +127,23 @@ public class Ship extends Entity {
 		assert isValidOrientation(orientation);
 		this.setOrientation(orientation);
 		
+		this.minRadius = 10;
 		if (! canHaveAsRadius(radius))
 			throw new IllegalArgumentException();
 		this.radius = radius;
 		
+		this.setDensity(1.42 * Math.pow(10, 12));
 		setMass(mass);
 	}
 	
-	
-	/**
-	 * Variable registering if this ship is terminated or not.
-	 */
-	private boolean isTerminated = false;
-	
-	
-	/**
-	 * Return the whether or not this ship is terminated.
-	 */
-	@Basic @Raw
-	public boolean isTerminated() {
-		return this.isTerminated;
-	}
-	
+
 	
 	/**
 	 * Terminates this ship. Breaks up any associations with entities and worlds.
 	 * Prepares this object for the garbage collector.
 	 * @see implementation
 	 */
+	@Override
 	public void terminate() {
 		if (getWorld() != null) world.removeEntity(this);
 		this.isTerminated = true;
@@ -170,7 +153,7 @@ public class Ship extends Entity {
 	
 		 /*
 		  * |-----------------------------------------------------------|
-		  * | 4. The next methods handle the Orientation of the Ship.	|
+		  * | 2. The next methods handle the Orientation of the Ship.	|
 		  * |-----------------------------------------------------------| 
 		  */
 	
@@ -228,83 +211,15 @@ public class Ship extends Entity {
 		this.orientation = orientation;
 	}
 	
-	
-	
-			/*
-			 * |----------------------------------------------------|
-			 * | 5. The next methods handle the Radius of the Ship.	|
-			 * |----------------------------------------------------| 
-			 */
-	
-	
-	
-	/**
-	 * Variable registering the radius of this ship.
-	 */
-	private final double radius;
-	// #Constant-2#
-	/**
-	 * Variable registering the minimum radius of this ship.
-	 */
-	private final double minRadius = 10;
-	
-	
-	/**
-	 *  Return the minimum radius of this ship.
-	 */
-	@Basic @Immutable @Raw
-	public double getMinRadius() {
-		return this.minRadius;
-	}
-	
-	/**
-	 * Return the radius of this ship.
-	 */
-	@Basic @Override @Raw
-	public double getRadius() {
-		return this.radius;
-	}
-	
-	
-	/**
-	 * Check whether this ship can have the given radius as its radius.
-	 *  
-	 * @param  	radius
-	 *         	The radius to check.
-	 * @return	Returns whether or not the given radius can be used 
-	 * 			as a valid radius or not. true if it can, false if not.
-	 *       	| result == (POSITIVE_INFINITY > radius) && (radius >= this.getMinRadius())
-	 */
-	@Raw
-	public boolean canHaveAsRadius(double radius) {
-		if ( (Double.POSITIVE_INFINITY > radius) && (radius >= this.getMinRadius()) )
-			return true;
-		return false;
-	}
-	
-	
+
 	
 			/*
 			 * |----------------------------------------------------|
-			 * | 6. The next methods handle the mass of the ship.	|
+			 * | 3. The next methods handle the mass of the ship.	|
 			 * |----------------------------------------------------| 
 			 */
 	
-	
-	
-	/**
-	 * Variable registering the mass of this ship.
-	 */
-	private double mass;
-	
-	
-	/**
-	 * Return the current mass of the ship.
-	 */
-	@Basic @Raw
-	public double getMass() {
-		return this.mass;
-	}
+
 	
 	/**
 	 * Return the current mass of the ship and its cargo.
@@ -320,6 +235,7 @@ public class Ship extends Entity {
 		return totalMass;
 	}
 	
+	
 	/**
 	 * Check whether the given mass is a valid mass for this ship.
 	 *  
@@ -331,7 +247,7 @@ public class Ship extends Entity {
 	 */
 	@Raw
 	public boolean isValidMass(double mass) {
-		return mass > (4/3) * Math.PI * Math.pow(this.getRadius(), 3) * (1.42 * Math.pow(10, 12));
+		return mass > (4/3) * Math.PI * Math.pow(this.getRadius(), 3) * (this.density);
 	}
 	
 	
@@ -371,22 +287,7 @@ public class Ship extends Entity {
 		     * |------------------------------------------------------------| 
 		     */
 	
-	
-	
-	/**
-	* Variable registering the world of this ship.
-	*/
-	public World world = null;
-	
-	
-	/**
-	* Return the world associated with this ship.
-	*/
-	@Basic @Override @Raw
-	public World getWorld() {
-		return this.world;
-	}
-	
+
 	
 	/**
 	* Check whether this ship can have the given world as world. 
@@ -402,49 +303,7 @@ public class Ship extends Entity {
 		return false;
 	}
 	
-	/**
-	* Check whether this ship is currently located in a given world. 
-	* This method only checks if the shape of the ship is located in a given world,
-	* it does not check if it's associated with the given world.
-	*  
-	* @param  	world
-	*         	The world to check.
-	*         
-	* @see implementation
-	*/
-	@Override @Raw
-	public boolean isInWorld(World world) {
-		return helper.apparentlyWithinBoundaries(this, world);
-	}
-	
-	
-	/**
-	* Set a given world as world for this ship.
-	*  
-	* @param  	world
-	*         	The world to set as world for this ship.
-	*         
-	* @see implementation
-	*/
-	@Override @Raw
-	public void setWorld(World world) throws IllegalArgumentException, NullPointerException {
-		if (world ==  null) throw new NullPointerException();
-		if (!canHaveAsWorld(world)) throw new IllegalArgumentException();
-		this.world = world;
-	}
-	
-	/**
-	* Remove the current world as world for this ship.
-	*      
-	* @see implementation
-	*/
-	@Override // TODO @Raw?
-	public void deSetWorld() throws NullPointerException {
-		if (getWorld() ==  null) throw new NullPointerException();
-		this.world = null;
-	}
-	
-	
+
 	
 		/*
 	     * |------------------------------------------------------------|
