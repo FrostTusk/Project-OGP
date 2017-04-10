@@ -373,7 +373,7 @@ public class TestBullet {
 	public void testBulletAddToShip() throws ModelException {
 		Bullet bullet = new Bullet(100, 200, 0, 0, 20);	
 		Ship ship = facade.createShip(100, 200, 10, -10, 20, Math.PI);
-		ship.addBullet(bullet);
+		ship.loadBullet(bullet);
 		assertTrue(ship.getAllBullets().contains(bullet));
 	}
 	
@@ -381,7 +381,7 @@ public class TestBullet {
 	public void testBulletRemovedWhenFired() throws ModelException {
 		Bullet bullet = new Bullet(100, 200, 0, 0, 20);	
 		Ship ship = facade.createShip(100, 200, 10, -10, 20, Math.PI);
-		ship.addBullet(bullet);
+		ship.loadBullet(bullet);
 		ship.fireBullet(bullet);
 		assertFalse(ship.getAllBullets().contains(bullet));
 	}
