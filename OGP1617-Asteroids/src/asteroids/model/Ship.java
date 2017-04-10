@@ -745,7 +745,8 @@ public class Ship extends Entity {
 		for (Entity entity : world.getAllEntities()) {
 			if (bullet.overlap(entity)) bullet.resolveCollision(entity);
 		}
-		//TODO: set velocity to 250 km/s in right irection
+		
+		bullet.setVelocity(250 * Math.cos(getOrientation()), 250 * Math.sin(getOrientation()));
 		
 		bullet.setShip(null);
 		try {
@@ -1034,10 +1035,6 @@ public class Ship extends Entity {
 				 */
 	
 	
-	
-	// TODO Entities only collide if they're in the same world.
-	
-	
 	/**
 	 * Gets the time to collision between this ship and a given world.
 	 * 
@@ -1053,6 +1050,8 @@ public class Ship extends Entity {
 	 */
 	@Override @Raw
 	public double getTimeToCollision(World world) {		
+		if (! world.containsEntity(this)) return Double.POSITIVE_INFINITY;
+		
 		double[] distance = getDistanceBetween(world);
 		if ( (distance[0] == Double.POSITIVE_INFINITY) || (distance[1] == Double.POSITIVE_INFINITY) )
 			return Double.POSITIVE_INFINITY;
@@ -1088,6 +1087,7 @@ public class Ship extends Entity {
 	public double getTimeToCollision(Entity entity) throws IllegalArgumentException {
 		if (entity == null) 
 			throw new IllegalArgumentException();
+		if (! (this.getWorld() == entity.getWorld())) return Double.POSITIVE_INFINITY;
 	
 		double[] deltaR = {entity.getPosition().getPositionX() - this.getPosition().getPositionX(), 
 						   entity.getPosition().getPositionY() - this.getPosition().getPositionY()};
@@ -1121,6 +1121,7 @@ public class Ship extends Entity {
 	@Raw
 	public double[] getCollisionPosition(World world) {	
 		double vector[] = {Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY};
+		if (! world.containsEntity(this)) return vector;
 
 		double time = getTimeToCollision(world);
 		if (time != Double.POSITIVE_INFINITY) {
@@ -1153,6 +1154,10 @@ public class Ship extends Entity {
 	public double[] getCollisionPosition(Entity entity) throws IllegalArgumentException {
 		if (entity == null) 
 			throw new IllegalArgumentException();
+		
+		double vector[] = {Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY};
+		if (! (this.getWorld() == entity.getWorld())) return vector;
+		
 		double time = getTimeToCollision(entity);
 		if (time == Double.POSITIVE_INFINITY)
 			return null;
@@ -1170,8 +1175,8 @@ public class Ship extends Entity {
 		
 		// Calculate the exact position vector of the collision point by using the angle that has just been calculated
 		// and the first ship's new position vector.
-		double[] vector = {newPosition1[0] + signs[0] * this.getRadius() * Math.cos(angle), 
-						   newPosition1[1] + signs[1] * this.getRadius() * Math.sin(angle)};
+		vector[0] = newPosition1[0] + signs[0] * this.getRadius() * Math.cos(angle);
+		vector[1] = newPosition1[1] + signs[1] * this.getRadius() * Math.sin(angle);
 		return vector;
 	}
 	
@@ -1208,7 +1213,7 @@ public class Ship extends Entity {
 	 */
 	public void resolveCollision(Entity entity) {
 		if (entity.getType() == "Ship") resolveCollisionShip((Ship)entity);
-		else if (entity.getType() == "Bullet") resolveCollisionBullet((Bullet) entity);
+		else if (entity.getType() == "Bullet") resolveCollisionBullet((Bullet)entity);
 	}
 
 
@@ -1220,18 +1225,20 @@ public class Ship extends Entity {
 	 * @see implementation
 	 */
 	public void resolveCollisionShip(Ship ship) {
-		// See page 12, TODO zeker dat omega this.getRadius() is en niet this.getRadius() + entity.getRadius()
-		// TODO delta V is niet getSpeed => zie collision detection
-		double J = (2 * this.getMass() * ship.getMass() * (this.getSpeed() - ship.getSpeed()) * (this.getRadius() - ship.getRadius()) 
-				/ (this.getRadius() * (this.getMass() + ship.getMass())));
+		double[] deltaV = {ship.getVelocityX() - getVelocityX(), ship.getVelocityY() - getVelocityY()};
+		double[] deltaR = {ship.getPosition().getPositionX() - getPosition().getPositionX(), ship.getPosition().getPositionY() - getPosition().getPositionY()};
+		double deltaVR = deltaV[0] * deltaR[0] + deltaV[1] * deltaR[1];
 		
-		double Jx1 = J * (this.getPosition().getPositionX() - ship.getPosition().getPositionX()) / this.getRadius();
-		double Jy1 = J * (this.getPosition().getPositionY() - ship.getPosition().getPositionY()) / this.getRadius();
+		double J = (2 * getMass() * ship.getMass() * deltaVR) 
+				/ (this.getRadius() * (this.getMass() + ship.getMass()));
+		
+		double Jx1 = J * (this.getPosition().getPositionX() - ship.getPosition().getPositionX()) / (getRadius() + ship.getRadius());
+		double Jy1 = J * (this.getPosition().getPositionY() - ship.getPosition().getPositionY()) / (getRadius() + ship.getRadius());
 	
 		this.setVelocity(this.getVelocityX() + Jx1/this.getMass(), this.getVelocityY() + Jy1/this.getMass());
 		
-		double Jx2 = J * (ship.getPosition().getPositionX() - this.getPosition().getPositionX()) / ship.getRadius();
-		double Jy2 = J * (ship.getPosition().getPositionY() - this.getPosition().getPositionY()) / ship.getRadius();
+		double Jx2 = J * (ship.getPosition().getPositionX() - this.getPosition().getPositionX()) / (getRadius() + ship.getRadius());
+		double Jy2 = J * (ship.getPosition().getPositionY() - this.getPosition().getPositionY()) / (getRadius() + ship.getRadius());
 		
 		ship.setVelocity(ship.getVelocityX() + Jx2/ship.getMass(), ship.getVelocityY() + Jy2 / ship.getMass());
 	}
@@ -1244,7 +1251,7 @@ public class Ship extends Entity {
 	 * @see implementation
 	 */
 	public void resolveCollisionBullet(Bullet bullet) {
-		if (bullet.getShip() == this) reloadBullet(bullet);
+		if (bullet.getSource() == this) reloadBullet(bullet);
 		else {
 			this.terminate();
 			bullet.terminate();
