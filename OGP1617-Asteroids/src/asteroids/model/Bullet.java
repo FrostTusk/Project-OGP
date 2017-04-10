@@ -158,7 +158,6 @@ public class Bullet extends Entity {
 	
 
 	
-	
 		/*
 	     * |------------------------------------|
 	     * | #Header-2# Association Methods.	|
@@ -183,8 +182,8 @@ public class Bullet extends Entity {
 	* @see implementation
 	*/
 	@Override @Raw
-	public boolean canHaveAsWorld(World world) throws IllegalArgumentException, NullPointerException {
-		if ((getWorld() != null) && (isInWorld(world)) ) return true;
+	public boolean canHaveAsWorld(World world) {
+		if ( (getShip() == null) && (getWorld() == null) && (isInWorld(world)) ) return true;
 		return false;
 	}
 	

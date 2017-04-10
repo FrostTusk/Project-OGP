@@ -298,9 +298,8 @@ public class Ship extends Entity {
 	* @see implementation
 	*/
 	@Override @Raw
-	public boolean canHaveAsWorld(World world) throws IllegalArgumentException, NullPointerException {
-		if ((getWorld() != null) && (isInWorld(world)) ) return true;
-		return false;
+	public boolean canHaveAsWorld(World world) {
+		return (getWorld() == null) && (isInWorld(world));
 	}
 	
 
