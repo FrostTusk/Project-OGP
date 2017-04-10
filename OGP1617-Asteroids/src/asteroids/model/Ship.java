@@ -249,6 +249,7 @@ public class Ship extends Entity {
 	/**
 	 * Variable registering the speed of light.
 	 */
+	// #Constant-1#
 	private double constantMaxSpeed = 300000;
 
 	
@@ -419,6 +420,7 @@ public class Ship extends Entity {
 	/**
 	 * Variable registering the minimum radius of this ship.
 	 */
+	// #Constant-2#
 	private final double minRadius = 10;
 	
 	
@@ -433,6 +435,7 @@ public class Ship extends Entity {
 	/**
 	 * Return the radius of this ship.
 	 */
+	// #Constan-2t#
 	@Basic @Override @Raw
 	public double getRadius() {
 		return this.radius;
@@ -887,34 +890,76 @@ public class Ship extends Entity {
 	
 	
 	
+	/**
+	* Variable registering the force of this ship.
+	*/
+	// #Constant-3#
 	private double force = 1.1 * Math.pow(10, 12);
+	/**
+	* Variable registering the thruster of this ship.
+	*/
+	private Thruster thruster = new Thruster();
 	
-	private Thruster thruster;
 	
-	
+	/**
+	* Return the force of this ship.
+	*/
+	@Basic @Raw
 	public double getForce() {
 		return this.force;
 	}
 	
+	/**
+	* Return the status of this ship's thruster.
+	* True => On, False => Off
+	*/
+	@Basic @Raw
 	public boolean getThrustStatus() {
 		return this.thruster.getThrustStatus();
 	}
 	
+	/**
+	* Return the acceleration of this ship.
+	*/
+	@Basic @Raw
 	public double getAcceleration() {
 		return getForce() / getTotalMass();
 	}
 	
 	
+	/**
+	 * Set the force of this ship to the given force.
+	 * 
+	 * @param  	force
+	 *         	The new force for this ship.
+	 * 
+	 * @see implementation
+	 */
+	@Raw
+	public void setForce(double force) {
+		this.force = force;
+	}
+	
+	
+	/**
+	 * Toggle the thruster of this ship on.
+	 * @see implementation
+	 */
+	@Raw
 	public void thrustOn() {
 		this.thruster.thrustOn();
 		thrust(getAcceleration());
 	}
 	
+	/**
+	 * Toggle the thruster of this ship off.
+	 * @see implementation
+	 */
+	@Raw
 	public void thrustOff() {
 		this.thruster.thrustOff();
 	}
 
-	
 	
 	
 			/*

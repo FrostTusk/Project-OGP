@@ -17,4 +17,5 @@ public class Thruster {
 	public boolean getThrustStatus() {
 		return thrustEnabled;
 	}
+	
 }

@@ -2,11 +2,13 @@ package asteroids.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import asteroids.helper.Entity;
-import asteroids.helper.Helper;
+//import asteroids.helper.Helper;
 import asteroids.helper.Position;
 
 import be.kuleuven.cs.som.annotate.*;
@@ -53,7 +55,7 @@ public class World {
 	
 	
 	
-	private Helper helper = new Helper();
+//	private Helper helper = new Helper();
 	
 	/**
 	 * Initialize this new world with given width and height.
@@ -442,11 +444,11 @@ public class World {
 	}
 	
 	/**
-	 * Returns all entities registered in this world.
-	 * 
+	 * Returns all entities registered in this world. 
+	 * Return type is Entity[].
 	 * @see implementation
 	 */
-	public Entity[] getAllEntities() {
+	public Entity[] getAllEntitiesTemp1() {
 		Entity[] entitiesResult = new Entity[entities.size()];
 		int current = 0;
 		for (Entity entity: entities.values()) {
@@ -457,43 +459,79 @@ public class World {
 	}
 	
 	/**
-	 * Returns all ships registered in this world.
-	 * 
+	 * Returns all entities registered in this world.
+	 * Return type is List<Entity>.
 	 * @see implementation
 	 */
-	public Ship[] getAllShips() {
+	public List<Entity> getAllEntitiesTemp2() {
+		List<Entity> entitiesResult = new ArrayList<Entity>();
+		for (Entity entity: entities.values()) {
+			entitiesResult.add(entity);
+		}
+		return entitiesResult;
+	}
+	
+	/**
+	 * Returns all entities registered in this world.
+	 * Return type is Set<Entity>.
+	 * @see implementation
+	 */
+	public Set<Entity> getAllEntities() {
+		Set<Entity> entitiesResult = new HashSet<Entity>();
+		for (Entity entity: entities.values()) {
+			entitiesResult.add(entity);
+		}
+		return entitiesResult;
+	}
+	
+	/**
+	 * Returns all ships registered in this world.
+	 * @see implementation
+	 */
+	public Set<Ship> getAllShips() {
 		// First get all the entities registered in this world
-		Entity[] entitiesResult = getAllEntities();
+//		Entity[] entitiesResult = getAllEntitiesTemp1();
+//		List<Entity> entitiesResult = getAllEntitiesTemp2();
+		Set<Entity> entitiesResult = getAllEntities();
 		
 		// Create a temporary List that will include all the bullet entities.
 		// We have to create this list because we have no idea how many bullets are
 		// in the total amount of entities.
-		List<Ship> shipsResult = new ArrayList<Ship>();
-		for (int i = 0; i < entitiesResult.length; i++) 
-			if (entitiesResult[i].getType() == "Ship") shipsResult.add((Ship)entitiesResult[i]);
+//		List<Ship> shipsResult = new ArrayList<Ship>();
+		Set<Ship> shipsResult = new HashSet<Ship>();
+//		for (int i = 0; i < entitiesResult.length; i++) 
+//			if (entitiesResult[i].getType() == "Ship") shipsResult.add((Ship)entitiesResult[i]);
+		for (Entity entity: entitiesResult)
+			if (entity.getType() == "Ship") shipsResult.add((Ship)entity);
 		
-		// Convert the List to an array using the helper class.
-		return (Ship[])helper.convertListToArray(shipsResult);
+		return shipsResult;
+//		// Convert the List to an array using the helper class.
+//		return (Ship[])helper.convertListToArray(shipsResult);
 	}
 	
 	/**
 	 * Returns all bullets registered in this world.
-	 * 
 	 * @see implementation
 	 */
-	public Bullet[] getAllBullets() {
+	public Set<Bullet> getAllBullets() {
 		// First get all the entities registered in this world
-		Entity[] entitiesResult = getAllEntities();
+//		Entity[] entitiesResult = getAllEntitiesTemp();
+//		List<Entity> entitiesResult = getAllEntitiesTemp2();
+		Set<Entity> entitiesResult = getAllEntities();
 		
 		// Create a temporary List that will include all the bullet entities.
 		// We have to create this list because we have no idea how many bullets are
 		// in the total amount of entities.
-		List<Bullet> bulletsResult = new ArrayList<Bullet>();
-		for (int i = 0; i < entitiesResult.length; i++) 
-			if (entitiesResult[i].getType() == "Bullet") bulletsResult.add((Bullet)entitiesResult[i]);
+//		List<Bullet> bulletsResult = new ArrayList<Bullet>();
+		Set<Bullet> bulletsResult = new HashSet<Bullet>();
+//		for (int i = 0; i < entitiesResult.length; i++) 
+//			if (entitiesResult[i].getType() == "Bullet") bulletsResult.add((Bullet)entitiesResult[i]);
+		for (Entity entity: entitiesResult)
+			if (entity.getType() == "Bullet") bulletsResult.add((Bullet)entity);
 		
-		// Convert the List to an array using the helper class.
-		return (Bullet[])helper.convertListToArray(bulletsResult);
+		return bulletsResult;
+//		// Convert the List to an array using the helper class.
+//		return (Bullet[])helper.convertListToArray(bulletsResult);
 	}
 	
 }
