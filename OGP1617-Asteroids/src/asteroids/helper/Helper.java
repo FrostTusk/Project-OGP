@@ -140,10 +140,6 @@ public class Helper {
 	 * 		  	The entity to be used.
 	 * @param 	world
 	 * 		  	The world to be used.
-	 * @param	distance
-	 * 			The shortest distance between the entity and the boundaries of the world.
-	 * 			distance[0] = the x distance
-	 * 			distance[1] = the y distance
 	 * 
 	 * @return	true if the entity is apparently in the boundaries, false if it is not.
 	 */
@@ -151,9 +147,8 @@ public class Helper {
 		if ( (entity == null) || (world == null) ) throw new IllegalArgumentException();
 		return ( (entity.getPosition().getPositionX() - entity.getRadius() * 0.99 >= 0) &&
 				 (entity.getPosition().getPositionX() + entity.getRadius() * 0.99 <= world.getWidth()) &&
-				 (entity.getPosition().getPositionY() - entity.getRadius() * 0.99>= 0) &&
+				 (entity.getPosition().getPositionY() - entity.getRadius() * 0.99 >= 0) &&
 				 (entity.getPosition().getPositionY() + entity.getRadius() * 0.99 <= world.getHeight()) );
-
 	}
 	
 	

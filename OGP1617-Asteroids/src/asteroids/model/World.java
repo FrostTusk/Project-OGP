@@ -281,7 +281,7 @@ public class World {
 		// The entity can only set and de-set worlds, but not recognize itself as actually being in a world.
 		// First we check if this world can have a given entity as entity, this will also check if the
 		// entity can have this world as world.
-		if (!canHaveAsEntity(entity)) {
+		if (canHaveAsEntity(entity)) {
 			// At this point we're sure that the entity can possibly be added to this world,
 			// the only thing that can go wrong now is if the entity is already in a world.
 			try {

@@ -702,27 +702,29 @@ public abstract class Entity {
 	}
 	
 	/**
-	* Gets the collision position between this and a given entity.
+	* Gets the collision position between this entity and a given entity.
 	* 
 	* @param  	entity
-	* 			the entity to which you want to know the collision position.
+	* 			The entity of which the collision position needs to be calculated.
 	* 
 	* @return	The position returned will be the position where both entities
 	* 			collide with each other. The method returns null if they never collide.
+	* 			// TODO declarative documentation.
 	* 
-	* @throws 	IllegalArgumentException
+	* @throws 	Null
 	* 			The other entity was null.
 	* 			| entity == null
 	*/
 	@Raw
-	public double[] getCollisionPosition(Entity entity) throws IllegalArgumentException {
-		if (entity == null) throw new IllegalArgumentException();
-		if (! (this.getWorld() == entity.getWorld())) return null;
+	public double[] getCollisionPosition(Entity entity) throws NullPointerException {
+		if (entity == null) throw new NullPointerException();
+		if (this.getWorld() != entity.getWorld()) return null;
+		
 		double time = getTimeToCollision(entity);
 		if (time == Double.POSITIVE_INFINITY) return null;
 		
-		double[] newPosition1 = {helper.calculatePosition(this, time)[0], helper.calculatePosition(this, time)[1]};
-		double[] newPosition2 = {helper.calculatePosition(entity, time)[0], helper.calculatePosition(entity, time)[1]}; 
+		double[] newPosition1 = helper.calculatePosition(this, time);
+		double[] newPosition2 = helper.calculatePosition(entity, time);
 		
 		// Calculate the correct signs to know whether to add/subtract the radius to/from the position calculated further
 		double[] signs = calculateSigns(newPosition1, newPosition2);
@@ -730,12 +732,12 @@ public abstract class Entity {
 		// Calculate the angle between the x component of the vector between newPosition1 and newPosition2.
 		// This angle is the same as the one between the collisionPosition vector (out of the first ship) and it's x component.
 		double angle = Math.atan( Math.abs(newPosition2[1] - newPosition1[1]) / 
-							  Math.abs(newPosition2[0] - newPosition1[0]) );
+								  Math.abs(newPosition2[0] - newPosition1[0]) );
 		
 		// Calculate the exact position vector of the collision point by using the angle that has just been calculated
 		// and the first ship's new position vector.
 		double vector[] = {newPosition1[0] + signs[0] * this.getRadius() * Math.cos(angle), 
-					   newPosition1[1] + signs[1] * this.getRadius() * Math.sin(angle)};
+					   	   newPosition1[1] + signs[1] * this.getRadius() * Math.sin(angle)};
 		return vector;
 	}
 	
