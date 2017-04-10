@@ -1165,7 +1165,7 @@ public class Ship extends Entity {
 		double[] newPosition1 = {helper.calculatePosition(this, time)[0], helper.calculatePosition(this, time)[1]};
 		double[] newPosition2 = {helper.calculatePosition(entity, time)[0], helper.calculatePosition(entity, time)[1]}; 
 		
-		// Calculate the correct signs TODO Explain further (why)
+		// Calculate the correct signs to know whether to add/subtract the radius to/from the position calculated further
 		double[] signs = calculateSigns(newPosition1, newPosition2);
 		
 		// Calculate the angle between the x component of the vector between newPosition1 and newPosition2.

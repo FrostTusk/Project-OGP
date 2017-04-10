@@ -684,13 +684,13 @@ public class Bullet extends Entity {
 	
 	
 	/**
-	 * Gets the distance between this ship and another given entity.
+	 * Gets the distance between this bullet and another given entity.
 	 * 
 	 * @param  	entity
 	 * 			the entity to which you want to know the distance.
 	 * 
-	 * @return	For the current ship, returns the distance between the current ship and a given entity.
-	 * 			If the two entities have the same position, the method returns zero.
+	 * @return	For the current bullet, returns the distance between the current bullet and a given entity.
+	 * 			If the bullet and the entity have the same position, the method returns zero.
 	 * 
 	 * @throws 	IllegalArgumentException
 	 * 			The other entity was null.
@@ -698,9 +698,9 @@ public class Bullet extends Entity {
 	 */
 	@Raw
 	public double getDistanceBetween(Entity entity) throws IllegalArgumentException {
-		double distance;	// distance between the ships
-		double distanceX;	// distance between the x-coordinates of the ships
-		double distanceY;	// distance between the y-coordinates of the ships
+		double distance;	// distance between the bullet and the entity
+		double distanceX;	// distance between the x-coordinates of the bullet and the entity
+		double distanceY;	// distance between the y-coordinates of the bullet and the entity
 		
 		if (entity == null) 
 			throw new IllegalArgumentException();
@@ -708,10 +708,10 @@ public class Bullet extends Entity {
 		distanceX = Math.sqrt(Math.pow(this.getPosition().getPositionX() - entity.getPosition().getPositionX(), 2));
 		distanceY = Math.sqrt(Math.pow(this.getPosition().getPositionY() - entity.getPosition().getPositionY(), 2));
 		
-		// use formula of Pythagoras to calculate total distance between centers of the ships
+		// use formula of Pythagoras to calculate total distance between centers of the bullet and the entity
 		distance = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
 		
-		// The distance between a ship and itself is 0.
+		// The distance between a bullet and itself is 0.
 		if (distance == 0)
 			return 0;
 					
@@ -722,16 +722,16 @@ public class Bullet extends Entity {
 	
 	
 	/**
-	 * Gets the distance between this ship and a world
+	 * Gets the distance between this bullet and a world
 	 * 
 	 * @param 	world
 	 * 			the world to which to calculate the distance
 	 * 
 	 * @return 	distance[]
-	 * 			the distances between the center of the ship and the boundaries of the world
+	 * 			the distances between the center of the bullet and the boundaries of the world
 	 * 
-	 * @post	distance[0] is equal to the shortest distance between the center of this ship and the vertical boundary of the world
-	 * 			distance[1] is equal to the shortest distance between the center of this ship and the horizontal boundary of the world
+	 * @post	distance[0] is equal to the shortest distance between the center of this bullet and the vertical boundary of the world
+	 * 			distance[1] is equal to the shortest distance between the center of this bullet and the horizontal boundary of the world
 	 */
 	@Raw
 	public double[] getDistanceBetween(World world) {
@@ -756,9 +756,9 @@ public class Bullet extends Entity {
 	 * Returns true if the entities overlap, false if they don't.
 	 * 
 	 * @param 	entity
-	 * 			the entity of which you want to if it it overlaps this ship.
+	 * 			the entity of which you want to if it it overlaps this bullet.
 	 * 
-	 * @return	For the current ship, returns true if it overlaps with the given entity,
+	 * @return	For the current bullet, returns true if it overlaps with the given entity,
 	 * 			false if it does not.
 	 * 			| result == this.getDistanceBetween(entity) =< 0
 	 * 
@@ -795,7 +795,7 @@ public class Bullet extends Entity {
 	
 	
 	/**
-	 * Gets the time to collision between this ship and a given world.
+	 * Gets the time to collision between this bullet and a given world.
 	 * 
 	 * @param  	world
 	 * 			The world to which the collision time needs to be calculated.
@@ -803,8 +803,8 @@ public class Bullet extends Entity {
 	 * @return	The time returned will be larger than 0 and will be equal to
 	 * 			the time needed for the entity to reach a position where it apparently collides with the boundaries of the world
 	 * 
-	 * @post	The time returned will be equal to the time needed for this ship to collide with the world's boundaries.
-	 * 			If the ship never collides with the boundary, the returned time will be infinity.
+	 * @post	The time returned will be equal to the time needed for this bullet to collide with the world's boundaries.
+	 * 			If the bullet never collides with the boundary, the returned time will be infinity.
 	 * 
 	 */
 	@Override @Raw
@@ -827,7 +827,7 @@ public class Bullet extends Entity {
 	}
 	
 	/**
-	 * Gets the time to collision between this ship and a given entity.
+	 * Gets the time to collision between this bullet and a given entity.
 	 * 
 	 * @param  	entity
 	 * 			The entity of which the collision time needs to be calculated.
@@ -863,15 +863,15 @@ public class Bullet extends Entity {
 	
 
 	/**
-	 * Gets the collision position between this and a given world.
+	 * Gets the collision position between this bullet and a given world.
 	 * 
 	 * @param  	world
 	 * 			the world to which you want to know the collision position.
 	 * 
-	 * @return	The position returned will be the position where this ship and the world
+	 * @return	The position returned will be the position where this bullet and the world
 	 * 			collide with each other. The method returns null if they never collide.
 	 * 
-	 * @post	vector contains the position where this ship and the world will collide, if any.
+	 * @post	vector contains the position where this bullet and the world will collide, if any.
 	 * 			vector is null if they never collide.
 	 */
 	@Raw
@@ -893,7 +893,7 @@ public class Bullet extends Entity {
 	}
 	
 	/**
-	 * Gets the collision position between this and a given entity.
+	 * Gets the collision position between this bullet and a given entity.
 	 * 
 	 * @param  	entity
 	 * 			the entity to which you want to know the collision position.
@@ -916,7 +916,7 @@ public class Bullet extends Entity {
 		double[] newPosition1 = {helper.calculatePosition(this, time)[0], helper.calculatePosition(this, time)[1]};
 		double[] newPosition2 = {helper.calculatePosition(entity, time)[0], helper.calculatePosition(entity, time)[1]}; 
 		
-		// Calculate the correct signs TODO Explain further (why)
+		// Calculate the correct signs to know whether to add/subtract the radius to/from the position calculated further
 		double[] signs = calculateSigns(newPosition1, newPosition2);
 		
 		// Calculate the angle between the x component of the vector between newPosition1 and newPosition2.
@@ -925,7 +925,7 @@ public class Bullet extends Entity {
 								  Math.abs(newPosition2[0] - newPosition1[0]) );
 		
 		// Calculate the exact position vector of the collision point by using the angle that has just been calculated
-		// and the first ship's new position vector.
+		// and the bullet's new position vector.
 		double[] vector = {newPosition1[0] + signs[0] * this.getRadius() * Math.cos(angle), 
 						   newPosition1[1] + signs[1] * this.getRadius() * Math.sin(angle)};
 		return vector;
@@ -997,7 +997,7 @@ public class Bullet extends Entity {
 
 	
 	/**
-	* Resolves the collision between this ship and a given world.
+	* Resolves the collision between this bullet and a given world.
 	* @param 	world
 	* 			The world to be used.
 	* 
@@ -1028,14 +1028,14 @@ public class Bullet extends Entity {
 	
 	
 	/**
-	* Resolves the collision between this ship and a given ship.
+	* Resolves the collision between this bullet and a given ship.
 	* @param 	ship
-	* 			The ship to be used.
+	* 			The ship to be collided with.
 	* 
 	* @see implementation
 	*/
 	public void resolveCollisionShip(Ship ship) {
-		if (this.getShip() == ship) ship.reloadBullet(this);
+		if (this.getSource() == ship) ship.reloadBullet(this);
 		else {
 			this.terminate();
 			ship.terminate();
