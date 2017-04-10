@@ -292,11 +292,11 @@ public class TestBullet {
 	}
 	
 	
-	/*
-	 * |----------------------------------------------------------------|
-	 * | 5. The next tests test the interaction with other entities.	|
-	 * |----------------------------------------------------------------| 
-	 */	
+			/*
+			* |----------------------------------------------------------------|
+			* | 5. The next tests test the interaction with other entities.	|
+		 	* |----------------------------------------------------------------| 
+		 	*/	
 
 	
 	@Test
@@ -305,6 +305,15 @@ public class TestBullet {
 		World world = new World(100, 100);
 		bullet.setWorld(world);
 		assertNotNull(bullet.getWorld());
+	}
+	
+	@Test
+	public void testDeSetWorld() throws ModelException {
+		Bullet bullet = new Bullet(1, 1, 1, 1, 1);
+		World world = new World(100, 100);
+		bullet.setWorld(world);
+		bullet.deSetWorld();
+		assertNull(bullet.getWorld());
 	}
 	
 	@Test
@@ -319,10 +328,11 @@ public class TestBullet {
 	@Test
 	public void testCollideWithShipSource() throws ModelException {
 		Bullet bullet = new Bullet(100, 200, 0, 0, 20);	
-		Ship ship = facade.createShip(100, 200, 10, -10, 20, Math.PI);
+		Ship ship = facade.createShip(200, 200, 10, -10, 20, Math.PI);
 		bullet.setSource(ship);
-		bullet.resolveCollisionShip(ship);
-		
+		double counter = ship.getBulletsCount();
+		bullet.resolveCollisionShip(ship);	
+		assertTrue(counter + 1 == ship.getBulletsCount());
 	}
 	
 	@Test
@@ -344,5 +354,36 @@ public class TestBullet {
 		assertTrue(counter + 1 == bullet.getBoundaryCollisionCounter());
 	}
 	
+	// Werkt nog niet: world !contains bullet -> illArgExc
+//	@Test
+//	public void testCollideWithWorldBulletCanNotBounce() throws ModelException {
+//		Bullet bullet = new Bullet(50, 50, 0, 0, 20);
+//		World world = new World(100, 100);
+//		double counter = bullet.getBoundaryCollisionCounter();
+//		bullet.setWorld(world);
+//		while (counter < bullet.getBoundaryCollisionMax()) {
+//			bullet.resolveCollision(world);
+//			counter += 1;
+//		}
+//		assertTrue(bullet.isTerminated());
+//	}
+
+	
+	@Test
+	public void testBulletAddToShip() throws ModelException {
+		Bullet bullet = new Bullet(100, 200, 0, 0, 20);	
+		Ship ship = facade.createShip(100, 200, 10, -10, 20, Math.PI);
+		ship.addBullet(bullet);
+		assertTrue(ship.getAllBullets().contains(bullet));
+	}
+	
+	@Test
+	public void testBulletRemovedWhenFired() throws ModelException {
+		Bullet bullet = new Bullet(100, 200, 0, 0, 20);	
+		Ship ship = facade.createShip(100, 200, 10, -10, 20, Math.PI);
+		ship.addBullet(bullet);
+		ship.fireBullet(bullet);
+		assertFalse(ship.getAllBullets().contains(bullet));
+	}
 	
 }
