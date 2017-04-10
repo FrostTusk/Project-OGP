@@ -517,13 +517,14 @@ public abstract class Entity {
 	
 	/**
 	* Gets the distance between this entity and another given entity.
+	* This distance is the distance between the edges of both entities.
 	* 
 	* @param  	entity
 	* 			the entity to which you want to know the distance.
 	* 
 	* @return	For the current entity, returns the distance between the current entity and a given entity.
 	* 			If the two entities have the same position, the method returns zero.
-	* 			// TODO declarative documentation
+	* 			// TODO declarative documentation.
 	* 
 	* @throws 	NullPointerException
 	* 			The other entity was null.
@@ -549,52 +550,50 @@ public abstract class Entity {
 	
 	
 	/**
-	* Gets the distance between this ship and a world
+	* Gets the distance between this ship and the boundaries of it's world.
+	* This distance is the distance between the edge of this entity and the boundaries.
 	* 
 	* @param 	world
 	* 			the world to which to calculate the distance
 	* 
-	* @return 	distance[]
-	* 			the distances between the ship and the boundaries of the world
-	* 
-	* @post	distance[0] is equal to the shortest distance between the center of this ship and the vertical boundary of the world
-	* 			distance[1] is equal to the shortest distance between the center of this ship and the horizontal boundary of the world
+	* @return 	returns the distance between this entity and the boundaries of it's world.
+	* 			position 0 contains the distance between this entity and boundary at x = 0.
+	* 			position 1 contains the distance between this entity and boundary at x = world.getWidth().
+	* 			position 2 contains the distance between this entity and boundary at y = 0.
+	* 			position 3 contains the distance between this entity and boundary at y = world.getHeight().
+	* 			// TODO declarative documentation.
 	*/
 	@Raw
 	public double[] getDistanceBetween(World world) {
-		double[] distance = {Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY};
+		double[] distance = {Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, 
+							 Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY};
 		if (getWorld() != world) return distance;
 		
-		if (getPosition().getPositionX() < (world.getWidth() / 2) )
-			distance[0] = getPosition().getPositionX() - getRadius();
-		else
-			distance[0] = world.getWidth() - getPosition().getPositionX()  + getRadius();
-		
-		if (getPosition().getPositionY() < (world.getHeight() / 2) )
-			distance[1] = getPosition().getPositionY() - getRadius();
-		else
-			distance[1] = world.getWidth() - getPosition().getPositionY() + getRadius();
-		
+		distance[0] = getPosition().getPositionX() - getRadius();
+		distance[1] = world.getWidth() - getPosition().getPositionX() + getRadius();
+		distance[2] = getPosition().getPositionY() - getRadius();
+		distance[3] = world.getWidth() - getPosition().getPositionY() + getRadius();
 		return distance;
 	}
 	
 	
 	/**
 	* Returns true if the entities overlap, false if they don't.
+	* This method uses the notation of significant overlap.
 	* 
 	* @param 	entity
-	* 			the entity of which you want to if it it overlaps this ship.
+	* 			the entity of which you want to if it it overlaps with this entity.
 	* 
 	* @return	For the current ship, returns true if it overlaps with the given entity,
 	* 			false if it does not.
-	* 			| result == this.getDistanceBetween(entity) =< 0
+	* 			| result == helper.significantOverlap(this, entity, this.getDistanceBetween(entity))
 	* 
-	* @throws 	IllegalArgumentException
+	* @throws 	NullPointerException
 	* 			the other entity was null.
 	* 			| entity == null
 	*/
 	@Raw
-	public boolean overlap(Entity entity) throws IllegalArgumentException {
+	public boolean overlap(Entity entity) throws NullPointerException {
 		if (entity == null) throw new IllegalArgumentException();
 		return helper.significantOverlap(this, entity, this.getDistanceBetween(entity));
 	}
@@ -610,36 +609,34 @@ public abstract class Entity {
 	
 	
 	/**
-	* Gets the time to collision between this ship and a given world.
+	* Gets the time to collision between this entity and a given world.
 	* 
 	* @param  	world
 	* 			The world to which the collision time needs to be calculated.
 	* 
 	* @return	The time returned will be larger than 0 and will be equal to
-	* 			the time needed for the entity to reach a position where it apparently collides with the boundaries of the world
-	* 
-	* @post	The time returned will be equal to the time needed for this ship to collide with the world's boundaries.
-	* 			If the ship never collides with the boundary, the returned time will be infinity.
-	* 
+	* 			the time needed for the entity to reach a position where it collides with the boundaries of the world.
+	* 			// TODO declarative documentation.
+	* 			// TODO apparently collide?
 	*/
 	@Raw
 	public double getTimeToCollision(World world) {		
 		if (! world.containsEntity(this)) return Double.POSITIVE_INFINITY;
 		
 		double[] distance = getDistanceBetween(world);
-		if ( (distance[0] == Double.POSITIVE_INFINITY) || (distance[1] == Double.POSITIVE_INFINITY) )
-		return Double.POSITIVE_INFINITY;
+		if ( (distance[0] == Double.POSITIVE_INFINITY) || (distance[1] == Double.POSITIVE_INFINITY) ||
+			 (distance[2] == Double.POSITIVE_INFINITY) || (distance[3] == Double.POSITIVE_INFINITY) ) return Double.POSITIVE_INFINITY;
 		
-		double time1 = distance[0] / this.getVelocityX();
-		if (distance[1] + this.getVelocityY() * time1 > world.getHeight()) return Double.POSITIVE_INFINITY;
-		if (distance[1] + this.getVelocityY() * time1 < 0) return Double.POSITIVE_INFINITY;
+		double time1; // The shortest time to collision between this entity and the x boundaries of the given world.
+		if ( (distance[0] / getVelocityX()) < (distance[1] / getVelocityX()) ) time1 = distance[0] / getVelocityX();
+		else time1 = distance[1] / getVelocityX();
 		
-		double time2 = distance[1] / this.getVelocityY();
-		if (distance[0] + this.getVelocityX() * time2 > world.getWidth()) return Double.POSITIVE_INFINITY;
-		if (distance[0] + this.getVelocityX() * time2 < 0) return Double.POSITIVE_INFINITY;
+		double time2; // The shortest time to collision between this entity and the y boundaries of the given world.
+		if ( (distance[2] / getVelocityY()) < (distance[3] / getVelocityY()) ) time2 = distance[2] / getVelocityY();
+		else time2 = distance[3] / getVelocityY();
 		
-		if (time1 > time2) return time2;		
-		return time1;
+		if (time1 < time2) return time1;		
+		return time2;
 	}
 	
 	/**
