@@ -2,17 +2,27 @@ package asteroids.tests;
 
 import static org.junit.Assert.*;
 
+import org.junit.Before;
 import org.junit.Test;
 
+import asteroids.facade.Facade;
 import asteroids.helper.Position;
 import asteroids.model.Bullet;
+import asteroids.model.Ship;
+import asteroids.model.World;
+import asteroids.part1.facade.IFacade;
 import asteroids.util.ModelException;
 
 public class TestBullet {
 
 	private static final double EPSILON = 0.0001;
-	
-	
+
+	IFacade facade;
+
+	@Before
+	public void setUp() {
+		facade = new Facade();
+	}
 	
 			/*
 			 * |--------------------------------------------|
@@ -27,6 +37,7 @@ public class TestBullet {
 		Bullet bullet = new Bullet(1, 1, 1, 1, 1);
 		assertNotNull(bullet);
 	}
+	
 	
 			/*
 			 * |---------------------------------------|
@@ -279,5 +290,59 @@ public class TestBullet {
 	public void testCreateBulletRadiusIsNan() throws ModelException {
 		new Bullet(100, 200, 10, -10, Double.NaN);
 	}
+	
+	
+	/*
+	 * |----------------------------------------------------------------|
+	 * | 5. The next tests test the interaction with other entities.	|
+	 * |----------------------------------------------------------------| 
+	 */	
+
+	
+	@Test
+	public void testSetWorld() throws ModelException {
+		Bullet bullet = new Bullet(1, 1, 1, 1, 1);
+		World world = new World(100, 100);
+		bullet.setWorld(world);
+		assertNotNull(bullet.getWorld());
+	}
+	
+	@Test
+	public void testCollideWithBullet() throws ModelException {
+		Bullet bullet1 = new Bullet(100, 200, 0, 0, 20);
+		Bullet bullet2 = new Bullet(100, 200, 10, 20, 20);
+		bullet1.resolveCollisionBullet(bullet2);
+		assertTrue(bullet1.isTerminated());
+		assertTrue(bullet2.isTerminated());
+	}
+	
+	@Test
+	public void testCollideWithShipSource() throws ModelException {
+		Bullet bullet = new Bullet(100, 200, 0, 0, 20);	
+		Ship ship = facade.createShip(100, 200, 10, -10, 20, Math.PI);
+		bullet.setSource(ship);
+		bullet.resolveCollisionShip(ship);
+		
+	}
+	
+	@Test
+	public void testCollideWithShipNotSource() throws ModelException {
+		Bullet bullet = new Bullet(100, 200, 0, 0, 20);	
+		Ship ship = facade.createShip(100, 200, 10, -10, 20, Math.PI);
+		bullet.resolveCollision(ship);
+		assertTrue(bullet.isTerminated());
+		assertTrue(ship.isTerminated());
+	}
+	
+	@Test
+	public void testCollideWithWorldBulletCanBounce() throws ModelException {
+		Bullet bullet = new Bullet(50, 50, 0, 0, 20);
+		World world = new World(100, 100);
+		double counter = bullet.getBoundaryCollisionCounter();
+		bullet.setWorld(world);
+		bullet.resolveCollision(world);
+		assertTrue(counter + 1 == bullet.getBoundaryCollisionCounter());
+	}
+	
 	
 }
