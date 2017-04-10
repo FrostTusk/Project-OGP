@@ -16,13 +16,13 @@ import asteroids.model.World;
 
 public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 
-	@Deprecated @Override
+	@Override
 	public Ship createShip() throws ModelException {
 		// ship parameters = positionX, positionY, velocityX, velocityY, orientation, radius.
 		return new Ship(0, 0, 0, 0, 0, 10, 1);
 	}
 
-	@Deprecated @Override
+	@Override
 	public Ship createShip(double x, double y, double xVelocity, double yVelocity, double radius, double orientation)
 			throws ModelException {
 		try {

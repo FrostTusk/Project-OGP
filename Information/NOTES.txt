@@ -1,16 +1,17 @@
 1. Questions:
-!	1. Documentation
-!		1. Declarative => no idea how to do it for getDistance/getTimeTo?
-!		2. @Raw => for setters?
+	1. Documentation
+		1. Declarative => no idea how to do it for getDistance/getTimeTo?
+			1. When to use it?
+		2. @Raw => for setters?
 		3. @Raw => for abstract methods?
-!	2. Binary Relations => Who should initialize it first?
-!	3. When to test facade?
-!	4. What to do with Position Class?
-!		1. What changes in terms of documentation with Ship?
+	2. Binary Relations => Who should initialize it first?
+	3. When to test facade?
+	4. What to do with Position Class?
+		1. What changes in terms of documentation with Ship?
 		2. Exception thrown at creation of Position? Should Ship cover it?
-!	5. What is and why type parameter? => See Helper.
-!	6. New methods in Ship class => Full Documentation or also @see?
-!!!	7. Ship + Entity rewrite in entity?
+	5. What is and why type parameter? => See Helper.
+	6. New methods in Ship class => Full Documentation or also @see?
+	7. Ship + Entity rewrite in entity?
 
 
 

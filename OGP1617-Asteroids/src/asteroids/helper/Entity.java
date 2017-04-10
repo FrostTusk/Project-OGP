@@ -71,7 +71,7 @@ public abstract class Entity {
 	 * @see implementation
 	 */
 	public Entity() {
-		this.setMaxpeed(300000);
+		setMaxpeed(300000);
 		this.world = null;
 	}
 	

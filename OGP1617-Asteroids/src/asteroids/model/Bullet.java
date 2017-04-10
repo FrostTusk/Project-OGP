@@ -4,31 +4,23 @@ import asteroids.helper.Entity;
 import be.kuleuven.cs.som.annotate.*;
 
 /* Constants:
-*	1.	constantMaxSpeed = the maximum speed this bullet can achieve.
-*	2.	minRadius = the minimum radius for each bullet.
-*	3.	density = the density for this bullet.
-*	4. 	boundaryCollisionMax = the maximum amount of collision with a boundary for this bullet
+*	1. 	boundaryCollisionMax = the maximum amount of collision with a boundary for this bullet
 */
 
 /*
  * Methods Index:
  * #1# Basic Methods
  * 		1. Methods that handle the Initialization and Termination of the Bullet
- * 		2. Methods that handle the Position of the Bullet
- * 		3. Methods that handle the Speed of the Bullet
- * 		4. Methods that handle the Radius of the Bullet
- * 		5. Methods that handle the Mass of the Bullet
+ * 		2. Methods that handle the Mass of the Bullet
  * #2# Association Methods
- * 		6. Methods that handle the association with Worlds
- * 		7. Methods that handle the association with Bullets
+ * 		3. Methods that handle the association with Worlds
+ * 		4. Methods that handle the association with Ships
  * #3# Advanced Methods
- * 		8. Methods that handle Moving and Accelerating
- * 		9. Methods that handle Calculating Distance and Overlap
+ * 		5. Methods that handle Moving
  * #4# Collision Detection Methods
- * 		10. Methods that handle Collision Detection
- * 		11. Methods that handle Resolving Collisions
+ * 		6. Methods that handle Resolving Collisions
  * #5# Other Methods
- *		12. Helper Methods
+ *		7. Helper Methods
  */
 
 /**
@@ -91,13 +83,18 @@ public class Bullet extends Entity {
 	 *                  	 
 	 * @throws 	IllegalArgumentException
 	 *         	This new bullet cannot have the given X and Y position as position.
-	 *       	| ! this.getPosition().isValidPosition(positionX, positionY)
+	 *       	| ! this.getPosition().isValidPosition(positionX, positionY)	// TODO is this done right?
 	 * @throws 	IllegalArgumentException
 	 *         	This new bullet cannot have the given radius as its radius.
 	 *       	| ! this.canHaveAsRadius(this.getRadius())
 	 */
 	public Bullet(double positionX, double positionY, double velocityX, double velocityY, double radius)
 		throws IllegalArgumentException {
+		this.minRadius = 1;
+		setDensity(7.8 * Math.pow(10, 12));
+		this.boundaryCollisionCounter = 0;
+		setBoundaryCollisionMax(3);
+		
 		try {
 			setPosition(positionX, positionY);
 		}
@@ -105,17 +102,13 @@ public class Bullet extends Entity {
 			throw new IllegalArgumentException();
 		}
 
-		this.setVelocity(velocityX, velocityY);
+		setVelocity(velocityX, velocityY);
 		
-		this.minRadius = 1;
 		if (! canHaveAsRadius(radius))
 			throw new IllegalArgumentException();
 		this.radius = radius;
 		
-		this.setDensity(7.8 * Math.pow(10, 12));
-		this.setMass();
-		
-		this.setBoundaryCollisionMax(3);
+		setMass();
 	}
 	
 	
@@ -127,17 +120,16 @@ public class Bullet extends Entity {
 	@Override
 	public void terminate() {
 		if (isTerminated()) return;
-		if (getWorld() != null) world.removeEntity(this);
-		if (getShip() != null) this.setShip(null);
+		if (getWorld() != null) getWorld().removeEntity(this);
+		setShip(null);
 		this.isTerminated = true;
 	}
 	
 
-	
-	
+		
 			/*
 		     * |----------------------------------------------------|
-		     * | 5. The next methods handle the Mass of the bullet.	|
+		     * | 2. The next methods handle the Mass of the bullet.	|
 		     * |----------------------------------------------------| 
 		     */
 	
@@ -167,33 +159,32 @@ public class Bullet extends Entity {
 	
 			/*
 		     * |------------------------------------------------------------|
-		     * | 6. The next methods handle the association with worlds.	|
+		     * | 3. The next methods handle the association with worlds.	|
 		     * |------------------------------------------------------------| 
 		     */
 	
 	
 		
 	/**
-	* Check whether this bullet can have the given world as world. 
-	*  
-	* @param  	world
-	*         	The world to check.
-	*         
-	* @see implementation
-	*/
+	 * Check whether this bullet can have the given world as world. 
+	 *  
+	 * @param  	world
+	 *         	The world to check.
+	 *         
+	 * @see implementation
+	 */
 	@Override @Raw
 	public boolean canHaveAsWorld(World world) {
-		if ( (getShip() == null) && (getWorld() == null) && (isInWorld(world)) ) return true;
-		return false;
+		return (getShip() == null) && (getWorld() == null) && (isInWorld(world));
 	}
 	
 	
 	
-		/*
-	     * |--------------------------------------------------------|
-	     * | 7. The next methods handle the association with ships.	|
-	     * |--------------------------------------------------------| 
-	     */
+			/*
+		     * |--------------------------------------------------------|
+		     * | 4. The next methods handle the association with ships.	|
+		     * |--------------------------------------------------------| 
+		     */
 	
 	
 	
@@ -202,8 +193,8 @@ public class Bullet extends Entity {
 	 */
 	private boolean hasBeenFired = false;
 	/**
-	* Variable registering the ship of this bullet.
-	*/
+	 * Variable registering the ship of this bullet.
+	 */
 	private Ship ship = null;
 	/**
 	 * Variable registering the source ship of this bullet.
@@ -212,25 +203,24 @@ public class Bullet extends Entity {
 	
 	
 	/**
-	* Return whether or not this bullet has already been fired.
-	*/
+	 * Return whether or not this bullet has already been fired.
+	 */
 	@Basic @Raw
 	public boolean hasBeenFired() {
 		return this.hasBeenFired;
 	}
 	
-	
 	/**
-	* Return the ship of this bullet.
-	*/
+	 * Return the ship of this bullet.
+	 */
 	@Basic @Raw
 	public Ship getShip() {
 		return this.ship;
 	}
 	
 	/**
-	* Return the source of this bullet.
-	*/
+	 * Return the source of this bullet.
+	 */
 	@Basic @Raw
 	public Ship getSource() {
 		return this.source;
@@ -238,26 +228,26 @@ public class Bullet extends Entity {
 	
 	
 	/**
-	* Check whether this bullet can have the given ship as source. 
-	*  
-	* @param  	ship
-	*         	The ship to check.
-	*         
-	* @see implementation
-	*/
+	 * Check whether this bullet can have the given ship as source. 
+	 *  
+	 * @param  	ship
+	 *         	The ship to check.
+	 *         
+	 * @see implementation
+	 */
 	@Raw
 	public boolean canHaveAsSource(Ship ship) {
 		return (!hasBeenFired) && (getShip() == ship);
 	}
 	
 	/**
-	* Check whether this bullet can have the given ship as ship. 
-	*  
-	* @param  	ship
-	*         	The ship to check.
-	*         
-	* @see implementation
-	*/
+	 * Check whether this bullet can have the given ship as ship. 
+	 *  
+	 * @param  	ship
+	 *         	The ship to check.
+	 *         
+	 * @see implementation
+     */
 	@Raw
 	public boolean canHaveAsShip(Ship ship) {
 		return ( (getShip() == null) && (getWorld() == null) );
@@ -265,13 +255,13 @@ public class Bullet extends Entity {
 	
 	
 	/**
-	* Set a given ship as source for this bullet.
-	*  
-	* @param  	ship
-	*         	The ship to set as ship for this bullet.
-	*         
-	* @see implementation
-	*/
+	 * Set a given ship as source for this bullet.
+	 *  
+	 * @param  	ship
+	 *         	The ship to set as source ship for this bullet.
+	 *         
+	 * @see implementation
+	 */
 	@Raw
 	public void setSource(Ship ship) {
 		if (canHaveAsSource(ship)) {
@@ -280,7 +270,18 @@ public class Bullet extends Entity {
 		}
 	}
 	
-	public void resetSource(Ship ship) {
+	/**
+	 * Reset a given ship as source for this bullet. This action has
+	 * as consequence that the source of this ship will be reset to null.
+	 *  
+	 * @param  	ship
+	 *         	The ship to reset as source ship for this bullet.
+	 *         
+	 * @see implementation
+	 * 		// TODO More documentation?
+	 */
+	@Raw
+	public void resetSource(Ship ship) throws NullPointerException, IllegalArgumentException {
 		if (ship == null) throw new NullPointerException();
 		if ( (!this.overlap(ship)) || (this.getSource() != ship) ) throw new IllegalArgumentException();
 		this.hasBeenFired = false;
@@ -288,18 +289,18 @@ public class Bullet extends Entity {
 	}
 	
 	/**
-	* Set a given ship as ship for this bullet.
-	*  
-	* @param  	ship
-	*         	The ship to set as ship for this bullet.
-	*         
-	* @see implementation
-	*/
+	 * Set a given ship as ship for this bullet.
+	 *  
+	 * @param  	ship
+	 *         	The ship to set as ship for this bullet.
+	 *         
+	 * @see implementation
+	 */
 	@Raw
 	public void setShip(Ship ship) throws IllegalArgumentException, NullPointerException {
 		if (ship == null) throw new NullPointerException();
-		if (canHaveAsShip(ship)) this.ship = ship;
-		else throw new IllegalArgumentException();
+		if (! canHaveAsShip(ship)) throw new IllegalArgumentException();
+		this.ship = ship;
 	}
 	
 	
@@ -312,35 +313,34 @@ public class Bullet extends Entity {
 	
 		
 			/*
-			 * |----------------------------------------------------|
-			 * | 12. The next methods handle resolving Collisions.	|
-			 * |----------------------------------------------------| 
+			 * |----------------------------------------------------------------|
+			 * | 5. The next methods handle the Boundary Collision Counter.	|
+			 * |----------------------------------------------------------------| 
 			 */
 	
-	
+	// TODO rewrite as a Class.
 	
 	/**
 	 * Variable registering the maximum amount of boundary collisions allowed for this bullet.
 	 */
-	private double boundaryCollisionMax;
+	private double boundaryCollisionMax;	// #Constant-1#
 	/**
 	 * Variable registering the amount of times this bullet has hit a boundary.
 	 */
-	private double boundaryCollisionCounter = 0;
+	private double boundaryCollisionCounter;
 
-	
-	
+		
 	/**
-	* Return the maximum amount of times this bullet can collide with a boundary.
-	*/
+	 * Return the maximum amount of times this bullet can collide with a boundary.
+	 */
 	@Basic @Raw
 	public double getBoundaryCollisionMax() {
 		return this.boundaryCollisionMax;
 	}
 	
 	/**
-	* Return the amount of times this bullet has collided with a boundary.
-	*/
+	 * Return the amount of times this bullet has collided with a boundary.
+	 */
 	@Basic @Raw
 	public double getBoundaryCollisionCounter() {
 		return this.boundaryCollisionCounter;
@@ -348,71 +348,99 @@ public class Bullet extends Entity {
 	
 	
 	/**
-	* Set a given maximum as maximum amount collisions for this bullet.
-	*  
-	* @param  	maximum
-	*         	The amount to which the maximum needs to be set
-	*         
-	* @see implementation
-	*/
+	 * Set a given maximum as maximum amount collisions for this bullet.
+	 *  
+	 * @param  	maximum
+	 *         	The amount to which the maximum needs to be set
+	 *         
+	 * @see implementation
+	 */
 	@Raw
 	private void setBoundaryCollisionMax(double maximum) {
 		this.boundaryCollisionMax = maximum;
 	}
 	
 	/**
-	* Set the boundary collision counter to a certain amount.
-	*  
-	* @param  	amount
-	*         	The amount to which the boundary collision counter needs to be set
-	*         
-	* @see implementation
-	*/
+	 * Set the boundary collision counter to a certain amount.
+	 *  
+	 * @param  	amount
+	 *         	The amount to which the boundary collision counter needs to be set
+	 *         
+	 * @see implementation
+	 */
 	@Raw
 	private void setBoundaryCollisionCounter(double amount) {
 		this.boundaryCollisionCounter = amount;
 	}
 
 	
+	
+			/*
+			 * |----------------------------------------------------|
+			 * | 6. The next methods handle resolving Collisions.	|
+			 * |----------------------------------------------------| 
+			 */
+	
+	// Are these Methods Raw?
+	
 	/**
-	* Resolves the collision between this bullet and a given world.
-	* @param 	world
-	* 			The world to be used.
-	* 
-	* @see implementation
-	*/
-	public void resolveCollision(World world) {
+	 * Resolves the collision between this bullet and a given world.
+	 * 
+	 * @param 	world
+	 * 			The world to be used.
+	 * 
+	 * @see implementation
+	 * 		// TODO declarative documentation.
+	 * 		// TODO apparently collide?
+	 * 		// TODO what if they are not colliding?
+	 */
+	public void resolveCollision(World world) throws NullPointerException {
+		if (world == null) throw new NullPointerException();
 		setBoundaryCollisionCounter(getBoundaryCollisionCounter() + 1);
 		if (getBoundaryCollisionCounter() < getBoundaryCollisionMax()) {
 			double[] position = getCollisionPosition(world);
-			
-			if (position[0] == this.world.getWidth() || position[0] == 0) setVelocity(getVelocityX(), -getVelocityY());
-			else if (position[0] == this.world.getHeight() || position[1] == 0) setVelocity(-getVelocityX(), getVelocityY());
+			if (position == null) return;	// There is no collision so the collision does not need to be resolved.
+			if (position[0] == this.getWorld().getWidth() || position[0] == 0) 
+				setVelocity(getVelocityX(), -getVelocityY());
+			else if (position[0] == this.getWorld().getHeight() || position[1] == 0) 
+				setVelocity(-getVelocityX(), getVelocityY());
 		}
 		else this.terminate();
 	}
 	
 	/**
-	* Resolves the collision between this ship and a given entity.
-	* @param 	entity
-	* 			The entity to be used.
-	* 
-	* @see implementation
-	*/
-	public void resolveCollision(Entity entity) {
-		if (entity.getType() == "Ship") resolveCollisionShip((Ship)entity);
-		else if (entity.getType() == "Bullet") resolveCollisionBullet((Bullet) entity);
+	 * Resolves the collision between this ship and a given entity.
+	 * 
+	 * @param 	entity
+	 * 			The entity to be used.
+	 * 
+	 * @see implementation
+	 * 		// TODO declarative documentation.
+	 */
+	public void resolveCollision(Entity entity) throws NullPointerException, IllegalArgumentException {
+		if (entity == null) throw new NullPointerException();
+		try {
+			if (entity.getType() == "Ship") resolveCollisionShip((Ship)entity);
+			else if (entity.getType() == "Bullet") resolveCollisionBullet((Bullet)entity);
+		}
+		catch (IllegalArgumentException exc) {
+			throw new IllegalArgumentException();
+		}
 	}
 	
 	
 	/**
-	* Resolves the collision between this bullet and a given ship.
-	* @param 	ship
-	* 			The ship to be collided with.
-	* 
-	* @see implementation
-	*/
-	public void resolveCollisionShip(Ship ship) {
+	 * Resolves the collision between this bullet and a given ship.
+	 * 
+	 * @param 	ship
+	 * 			The ship to be collided with.
+	 * 
+	 * @see implementation
+	 * 		// TODO declarative documentation.
+	 */
+	public void resolveCollisionShip(Ship ship) throws NullPointerException, IllegalArgumentException {
+		if (ship == null) throw new NullPointerException();
+		if (!this.overlap(ship)) throw new IllegalArgumentException();
 		if (this.getSource() == ship) ship.reloadBullet(this);
 		else {
 			this.terminate();
@@ -421,13 +449,16 @@ public class Bullet extends Entity {
 	}
 	
 	/**
-	* Resolves the collision between this ship and a given bullet.
-	* @param 	bullet
-	* 			The bullet to be used.
-	* 
-	* @see implementation
-	*/
-	public void resolveCollisionBullet(Bullet bullet) {
+	 * Resolves the collision between this ship and a given bullet.
+	 * 
+	 * @param 	bullet
+	 * 			The bullet to be used.
+	 * 
+	 * @see implementation
+	 * 		// TODO declarative documentation.
+	 */
+	public void resolveCollisionBullet(Bullet bullet) throws NullPointerException {
+		if (bullet == null) throw new NullPointerException();
 		this.terminate();
 		bullet.terminate();
 	}
@@ -443,13 +474,16 @@ public class Bullet extends Entity {
 	
 			/*
 		     * |--------------------------------------------|
-		     * | 11. The next methods are Helper Methods.	|
+		     * | 7. The next methods are Helper Methods.	|
 		     * |--------------------------------------------| 
 		     */
 	
 	
 	
-	@Raw @Override
+	/**
+	 * Returns the type of this Ship Class in string format.
+	 */
+	@Basic @Override @Raw
 	public String getType() {
 		return "Bullet";
 	}

@@ -114,11 +114,11 @@ public class Ship extends Entity {
 	public Ship(double positionX, double positionY, double velocityX, double velocityY, double orientation, double radius, double mass)
 		throws IllegalArgumentException {
 		this.minRadius = 10;	// First the constants are set.
-		this.setDensity(1.42 * Math.pow(10, 12));
-		this.setForce(1.1 * Math.pow(10, 12));
+		setDensity(1.42 * Math.pow(10, 12));
+		setForce(1.1 * Math.pow(10, 12));
 		
 		try {	// Check if the position can be set.
-			this.setPosition(positionX, positionY);
+			setPosition(positionX, positionY);
 		}
 		catch (IllegalArgumentException exc) {
 			throw new IllegalArgumentException();
@@ -127,7 +127,7 @@ public class Ship extends Entity {
 		setVelocity(velocityX, velocityY);	// Set the velocity.
 		
 		assert isValidOrientation(orientation);	// Check if the orientation can be set.
-		this.setOrientation(orientation);
+		setOrientation(orientation);
 		
 		if (! canHaveAsRadius(radius)) throw new IllegalArgumentException();	// Check if the radius can be set.
 		this.radius = radius;
@@ -144,6 +144,7 @@ public class Ship extends Entity {
 	 */
 	@Override
 	public void terminate() {
+		if (isTerminated()) return;
 		if (getWorld() != null) world.removeEntity(this);
 		for (Bullet bullet: getAllBullets()) this.removeBullet(bullet);
 		this.isTerminated = true;
@@ -511,11 +512,11 @@ public class Ship extends Entity {
 		
 		if (! isValidOrientation(getOrientation() + angle))
 			if (angle > 0) 
-				this.setOrientation(orientation + angle - 2*Math.PI);
+				setOrientation(orientation + angle - 2*Math.PI);
 			else 
-				this.setOrientation(orientation + angle + 2*Math.PI);	
+				setOrientation(orientation + angle + 2*Math.PI);	
 		else
-			this.setOrientation(orientation + angle);
+			setOrientation(orientation + angle);
 	}
 	
 	
@@ -639,7 +640,7 @@ public class Ship extends Entity {
 			 * |----------------------------------------------------| 
 			 */
 
-	
+	// TODO Are these Methods Raw?
 	
 	/**
 	 * Resolves the collision between this ship and a given world.
@@ -650,8 +651,10 @@ public class Ship extends Entity {
 	 * @see implementation
 	 * 		// TODO declarative documentation.
 	 * 		// TODO apparently collide?
+	 * 		// TODO what if they are not colliding?
 	 */
-	public void resolveCollision(World world) {
+	public void resolveCollision(World world) throws NullPointerException {
+		if (world == null) throw new NullPointerException();
 		double[] position = getCollisionPosition(world);
 		if (position == null) return;	// There is no collision so the collision does not need to be resolved.
 		if (position[0] + this.getRadius() == this.world.getWidth() || position[0] - this.getRadius() == 0) 
@@ -669,9 +672,15 @@ public class Ship extends Entity {
 	 * @see implementation
 	 * 		// TODO declarative documentation.
 	 */
-	public void resolveCollision(Entity entity) {
-		if (entity.getType() == "Ship") resolveCollisionShip((Ship)entity);
-		else if (entity.getType() == "Bullet") resolveCollisionBullet((Bullet)entity);
+	public void resolveCollision(Entity entity) throws NullPointerException, IllegalArgumentException {
+		if (entity == null) throw new NullPointerException();
+		try {
+			if (entity.getType() == "Ship") resolveCollisionShip((Ship)entity);
+			else if (entity.getType() == "Bullet") resolveCollisionBullet((Bullet)entity);
+		}
+		catch (IllegalArgumentException exc) {
+			throw new IllegalArgumentException();
+		}
 	}
 
 
@@ -684,7 +693,9 @@ public class Ship extends Entity {
 	 * @see implementation
 	 * 		// TODO declarative documentation.
 	 */
-	public void resolveCollisionShip(Ship ship) {
+	public void resolveCollisionShip(Ship ship) throws NullPointerException, IllegalArgumentException {
+		if (ship == null) throw new NullPointerException();
+		if (!this.overlap(ship)) throw new IllegalArgumentException();
 		double[] deltaV = {ship.getVelocityX() - getVelocityX(), ship.getVelocityY() - getVelocityY()};
 		double[] deltaR = {ship.getPosition().getPositionX() - getPosition().getPositionX(), 
 						   ship.getPosition().getPositionY() - getPosition().getPositionY()};
@@ -711,7 +722,9 @@ public class Ship extends Entity {
 	 * @see implementation
 	 * 		// TODO declarative documentation.
 	 */
-	public void resolveCollisionBullet(Bullet bullet) {
+	public void resolveCollisionBullet(Bullet bullet) throws NullPointerException, IllegalArgumentException {
+		if (bullet == null) throw new NullPointerException();
+		if (!this.overlap(bullet)) throw new IllegalArgumentException();
 		if (bullet.getSource() == this) reloadBullet(bullet);
 		else {
 			this.terminate();
