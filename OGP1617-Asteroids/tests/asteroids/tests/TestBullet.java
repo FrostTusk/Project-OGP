@@ -327,9 +327,13 @@ public class TestBullet {
 	
 	@Test
 	public void testCollideWithShipSource() throws ModelException {
-		Bullet bullet = new Bullet(100, 200, 0, 0, 20);	
-		Ship ship = facade.createShip(200, 200, 10, -10, 20, Math.PI);
+		Bullet bullet = new Bullet(100, 100, 0, 0, 20);	
+		Ship ship = new Ship(100, 100, 10, -10, Math.PI, 20, 10);
+		World world = new World(1000, 1000);
+		ship.setWorld(world);
+		bullet.setShip(ship);
 		bullet.setSource(ship);
+		bullet.setShip(null);
 		double counter = ship.getBulletsCount();
 		bullet.resolveCollisionShip(ship);	
 		assertTrue(counter + 1 == ship.getBulletsCount());

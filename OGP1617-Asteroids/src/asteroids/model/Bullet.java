@@ -175,6 +175,7 @@ public class Bullet extends Entity {
 	 */
 	@Override @Raw
 	public boolean canHaveAsWorld(World world) {
+		if (world == null) return true;	// TODO Is this a good fix?
 		return (getShip() == null) && (getWorld() == null) && (isInWorld(world));
 	}
 	

@@ -389,7 +389,7 @@ public class Ship extends Entity {
 	* @see implementation
 	*/
 	public void loadBullet(Bullet bullet) throws IllegalArgumentException {
-		if (!( (bullet.canHaveAsShip(this) && (canHaveAsBullet(bullet)) ) )) throw new IllegalArgumentException();
+		if ( (!bullet.canHaveAsShip(this)) && (!this.canHaveAsBullet(bullet)) ) throw new IllegalArgumentException();
 		addBullet(bullet);
 		bullet.setShip(this);
 	}
@@ -411,6 +411,7 @@ public class Ship extends Entity {
 		catch (IllegalArgumentException exc) {
 			return;
 		}
+		bullet.setWorld(null);
 		loadBullet(bullet);
 	}
 	
