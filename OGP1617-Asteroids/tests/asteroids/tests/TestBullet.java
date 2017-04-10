@@ -380,7 +380,9 @@ public class TestBullet {
 	@Test
 	public void testBulletRemovedWhenFired() throws ModelException {
 		Bullet bullet = new Bullet(100, 200, 0, 0, 20);	
-		Ship ship = facade.createShip(100, 200, 10, -10, 20, Math.PI);
+		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
+		World world = new World(1000, 1000);
+		ship.setWorld(world);
 		ship.loadBullet(bullet);
 		ship.fireBullet(bullet);
 		assertFalse(ship.getAllBullets().contains(bullet));

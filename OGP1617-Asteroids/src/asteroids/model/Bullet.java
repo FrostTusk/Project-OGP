@@ -250,6 +250,7 @@ public class Bullet extends Entity {
      */
 	@Raw
 	public boolean canHaveAsShip(Ship ship) {
+		if (ship == null) return true;	// TODO Is this a good fix?
 		return ( (getShip() == null) && (getWorld() == null) );
 	}
 	
@@ -297,8 +298,7 @@ public class Bullet extends Entity {
 	 * @see implementation
 	 */
 	@Raw
-	public void setShip(Ship ship) throws IllegalArgumentException, NullPointerException {
-		if (ship == null) throw new NullPointerException();
+	public void setShip(Ship ship) throws IllegalArgumentException {
 		if (! canHaveAsShip(ship)) throw new IllegalArgumentException();
 		this.ship = ship;
 	}
