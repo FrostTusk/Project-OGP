@@ -587,10 +587,10 @@ public class Ship extends Entity {
 	*/
 	@Override @Raw
 	public boolean isInWorld(World world) {
-		if ( (this.getPosition().getPositionX() - this.getRadius() >= 0) &&
-				 (this.getPosition().getPositionX() + this.getRadius() <= world.getWidth()) &&
-				 (this.getPosition().getPositionY() - this.getRadius() >= 0) &&
-				 (this.getPosition().getPositionY() + this.getRadius() <= world.getHeight()) )
+		if ( (this.getPosition().getPositionX() - this.getRadius() * 0.99 >= 0) &&
+				 (this.getPosition().getPositionX() + this.getRadius() * 0.99 <= world.getWidth()) &&
+				 (this.getPosition().getPositionY() - this.getRadius() * 0.99 >= 0) &&
+				 (this.getPosition().getPositionY() + this.getRadius() * 0.99 <= world.getHeight()) )
 				return true;
 			return false;
 	}
@@ -738,15 +738,14 @@ public class Ship extends Entity {
 		else bullets.remove(bullet);
 		
 		bullet.setSource(this);
-		
+		bullet.setVelocity(250 * Math.cos(getOrientation()), 250 * Math.sin(getOrientation()));	
 		bullet.setPosition(getPosition().getPositionX() + getRadius() * Math.cos(getOrientation()) + bullet.getRadius() * Math.cos(getOrientation()), 
 				getPosition().getPositionY() + getRadius() * Math.sin(getOrientation()) + bullet.getRadius() * Math.sin(getOrientation()));
 
 		for (Entity entity : world.getAllEntities()) {
 			if (bullet.overlap(entity)) bullet.resolveCollision(entity);
 		}
-		
-		bullet.setVelocity(250 * Math.cos(getOrientation()), 250 * Math.sin(getOrientation()));
+		if (! bullet.isInWorld(world)) bullet.terminate();
 		
 		bullet.setShip(null);
 		try {
@@ -940,9 +939,9 @@ public class Ship extends Entity {
 	 */
 	@Raw
 	public double getDistanceBetween(Entity entity) throws IllegalArgumentException {
-		double distance;	// distance between the ships
-		double distanceX;	// distance between the x-coordinates of the ships
-		double distanceY;	// distance between the y-coordinates of the ships
+		double distance;	// distance between the ship and entity
+		double distanceX;	// distance between the x-coordinates of the ship and entity
+		double distanceY;	// distance between the y-coordinates of the ship and entity
 		
 		if (entity == null) 
 			throw new IllegalArgumentException();
@@ -970,7 +969,7 @@ public class Ship extends Entity {
 	 * 			the world to which to calculate the distance
 	 * 
 	 * @return 	distance[]
-	 * 			the distances between the center of the ship and the boundaries of the world
+	 * 			the distances between the ship and the boundaries of the world
 	 * 
 	 * @post	distance[0] is equal to the shortest distance between the center of this ship and the vertical boundary of the world
 	 * 			distance[1] is equal to the shortest distance between the center of this ship and the horizontal boundary of the world
@@ -981,28 +980,28 @@ public class Ship extends Entity {
 		if (getWorld() != world) return distance;
 		
 		if (getPosition().getPositionX() < (world.getWidth() / 2) )
-			distance[0] = getPosition().getPositionX();
+			distance[0] = getPosition().getPositionX() - getRadius();
 		else
-			distance[0] = world.getWidth() - getPosition().getPositionX();
+			distance[0] = world.getWidth() - getPosition().getPositionX() + getRadius();
 		
 		if (getPosition().getPositionY() < (world.getHeight() / 2) )
-			distance[1] = getPosition().getPositionY();
+			distance[1] = getPosition().getPositionY() - getRadius();
 		else
-			distance[1] = world.getWidth() - getPosition().getPositionY();
+			distance[1] = world.getWidth() - getPosition().getPositionY() + getRadius();
 		
 		return distance;
 	}
 	
 	
 	/**
-	 * Returns true if the entities overlap, false if they don't.
+	 * Returns true if the entities overlap significantly, false if they don't.
 	 * 
 	 * @param 	entity
 	 * 			the entity of which you want to if it it overlaps this ship.
 	 * 
 	 * @return	For the current ship, returns true if it overlaps with the given entity,
 	 * 			false if it does not.
-	 * 			| result == this.getDistanceBetween(entity) =< 0
+	 * 			| result = (getDistanceBetween(entity) <= 0.99 * (getRadius()) + entity.getRadius())
 	 * 
 	 * @throws 	IllegalArgumentException
 	 * 			the other entity was null.
@@ -1013,11 +1012,10 @@ public class Ship extends Entity {
 		if (entity == null) 
 			throw new IllegalArgumentException();
 
-		if (this.getDistanceBetween(entity) <= 0)
-			return true;
-		else 
-			return false;
+		if (getDistanceBetween(entity) <= 0.99 * (getRadius()) + entity.getRadius()) return true;
+		return false;
 	}
+	
 	
 	
 	
@@ -1087,7 +1085,7 @@ public class Ship extends Entity {
 	public double getTimeToCollision(Entity entity) throws IllegalArgumentException {
 		if (entity == null) 
 			throw new IllegalArgumentException();
-		if (! (this.getWorld() == entity.getWorld())) return Double.POSITIVE_INFINITY;
+		if (this.getWorld() != entity.getWorld()) return Double.POSITIVE_INFINITY;
 	
 		double[] deltaR = {entity.getPosition().getPositionX() - this.getPosition().getPositionX(), 
 						   entity.getPosition().getPositionY() - this.getPosition().getPositionY()};

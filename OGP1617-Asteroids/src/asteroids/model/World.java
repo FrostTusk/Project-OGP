@@ -119,7 +119,7 @@ public class World {
 	/**
 	 * Variable registering the height of this world.
 	 */
-	private double height;
+	private final double height;
 	/**
 	 * Variable registering the upper bound for every world.
 	 */
