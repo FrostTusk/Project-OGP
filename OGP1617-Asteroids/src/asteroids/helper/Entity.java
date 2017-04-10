@@ -594,7 +594,7 @@ public abstract class Entity {
 	*/
 	@Raw
 	public boolean overlap(Entity entity) throws NullPointerException {
-		if (entity == null) throw new IllegalArgumentException();
+		if (entity == null) throw new NullPointerException();
 		return helper.significantOverlap(this, entity, this.getDistanceBetween(entity));
 	}
 	
@@ -621,8 +621,6 @@ public abstract class Entity {
 	*/
 	@Raw
 	public double getTimeToCollision(World world) {		
-		if (! world.containsEntity(this)) return Double.POSITIVE_INFINITY;
-		
 		double[] distance = getDistanceBetween(world);
 		if ( (distance[0] == Double.POSITIVE_INFINITY) || (distance[1] == Double.POSITIVE_INFINITY) ||
 			 (distance[2] == Double.POSITIVE_INFINITY) || (distance[3] == Double.POSITIVE_INFINITY) ) return Double.POSITIVE_INFINITY;
@@ -640,69 +638,65 @@ public abstract class Entity {
 	}
 	
 	/**
-	* Gets the time to collision between this ship and a given entity.
+	* Gets the time to collision between this entity and a given entity.
 	* 
 	* @param  	entity
 	* 			The entity of which the collision time needs to be calculated.
 	* 
 	* @return	The time returned will be larger than 0 and will be equal to
-	* 			the time needed for both entities to reach a position where they
-	* 			will collide with each other.
+	* 			the time needed for both entities to reach a position where they will collide with each other.
+	* 			// TODO declarative documentation.
+	* 			// TODO apparently collide?
 	* 
-	* @throws 	IllegalArgumentException
+	* @throws 	NullPointerException
 	* 			The other entity was null.
 	* 			| entity == null
 	*/
 	@Raw
-	public double getTimeToCollision(Entity entity) throws IllegalArgumentException {
-		if (entity == null) 
-		throw new IllegalArgumentException();
-		if (this.getWorld() != entity.getWorld()) return Double.POSITIVE_INFINITY;
+	public double getTimeToCollision(Entity entity) throws NullPointerException {
+		if (entity == null) throw new NullPointerException(); 
+		if (this.getWorld() != entity.getWorld()) return Double.POSITIVE_INFINITY;	//TODO can they collide in the null world?
 		
 		double[] deltaR = {entity.getPosition().getPositionX() - this.getPosition().getPositionX(), 
-					   entity.getPosition().getPositionY() - this.getPosition().getPositionY()};
+					   	   entity.getPosition().getPositionY() - this.getPosition().getPositionY()};
 		double[] deltaV = {entity.getVelocityX() - this.getVelocityX(), 
-					   entity.getVelocityY() - this.getVelocityY()};
+					   	   entity.getVelocityY() - this.getVelocityY()};
 		
-		if (helper.evaluateScalar(deltaR, deltaV) >= 0)
-		return Double.POSITIVE_INFINITY;
-		
+		if (helper.evaluateScalar(deltaR, deltaV) >= 0) return Double.POSITIVE_INFINITY;
 		double omega = this.getRadius() + entity.getRadius();
-		double d = (Math.pow(helper.evaluateScalar(deltaV, deltaR), 2) - helper.evaluateScalar(deltaV)*(helper.evaluateScalar(deltaR) - Math.pow(omega, 2)));
-		if (d <= 0)
-		return Double.POSITIVE_INFINITY;
+		
+		double d = ( Math.pow(helper.evaluateScalar(deltaV, deltaR), 2)
+					- helper.evaluateScalar(deltaV) * (helper.evaluateScalar(deltaR) - Math.pow(omega, 2)) );
+		if (d <= 0) return Double.POSITIVE_INFINITY;
 		
 		return -( (helper.evaluateScalar(deltaV, deltaR) + Math.sqrt(d)) / helper.evaluateScalar(deltaV) );
 	}
 	
 	
 	/**
-	* Gets the collision position between this and a given world.
+	* Gets the collision position between this entity and a given world.
 	* 
 	* @param  	world
-	* 			the world to which you want to know the collision position.
+	* 			The world of which the collision position needs to be calculated.
 	* 
 	* @return	The position returned will be the position where this ship and the world
 	* 			collide with each other. The method returns null if they never collide.
-	* 
-	* @post	vector contains the position where this ship and the world will collide, if any.
-	* 			vector is null if they never collide.
+	* 			// TODO declarative documentation.
+	* 			// TODO null or infinity if they don't collide?
+	* 			// TODO problems with rounding?
 	*/
 	@Raw
 	public double[] getCollisionPosition(World world) {	
-		double vector[] = {Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY};
-		if (! world.containsEntity(this)) return vector;
+		if (! world.containsEntity(this)) return null;
 		
 		double time = getTimeToCollision(world);
-		if (time != Double.POSITIVE_INFINITY) {
-		vector[0] = helper.calculatePosition(this, time)[0];
-		vector[1] = helper.calculatePosition(this, time)[1];
+		if (time == Double.POSITIVE_INFINITY) return null;
 		
+		double[] vector = helper.calculatePosition(this, time);
 		if (vector[0] + this.getRadius() == world.getWidth()) vector[0] += this.getRadius();
 		else if (vector[0] - this.getRadius() == 0) vector[0] = 0;
 		else if (vector[1] + this.getRadius() == world.getHeight()) vector[1] += this.getRadius();
 		else if (vector[1] - this.getRadius() == 0) vector[1] = 0;
-		}
 		
 		return vector;	
 	}
