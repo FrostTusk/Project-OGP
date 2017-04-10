@@ -148,13 +148,12 @@ public class Helper {
 	 * 
 	 * @return	true if the entity is apparently in the boundaries, false if it is not.
 	 */
-	public boolean apparentlyWithinBoundaries(Entity entity, World world, double[] distance) {
-		if ( (distance[0] == Double.MAX_VALUE) || (distance[1] == Double.MAX_VALUE) )
-			return false;
-		if ( ( distance[0] >= (99/100)*(entity.getRadius()) ) && 
-				( distance[1] >= (99/100)*(entity.getRadius()) ) )
-			return true;
-		return false;
+	public boolean apparentlyWithinBoundaries(Entity entity, World world/*, double[] distance*/) {
+		return ( (entity.getPosition().getPositionX() - entity.getRadius() * 0.99 >= 0) &&
+				 (entity.getPosition().getPositionX() + entity.getRadius() * 0.99 <= world.getWidth()) &&
+				 (entity.getPosition().getPositionY() - entity.getRadius() * 0.99>= 0) &&
+				 (entity.getPosition().getPositionY() + entity.getRadius() * 0.99 <= world.getHeight()) );
+
 	}
 	
 	

@@ -492,12 +492,13 @@ public class Bullet extends Entity {
 	*/
 	@Override @Raw
 	public boolean isInWorld(World world) {
-		if ( (this.getPosition().getPositionX() - this.getRadius() * 0.99 >= 0) &&
-			 (this.getPosition().getPositionX() + this.getRadius() * 0.99 <= world.getWidth()) &&
-			 (this.getPosition().getPositionY() - this.getRadius() * 0.99 >= 0) &&
-			 (this.getPosition().getPositionY() + this.getRadius() * 0.99 <= world.getHeight()) )
-			return true;
-		return false;
+		return helper.apparentlyWithinBoundaries(this, world);
+//		if ( (this.getPosition().getPositionX() - this.getRadius() * 0.99 >= 0) &&
+//			 (this.getPosition().getPositionX() + this.getRadius() * 0.99 <= world.getWidth()) &&
+//			 (this.getPosition().getPositionY() - this.getRadius() * 0.99 >= 0) &&
+//			 (this.getPosition().getPositionY() + this.getRadius() * 0.99 <= world.getHeight()) )
+//			return true;
+//		return false;
 	}
 	
 	

@@ -592,12 +592,14 @@ public class Ship extends Entity {
 	*/
 	@Override @Raw
 	public boolean isInWorld(World world) {
-		if ( (this.getPosition().getPositionX() - this.getRadius() * 0.99 >= 0) &&
-				 (this.getPosition().getPositionX() + this.getRadius() * 0.99 <= world.getWidth()) &&
-				 (this.getPosition().getPositionY() - this.getRadius() * 0.99 >= 0) &&
-				 (this.getPosition().getPositionY() + this.getRadius() * 0.99 <= world.getHeight()) )
-				return true;
-			return false;
+		return helper.apparentlyWithinBoundaries(this, world);
+//		if ( (this.getPosition().getPositionX() - this.getRadius() >= 0) &&
+//				 (this.getPosition().getPositionX() + this.getRadius() <= world.getWidth()) &&
+//				 (this.getPosition().getPositionY() - this.getRadius() >= 0) &&
+//				 (this.getPosition().getPositionY() + this.getRadius() <= world.getHeight()) )
+//				return true;
+//		else return helper.apparentlyWithinBoundaries(this, world, getDistanceBetween(world));
+//			return false;
 	}
 	
 	
@@ -758,6 +760,7 @@ public class Ship extends Entity {
 		else bullets.remove(bullet);
 		
 		bullet.setSource(this);
+		
 		bullet.setVelocity(250 * Math.cos(getOrientation()), 250 * Math.sin(getOrientation()));	
 		bullet.setPosition(getPosition().getPositionX() + getRadius() * Math.cos(getOrientation()) + bullet.getRadius() * Math.cos(getOrientation()), 
 				getPosition().getPositionY() + getRadius() * Math.sin(getOrientation()) + bullet.getRadius() * Math.sin(getOrientation()));
@@ -765,6 +768,7 @@ public class Ship extends Entity {
 		for (Entity entity : world.getAllEntities()) {
 			if (bullet.overlap(entity)) bullet.resolveCollision(entity);
 		}
+		
 		if (! bullet.isInWorld(world)) bullet.terminate();
 		
 		bullet.setShip(null);
@@ -1044,7 +1048,7 @@ public class Ship extends Entity {
 		if (getPosition().getPositionX() < (world.getWidth() / 2) )
 			distance[0] = getPosition().getPositionX() - getRadius();
 		else
-			distance[0] = world.getWidth() - getPosition().getPositionX() + getRadius();
+			distance[0] = world.getWidth() - getPosition().getPositionX()  + getRadius();
 		
 		if (getPosition().getPositionY() < (world.getHeight() / 2) )
 			distance[1] = getPosition().getPositionY() - getRadius();
@@ -1056,14 +1060,14 @@ public class Ship extends Entity {
 	
 	
 	/**
-	 * Returns true if the entities overlap significantly, false if they don't.
+	 * Returns true if the entities overlap, false if they don't.
 	 * 
 	 * @param 	entity
 	 * 			the entity of which you want to if it it overlaps this ship.
 	 * 
 	 * @return	For the current ship, returns true if it overlaps with the given entity,
 	 * 			false if it does not.
-	 * 			| result = (getDistanceBetween(entity) <= 0.99 * (getRadius()) + entity.getRadius())
+	 * 			| result == this.getDistanceBetween(entity) =< 0
 	 * 
 	 * @throws 	IllegalArgumentException
 	 * 			the other entity was null.
@@ -1074,10 +1078,8 @@ public class Ship extends Entity {
 		if (entity == null) 
 			throw new IllegalArgumentException();
 
-		if (getDistanceBetween(entity) <= 0.99 * (getRadius()) + entity.getRadius()) return true;
-		return false;
+		return helper.significantOverlap(this, entity, this.getDistanceBetween(entity));
 	}
-	
 	
 	
 	
