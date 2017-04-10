@@ -1,7 +1,9 @@
 package asteroids.model;
 
-import java.util.ArrayList;
-import java.util.List;
+//import java.util.ArrayList;
+import java.util.HashSet;
+//import java.util.List;
+import java.util.Set;
 
 import asteroids.helper.Entity;
 import asteroids.helper.Helper;
@@ -249,6 +251,7 @@ public class Ship extends Entity {
 	/**
 	 * Variable registering the speed of light.
 	 */
+	// #Constant-1#
 	private double constantMaxSpeed = 300000;
 
 	
@@ -419,6 +422,7 @@ public class Ship extends Entity {
 	/**
 	 * Variable registering the minimum radius of this ship.
 	 */
+	// #Constant-2#
 	private final double minRadius = 10;
 	
 	
@@ -433,6 +437,7 @@ public class Ship extends Entity {
 	/**
 	 * Return the radius of this ship.
 	 */
+	// #Constan-2t#
 	@Basic @Override @Raw
 	public double getRadius() {
 		return this.radius;
@@ -635,7 +640,16 @@ public class Ship extends Entity {
 	/**
 	* Variable registering the bullets of this ship.
 	*/
-	private List<Bullet> bullets = new ArrayList<Bullet>();
+	private Set<Bullet> bullets = new HashSet<Bullet>();
+	
+	
+	public Set<Bullet> getAllBullets() {
+		return bullets;
+	}
+	
+	public int getBulletsCount() {
+		return bullets.size();
+	}
 	
 	
 	/**
@@ -676,8 +690,9 @@ public class Ship extends Entity {
 	*         
 	* @see implementation
 	*/
-	public void removeBullet(Bullet bullet) {
-		bullets.remove(bullet);
+	public void removeBullet(Bullet bullet) throws IllegalArgumentException {
+		if (!bullets.contains(bullet)) throw new IllegalArgumentException();
+		else bullets.remove(bullet);
 	}
 	
 	
@@ -717,7 +732,11 @@ public class Ship extends Entity {
 	*/
 	public void fireBullet() {
 		if (bullets.size() > 0)
-			fireBullet(bullets.get(0));
+//			fireBullet(bullets.get(0));
+			for (Bullet bullet: bullets) {
+				fireBullet(bullet);
+				break;
+			}
 	}
 	
 	/**
@@ -732,9 +751,10 @@ public class Ship extends Entity {
 		Bullet bullet = bulletRequest;
 		if (getWorld() == null) return;
 		
-		if (!bullets.contains(bullet)) 
-			if (bullets.size() > 0) bullet = bullets.remove(0);
-			else return;
+		if (!bullets.contains(bullet)) {
+			if (!(bullets.size() > 0)) fireBullet();
+			return;
+		}
 		else bullets.remove(bullet);
 		
 		bullet.setSource(this);
@@ -886,34 +906,76 @@ public class Ship extends Entity {
 	
 	
 	
+	/**
+	* Variable registering the force of this ship.
+	*/
+	// #Constant-3#
 	private double force = 1.1 * Math.pow(10, 12);
+	/**
+	* Variable registering the thruster of this ship.
+	*/
+	private Thruster thruster = new Thruster();
 	
-	private Thruster thruster;
 	
-	
+	/**
+	* Return the force of this ship.
+	*/
+	@Basic @Raw
 	public double getForce() {
 		return this.force;
 	}
 	
+	/**
+	* Return the status of this ship's thruster.
+	* True => On, False => Off
+	*/
+	@Basic @Raw
 	public boolean getThrustStatus() {
 		return this.thruster.getThrustStatus();
 	}
 	
+	/**
+	* Return the acceleration of this ship.
+	*/
+	@Basic @Raw
 	public double getAcceleration() {
 		return getForce() / getTotalMass();
 	}
 	
 	
+	/**
+	 * Set the force of this ship to the given force.
+	 * 
+	 * @param  	force
+	 *         	The new force for this ship.
+	 * 
+	 * @see implementation
+	 */
+	@Raw
+	public void setForce(double force) {
+		this.force = force;
+	}
+	
+	
+	/**
+	 * Toggle the thruster of this ship on.
+	 * @see implementation
+	 */
+	@Raw
 	public void thrustOn() {
 		this.thruster.thrustOn();
 		thrust(getAcceleration());
 	}
 	
+	/**
+	 * Toggle the thruster of this ship off.
+	 * @see implementation
+	 */
+	@Raw
 	public void thrustOff() {
 		this.thruster.thrustOff();
 	}
 
-	
 	
 	
 			/*

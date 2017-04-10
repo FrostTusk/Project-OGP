@@ -7,6 +7,7 @@ import asteroids.util.ModelException;
 import java.util.Collection;
 import java.util.Set;
 
+import asteroids.helper.Entity;
 import asteroids.helper.Position;
 import asteroids.model.Bullet;
 import asteroids.model.Ship;
@@ -233,20 +234,35 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 
 	@Override
 	public boolean isShipThrusterActive(Ship ship) throws ModelException {
-		// TODO Auto-generated method stub
-		return false;
+		try {
+			return ship.getThrustStatus();
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
 	public void setThrusterActive(Ship ship, boolean active) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		try {
+			if (active)
+				ship.thrustOn();
+			else
+				ship.thrustOff();
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
 	public double getShipAcceleration(Ship ship) throws ModelException {
-		// TODO Auto-generated method stub
-		return 0;
+		try {
+			return ship.getAcceleration();
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
@@ -402,14 +418,22 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 
 	@Override
 	public Set<? extends Ship> getWorldShips(World world) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return world.getAllShips();
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
 	public Set<? extends Bullet> getWorldBullets(World world) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return world.getAllBullets();
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
@@ -466,14 +490,22 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 
 	@Override
 	public Set<? extends Bullet> getBulletsOnShip(Ship ship) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return ship.getAllBullets();
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
 	public int getNbBulletsOnShip(Ship ship) throws ModelException {
-		// TODO Auto-generated method stub
-		return 0;
+		try {
+			return ship.getBulletsCount();
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
@@ -497,8 +529,15 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 
 	@Override
 	public void removeBulletFromShip(Ship ship, Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		try {
+			ship.removeBullet(bullet);
+		}
+		catch (IllegalArgumentException exc) {
+			throw new ModelException(exc);
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}		
 	}
 
 	@Override
@@ -516,26 +555,42 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 
 	@Override
 	public double getTimeCollisionBoundary(Object object) throws ModelException {
-		// TODO Auto-generated method stub
-		return 0;
+		try {
+			return ((Entity) object).getTimeToCollision(((Entity)object).getWorld());
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
 	public double[] getPositionCollisionBoundary(Object object) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return ((Entity) object).getCollisionPosition(((Entity)object).getWorld());
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
 	public double getTimeCollisionEntity(Object entity1, Object entity2) throws ModelException {
-		// TODO Auto-generated method stub
-		return 0;
+		try {
+			return ((Entity) entity1).getTimeToCollision((Entity)entity1);
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
 	public double[] getPositionCollisionEntity(Object entity1, Object entity2) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return ((Entity) entity1).getCollisionPosition((Entity)entity1);
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
@@ -552,7 +607,12 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 
 	@Override
 	public void evolve(World world, double dt, CollisionListener collisionListener) throws ModelException {
-		// TODO Auto-generated method stub
+		try {
+			world.evolve(dt);
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 		
 	}
 
@@ -571,8 +631,12 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 
 	@Override
 	public Set<? extends Object> getEntities(World world) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return world.getAllEntities();
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 }

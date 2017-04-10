@@ -43,7 +43,9 @@ public abstract class Entity {
 	
 	public abstract double getTimeToCollision(Entity entity);
 
+	public abstract double[] getCollisionPosition(World world);
 	
+	public abstract double[] getCollisionPosition(Entity entity);
 	
 	
 	public abstract String getType();
