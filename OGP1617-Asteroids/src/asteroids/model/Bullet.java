@@ -25,7 +25,7 @@ import be.kuleuven.cs.som.annotate.*;
  */
 
 /**
- * A class of bullets.
+ * A class of bullets. //TODO Do we need to keep all these invariants? + Any more?
  * 
 * @invar  	The position of each bullet must be a valid position for any
 *         	bullet.

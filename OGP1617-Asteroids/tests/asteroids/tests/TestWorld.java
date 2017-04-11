@@ -199,8 +199,8 @@ public class TestWorld {
 		assertTrue(world.containsEntity(bullet));
 	}
 	
-	@Test
-	public void testWorldAddEntityUnable() throws ModelException {
+	@Test(expected = IllegalArgumentException.class)
+	public void testWorldAddEntityUnable() throws IllegalArgumentException {
 		World world = new World(1000, 1000);
 		Ship ship = new Ship(1000, 1000, 10, -10, Math.PI, 20, 10);
 		Bullet bullet = new Bullet(1000, 1000, 1, 1, 1);
@@ -230,7 +230,7 @@ public class TestWorld {
 	}
 	
 	@Test (expected = IllegalArgumentException.class)
-	public void testWorldRemoveEntityNotInWorld() throws ModelException {
+	public void testWorldRemoveEntityNotInWorld() throws IllegalArgumentException {
 		World world = new World(1000, 1000);
 		Ship ship = new Ship(100, 100, 10, -10, Math.PI, 20, 10);
 		Bullet bullet = new Bullet(1, 1, 1, 1, 1);
@@ -241,7 +241,7 @@ public class TestWorld {
 	}
 	
 	@Test
-	public void testWorldEvolveNoCollisions() throws ModelException {
+	public void testWorldEvolveNoCollisions() throws IllegalArgumentException {
 		World world = new World(1000, 1000);
 		Ship ship = new Ship(100, 100, 10, -10, Math.PI, 20, 10);
 		Bullet bullet = new Bullet(1, 1, 10, 10, 1);
@@ -305,7 +305,8 @@ public class TestWorld {
 		ship2.setWorld(world);
 		Entity[] ships1 = {ship1, ship2};
 		Entity[] ships2 = {ship2, ship1};
-		if (world.getFirstCollisionEntities() == ships1 || world.getFirstCollisionEntities() == ships2) return; 
+		if ( (world.getFirstCollisionEntities()[0] == ships1[0] && world.getFirstCollisionEntities()[1] == ships1[1]) ||
+				(world.getFirstCollisionEntities()[0] == ships2[0] && world.getFirstCollisionEntities()[1] == ships2[1]) ) return; 
 		else fail();
 	}
 	
@@ -326,7 +327,8 @@ public class TestWorld {
 		ship4.setWorld(world);
 		Entity[] ships1 = {ship1, ship2};
 		Entity[] ships2 = {ship2, ship1};
-		if (world.getFirstCollisionEntities() == ships1 || world.getFirstCollisionEntities() == ships2) return; 
+		if ( (world.getFirstCollisionEntities()[0] == ships1[0] && world.getFirstCollisionEntities()[1] == ships1[1]) ||
+				(world.getFirstCollisionEntities()[0] == ships2[0] && world.getFirstCollisionEntities()[1] == ships2[1]) ) return; 
 		else fail();
 	}
 	

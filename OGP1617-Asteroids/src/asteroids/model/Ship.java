@@ -33,7 +33,7 @@ import be.kuleuven.cs.som.annotate.*;
  */
 
 /**
- * A class of ships. //TODO Do we need to keep all these invariants?
+ * A class of ships. //TODO Do we need to keep all these invariants? + Any more?
  * 
 * @invar  	The position of each ship must be a valid position for any
 *         	ship.

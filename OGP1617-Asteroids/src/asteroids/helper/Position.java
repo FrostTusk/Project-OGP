@@ -174,6 +174,7 @@ public class Position {
 	 *       	|			(this.getMinpositionX() < positionX) && (this.getMaxpositionX() > positionX) &&
 	 *			|			(this.getMinpositionY() < positionY) && (this.getMaxpositionY() > positionY)      
 	 */
+	@Raw
 	public boolean isValidPosition(double positionX, double positionY) {
 		// A position has to be a number.
 		if ( (java.lang.Double.isNaN(positionX)) || (java.lang.Double.isNaN(positionY)) )
@@ -206,6 +207,7 @@ public class Position {
 	 *         	position.
 	 *       	| ! this.isValidPosition(positionX, positionY)
 	 */
+	@Raw
 	private void setPosition(double positionX, double positionY) throws IllegalArgumentException {
 		if (! isValidPosition(positionX, positionY)) 
 			throw new IllegalArgumentException();

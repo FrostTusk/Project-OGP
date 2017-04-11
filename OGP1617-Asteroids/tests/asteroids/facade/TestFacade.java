@@ -774,7 +774,7 @@ public class TestFacade {
 		assertTrue( (facade.getTimeToCollision(ship1, ship2) > 2) && (facade.getTimeToCollision(ship1, ship2) < 4) );
 	}
 	
-	@Test
+	@Test(expected = ModelException.class)
 	public void testCollisionDetectionSameShip() throws ModelException {		
 		Ship ship1 = facade.createShip(0, 0, 10, 0, 10, 0);
 		double[] position = facade.getCollisionPosition(ship1, ship1);

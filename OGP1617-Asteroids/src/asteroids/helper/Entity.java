@@ -33,7 +33,7 @@ import be.kuleuven.cs.som.annotate.*;
  */
 
 /**
- * A class of entities.
+ * A class of entities. //TODO Do we need to keep all these invariants? + Any more?
  * 
 * @invar  	The position of each entity must be a valid position for any
 *         	entity.
@@ -677,11 +677,13 @@ public abstract class Entity {
 			 (distance[2] == Double.POSITIVE_INFINITY) || (distance[3] == Double.POSITIVE_INFINITY) ) return Double.POSITIVE_INFINITY;
 		
 		double time1; // The shortest time to collision between this entity and the x boundaries of the given world.
-		if ( (distance[0] / getVelocityX()) < (distance[1] / getVelocityX()) ) time1 = distance[0] / getVelocityX();
+		if (getVelocityX() == 0) time1 = Double.POSITIVE_INFINITY;
+		if (getVelocityX() < 0) time1 = distance[0] / -getVelocityX();
 		else time1 = distance[1] / getVelocityX();
 		
 		double time2; // The shortest time to collision between this entity and the y boundaries of the given world.
-		if ( (distance[2] / getVelocityY()) < (distance[3] / getVelocityY()) ) time2 = distance[2] / getVelocityY();
+		if (getVelocityY() == 0) time2 = Double.POSITIVE_INFINITY;
+		if (getVelocityY() < 0) time2 = distance[2] / -getVelocityY();
 		else time2 = distance[3] / getVelocityY();
 		
 		if (time1 < time2) return time1;		

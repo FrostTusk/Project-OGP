@@ -31,7 +31,7 @@ import be.kuleuven.cs.som.annotate.*;
  */
 
 /**
- * A class of worlds.
+ * A class of worlds. //TODO Do we need to keep all these invariants? + Any more?
  * 
  * @invar  	The size of each world must be a valid size for any
  *         	world.
@@ -249,7 +249,7 @@ public class World {
 	 */
 	@Raw
 	public boolean canHaveAsEntity(Entity entity) {
-		return (entity != null) && (!containsEntity(entity));
+		return (entity != null) && (!containsEntity(entity)) && (entity.canHaveAsWorld(this));
 	}	
 	
 	/**
@@ -472,13 +472,15 @@ public class World {
 		for (Entity entity: entities.values()) entitiesList.add(entity);	// Creates an iterator that the next
 		for (Entity entity: entitiesList) {									// for loop can iterate over, otherwise the map might
 			this.removeEntity(entity);										// be changed during execution.
+			entity.setWorld(null);
 			try {	// The exceptions in removeEntity are never thrown in this method.
 				entity.move(time);
 			}
 			catch (IllegalArgumentException exc) {	// This exception is throw if the new position of this entity is invalid
 				throw new IllegalArgumentException();	// or if time is < 0.
 			}
-			this.addEntity(entity);	// These exceptions are also never thrown (because nothing moves out of bounds in this method.
+			this.addEntity(entity);	// These exceptions are also never thrown (because nothing moves out of bounds in this method).
+			entity.setWorld(this);
 		}
 	}
 	
