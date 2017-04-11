@@ -198,7 +198,7 @@ public class TestWorld {
 		assertTrue(world.containsEntity(bullet));
 	}
 	
-	@Test (expected = IllegalArgumentException.class)
+	@Test
 	public void testWorldAddEntityUnable() throws ModelException {
 		World world = new World(1000, 1000);
 		Ship ship = new Ship(1000, 1000, 10, -10, Math.PI, 20, 10);
@@ -237,6 +237,93 @@ public class TestWorld {
 		world.removeEntity(bullet);
 		assertFalse(world.containsEntity(ship));
 		assertFalse(world.containsEntity(bullet));
+	}
+	
+	@Test
+	public void testWorldEvolveNoCollisions() throws ModelException {
+		World world = new World(1000, 1000);
+		Ship ship = new Ship(100, 100, 10, -10, Math.PI, 20, 10);
+		Bullet bullet = new Bullet(1, 1, 10, 10, 1);
+		world.addEntity(ship);
+		ship.setWorld(world);
+		world.addEntity(bullet);
+		bullet.setWorld(world);
+		world.evolve(2);
+		assertEquals(120, ship.getPosition().getPositionX(), EPSILON);
+		assertEquals(80, ship.getPosition().getPositionY(), EPSILON);
+		assertEquals(21, bullet.getPosition().getPositionX(), EPSILON);
+		assertEquals(21, bullet.getPosition().getPositionY(), EPSILON);
+	}
+	
+	@Test
+	public void testWorldEvolveCollisions() throws ModelException {
+		World world = new World(1000, 1000);
+		Ship ship1 = new Ship(100, 100, 0, 0, Math.PI, 20, 10);
+		Ship ship2 = new Ship(130, 130, -10, -10, Math.PI, 20, 10);
+		world.addEntity(ship1);
+		ship1.setWorld(world);
+		world.addEntity(ship2);
+		ship2.setWorld(world);
+		world.evolve(2);
+	}
+	
+	
+	@Test
+	public void testWorldRemoveEntityGeneric1() throws ModelException {
+		World world = new World(1000, 1000);
+		Ship ship = new Ship(100, 100, 10, -10, Math.PI, 20, 10);
+		Bullet bullet = new Bullet(1, 1, 1, 1, 1);
+		world.addEntity(ship);
+		ship.setWorld(world);
+		world.addEntity(bullet);
+		bullet.setWorld(world);
+		assertTrue(world.containsEntity(ship));
+		assertTrue(world.containsEntity(bullet));
+		world.removeEntity(ship);
+		ship.setWorld(null);
+		world.removeEntity(bullet);
+		bullet.setWorld(null);
+		assertFalse(world.containsEntity(ship));
+		assertFalse(world.containsEntity(bullet));
+	}
+	
+	@Test (expected = IllegalArgumentException.class)
+	public void testWorldRemoveEntityNotInWorld1() throws ModelException {
+		World world = new World(1000, 1000);
+		Ship ship = new Ship(100, 100, 10, -10, Math.PI, 20, 10);
+		Bullet bullet = new Bullet(1, 1, 1, 1, 1);
+		world.removeEntity(ship);
+		world.removeEntity(bullet);
+		assertFalse(world.containsEntity(ship));
+		assertFalse(world.containsEntity(bullet));
+	}
+	
+	@Test
+	public void testWorldEvolveNoCollisions1() throws ModelException {
+		World world = new World(1000, 1000);
+		Ship ship = new Ship(100, 100, 10, -10, Math.PI, 20, 10);
+		Bullet bullet = new Bullet(1, 1, 10, 10, 1);
+		world.addEntity(ship);
+		ship.setWorld(world);
+		world.addEntity(bullet);
+		bullet.setWorld(world);
+		world.evolve(2);
+		assertEquals(120, ship.getPosition().getPositionX(), EPSILON);
+		assertEquals(80, ship.getPosition().getPositionY(), EPSILON);
+		assertEquals(21, bullet.getPosition().getPositionX(), EPSILON);
+		assertEquals(21, bullet.getPosition().getPositionY(), EPSILON);
+	}
+	
+	@Test
+	public void testWorldEvolveCollisions1() throws ModelException {
+		World world = new World(1000, 1000);
+		Ship ship1 = new Ship(100, 100, 0, 0, Math.PI, 20, 10);
+		Ship ship2 = new Ship(130, 130, -10, -10, Math.PI, 20, 10);
+		world.addEntity(ship1);
+		ship1.setWorld(world);
+		world.addEntity(ship2);
+		ship2.setWorld(world);
+		world.evolve(2);
 	}
 	
 }
