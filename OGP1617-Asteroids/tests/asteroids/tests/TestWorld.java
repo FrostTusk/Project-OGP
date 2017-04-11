@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import asteroids.model.Bullet;
+import asteroids.model.Ship;
 import asteroids.model.World;
 import asteroids.util.ModelException;
 
@@ -160,6 +162,77 @@ public class TestWorld {
 //		assertEquals(5, world2.getHeight(), EPSILON);
 //	}
 	
-
+	
+	/*
+	 * |----------------------------------------------------|
+	 * | 4. The next test test the relation with Entities	|
+	 * |----------------------------------------------------| 
+	 */	
+	
+	@Test
+	public void testWorldCanContainEntityT() throws ModelException {
+		World world = new World(1000, 1000);
+		Ship ship = new Ship(100, 100, 10, -10, Math.PI, 20, 10);
+		Bullet bullet = new Bullet(1, 1, 1, 1, 1);
+		assertTrue(world.canHaveAsEntity(ship));
+		assertTrue(world.canHaveAsEntity(bullet));
+	}
+	
+	@Test
+	public void testWorldCanContainEntityF() throws ModelException {
+		World world = new World(1000, 1000);
+		Ship ship = new Ship(1000, 1000, 10, -10, Math.PI, 20, 10);
+		Bullet bullet = new Bullet(0, 0, 1, 1, 1);
+		assertFalse(world.canHaveAsEntity(ship));
+		assertFalse(world.canHaveAsEntity(bullet));
+	}
+	
+	@Test
+	public void testWorldAddEntityAble() throws ModelException {
+		World world = new World(1000, 1000);
+		Ship ship = new Ship(100, 100, 10, -10, Math.PI, 20, 10);
+		Bullet bullet = new Bullet(1, 1, 1, 1, 1);
+		world.addEntity(ship);
+		world.addEntity(bullet);
+		assertTrue(world.containsEntity(ship));
+		assertTrue(world.containsEntity(bullet));
+	}
+	
+	@Test (expected = IllegalArgumentException.class)
+	public void testWorldAddEntityUnable() throws ModelException {
+		World world = new World(1000, 1000);
+		Ship ship = new Ship(1000, 1000, 10, -10, Math.PI, 20, 10);
+		Bullet bullet = new Bullet(1000, 1000, 1, 1, 1);
+		world.addEntity(ship);
+		world.addEntity(bullet);
+		assertFalse(world.containsEntity(ship));
+		assertFalse(world.containsEntity(bullet));
+	}
+	
+	@Test
+	public void testWorldRemoveEntityGeneric() throws ModelException {
+		World world = new World(1000, 1000);
+		Ship ship = new Ship(100, 100, 10, -10, Math.PI, 20, 10);
+		Bullet bullet = new Bullet(1, 1, 1, 1, 1);
+		world.addEntity(ship);
+		world.addEntity(bullet);
+		assertTrue(world.containsEntity(ship));
+		assertTrue(world.containsEntity(bullet));
+		world.removeEntity(ship);
+		world.removeEntity(bullet);
+		assertFalse(world.containsEntity(ship));
+		assertFalse(world.containsEntity(bullet));
+	}
+	
+	@Test (expected = IllegalArgumentException.class)
+	public void testWorldRemoveEntityNotInWorld() throws ModelException {
+		World world = new World(1000, 1000);
+		Ship ship = new Ship(100, 100, 10, -10, Math.PI, 20, 10);
+		Bullet bullet = new Bullet(1, 1, 1, 1, 1);
+		world.removeEntity(ship);
+		world.removeEntity(bullet);
+		assertFalse(world.containsEntity(ship));
+		assertFalse(world.containsEntity(bullet));
+	}
 	
 }

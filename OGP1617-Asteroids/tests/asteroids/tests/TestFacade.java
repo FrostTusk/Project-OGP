@@ -6,7 +6,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import asteroids.facade.Facade;
+import asteroids.helper.Position;
+import asteroids.model.Bullet;
 import asteroids.model.Ship;
+import asteroids.model.World;
 import asteroids.part1.facade.IFacade;
 import asteroids.util.ModelException;
 
@@ -21,7 +24,11 @@ public class TestFacade {
 		facade = new Facade();
 	}
 
-	
+		/*
+		 * |----------------------------|
+		 * | #Header-1# Ship Methods.	|
+		 * |----------------------------| 
+		 */
 	
 			/*
 			 * |--------------------------------------------|
@@ -777,7 +784,21 @@ public class TestFacade {
 		assertNull(position);
 		assertEquals(Double.POSITIVE_INFINITY, facade.getTimeToCollision(ship1, ship1), EPSILON);
 	}
+	
+		/*
+		 * |----------------------------|
+		 * | #Header-2# Bullet Methods.	|
+		 * |----------------------------| 
+		 */
+	
+	
+	
+	
+		/*
+		 * |----------------------------|
+		 * | #Header-3# World Methods.	|
+		 * |----------------------------| 
+		 */
+
 
 }
-
-
