@@ -404,7 +404,8 @@ public class Ship extends Entity {
 	*         
 	* @see implementation
 	*/
-	public void loadBullet(Bullet bullet) throws IllegalArgumentException {
+	public void loadBullet(Bullet bullet) throws IllegalArgumentException, NullPointerException {
+		if (bullet == null)	throw new NullPointerException();
 		if ( (!bullet.canHaveAsShip(this)) || (!this.canHaveAsBullet(bullet)) ) throw new IllegalArgumentException();
 		addBullet(bullet);
 		try {
@@ -424,7 +425,7 @@ public class Ship extends Entity {
 	*         
 	* @see implementation
 	*/
-	public void loadBullets(Collection<Bullet> bullets) throws IllegalArgumentException {
+	public void loadBullets(Collection<Bullet> bullets) throws IllegalArgumentException, NullPointerException {
 		try {
 			for (Bullet bullet: bullets) loadBullet(bullet);
 		}
@@ -434,7 +435,6 @@ public class Ship extends Entity {
 		catch (NullPointerException exc) {
 			throw new NullPointerException();
 		}
-
 	}
 	
 	/**
@@ -446,14 +446,17 @@ public class Ship extends Entity {
 	* @see implementation
 	* 		// TODO declarative documentation.
 	*/
-	public void reloadBullet(Bullet bullet) {
+	public void reloadBullet(Bullet bullet) throws IllegalArgumentException, NullPointerException {
 		try {
 			bullet.resetSource(this);
 			bullet.setWorld(null);
 			loadBullet(bullet);
 		}
 		catch (IllegalArgumentException exc) {
-			return;
+			throw new IllegalArgumentException();
+		}
+		catch (NullPointerException exc) {
+			throw new NullPointerException();
 		}
 	}
 	
@@ -718,7 +721,7 @@ public class Ship extends Entity {
 	 * 		// TODO declarative documentation.
 	 */
 	@Override
-	public void resolveCollision(Entity entity) throws NullPointerException, IllegalArgumentException {
+	public void resolveCollision(Entity entity) throws IllegalArgumentException, NullPointerException {
 		if (entity == null) throw new NullPointerException();
 		try {
 			if (entity.getType() == "Ship") resolveCollisionShip((Ship)entity);
@@ -740,9 +743,9 @@ public class Ship extends Entity {
 	 * 		// TODO declarative documentation.
 	 */
 	@Override
-	public void resolveCollisionShip(Ship ship) throws NullPointerException, IllegalArgumentException {
+	public void resolveCollisionShip(Ship ship) throws IllegalArgumentException, NullPointerException {
 		if (ship == null) throw new NullPointerException();
-		if (!this.overlap(ship)) throw new IllegalArgumentException();
+//		if (!this.overlap(ship)) throw new IllegalArgumentException();
 		double[] deltaV = {ship.getVelocityX() - getVelocityX(), ship.getVelocityY() - getVelocityY()};
 		double[] deltaR = {ship.getPosition().getPositionX() - getPosition().getPositionX(), 
 						   ship.getPosition().getPositionY() - getPosition().getPositionY()};
@@ -770,10 +773,17 @@ public class Ship extends Entity {
 	 * 		// TODO declarative documentation.
 	 */
 	@Override
-	public void resolveCollisionBullet(Bullet bullet) throws NullPointerException, IllegalArgumentException {
+	public void resolveCollisionBullet(Bullet bullet) throws IllegalArgumentException, NullPointerException {
 		if (bullet == null) throw new NullPointerException();
 		if (!this.overlap(bullet)) throw new IllegalArgumentException();
-		if (bullet.getSource() == this) reloadBullet(bullet);
+		if (bullet.getSource() == this) {
+			try {
+				reloadBullet(bullet);
+			}
+			catch (IllegalArgumentException exc) {
+				throw new IllegalArgumentException();
+			}
+		}
 		else {
 			this.terminate();
 			bullet.terminate();

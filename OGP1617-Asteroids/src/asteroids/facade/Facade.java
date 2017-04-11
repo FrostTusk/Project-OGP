@@ -19,7 +19,15 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 	@Override
 	public Ship createShip() throws ModelException {
 		// ship parameters = positionX, positionY, velocityX, velocityY, orientation, radius.
-		return new Ship(0, 0, 0, 0, 0, 10, 1);
+		try {
+			return new Ship(0, 0, 0, 0, 0, 10, 1);
+		}
+		catch (AssertionError exc) {
+			throw new ModelException(exc);
+		}
+		catch (IllegalArgumentException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
@@ -28,13 +36,10 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 		try {
 			return new Ship(x, y, xVelocity, yVelocity, orientation, radius, 1);
 		}
-		catch (IllegalArgumentException exc) {
-			throw new ModelException(exc);
-		}
-		catch (IndexOutOfBoundsException exc) {
-			throw new ModelException(exc);
-		}
 		catch (AssertionError exc) {
+			throw new ModelException(exc);
+		}
+		catch (IllegalArgumentException exc) {
 			throw new ModelException(exc);
 		}
 	}
@@ -55,10 +60,10 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 	@Override
 	public double[] getShipVelocity(Ship ship) throws ModelException {
 		try {
-		double velocityX = ship.getVelocityX();
-		double velocityY = ship.getVelocityY();
-		double[] velocity = {velocityX, velocityY};
-		return velocity;
+			double velocityX = ship.getVelocityX();
+			double velocityY = ship.getVelocityY();
+			double[] velocity = {velocityX, velocityY};
+			return velocity;
 		}
 		catch (NullPointerException exc) {
 			throw new ModelException(exc);
@@ -91,9 +96,6 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 			ship.move(dt);
 		}
 		catch (IllegalArgumentException exc) {
-			throw new ModelException(exc);
-		}
-		catch (IndexOutOfBoundsException exc) {
 			throw new ModelException(exc);
 		}
 		catch (NullPointerException exc) {
@@ -183,10 +185,10 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 		try {
 			return new Ship(x, y, xVelocity, yVelocity, direction, radius, mass);
 		}
-		catch (IllegalArgumentException exc) {
+		catch (AssertionError exc) {
 			throw new ModelException(exc);
 		}
-		catch (AssertionError exc) {
+		catch (IllegalArgumentException exc) {
 			throw new ModelException(exc);
 		}
 	}
@@ -199,7 +201,6 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 		catch (NullPointerException exc) {
 			throw new ModelException(exc);
 		}
-		
 	}
 
 	@Override
@@ -304,9 +305,6 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 		try {
 			double[] position = {bullet.getPosition().getPositionX(), bullet.getPosition().getPositionY()};
 			return position;
-		}
-		catch (IllegalArgumentException exc) {
-			throw new ModelException(exc);
 		}
 		catch (NullPointerException exc) {
 			throw new ModelException(exc);
@@ -478,7 +476,7 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 	@Override
 	public void removeBulletFromWorld(World world, Bullet bullet) throws ModelException {
 		try {
-			world.addEntity(bullet);
+			world.removeEntity(bullet);
 		}
 		catch (IllegalArgumentException exc) {
 			throw new ModelException(exc);
@@ -552,9 +550,6 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 		try {
 			ship.fireBullet();
 		}
-		catch (IllegalArgumentException exc) {
-			throw new ModelException(exc);
-		}
 		catch (NullPointerException exc) {
 			throw new ModelException(exc);
 		}
@@ -585,6 +580,9 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 		try {
 			return ((Entity) entity1).getTimeToCollision((Entity)entity1);
 		}
+		catch (IllegalArgumentException exc) {
+			throw new ModelException(exc);
+		}
 		catch (NullPointerException exc) {
 			throw new ModelException(exc);
 		}
@@ -594,6 +592,9 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 	public double[] getPositionCollisionEntity(Object entity1, Object entity2) throws ModelException {
 		try {
 			return ((Entity) entity1).getCollisionPosition((Entity)entity1);
+		}
+		catch (IllegalArgumentException exc) {
+			throw new ModelException(exc);
 		}
 		catch (NullPointerException exc) {
 			throw new ModelException(exc);
@@ -625,19 +626,18 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 		try {
 			world.evolve(dt);
 		}
+		catch (IllegalArgumentException exc) {
+			throw new ModelException(exc);
+		}
 		catch (NullPointerException exc) {
 			throw new ModelException(exc);
 		}
-		
 	}
 
 	@Override
 	public Object getEntityAt(World world, double x, double y) throws ModelException {
 		try {
 			return world.getEntityAtPosition(new Position(x, y));
-		}
-		catch (IllegalArgumentException exc) {
-			throw new ModelException(exc);
 		}
 		catch (NullPointerException exc) {
 			throw new ModelException(exc);

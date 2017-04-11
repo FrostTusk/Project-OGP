@@ -27,8 +27,9 @@ import be.kuleuven.cs.som.annotate.*;
  * 		8. Methods that handle Calculating Distance and Overlap
  * #4# Collision Detection Methods
  * 		9. Methods that handle Collision Detection 
+ * 		10. Methods that handle Resolving Collisions
  * #5# Other Methods
- *		10. Helper Methods
+ *		11. Helper Methods
  */
 
 /**
@@ -534,7 +535,7 @@ public abstract class Entity {
 	 *       	| ! isValidPosition(new.getPositionX(), new.getPositionY())
 	 */
 	// TODO @Raw?
-	public void move(double time) throws IllegalArgumentException, IndexOutOfBoundsException {
+	public void move(double time) throws IllegalArgumentException {
 		if (time < 0) throw new IllegalArgumentException();
 			
 		double newPositionX = helper.calculatePosition(this, time)[0];
@@ -698,12 +699,15 @@ public abstract class Entity {
 	* 			// TODO declarative documentation.
 	* 			// TODO apparently collide?
 	* 
+	* @throws 	IllegalArgumentException
+	* 			The entity overlaps this entity.
+	* 			| entity == this
 	* @throws 	NullPointerException
 	* 			The other entity was null.
 	* 			| entity == null
 	*/
 	@Raw
-	public double getTimeToCollision(Entity entity) throws NullPointerException, IllegalArgumentException {
+	public double getTimeToCollision(Entity entity) throws IllegalArgumentException, NullPointerException {
 		if (entity == null) throw new NullPointerException(); 
 		if (this.overlap(entity)) throw new IllegalArgumentException();
 		if (this.getWorld() != entity.getWorld()) return Double.POSITIVE_INFINITY;	//TODO can they collide in the null world?
@@ -769,11 +773,16 @@ public abstract class Entity {
 	* 			| entity == null
 	*/
 	@Raw
-	public double[] getCollisionPosition(Entity entity) throws NullPointerException {
+	public double[] getCollisionPosition(Entity entity) throws IllegalArgumentException, NullPointerException {
 		if (entity == null) throw new NullPointerException();
 		if (this.getWorld() != entity.getWorld()) return null;
-		
-		double time = getTimeToCollision(entity);
+		double time;
+		try {
+			time = getTimeToCollision(entity);
+		}
+		catch (IllegalArgumentException exc) {
+			throw new IllegalArgumentException();
+		}
 		if (time == Double.POSITIVE_INFINITY) return null;
 		
 		double[] newPosition1 = helper.calculatePosition(this, time);
@@ -798,7 +807,7 @@ public abstract class Entity {
 	
 			/*
 			 * |----------------------------------------------------|
-			 * | ?. The next methods handle resolving Collisions.	| // TODO Number
+			 * | 10. The next methods handle resolving Collisions.	|
 			 * |----------------------------------------------------| 
 			 */
 	
@@ -820,7 +829,7 @@ public abstract class Entity {
 
 			/*
 		     * |--------------------------------------------|
-		     * | 10. The next methods are Helper Methods.	|
+		     * | 11. The next methods are Helper Methods.	|
 		     * |--------------------------------------------| 
 		     */
 

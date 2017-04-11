@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Set;
 
 import asteroids.helper.Entity;
-//import asteroids.helper.Helper;
 import asteroids.helper.Position;
 
 import be.kuleuven.cs.som.annotate.*;
@@ -25,9 +24,10 @@ import be.kuleuven.cs.som.annotate.*;
  * #2# Association Methods
  * 		3. Methods that handle the relation with Entities
  * #3# Advanced Methods
- * 		4. Methods that handle evolving the world
+ * 		4. Methods that handle Collision Detection 
+ * 		5. Methods that handle evolving the world
  * #4# Query Methods
- * 		5. Methods that handle queries of the world
+ * 		6. Methods that handle queries of the world
  */
 
 /**
@@ -281,7 +281,7 @@ public class World {
 	 * @see implementation
 	 */
 	@Raw
-	public void addEntity(Entity entity) throws NullPointerException, IllegalArgumentException {
+	public void addEntity(Entity entity) throws IllegalArgumentException, NullPointerException {
 		if (entity == null) throw new NullPointerException();
 		if (! canHaveAsEntity(entity)) throw new IllegalArgumentException();
 		entities.put(entity.getPosition(), entity);
@@ -296,7 +296,7 @@ public class World {
 	 * @see implementation
 	 */
 	@Raw
-	public void removeEntity(Entity entity) throws NullPointerException, IllegalArgumentException {
+	public void removeEntity(Entity entity) throws IllegalArgumentException, NullPointerException {
 		if (entity == null) throw new NullPointerException();
 		if (!containsEntity(entity)) throw new IllegalArgumentException();
 		entities.remove(entity.getPosition());
@@ -334,11 +334,13 @@ public class World {
 		
 		for (Entity entity1: entities.values()) {
 			for (Entity entity2: entities.values()) {
-				double collisionTimeTemp = entity1.getTimeToCollision(entity2);
-				if ( (collisionTimeTemp < collisionTimeMin) || (collisionTimeMin == -1 ) ) {
-					collisionTimeMin = collisionTimeTemp;
-					collisionEntitiesMin[0] = entity1;
-					collisionEntitiesMin[1] = entity2;
+				if (entity1 != entity2) {
+					double collisionTimeTemp = entity1.getTimeToCollision(entity2);
+					if ( (collisionTimeTemp < collisionTimeMin) || (collisionTimeMin == -1 ) ) {
+						collisionTimeMin = collisionTimeTemp;
+						collisionEntitiesMin[0] = entity1;
+						collisionEntitiesMin[1] = entity2;
+					}
 				}
 			}
 			double collisionTimeTemp = entity1.getTimeToCollision(this);
@@ -378,8 +380,10 @@ public class World {
 		double collisionTimeMin = -1;
 		for (Entity entity1: entities.values()) {
 			for (Entity entity2: entities.values()) {
-				double collisionTimeTemp = entity1.getTimeToCollision(entity2);
-				if ( (collisionTimeTemp < collisionTimeMin) || (collisionTimeMin == -1 ) ) collisionTimeMin = collisionTimeTemp;
+				if (entity1 != entity2) {
+					double collisionTimeTemp = entity1.getTimeToCollision(entity2);
+					if ( (collisionTimeTemp < collisionTimeMin) || (collisionTimeMin == -1 ) ) collisionTimeMin = collisionTimeTemp;
+				}
 			}
 			double collisionTimeTemp = entity1.getTimeToCollision(this);
 			if (collisionTimeTemp < collisionTimeMin) collisionTimeMin = collisionTimeTemp;
@@ -404,19 +408,51 @@ public class World {
 	 * @param	time
 	 * 			the time over which the world will evolve.
 	 */
-	public void evolve(double time) {
-		double collisionTimeMin;
+	public void evolve(double time) throws IllegalArgumentException {
+		if (time < 0) throw new IllegalArgumentException();
 		Entity[] collisionEntitiesMin = getFirstCollisionEntities();
-		if ( collisionEntitiesMin[0] == collisionEntitiesMin[1] )
+		if (collisionEntitiesMin == null) resolveEvolve(-1, collisionEntitiesMin, time);	// There are no entities in this World.
+		
+		double collisionTimeMin;
+		if ( collisionEntitiesMin[0] == collisionEntitiesMin[1] )	// If the collision is with the boundary.
 			collisionTimeMin = collisionEntitiesMin[0].getTimeToCollision(this);
-		else
+		else	// If the collision is between 2 entities.
 			collisionTimeMin = collisionEntitiesMin[0].getTimeToCollision(collisionEntitiesMin[1]);
+		
+		try {	// This is the only possible exception that is thrown in this method (outside of the one for the parameter);
+			resolveEvolve(collisionTimeMin, collisionEntitiesMin, time); // All other exceptions will never occur in the execution of this method
+		}																 // "All other" = the ones in the method calls of this method.
+		catch (IllegalArgumentException exc) {// This exception is throw if the new position of an entity is invalid
+			throw new IllegalArgumentException();	// or if time is < 0.
+		}
+	}
 	
-		if ( collisionTimeMin < time) {
-			update(collisionTimeMin);
-			if ( collisionEntitiesMin[0] == collisionEntitiesMin[1] )
+	
+	/**
+	 * Resolves the evolution method.
+	 * Helper method of evolve().
+	 * 
+	 * @param	collisionTimeMin
+	 * 			The time to the first collision.
+	 * @param	collisionEntitiesMin
+	 * 			The entities involved in the first collision.
+	 * @param	time
+	 * 			the time over which the world has to be evolved.
+	 * 
+	 */
+	private void resolveEvolve(double collisionTimeMin, Entity[] collisionEntitiesMin, double time) 
+			throws IllegalArgumentException {
+		if ( (0 < collisionTimeMin) && (collisionTimeMin < time) ) {	// Collision time needs to be positive.-1 is also used to
+			try {														// shortcut immediately from this comparison to the end.
+				update(collisionTimeMin);
+			}
+			catch (IllegalArgumentException exc) {// This exception is throw if the new position of an entity is invalid
+				throw new IllegalArgumentException();	// or if time is < 0.
+			}
+			
+			if ( collisionEntitiesMin[0] == collisionEntitiesMin[1] )	// If the collision is with the boundary
 				collisionEntitiesMin[0].resolveCollision(this);
-			else
+			else	// If the collision is between 2 entities.
 				collisionEntitiesMin[0].resolveCollision(collisionEntitiesMin[1]);
 			evolve(time - collisionTimeMin);
 		}
@@ -431,13 +467,18 @@ public class World {
 	 * @param	time
 	 * 			the time over which the world has to be updated.
 	 */
-	private void update(double time) {
+	private void update(double time) throws IllegalArgumentException {
 		List<Entity> entitiesList = new ArrayList<Entity>();
-		for (Entity entity: entities.values()) entitiesList.add(entity);
-		for (Entity entity: entitiesList) {
-			this.removeEntity(entity);
-			entity.move(time);
-			this.addEntity(entity);
+		for (Entity entity: entities.values()) entitiesList.add(entity);	// Creates an iterator that the next
+		for (Entity entity: entitiesList) {									// for loop can iterate over, otherwise the map might
+			this.removeEntity(entity);										// be changed during execution.
+			try {	// The exceptions in removeEntity are never thrown in this method.
+				entity.move(time);
+			}
+			catch (IllegalArgumentException exc) {	// This exception is throw if the new position of this entity is invalid
+				throw new IllegalArgumentException();	// or if time is < 0.
+			}
+			this.addEntity(entity);	// These exceptions are also never thrown (because nothing moves out of bounds in this method.
 		}
 	}
 	

@@ -1,6 +1,7 @@
 package asteroids.model;
 
 import asteroids.helper.Entity;
+
 import be.kuleuven.cs.som.annotate.*;
 
 /* Constants:
@@ -295,7 +296,7 @@ public class Bullet extends Entity {
 	 * 		// TODO More documentation?
 	 */
 	@Raw
-	public void resetSource(Ship ship) throws NullPointerException, IllegalArgumentException {
+	public void resetSource(Ship ship) throws IllegalArgumentException, NullPointerException {
 		if (ship == null) throw new NullPointerException();
 		if ( (!this.overlap(ship)) || (this.getSource() != ship) ) throw new IllegalArgumentException();
 		this.hasBeenFired = false;
@@ -432,7 +433,7 @@ public class Bullet extends Entity {
 	 * 		// TODO declarative documentation.
 	 */
 	@Override
-	public void resolveCollision(Entity entity) throws NullPointerException, IllegalArgumentException {
+	public void resolveCollision(Entity entity) throws IllegalArgumentException, NullPointerException {
 		if (entity == null) throw new NullPointerException();
 		try {
 			if (entity.getType() == "Ship") resolveCollisionShip((Ship)entity);
@@ -454,10 +455,17 @@ public class Bullet extends Entity {
 	 * 		// TODO declarative documentation.
 	 */
 	@Override
-	public void resolveCollisionShip(Ship ship) throws NullPointerException, IllegalArgumentException {
+	public void resolveCollisionShip(Ship ship) throws IllegalArgumentException, NullPointerException {
 		if (ship == null) throw new NullPointerException();
-		if (!this.overlap(ship)) throw new IllegalArgumentException();
-		if (this.getSource() == ship) ship.reloadBullet(this);
+//		if (!this.overlap(ship)) throw new IllegalArgumentException();
+		if (this.getSource() == ship) {
+			try {
+				ship.reloadBullet(this);
+			}
+			catch (IllegalArgumentException exc) {
+				throw new IllegalArgumentException();
+			}
+		}
 		else {
 			this.terminate();
 			ship.terminate();
