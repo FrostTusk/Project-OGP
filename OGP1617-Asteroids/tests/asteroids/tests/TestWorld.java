@@ -215,11 +215,15 @@ public class TestWorld {
 		Ship ship = new Ship(100, 100, 10, -10, Math.PI, 20, 10);
 		Bullet bullet = new Bullet(1, 1, 1, 1, 1);
 		world.addEntity(ship);
+		ship.setWorld(world);
 		world.addEntity(bullet);
+		bullet.setWorld(world);
 		assertTrue(world.containsEntity(ship));
 		assertTrue(world.containsEntity(bullet));
 		world.removeEntity(ship);
+		ship.deSetWorld();
 		world.removeEntity(bullet);
+		bullet.deSetWorld();
 		assertFalse(world.containsEntity(ship));
 		assertFalse(world.containsEntity(bullet));
 	}

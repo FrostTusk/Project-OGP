@@ -284,13 +284,13 @@ public class World {
 		if (canHaveAsEntity(entity)) {
 			// At this point we're sure that the entity can possibly be added to this world,
 			// the only thing that can go wrong now is if the entity is already in a world.
-			try {
-				// We set the current world of the entity to this.
-				entity.setWorld(this);
-			}
-			catch (IllegalArgumentException exc) {
-				throw new IllegalArgumentException();
-			}
+//			try {
+//				// We set the current world of the entity to this.
+//				entity.setWorld(this);
+//			}
+//			catch (IllegalArgumentException exc) {
+//				throw new IllegalArgumentException();
+//			}
 			// Finally we can add the entity to the entities list.
 			entities.put(entity.getPosition(), entity);
 		}
@@ -314,7 +314,7 @@ public class World {
 		// the entity is actually in the world and the world is  the current world of the entity.
 		if ( (containsEntity(entity)) && (entity.getWorld() == this) ) {
 			// Now we know that we're in a valid situation and can break the association.
-			entity.deSetWorld();
+//			entity.deSetWorld();
 			entities.remove(entity.getPosition());
 		}
 		else throw new IllegalArgumentException();

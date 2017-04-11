@@ -386,6 +386,7 @@ public class TestBullet {
 		World world = new World(100, 100);
 		double counter = bullet.getBoundaryCollisionCounter();
 		world.addEntity(bullet);
+		bullet.setWorld(world);
 		bullet.resolveCollision(world);
 		assertTrue(counter + 1 == bullet.getBoundaryCollisionCounter());
 		assertTrue(bullet.getVelocityX() == -10);
@@ -399,6 +400,7 @@ public class TestBullet {
 		World world = new World(100, 100);
 		double counter = bullet.getBoundaryCollisionCounter();
 		world.addEntity(bullet);
+		bullet.setWorld(world);
 		bullet.resolveCollision(world);
 		assertTrue(counter + 1 == bullet.getBoundaryCollisionCounter());
 		assertTrue(bullet.getVelocityX() == 10);
@@ -412,6 +414,7 @@ public class TestBullet {
 		World world = new World(100, 100);
 		double counter = bullet.getBoundaryCollisionCounter();
 		world.addEntity(bullet);
+		bullet.setWorld(world);
 		bullet.resolveCollision(world);
 		assertTrue(counter + 1 == bullet.getBoundaryCollisionCounter());
 		// TODO Separate case for corners.

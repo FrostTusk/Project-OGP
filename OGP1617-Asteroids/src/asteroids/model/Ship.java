@@ -339,6 +339,7 @@ public class Ship extends Entity {
 	*         	The bullet to check.
 	*         
 	* @see implementation
+	* 		// TODO Bullet has to lie in the circle of Ship
 	*/
 	@Raw
 	public boolean canHaveAsBullet(Bullet bullet) {
@@ -375,13 +376,14 @@ public class Ship extends Entity {
 	public void removeBullet(Bullet bullet) throws IllegalArgumentException {
 		if (!this.bullets.contains(bullet)) throw new IllegalArgumentException();
 		this.bullets.remove(bullet);
-		bullet.setShip(null);
+		// TODO	bullet.setShip(null); ?
 		// TODO bullet.setWorld(this.getWorld); ?
 	}
 	
 	
 	/**
-	* Load a given bullet into this ship.
+	* Load a given bullet into this ship. Loading a bullet will add
+	* the given bullet to the ship's collection and set it's ship as this ship.
 	*  
 	* @param  	bullet
 	*         	The bullet to be loaded.
@@ -391,7 +393,12 @@ public class Ship extends Entity {
 	public void loadBullet(Bullet bullet) throws IllegalArgumentException {
 		if ( (!bullet.canHaveAsShip(this)) && (!this.canHaveAsBullet(bullet)) ) throw new IllegalArgumentException();
 		addBullet(bullet);
-		bullet.setShip(this);
+		try {
+			bullet.setShip(this);
+		}
+		catch (IllegalArgumentException exc) {
+			throw new IllegalArgumentException();
+		}
 	}
 	
 	
@@ -407,12 +414,12 @@ public class Ship extends Entity {
 	public void reloadBullet(Bullet bullet) {
 		try {
 			bullet.resetSource(this);
+			bullet.setWorld(null);
+			loadBullet(bullet);
 		}
 		catch (IllegalArgumentException exc) {
 			return;
 		}
-		bullet.setWorld(null);
-		loadBullet(bullet);
 	}
 	
 	

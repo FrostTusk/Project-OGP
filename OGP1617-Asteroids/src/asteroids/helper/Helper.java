@@ -153,6 +153,29 @@ public class Helper {
 	
 	
 	/**
+	 * Calculates if an entity is apparently within the boundaries of a world.
+	 * 
+	 * @param 	entityContained
+	 * 		  	The entity to be checked if it lies in the boundaries of the other entity.
+	 * @param 	entityContainer
+	 * 		  	The world to be used.
+	 * 
+	 * @return	true if the entity is apparently in the boundaries, false if it is not.
+	 */
+	public boolean apparentlyWithinBoundaries(Entity entityContained, Entity entityContainer) throws IllegalArgumentException {
+		if ( (entityContained == null) || (entityContainer == null) ) throw new IllegalArgumentException();
+		return ( (entityContained.getPosition().getPositionX() - entityContained.getRadius() * 0.99 >= 
+				entityContainer.getPosition().getPositionX() - entityContainer.getRadius()) &&
+				 (entityContained.getPosition().getPositionX() + entityContained.getRadius() * 0.99 <= 
+				entityContainer.getPosition().getPositionX() + entityContainer.getRadius()) &&
+				 (entityContained.getPosition().getPositionY() - entityContained.getRadius() * 0.99 >= 
+				entityContainer.getPosition().getPositionY() - entityContainer.getRadius()) &&
+				 (entityContained.getPosition().getPositionY() + entityContained.getRadius() * 0.99 <= 
+				entityContainer.getPosition().getPositionY() + entityContainer.getRadius()) );
+	}
+	
+	
+	/**
 	 * Calculates if two entities apparently collide.
 	 * 
 	 * @param 	entity1
