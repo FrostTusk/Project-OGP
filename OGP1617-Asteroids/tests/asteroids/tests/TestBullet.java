@@ -411,9 +411,10 @@ public class TestBullet {
 		Bullet bullet = new Bullet(80, 80, 10, 10, 20);
 		World world = new World(100, 100);
 		double counter = bullet.getBoundaryCollisionCounter();
-		bullet.setWorld(world);
+		world.addEntity(bullet);
 		bullet.resolveCollision(world);
 		assertTrue(counter + 1 == bullet.getBoundaryCollisionCounter());
+		// TODO Separate case for corners.
 		assertTrue(bullet.getVelocityX() == -10);
 		assertTrue(bullet.getVelocityY() == -10);
 	}
