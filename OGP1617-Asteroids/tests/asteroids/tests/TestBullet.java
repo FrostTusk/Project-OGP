@@ -385,7 +385,7 @@ public class TestBullet {
 		Bullet bullet = new Bullet(80, 50, 10, 10, 20);
 		World world = new World(100, 100);
 		double counter = bullet.getBoundaryCollisionCounter();
-		bullet.setWorld(world);
+		world.addEntity(bullet);
 		bullet.resolveCollision(world);
 		assertTrue(counter + 1 == bullet.getBoundaryCollisionCounter());
 		assertTrue(bullet.getVelocityX() == -10);

@@ -611,9 +611,9 @@ public abstract class Entity {
 		if (getWorld() != world) return distance;
 		
 		distance[0] = getPosition().getPositionX() - getRadius();
-		distance[1] = world.getWidth() - getPosition().getPositionX() + getRadius();
+		distance[1] = world.getWidth() - (getPosition().getPositionX() + getRadius());
 		distance[2] = getPosition().getPositionY() - getRadius();
-		distance[3] = world.getWidth() - getPosition().getPositionY() + getRadius();
+		distance[3] = world.getHeight() - (getPosition().getPositionY() + getRadius());
 		return distance;
 	}
 	
