@@ -1,37 +1,16 @@
 package asteroids.tests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import asteroids.model.Bullet;
-import asteroids.model.Ship;
-import asteroids.model.World;
 import asteroids.facade.Facade;
+import asteroids.model.Ship;
 import asteroids.part1.facade.IFacade;
 import asteroids.util.ModelException;
 
-/*
- * Tests Index:
- * 1. Tests for Initialization
- * 2. Tests for Position
- * 3. Tests for Speed
- * 4. Tests for Radius
- * 5. Tests for Orientation
- * 6. Tests for Move
- * 7. Tests for Thrust
- * 8. Tests for Turn
- * 9. Tests for Distance
- * 10. Tests for Overlap
- * 11. Tests for Collision Detection
- */
-
-public class TestShip {
+public class TestFacade {
 
 	private static final double EPSILON = 0.0001;
 
@@ -798,31 +777,7 @@ public class TestShip {
 		assertNull(position);
 		assertEquals(Double.POSITIVE_INFINITY, facade.getTimeToCollision(ship1, ship1), EPSILON);
 	}
-	
-			/*
-	 		* |---------------------------------------------------------|
-	 		* | 12. The next tests test the interaction with bullets.	|
-	 		* |---------------------------------------------------------| 
-	 		*/
-	
-	@Test
-	public void testBulletAddToShip() throws ModelException {
-		Bullet bullet = new Bullet(100, 200, 0, 0, 20);	
-		Ship ship = new Ship(100, 200, 10, -10, 20, Math.PI, 1);
-		ship.loadBullet(bullet);
-		assertTrue(ship.getAllBullets().contains(bullet));
-	}
-	
-	@Test
-	public void testBulletRemovedWhenFired() throws ModelException {
-		Bullet bullet = new Bullet(100, 200, 0, 0, 20);	
-		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
-		World world = new World(1000, 1000);
-		ship.setWorld(world);
-		ship.loadBullet(bullet);
-		ship.fireBullet(bullet);
-		assertFalse(ship.getAllBullets().contains(bullet));
-	}
 
 }
-	
+
+
