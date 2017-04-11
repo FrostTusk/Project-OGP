@@ -346,7 +346,7 @@ public class World {
 	 */
 	public void evolve(double time) {
 		double collisionTimeMin;
-		Entity[] collisionEntitiesMin = calculateFirstCollision();
+		Entity[] collisionEntitiesMin = getFirstCollisionPosition();
 		if ( collisionEntitiesMin[0] == collisionEntitiesMin[1] )
 			collisionTimeMin = collisionEntitiesMin[0].getTimeToCollision(this);
 		else
@@ -380,7 +380,7 @@ public class World {
 	/**
 	 * Calculate the first collision in the current world.
 	 */
-	public Entity[] calculateFirstCollision() {
+	public Entity[] getFirstCollisionPosition() {
 		double collisionTimeMin = -1;
 		Entity[] collisionEntitiesMin = new Entity[2];
 		
@@ -393,18 +393,33 @@ public class World {
 					collisionEntitiesMin[1] = entity2;
 				}
 			}
-		}
 		
-		for (Entity entity: entities.values()) {
-			double collisionTimeTemp = entity.getTimeToCollision(this);
+			double collisionTimeTemp = entity1.getTimeToCollision(this);
 			if (collisionTimeTemp < collisionTimeMin) {
 				collisionTimeMin = collisionTimeTemp;
-				collisionEntitiesMin[0] = entity;
-				collisionEntitiesMin[1] = entity;
+				collisionEntitiesMin[0] = entity1;
+				collisionEntitiesMin[1] = entity1;
 			}
 		}
 		
 		return collisionEntitiesMin;
+	}
+	
+	public double getFirstCollisionTime() {
+		double collisionTimeMin = -1;
+
+		
+		for (Entity entity1: entities.values()) {
+			for (Entity entity2: entities.values()) {
+				double collisionTimeTemp = entity1.getTimeToCollision(entity2);
+				if ( (collisionTimeTemp < collisionTimeMin) || (collisionTimeMin == -1 ) ) collisionTimeMin = collisionTimeTemp;
+			}
+			
+			double collisionTimeTemp = entity1.getTimeToCollision(this);
+			if (collisionTimeTemp < collisionTimeMin) collisionTimeMin = collisionTimeTemp;
+		}
+		
+		return collisionTimeMin;
 	}
 	
 	
