@@ -6,10 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import asteroids.facade.Facade;
-import asteroids.helper.Position;
-import asteroids.model.Bullet;
 import asteroids.model.Ship;
-import asteroids.model.World;
 import asteroids.part1.facade.IFacade;
 import asteroids.util.ModelException;
 

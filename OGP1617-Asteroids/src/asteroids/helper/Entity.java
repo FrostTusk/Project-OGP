@@ -1,5 +1,7 @@
 package asteroids.helper;
 
+import asteroids.model.Bullet;
+import asteroids.model.Ship;
 import asteroids.model.World;
 
 import be.kuleuven.cs.som.annotate.*;
@@ -717,7 +719,9 @@ public abstract class Entity {
 					- helper.evaluateScalar(deltaV) * (helper.evaluateScalar(deltaR) - Math.pow(omega, 2)) );
 		if (d <= 0) return Double.POSITIVE_INFINITY;
 		
-		return -( (helper.evaluateScalar(deltaV, deltaR) + Math.sqrt(d)) / helper.evaluateScalar(deltaV) );
+		double result = -( (helper.evaluateScalar(deltaV, deltaR) + Math.sqrt(d)) / helper.evaluateScalar(deltaV) );
+		if (result < 0 ) return 0;	// TODO Is this right?
+		return result;
 	}
 	
 	
@@ -789,6 +793,21 @@ public abstract class Entity {
 		return vector;
 	}
 	
+	
+	
+			/*
+			 * |----------------------------------------------------|
+			 * | ?. The next methods handle resolving Collisions.	| // TODO Number
+			 * |----------------------------------------------------| 
+			 */
+	
+	
+	// TODO Documentation
+	public abstract void resolveCollision(World world);
+	public abstract void resolveCollision(Entity entity);
+	public abstract void resolveCollisionShip(Ship ship);
+	public abstract void resolveCollisionBullet(Bullet bullet);
+
 	
 	
 		/*

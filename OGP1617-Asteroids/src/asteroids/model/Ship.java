@@ -1,5 +1,6 @@
 package asteroids.model;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -414,6 +415,27 @@ public class Ship extends Entity {
 		}
 	}
 	
+	/**
+	* Load a given bullet collection into this ship. Loading a bullet will add
+	* the given bullet to the ship's collection and set it's ship as this ship.
+	*  
+	* @param  	bullet
+	*         	The bullet to be loaded.
+	*         
+	* @see implementation
+	*/
+	public void loadBullets(Collection<Bullet> bullets) throws IllegalArgumentException {
+		try {
+			for (Bullet bullet: bullets) loadBullet(bullet);
+		}
+		catch (IllegalArgumentException exc) {
+			throw new IllegalArgumentException();
+		}
+		catch (NullPointerException exc) {
+			throw new NullPointerException();
+		}
+
+	}
 	
 	/**
 	* Reload a given bullet into this ship.
@@ -675,6 +697,7 @@ public class Ship extends Entity {
 	 * 		// TODO apparently collide?
 	 * 		// TODO what if they are not colliding?
 	 */
+	@Override
 	public void resolveCollision(World world) throws NullPointerException {
 		if (world == null) throw new NullPointerException();
 		double[] position = getCollisionPosition(world);
@@ -694,6 +717,7 @@ public class Ship extends Entity {
 	 * @see implementation
 	 * 		// TODO declarative documentation.
 	 */
+	@Override
 	public void resolveCollision(Entity entity) throws NullPointerException, IllegalArgumentException {
 		if (entity == null) throw new NullPointerException();
 		try {
@@ -715,6 +739,7 @@ public class Ship extends Entity {
 	 * @see implementation
 	 * 		// TODO declarative documentation.
 	 */
+	@Override
 	public void resolveCollisionShip(Ship ship) throws NullPointerException, IllegalArgumentException {
 		if (ship == null) throw new NullPointerException();
 		if (!this.overlap(ship)) throw new IllegalArgumentException();
@@ -744,6 +769,7 @@ public class Ship extends Entity {
 	 * @see implementation
 	 * 		// TODO declarative documentation.
 	 */
+	@Override
 	public void resolveCollisionBullet(Bullet bullet) throws NullPointerException, IllegalArgumentException {
 		if (bullet == null) throw new NullPointerException();
 		if (!this.overlap(bullet)) throw new IllegalArgumentException();

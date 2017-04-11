@@ -407,6 +407,7 @@ public class Bullet extends Entity {
 	 * 		// TODO apparently collide?
 	 * 		// TODO what if they are not colliding?
 	 */
+	@Override
 	public void resolveCollision(World world) throws NullPointerException {
 		if (world == null) throw new NullPointerException();
 		setBoundaryCollisionCounter(getBoundaryCollisionCounter() + 1);
@@ -430,6 +431,7 @@ public class Bullet extends Entity {
 	 * @see implementation
 	 * 		// TODO declarative documentation.
 	 */
+	@Override
 	public void resolveCollision(Entity entity) throws NullPointerException, IllegalArgumentException {
 		if (entity == null) throw new NullPointerException();
 		try {
@@ -451,6 +453,7 @@ public class Bullet extends Entity {
 	 * @see implementation
 	 * 		// TODO declarative documentation.
 	 */
+	@Override
 	public void resolveCollisionShip(Ship ship) throws NullPointerException, IllegalArgumentException {
 		if (ship == null) throw new NullPointerException();
 		if (!this.overlap(ship)) throw new IllegalArgumentException();
@@ -470,6 +473,7 @@ public class Bullet extends Entity {
 	 * @see implementation
 	 * 		// TODO declarative documentation.
 	 */
+	@Override
 	public void resolveCollisionBullet(Bullet bullet) throws NullPointerException {
 		if (bullet == null) throw new NullPointerException();
 		this.terminate();

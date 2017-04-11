@@ -311,58 +311,22 @@ public class World {
 	     */
 
 
-
 			/*
-			 * |------------------------------------------------|
-			 * | 4. The next methods handle evolving the world.	|
-			 * |------------------------------------------------| 
+			 * |----------------------------------------------------|
+			 * | 4. The next methods handle Collision Detection.	|
+			 * |----------------------------------------------------| 
 			 */
-	
-	
-	
+
+
+
 	/**
-	 * Evolve the current world.
-	 * 
-	 * @param	time
-	 * 			the time over which the world will evolve.
-	 */
-	public void evolve(double time) {
-		double collisionTimeMin;
-		Entity[] collisionEntitiesMin = getFirstCollisionPosition();
-		if ( collisionEntitiesMin[0] == collisionEntitiesMin[1] )
-			collisionTimeMin = collisionEntitiesMin[0].getTimeToCollision(this);
-		else
-			collisionTimeMin = collisionEntitiesMin[0].getTimeToCollision(collisionEntitiesMin[1]);
-	
-		if ( collisionTimeMin < time) {
-			update(collisionTimeMin);
-			// Resolve Collision
-			evolve(time-collisionTimeMin);
-		}
-		update(time);
-	}
-	
-	
-	/**
-	 * Update the position of all elements in the current world.
-	 * Helper method of evolve().
-	 * 
-	 * @param	time
-	 * 			the time over which the world has to be updated.
-	 */
-	private void update(double time) {
-		for (Entity entity: entities.values()) {
-			this.removeEntity(entity);
-			entity.move(time);
-			this.addEntity(entity);
-		}
-	}
-	
-	
-	/**
-	 * Calculate the first collision in the current world.
-	 */
-	public Entity[] getFirstCollisionPosition() {
+	* Gets the entities involved first collision in the current world.
+	* 
+	* @return	Returns the entities involved in the first collision
+	* 			of this world.
+	* 			// TODO Declarative Documentation.
+	*/
+	public Entity[] getFirstCollisionEntities() {
 		double collisionTimeMin = -1;
 		Entity[] collisionEntitiesMin = new Entity[2];
 		
@@ -382,10 +346,31 @@ public class World {
 				collisionEntitiesMin[1] = entity1;
 			}
 		}
+		
 		return collisionEntitiesMin;
 	}
 	
-	public double getFirstCollisionTime() {
+	
+	/**
+	* Gets the position of the first collision in the current world.
+	* 
+	* @return	Returns the position of the first collision
+	* 			of this world.
+	* 			// TODO Declarative Documentation.
+	*/
+	public double[] getFirstCollisionPosition() {
+		double[] vector = getFirstCollisionEntities()[0].getCollisionPosition(getFirstCollisionEntities()[1]);
+		return vector;
+	}
+	
+	/**
+	* Gets the time of the first collision in the current world.
+	* 
+	* @return	Returns the time of the first collision
+	* 			of this world.
+	* 			// TODO Declarative Documentation.
+	*/
+	public double getTimeToFirstCollision() {
 		double collisionTimeMin = -1;
 		for (Entity entity1: entities.values()) {
 			for (Entity entity2: entities.values()) {
@@ -400,7 +385,60 @@ public class World {
 	}
 	
 	
-		
+
+			/*
+			 * |------------------------------------------------|
+			 * | 5. The next methods handle evolving the world.	|
+			 * |------------------------------------------------| 
+			 */
+	
+	
+	
+	/**
+	 * Evolve the current world.
+	 * 
+	 * @param	time
+	 * 			the time over which the world will evolve.
+	 */
+	public void evolve(double time) {
+		double collisionTimeMin;
+		Entity[] collisionEntitiesMin = getFirstCollisionEntities();
+		if ( collisionEntitiesMin[0] == collisionEntitiesMin[1] )
+			collisionTimeMin = collisionEntitiesMin[0].getTimeToCollision(this);
+		else
+			collisionTimeMin = collisionEntitiesMin[0].getTimeToCollision(collisionEntitiesMin[1]);
+	
+		if ( collisionTimeMin < time) {
+			update(collisionTimeMin);
+			if ( collisionEntitiesMin[0] == collisionEntitiesMin[1] )
+				collisionEntitiesMin[0].resolveCollision(this);
+			else
+				collisionEntitiesMin[0].resolveCollision(collisionEntitiesMin[1]);
+			evolve(time - collisionTimeMin);
+		}
+		update(time);
+	}
+	
+	
+	/**
+	 * Update the position of all elements in the current world.
+	 * Helper method of evolve().
+	 * 
+	 * @param	time
+	 * 			the time over which the world has to be updated.
+	 */
+	private void update(double time) {
+		List<Entity> entitiesList = new ArrayList<Entity>();
+		for (Entity entity: entities.values()) entitiesList.add(entity);
+		for (Entity entity: entitiesList) {
+			this.removeEntity(entity);
+			entity.move(time);
+			this.addEntity(entity);
+		}
+	}
+	
+
+	
 		/*
 	     * |----------------------------|
 	     * | #Header-4# Query Methods.	|
@@ -411,7 +449,7 @@ public class World {
 	
 			/*
 			 * |----------------------------------------------------|
-			 * | 5. The next methods handle queries of the world.	|
+			 * | 6. The next methods handle queries of the world.	|
 			 * |----------------------------------------------------| 
 			 */
 
@@ -423,7 +461,7 @@ public class World {
 	 * @param	position
 	 * 			The position of the entity to be returned.
 	 * 
-	 * @see implementation
+	 * @return	Returns the entitity at the given position.
 	 */
 	// TODO Is this @Basic? @Raw?
 	public Entity getEntityAtPosition(Position position) {
