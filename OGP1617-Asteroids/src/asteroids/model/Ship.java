@@ -136,17 +136,28 @@ public class Ship extends Entity {
 	}
 	
 
-	
 	/**
 	 * Terminates this ship. Breaks up any associations with entities and worlds.
 	 * Prepares this object for the garbage collector.
 	 * @see implementation
 	 */
-	@Override
+	@Override @Raw
 	public void terminate() {
 		if (isTerminated()) return;
-		if (getWorld() != null) world.removeEntity(this);
-		for (Bullet bullet: getAllBullets()) this.removeBullet(bullet);
+		if (getWorld() != null) { 
+			try {
+				getWorld().removeEntity(this);
+				this.setWorld(null);
+			}
+			catch (IllegalArgumentException exc) {}	// Empty catch because if an IllegalArgumentException
+		}											// is thrown, it means that the association wasn't set to start with.		
+		for (Bullet bullet: getAllBullets()) {		// This means that the association already doesn't exist. We don't have to do anything.
+			try {
+				this.removeBullet(bullet);
+				bullet.setShip(null);
+			}
+			catch (IllegalArgumentException exc) {}	// See former explanation.
+		}
 		this.isTerminated = true;
 	}
 	
@@ -297,6 +308,7 @@ public class Ship extends Entity {
 	*/
 	@Override @Raw
 	public boolean canHaveAsWorld(World world) {
+		if (world == null) return true;	// TODO Is this a good fix?
 		return (getWorld() == null) && (isInWorld(world));
 	}
 	
@@ -344,8 +356,9 @@ public class Ship extends Entity {
 	@Raw
 	public boolean canHaveAsBullet(Bullet bullet) {
 		if ( (this.bullets.contains(bullet)) || (bullet == null) ) return false;
-		if (bullet.canHaveAsShip(this)) return true; 
-		return false;
+		return true;
+		//		if (bullet.canHaveAsShip(this)) return true; 
+//		return false;
 	}
 	
 	
@@ -391,7 +404,7 @@ public class Ship extends Entity {
 	* @see implementation
 	*/
 	public void loadBullet(Bullet bullet) throws IllegalArgumentException {
-		if ( (!bullet.canHaveAsShip(this)) && (!this.canHaveAsBullet(bullet)) ) throw new IllegalArgumentException();
+		if ( (!bullet.canHaveAsShip(this)) || (!this.canHaveAsBullet(bullet)) ) throw new IllegalArgumentException();
 		addBullet(bullet);
 		try {
 			bullet.setShip(this);
@@ -457,6 +470,7 @@ public class Ship extends Entity {
 		
 		this.removeBullet(bullet);
 		bullet.setSource(this);
+		bullet.setShip(null);
 		bullet.setVelocity(250 * Math.cos(getOrientation()), 250 * Math.sin(getOrientation()));	
 		bullet.setPosition( getPosition().getPositionX() + getRadius() * Math.cos(getOrientation()) 
 								+ bullet.getRadius() * Math.cos(getOrientation()), 

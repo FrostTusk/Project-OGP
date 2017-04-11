@@ -46,7 +46,6 @@ public class World {
 	     */
 	
 	
-	
 			/*
 			 * |--------------------------------------------------------------------------------|
 			 * | 1. The next method handles the Initialization and Termination of the World.	|
@@ -54,8 +53,6 @@ public class World {
 			 */
 	
 	
-	
-//	private Helper helper = new Helper();
 	
 	/**
 	 * Initialize this new world with given width and height.
@@ -65,18 +62,21 @@ public class World {
 	 * @param	height
 	 * 			The height for this new world.
 	 * 
-	 * @post	TODO see implementation ?
-	 *       	| if (isValidSize(width, height))
+	 * @see	implementation
+	 * 
+	 * @post    | if (isValidSize(width, height))
 	 *       	|   	new.getWidth() == width
 	 *       	|		new.getHeight() == height
-	 *       	| else  new.getWidth() == calculateDefaultSiz(width, height)[0]
-	 *       	|		new.getHeight() == calculateDefaultSiz(width, height)[1]
+	 *       	| else  new.getWidth() == this.calculateDefaultSiz(width, height)[0]
+	 *       	|		new.getHeight() == this.calculateDefaultSiz(width, height)[1]
+	 * 
+	 * // TODO See implementation?
 	 */
 	public World(double width, double height) {
 		double[] temp = {width, height};
 		if (! isValidSize(width, height)) temp = calculateDefaultSize(width, height);
-		this.width = temp[0];
-		this.height = temp[1];
+		this.width = temp[0];	// The size is hard coded because the width and height
+		this.height = temp[1];	// cannot change after construction.
 	}
 	
 	
@@ -87,21 +87,29 @@ public class World {
 	
 	
 	/**
-	 * Return the whether or not this world is terminated.
+	 * Return whether or not this world is terminated.
 	 */
 	@Basic @Raw
 	public boolean isTerminated() {
 		return this.isTerminated;
 	}
 	
+	
 	/**
 	 * Terminates this world. Breaks up any associations with entities.
 	 * Prepares this object for the garbage collector.
 	 * @see implementation
 	 */
+	@Raw
 	public void terminate() {
-		for (Entity entity: entities.values()) 
-			removeEntity(entity);
+		for (Entity entity: entities.values()) {
+			try {
+				this.removeEntity(entity);
+				entity.setWorld(null);
+			}
+			catch (IllegalArgumentException exc) {}	// Empty catch because if an IllegalArgumentException
+		}											// is thrown, it means that the association wasn't set to start with.		
+		this.isTerminated = true;					// This means that the association already doesn't exist. We don't have to do anything.		
 	}
 	
 	
@@ -162,15 +170,17 @@ public class World {
 	 * @param	height
 	 * 			The height to check.
 	 *         
-	 * @see implementation
-	*/
+	 * @return	Returns whether the given width and height make up a valid size or not.
+	 * 			true if it is, false if not.
+	 */
 	@Raw
 	public static boolean isValidSize(double width, double height) {
-		return ( ( (width >= 0) && (width <= getUpperBound()) ) && ( (height >= 0) && (height <= getUpperBound()) ));
+		return ( ( (width >= 0) && (width <= getUpperBound()) ) && ( (height >= 0) && (height <= getUpperBound()) ) );
 	}
 	
 	
 	/**
+	 * Set the upper bound for the width and height of every entity to the given upper bound.
 	 * 
 	 * @param 	newUpperBound
 	 * 			The new upper bound for the width and height for every world.
@@ -178,10 +188,9 @@ public class World {
 	 * @see implementation
 	 */
 	// TODO Should this method be public?
-	// TODO Is this raw
+	@Raw
 	public void setUpperBound(double newUpperBound) {
 		upperBound = newUpperBound;
-		
 	}
 	
 	
@@ -215,7 +224,6 @@ public class World {
 	     */
 	
 	
-	
 			/*
 			 * |------------------------------------------------------------|
 			 * | 3. The next methods handle the relationship with Entities.	|
@@ -236,21 +244,22 @@ public class World {
 	 * @param	entity
 	 * 			The entity to be checked.
 	 * 
-	 * @see implementation
+	 * @return 	Returns whether this world can have the given entity as entity.
+	 * 			true if it can, false if not.
 	 */
 	@Raw
 	public boolean canHaveAsEntity(Entity entity) {
-		if ( (!containsEntity(entity)) && (entity.canHaveAsWorld(this)) ) return true;
-		return false;
+		return (entity != null) && (!containsEntity(entity));
 	}	
 	
 	/**
 	 * Check whether a given in entity is currently in this world.
 	 * 
-	 *@param	entity
+	 * @param	entity
 	 * 			The entity to be checked.
 	 * 
-	 * @see implementation
+	 * @return 	Returns whether this world already has the given entity in 
+	 * 			it's collection of entities. true if it can, false if not.
 	 */
 	@Raw
 	public boolean containsEntity(Entity entity) {
@@ -258,9 +267,6 @@ public class World {
            return entities.get(entity.getPosition()) == entity;
         }
         catch (NullPointerException exc) {
-//             //Because the given purchase is raw, it is possible that
-//             //it does not yet reference an effective share.
-//          assert (purchase == null) || (purchase.getShare() == null);
             return false;
         }
 	}
@@ -277,24 +283,8 @@ public class World {
 	@Raw
 	public void addEntity(Entity entity) throws NullPointerException, IllegalArgumentException {
 		if (entity == null) throw new NullPointerException();
-		// The world will always have final say as to what entities are in it.
-		// The entity can only set and de-set worlds, but not recognize itself as actually being in a world.
-		// First we check if this world can have a given entity as entity, this will also check if the
-		// entity can have this world as world.
-		if (canHaveAsEntity(entity)) {
-			// At this point we're sure that the entity can possibly be added to this world,
-			// the only thing that can go wrong now is if the entity is already in a world.
-//			try {
-//				// We set the current world of the entity to this.
-//				entity.setWorld(this);
-//			}
-//			catch (IllegalArgumentException exc) {
-//				throw new IllegalArgumentException();
-//			}
-			// Finally we can add the entity to the entities list.
-			entities.put(entity.getPosition(), entity);
-		}
-		else throw new IllegalArgumentException();
+		if (! canHaveAsEntity(entity)) throw new IllegalArgumentException();
+		entities.put(entity.getPosition(), entity);
 	}
 	
 	/**
@@ -308,16 +298,8 @@ public class World {
 	@Raw
 	public void removeEntity(Entity entity) throws NullPointerException, IllegalArgumentException {
 		if (entity == null) throw new NullPointerException();
-		// The world will always have final say as to what entities are in it.
-		// The entity can only set and de-set worlds, but not recognize itself as actually being in a world.
-		// Removing an entity is simpler than adding an entity. We only have to check if
-		// the entity is actually in the world and the world is  the current world of the entity.
-		if ( (containsEntity(entity)) && (entity.getWorld() == this) ) {
-			// Now we know that we're in a valid situation and can break the association.
-//			entity.deSetWorld();
-			entities.remove(entity.getPosition());
-		}
-		else throw new IllegalArgumentException();
+		if (!containsEntity(entity)) throw new IllegalArgumentException();
+		entities.remove(entity.getPosition());
 	}
 	
 	
@@ -393,7 +375,6 @@ public class World {
 					collisionEntitiesMin[1] = entity2;
 				}
 			}
-		
 			double collisionTimeTemp = entity1.getTimeToCollision(this);
 			if (collisionTimeTemp < collisionTimeMin) {
 				collisionTimeMin = collisionTimeTemp;
@@ -401,20 +382,16 @@ public class World {
 				collisionEntitiesMin[1] = entity1;
 			}
 		}
-		
 		return collisionEntitiesMin;
 	}
 	
 	public double getFirstCollisionTime() {
 		double collisionTimeMin = -1;
-
-		
 		for (Entity entity1: entities.values()) {
 			for (Entity entity2: entities.values()) {
 				double collisionTimeTemp = entity1.getTimeToCollision(entity2);
 				if ( (collisionTimeTemp < collisionTimeMin) || (collisionTimeMin == -1 ) ) collisionTimeMin = collisionTimeTemp;
 			}
-			
 			double collisionTimeTemp = entity1.getTimeToCollision(this);
 			if (collisionTimeTemp < collisionTimeMin) collisionTimeMin = collisionTimeTemp;
 		}

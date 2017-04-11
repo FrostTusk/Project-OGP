@@ -481,16 +481,16 @@ public abstract class Entity {
 		this.world = world;
 	}
 	
-	/**
-	* Remove the current world as world for this entity.
-	*      
-	* @see implementation
-	*/
-	 // TODO @Raw?
-	public void deSetWorld() throws NullPointerException {
-		if (getWorld() ==  null) throw new NullPointerException();
-		this.world = null;
-	}
+//	/**
+//	* Remove the current world as world for this entity.
+//	*      
+//	* @see implementation
+//	*/
+//	 // TODO @Raw?
+//	public void deSetWorld() throws NullPointerException {
+//		if (getWorld() ==  null) throw new NullPointerException();
+//		this.world = null;
+//	}
 	
 	
 	

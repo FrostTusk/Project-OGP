@@ -117,11 +117,23 @@ public class Bullet extends Entity {
 	 * Prepares this object for the garbage collector.
 	 * @see implementation
 	 */
-	@Override
+	@Override @Raw
 	public void terminate() {
 		if (isTerminated()) return;
-		if (getWorld() != null) getWorld().removeEntity(this);
-		setShip(null);
+		if (getWorld() != null) { 
+			try {
+				getWorld().removeEntity(this);
+				this.setWorld(null);
+			}
+			catch (IllegalArgumentException exc) {}	// Empty catch because if an IllegalArgument Exception
+		}											// is thrown, it means that the association wasn't set to start with.
+		if (getShip() != null) {					// This means that the association already doesn't exist. We don't have to do anything.
+			try {
+				getShip().removeBullet(this);
+				setShip(null);
+			}
+			catch (IllegalArgumentException exc) {}	// See former explanation.
+		}
 		this.isTerminated = true;
 	}
 	

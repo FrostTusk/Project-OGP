@@ -327,7 +327,7 @@ public class TestBullet {
 		Bullet bullet = new Bullet(1, 1, 1, 1, 1);
 		World world = new World(100, 100);
 		bullet.setWorld(world);
-		bullet.deSetWorld();
+		bullet.setWorld(null);
 		assertNull(bullet.getWorld());
 	}
 	

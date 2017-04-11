@@ -221,9 +221,9 @@ public class TestWorld {
 		assertTrue(world.containsEntity(ship));
 		assertTrue(world.containsEntity(bullet));
 		world.removeEntity(ship);
-		ship.deSetWorld();
+		ship.setWorld(null);
 		world.removeEntity(bullet);
-		bullet.deSetWorld();
+		bullet.setWorld(null);
 		assertFalse(world.containsEntity(ship));
 		assertFalse(world.containsEntity(bullet));
 	}

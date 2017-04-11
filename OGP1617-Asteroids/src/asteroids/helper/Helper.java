@@ -158,7 +158,7 @@ public class Helper {
 	 * @param 	entityContained
 	 * 		  	The entity to be checked if it lies in the boundaries of the other entity.
 	 * @param 	entityContainer
-	 * 		  	The world to be used.
+	 * 		  	The entity to be checked if it lies in the boundaries of the other entity.
 	 * 
 	 * @return	true if the entity is apparently in the boundaries, false if it is not.
 	 */

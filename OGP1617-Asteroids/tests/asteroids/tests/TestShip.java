@@ -799,16 +799,20 @@ public class TestShip {
 		assertEquals(Double.POSITIVE_INFINITY, facade.getTimeToCollision(ship1, ship1), EPSILON);
 	}
 	
+	
+	
 			/*
 	 		* |---------------------------------------------------------|
 	 		* | 12. The next tests test the interaction with bullets.	|
 	 		* |---------------------------------------------------------| 
 	 		*/
 	
+	
+	
 	@Test
-	public void testBulletAddToShip() throws ModelException {
+	public void testBulletLoadOnShip() throws ModelException {
 		Bullet bullet = new Bullet(100, 200, 0, 0, 20);	
-		Ship ship = new Ship(100, 200, 10, -10, 20, Math.PI, 1);
+		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
 		ship.loadBullet(bullet);
 		assertTrue(ship.getAllBullets().contains(bullet));
 	}
