@@ -291,11 +291,26 @@ public class TestBullet {
 		new Bullet(100, 200, 10, -10, Double.NaN);
 	}
 	
+			/*
+			* |-------------------------------------|
+			* | 4. The next tests test the Radius.	|
+			* |-------------------------------------| 
+			*/	
+	
+	@Test
+	public void testBulletSetMassGeneric() throws ModelException {
+		Bullet bullet = new Bullet(100, 200, 10, -10, 50);
+		assertNotNull(bullet);
+		bullet.setMass();
+		assertEquals((4/3) * Math.PI * Math.pow(50, 3) * (bullet.getDensity()), bullet.getMass(), EPSILON);
+	}
+	
+	
 	
 			/*
-			* |----------------------------------------------------------------|
-			* | 5. The next tests test the interaction with other entities.	|
-		 	* |----------------------------------------------------------------| 
+			* |-----------------------------------------------------------------|
+			* | 6. The next tests test the interaction with other entities.		|
+		 	* |-----------------------------------------------------------------| 
 		 	*/	
 
 	
@@ -341,11 +356,18 @@ public class TestBullet {
 	
 	@Test
 	public void testCollideWithShipNotSource() throws ModelException {
-		Bullet bullet = new Bullet(100, 200, 0, 0, 20);	
-		Ship ship = facade.createShip(100, 200, 10, -10, 20, Math.PI);
-		bullet.resolveCollision(ship);
+		Bullet bullet = new Bullet(200, 200, 0, 0, 20);	
+		Ship ship1 = new Ship(100, 100, 10, -10, Math.PI, 20, 10);
+		Ship ship2 = new Ship(200, 200, 10, -10, Math.PI, 20, 10);
+		World world = new World(1000, 1000);
+		world.addEntity(ship1);
+		world.addEntity(ship2);
+		bullet.setShip(ship1);
+		bullet.setSource(ship1);
+		bullet.setShip(null);
+		bullet.resolveCollisionShip(ship2);	
+		assertTrue(ship2.isTerminated());
 		assertTrue(bullet.isTerminated());
-		assertTrue(ship.isTerminated());
 	}
 	
 	@Test
@@ -356,6 +378,43 @@ public class TestBullet {
 		bullet.setWorld(world);
 		bullet.resolveCollision(world);
 		assertTrue(counter + 1 == bullet.getBoundaryCollisionCounter());
+	}
+	
+	// TODO: er zit een fout in bullet.resolvecollision(World), daar moet nog rekening gehouden worden met de radius van de bullet
+	@Test
+	public void testCollideWithWorldVelocityXChanged() throws ModelException {
+		Bullet bullet = new Bullet(80, 50, 10, 10, 20);
+		World world = new World(100, 100);
+		double counter = bullet.getBoundaryCollisionCounter();
+		bullet.setWorld(world);
+		bullet.resolveCollision(world);
+		assertTrue(counter + 1 == bullet.getBoundaryCollisionCounter());
+		assertTrue(bullet.getVelocityX() == -10);
+		assertTrue(bullet.getVelocityY() == 10);
+	}
+	//TODO: same
+	@Test
+	public void testCollideWithWorldVelocityYChanged() throws ModelException {
+		Bullet bullet = new Bullet(50, 80, 10, 10, 20);
+		World world = new World(100, 100);
+		double counter = bullet.getBoundaryCollisionCounter();
+		bullet.setWorld(world);
+		bullet.resolveCollision(world);
+		assertTrue(counter + 1 == bullet.getBoundaryCollisionCounter());
+		assertTrue(bullet.getVelocityX() == 10);
+		assertTrue(bullet.getVelocityY() == -10);
+	}
+	//TODO: same
+	@Test
+	public void testCollideWithWorldCorner() throws ModelException {
+		Bullet bullet = new Bullet(80, 80, 10, 10, 20);
+		World world = new World(100, 100);
+		double counter = bullet.getBoundaryCollisionCounter();
+		bullet.setWorld(world);
+		bullet.resolveCollision(world);
+		assertTrue(counter + 1 == bullet.getBoundaryCollisionCounter());
+		assertTrue(bullet.getVelocityX() == -10);
+		assertTrue(bullet.getVelocityY() == -10);
 	}
 	
 	// Werkt nog niet: world !contains bullet -> illArgExc
@@ -372,24 +431,29 @@ public class TestBullet {
 //		assertTrue(bullet.isTerminated());
 //	}
 
-	
+
 	@Test
-	public void testBulletAddToShip() throws ModelException {
-		Bullet bullet = new Bullet(100, 200, 0, 0, 20);	
-		Ship ship = facade.createShip(100, 200, 10, -10, 20, Math.PI);
-		ship.loadBullet(bullet);
-		assertTrue(ship.getAllBullets().contains(bullet));
+	public void testCanHaveAsWorldT() throws ModelException {
+		Bullet bullet1 = new Bullet(1, 1, 1, 1, 1);
+		Bullet bullet2 = new Bullet(10, 10, 1, 1, 1);
+		World world = new World(100, 100);
+		assertTrue(bullet1.canHaveAsWorld(world));
+		assertTrue(bullet2.canHaveAsWorld(world));
 	}
 	
 	@Test
-	public void testBulletRemovedWhenFired() throws ModelException {
-		Bullet bullet = new Bullet(100, 200, 0, 0, 20);	
-		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
-		World world = new World(1000, 1000);
-		ship.setWorld(world);
-		ship.loadBullet(bullet);
-		ship.fireBullet(bullet);
-		assertFalse(ship.getAllBullets().contains(bullet));
+	public void testCanHaveAsWorldF() throws ModelException {
+		Bullet bullet1 = new Bullet(100, 1, 1, 1, 1);
+		Bullet bullet2 = new Bullet(0, 1, 1, 1, 1);
+		Bullet bullet3 = new Bullet(1, 100, 1, 1, 1);
+		Bullet bullet4 = new Bullet(1, 0, 1, 1, 1);
+		World world = new World(100, 100);
+		assertFalse(bullet1.canHaveAsWorld(world));
+		assertFalse(bullet2.canHaveAsWorld(world));
+		assertFalse(bullet3.canHaveAsWorld(world));
+		assertFalse(bullet4.canHaveAsWorld(world));
 	}
+	
+	
 	
 }
