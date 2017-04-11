@@ -703,8 +703,9 @@ public abstract class Entity {
 	* 			| entity == null
 	*/
 	@Raw
-	public double getTimeToCollision(Entity entity) throws NullPointerException {
+	public double getTimeToCollision(Entity entity) throws NullPointerException, IllegalArgumentException {
 		if (entity == null) throw new NullPointerException(); 
+		if (this.overlap(entity)) throw new IllegalArgumentException();
 		if (this.getWorld() != entity.getWorld()) return Double.POSITIVE_INFINITY;	//TODO can they collide in the null world?
 		
 		double[] deltaR = {entity.getPosition().getPositionX() - this.getPosition().getPositionX(), 

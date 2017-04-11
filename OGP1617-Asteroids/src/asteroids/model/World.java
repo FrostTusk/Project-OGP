@@ -320,12 +320,14 @@ public class World {
 
 
 	/**
-	* Gets the entities involved first collision in the current world.
-	* 
-	* @return	Returns the entities involved in the first collision
-	* 			of this world.
-	* 			// TODO Declarative Documentation.
-	*/
+	 * Gets the entities involved first collision in the current world.
+	 * 
+	 * @return	Returns the entities involved in the first collision
+	 * 			of this world. If a boundary is involved the entities returned
+	 * 			will be the entity involved in the boundary collision and itself.
+	 * 			// TODO Declarative Documentation.
+	 */
+	@Raw
 	public Entity[] getFirstCollisionEntities() {
 		double collisionTimeMin = -1;
 		Entity[] collisionEntitiesMin = new Entity[2];
@@ -352,24 +354,26 @@ public class World {
 	
 	
 	/**
-	* Gets the position of the first collision in the current world.
-	* 
-	* @return	Returns the position of the first collision
-	* 			of this world.
-	* 			// TODO Declarative Documentation.
-	*/
+	 * Gets the position of the first collision in the current world.
+	 * 
+	 * @return	Returns the position of the first collision
+	 * 			of this world.
+	 * 			// TODO Declarative Documentation.
+	 */
+	@Raw
 	public double[] getFirstCollisionPosition() {
 		double[] vector = getFirstCollisionEntities()[0].getCollisionPosition(getFirstCollisionEntities()[1]);
 		return vector;
 	}
 	
 	/**
-	* Gets the time of the first collision in the current world.
-	* 
-	* @return	Returns the time of the first collision
-	* 			of this world.
-	* 			// TODO Declarative Documentation.
-	*/
+	 * Gets the time of the first collision in the current world.
+	 * 
+	 * @return	Returns the time of the first collision
+	 * 			of this world.
+	 * 			// TODO Declarative Documentation.
+	 */
+	@Raw
 	public double getTimeToFirstCollision() {
 		double collisionTimeMin = -1;
 		for (Entity entity1: entities.values()) {
@@ -461,9 +465,11 @@ public class World {
 	 * @param	position
 	 * 			The position of the entity to be returned.
 	 * 
-	 * @return	Returns the entitity at the given position.
+	 * @return	Returns the entity at the given position. 
+	 * 			Returns null if there is no entity at that position.
+	 * 			// TODO Declarative Documentation.
 	 */
-	// TODO Is this @Basic? @Raw?
+	@Raw
 	public Entity getEntityAtPosition(Position position) {
 		try {
 			return entities.get(position);
@@ -474,38 +480,12 @@ public class World {
 	}
 	
 	/**
-	 * Returns all entities registered in this world. 
-	 * Return type is Entity[].
-	 * @see implementation
-	 */
-	public Entity[] getAllEntitiesTemp1() {
-		Entity[] entitiesResult = new Entity[entities.size()];
-		int current = 0;
-		for (Entity entity: entities.values()) {
-			entitiesResult[current] = entity;
-			current += 1;
-		}
-		return entitiesResult;
-	}
-	
-	/**
 	 * Returns all entities registered in this world.
-	 * Return type is List<Entity>.
-	 * @see implementation
+	 * 
+	 * @return	Returns all entities registered in this world.
+	 * 			// TODO Declarative Documentation.
 	 */
-	public List<Entity> getAllEntitiesTemp2() {
-		List<Entity> entitiesResult = new ArrayList<Entity>();
-		for (Entity entity: entities.values()) {
-			entitiesResult.add(entity);
-		}
-		return entitiesResult;
-	}
-	
-	/**
-	 * Returns all entities registered in this world.
-	 * Return type is Set<Entity>.
-	 * @see implementation
-	 */
+	@Raw
 	public Set<Entity> getAllEntities() {
 		Set<Entity> entitiesResult = new HashSet<Entity>();
 		for (Entity entity: entities.values()) {
@@ -516,52 +496,34 @@ public class World {
 	
 	/**
 	 * Returns all ships registered in this world.
-	 * @see implementation
+	 * 
+	 * @return	Returns all ships registered in this world.
+	 * 			// TODO Declarative Documentation.
 	 */
+	@Raw
 	public Set<Ship> getAllShips() {
-		// First get all the entities registered in this world
-//		Entity[] entitiesResult = getAllEntitiesTemp1();
-//		List<Entity> entitiesResult = getAllEntitiesTemp2();
 		Set<Entity> entitiesResult = getAllEntities();
-		
-		// Create a temporary List that will include all the bullet entities.
-		// We have to create this list because we have no idea how many bullets are
-		// in the total amount of entities.
-//		List<Ship> shipsResult = new ArrayList<Ship>();
 		Set<Ship> shipsResult = new HashSet<Ship>();
-//		for (int i = 0; i < entitiesResult.length; i++) 
-//			if (entitiesResult[i].getType() == "Ship") shipsResult.add((Ship)entitiesResult[i]);
 		for (Entity entity: entitiesResult)
 			if (entity.getType() == "Ship") shipsResult.add((Ship)entity);
 		
 		return shipsResult;
-//		// Convert the List to an array using the helper class.
-//		return (Ship[])helper.convertListToArray(shipsResult);
 	}
 	
 	/**
 	 * Returns all bullets registered in this world.
-	 * @see implementation
+	 * 
+	 * @return 	Returns all bullets registered in this world.
+	 * 			// TODO Declarative Documentation.
 	 */
+	@Raw
 	public Set<Bullet> getAllBullets() {
-		// First get all the entities registered in this world
-//		Entity[] entitiesResult = getAllEntitiesTemp();
-//		List<Entity> entitiesResult = getAllEntitiesTemp2();
 		Set<Entity> entitiesResult = getAllEntities();
-		
-		// Create a temporary List that will include all the bullet entities.
-		// We have to create this list because we have no idea how many bullets are
-		// in the total amount of entities.
-//		List<Bullet> bulletsResult = new ArrayList<Bullet>();
 		Set<Bullet> bulletsResult = new HashSet<Bullet>();
-//		for (int i = 0; i < entitiesResult.length; i++) 
-//			if (entitiesResult[i].getType() == "Bullet") bulletsResult.add((Bullet)entitiesResult[i]);
 		for (Entity entity: entitiesResult)
 			if (entity.getType() == "Bullet") bulletsResult.add((Bullet)entity);
 		
 		return bulletsResult;
-//		// Convert the List to an array using the helper class.
-//		return (Bullet[])helper.convertListToArray(bulletsResult);
 	}
 	
 }
