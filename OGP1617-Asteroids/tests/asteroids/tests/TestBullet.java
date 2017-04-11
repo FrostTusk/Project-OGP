@@ -380,7 +380,6 @@ public class TestBullet {
 		assertTrue(counter + 1 == bullet.getBoundaryCollisionCounter());
 	}
 	
-	// TODO: er zit een fout in bullet.resolvecollision(World), daar moet nog rekening gehouden worden met de radius van de bullet
 	@Test
 	public void testCollideWithWorldVelocityXChanged() throws ModelException {
 		Bullet bullet = new Bullet(80, 50, 10, 10, 20);
@@ -392,19 +391,21 @@ public class TestBullet {
 		assertTrue(bullet.getVelocityX() == -10);
 		assertTrue(bullet.getVelocityY() == 10);
 	}
-	//TODO: same
+	
+	//TODO
 	@Test
 	public void testCollideWithWorldVelocityYChanged() throws ModelException {
 		Bullet bullet = new Bullet(50, 80, 10, 10, 20);
 		World world = new World(100, 100);
 		double counter = bullet.getBoundaryCollisionCounter();
-		bullet.setWorld(world);
+		world.addEntity(bullet);
 		bullet.resolveCollision(world);
 		assertTrue(counter + 1 == bullet.getBoundaryCollisionCounter());
 		assertTrue(bullet.getVelocityX() == 10);
 		assertTrue(bullet.getVelocityY() == -10);
 	}
-	//TODO: same
+
+	// TODO
 	@Test
 	public void testCollideWithWorldCorner() throws ModelException {
 		Bullet bullet = new Bullet(80, 80, 10, 10, 20);

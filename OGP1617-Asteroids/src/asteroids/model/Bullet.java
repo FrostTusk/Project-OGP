@@ -401,9 +401,9 @@ public class Bullet extends Entity {
 		if (getBoundaryCollisionCounter() < getBoundaryCollisionMax()) {
 			double[] position = getCollisionPosition(world);
 			if (position == null) return;	// There is no collision so the collision does not need to be resolved.
-			if (position[0] == this.getWorld().getWidth() || position[0] == 0) 
+			if (position[0] + getRadius() == getWorld().getWidth() || position[0] - getRadius() == 0) 
 				setVelocity(getVelocityX(), -getVelocityY());
-			else if (position[0] == this.getWorld().getHeight() || position[1] == 0) 
+			else if (position[1] + getRadius() == getWorld().getHeight() || position[1] - getRadius() == 0) 
 				setVelocity(-getVelocityX(), getVelocityY());
 		}
 		else this.terminate();
