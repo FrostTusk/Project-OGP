@@ -810,7 +810,7 @@ public class TestShip {
 	
 	
 	@Test
-	public void testBulletLoadOnShip() throws ModelException {
+	public void testShipBulletLoadOnShip() throws ModelException {
 		Bullet bullet = new Bullet(100, 200, 0, 0, 20);	
 		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
 		ship.loadBullet(bullet);
@@ -818,7 +818,7 @@ public class TestShip {
 	}
 	
 	@Test
-	public void testBulletRemovedWhenFired() throws ModelException {
+	public void testShipBulletRemovedWhenFired() throws ModelException {
 		Bullet bullet = new Bullet(100, 200, 0, 0, 20);	
 		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
 		World world = new World(1000, 1000);
@@ -827,6 +827,56 @@ public class TestShip {
 		ship.fireBullet(bullet);
 		assertFalse(ship.getAllBullets().contains(bullet));
 	}
+	
+	@Test
+	public void testShipCanHaveAsBulletT() throws ModelException {
+		Bullet bullet = new Bullet(100, 200, 0, 0, 20);	
+		Ship ship1 = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
+		Ship ship2 = new Ship(200, 200, 10, -10, Math.PI, 20, 1);
+		bullet.setShip(ship2);
+		assertTrue(ship1.canHaveAsBullet(bullet));
+	}
+	
+	@Test
+	public void testShipCanHaveAsBulletBulletIsNull() throws ModelException {
+		Bullet bullet = null;
+		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
+		assertFalse(ship.canHaveAsBullet(bullet));
+	}
+	
+	@Test
+	public void testShipCanHaveAsBulletF() throws ModelException {
+		Bullet bullet = new Bullet(100, 200, 0, 0, 20);
+		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
+		ship.loadBullet(bullet);
+		assertFalse(ship.canHaveAsBullet(bullet));
+	}
+	
+		/*
+		* |-------------------------------------|
+		* | 13. The next tests test the Mass.	|
+		* |-------------------------------------| 
+		*/
+	
+	
+	@Test
+	public void testCreateShipMassGeneric() throws ModelException {
+		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, Math.pow(10, 20));
+		assertEquals(Math.pow(10, 20), ship.getMass(), EPSILON);
+	}
+	
+	@Test
+	public void testCreateShipMassUnderZero() throws ModelException {
+		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, -10);
+		assertEquals((4/3) * Math.PI * Math.pow(20, 3) * ship.getDensity(), ship.getMass(), EPSILON);
+	}
+	
+	@Test
+	public void testCreateShipMassZero() throws ModelException {
+		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 0);
+		assertEquals((4/3) * Math.PI * Math.pow(20, 3) * ship.getDensity(), ship.getMass(), EPSILON);
+	}
+
 
 }
 	

@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import asteroids.helper.Entity;
 import asteroids.model.Bullet;
 import asteroids.model.Ship;
 import asteroids.model.World;
@@ -256,15 +257,85 @@ public class TestWorld {
 	}
 	
 	@Test
-	public void testWorldEvolveCollisions() throws ModelException {
+	public void testWorldGetFirstCollisionPosition() throws ModelException {
 		World world = new World(1000, 1000);
-		Ship ship1 = new Ship(100, 100, 0, 0, Math.PI, 20, 10);
-		Ship ship2 = new Ship(130, 130, -10, -10, Math.PI, 20, 10);
+		Ship ship = new Ship(150, 100, 0, 10, Math.PI, 20, 10);
+		Bullet bullet = new Bullet(150, 150, 0, 0, 1);
+		world.addEntity(ship);
+		ship.setWorld(world);
+		world.addEntity(bullet);
+		bullet.setWorld(world);
+		world.getFirstCollisionPosition();
+		assertEquals(150, world.getFirstCollisionPosition()[0], EPSILON);
+		assertEquals(149, world.getFirstCollisionPosition()[1], EPSILON);
+	}
+	
+	@Test
+	public void testWorldGetFirstCollisionTime() throws ModelException {
+		World world = new World(1000, 1000);
+		Ship ship1 = new Ship(100, 100, 0, 10, Math.PI, 20, 10);
+		Ship ship2 = new Ship(100, 150, 0, 0, Math.PI, 20, 10);
 		world.addEntity(ship1);
 		ship1.setWorld(world);
 		world.addEntity(ship2);
 		ship2.setWorld(world);
-		world.evolve(2);
+		assertEquals(1, world.getTimeToFirstCollision(), EPSILON);
 	}
+	
+	@Test
+	public void testWorldGetFirstCollisionTimeNoCollision() throws ModelException {
+		World world = new World(1000, 1000);
+		Ship ship1 = new Ship(100, 100, 0, 0, Math.PI, 20, 10);
+		Ship ship2 = new Ship(150, 150, 0, 0, Math.PI, 20, 10);
+		world.addEntity(ship1);
+		ship1.setWorld(world);
+		world.addEntity(ship2);
+		ship2.setWorld(world);
+		assertEquals(Double.POSITIVE_INFINITY, world.getTimeToFirstCollision(), EPSILON);
+	}
+	
+	@Test
+	public void testWorldGetFirstCollisionEntitiesNoCollision() throws ModelException {
+		World world = new World(1000, 1000);
+		Ship ship1 = new Ship(100, 100, 0, 0, Math.PI, 20, 10);
+		Ship ship2 = new Ship(150, 150, 0, 0, Math.PI, 20, 10);
+		world.addEntity(ship1);
+		ship1.setWorld(world);
+		world.addEntity(ship2);
+		ship2.setWorld(world);
+		Entity[] ships1 = {ship1, ship2};
+		Entity[] ships2 = {ship2, ship1};
+		if (world.getFirstCollisionEntities() == ships1 || world.getFirstCollisionEntities() == ships2) return; 
+		else fail();
+	}
+	
+	@Test
+	public void testWorldGetFirstCollisionEntitiesGeneric() throws ModelException {
+		World world = new World(1000, 1000);
+		Ship ship1 = new Ship(100, 100, 10, 0, Math.PI, 20, 10);
+		Ship ship2 = new Ship(150, 100, 0, 0, Math.PI, 20, 10);
+		Ship ship3 = new Ship(200, 100, 0, 0, Math.PI, 20, 10);
+		Ship ship4 = new Ship(250, 100, 0, 0, Math.PI, 20, 10);
+		world.addEntity(ship1);
+		ship1.setWorld(world);
+		world.addEntity(ship2);
+		ship2.setWorld(world);
+		world.addEntity(ship3);
+		ship3.setWorld(world);
+		world.addEntity(ship4);
+		ship4.setWorld(world);
+		Entity[] ships1 = {ship1, ship2};
+		Entity[] ships2 = {ship2, ship1};
+		if (world.getFirstCollisionEntities() == ships1 || world.getFirstCollisionEntities() == ships2) return; 
+		else fail();
+	}
+	
+	@Test
+	public void testWorldGetFirstCollisionEntitiesNoEntities() throws ModelException {
+		World world = new World(1000, 1000);
+		world.getFirstCollisionEntities();
+	}
+	
+	
 	
 }
