@@ -403,7 +403,7 @@ public class Bullet extends Entity {
 			if (position == null) return;	// There is no collision so the collision does not need to be resolved.
 			if (position[0] == getWorld().getWidth() || position[0] == 0) 
 				setVelocity(-getVelocityX(), getVelocityY());
-			else if (position[1] == getWorld().getHeight() || position[1] == 0) 
+			if (position[1] == getWorld().getHeight() || position[1] == 0) 
 				setVelocity(getVelocityX(), -getVelocityY());
 		}
 		else this.terminate();

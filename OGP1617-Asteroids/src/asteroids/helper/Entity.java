@@ -743,7 +743,7 @@ public abstract class Entity {
 		double[] vector = helper.calculatePosition(this, time);
 		if (vector[0] + this.getRadius() == world.getWidth()) vector[0] += this.getRadius();
 		else if (vector[0] - this.getRadius() == 0) vector[0] = 0;
-		else if (vector[1] + this.getRadius() == world.getHeight()) vector[1] += this.getRadius();
+		if (vector[1] + this.getRadius() == world.getHeight()) vector[1] += this.getRadius();
 		else if (vector[1] - this.getRadius() == 0) vector[1] = 0;
 		
 		return vector;	

@@ -660,7 +660,7 @@ public class Ship extends Entity {
 		if (position == null) return;	// There is no collision so the collision does not need to be resolved.
 		if (position[0] == this.world.getWidth() || position[0] == 0) 
 			setVelocity(-getVelocityX(), getVelocityY());
-		else if (position[0] == this.world.getHeight() || position[1] == 0) 
+		if (position[0] == this.world.getHeight() || position[1] == 0) 
 			setVelocity(getVelocityX(), -getVelocityY());
 	}
 	
