@@ -745,24 +745,21 @@ public class Ship extends Entity {
 	 * 		// TODO declarative documentation.
 	 */
 	@Override
-	public void resolveCollisionShip(Ship ship) throws IllegalArgumentException, NullPointerException {
+	public void resolveCollisionShip(Ship ship) throws NullPointerException {
 		if (ship == null) throw new NullPointerException();
 //		if (!this.overlap(ship)) throw new IllegalArgumentException();
 		double[] deltaV = {ship.getVelocityX() - getVelocityX(), ship.getVelocityY() - getVelocityY()};
 		double[] deltaR = {ship.getPosition().getPositionX() - getPosition().getPositionX(), 
 						   ship.getPosition().getPositionY() - getPosition().getPositionY()};
-		double deltaVR = deltaV[0] * deltaR[0] + deltaV[1] * deltaR[1];
 		
-		double J = (2 * getMass() * ship.getMass() * deltaVR) 
-				/ (this.getRadius() * (this.getMass() + ship.getMass()));
+		double J = ( 2 * getMass() * ship.getMass() * helper.evaluateScalar(deltaV, deltaR) 
+				/ ( (getRadius() + ship.getRadius()) * (getMass() + ship.getMass()) ) );
 		
-		double Jx1 = J * (this.getPosition().getPositionX() - ship.getPosition().getPositionX()) / (getRadius() + ship.getRadius());
-		double Jy1 = J * (this.getPosition().getPositionY() - ship.getPosition().getPositionY()) / (getRadius() + ship.getRadius());
-		this.setVelocity(this.getVelocityX() + Jx1/this.getMass(), this.getVelocityY() + Jy1/this.getMass());
+		double Jx = J * (ship.getPosition().getPositionX() - getPosition().getPositionX()) / (getRadius() + ship.getRadius());
+		double Jy = J * (ship.getPosition().getPositionY() - getPosition().getPositionY()) / (getRadius() + ship.getRadius());
 		
-		double Jx2 = J * (ship.getPosition().getPositionX() - this.getPosition().getPositionX()) / (getRadius() + ship.getRadius());
-		double Jy2 = J * (ship.getPosition().getPositionY() - this.getPosition().getPositionY()) / (getRadius() + ship.getRadius());
-		ship.setVelocity(ship.getVelocityX() + Jx2/ship.getMass(), ship.getVelocityY() + Jy2 / ship.getMass());
+		this.setVelocity(getVelocityX() + Jx/getMass(), getVelocityY() + Jy/getMass());
+		ship.setVelocity(ship.getVelocityX() - Jx/ship.getMass(), ship.getVelocityY() - Jy / ship.getMass());
 	}
 	
 	/**

@@ -335,26 +335,92 @@ public class World {
 		Entity[] collisionEntitiesMin = new Entity[2];
 		
 		for (Entity entity1: entities.values()) {
-			for (Entity entity2: entities.values()) {
-				if (entity1 != entity2) {
-					double collisionTimeTemp = entity1.getTimeToCollision(entity2);
-					if ( (collisionTimeTemp < collisionTimeMin) || (collisionTimeMin == -1 ) ) {
-						collisionTimeMin = collisionTimeTemp;
-						collisionEntitiesMin[0] = entity1;
-						collisionEntitiesMin[1] = entity2;
-					}
-				}
-			}
-			double collisionTimeTemp = entity1.getTimeToCollision(this);
-			if (collisionTimeTemp < collisionTimeMin) {
-				collisionTimeMin = collisionTimeTemp;
-				collisionEntitiesMin[0] = entity1;
-				collisionEntitiesMin[1] = entity1;
-			}
+			collisionTimeMin = iterateEntities(collisionTimeMin, collisionEntitiesMin, entity1);
+			collisionTimeMin = iterateBoundaries(collisionTimeMin, collisionEntitiesMin, entity1);
 		}
 		
 		return collisionEntitiesMin;
 	}
+
+	private double iterateEntities(double collisionTimeMin, Entity[] collisionEntitiesMin, Entity entity1) {
+		double collisionTimeTemp;
+		for (Entity entity2: entities.values()) {
+			if (entity1 == entity2) continue;	// Only check if the entities are different.
+			try {
+				collisionTimeTemp = entity1.getTimeToCollision(entity2);
+			}
+			catch (IllegalArgumentException exc) {	// Exception thrown if the entities overlap.
+				collisionTimeTemp = 0;	// If the exception is thrown, there is a collision at time 0.
+			}
+			
+			if (!( (collisionTimeTemp < collisionTimeMin) || (collisionTimeMin == -1 ) )) continue;
+			collisionTimeMin = collisionTimeTemp;	// This code is only reached if the new time is smaller
+			collisionEntitiesMin[0] = entity1;	// Than the old time.
+			collisionEntitiesMin[1] = entity2;
+		}
+		return collisionTimeMin;
+	}
+	
+	private double iterateBoundaries(double collisionTimeMin, Entity[] collisionEntitiesMin, Entity entity1) {
+		double collisionTimeTemp;
+		try {
+			collisionTimeTemp = entity1.getTimeToCollision(this);
+		}
+		catch (IllegalArgumentException exc) { // Exception thrown if the entity is overlapping.
+			collisionTimeTemp = 0;	// If the exception is thrown, there is a collision at time 0.
+		}
+		if (!( (collisionTimeTemp < collisionTimeMin) || (collisionTimeMin == -1 ) )) return collisionTimeMin;
+		collisionTimeMin = collisionTimeTemp;
+		collisionEntitiesMin[0] = entity1;
+		collisionEntitiesMin[1] = entity1;
+		return collisionTimeMin;
+	}
+
+//	// TODO WORK ON THIS SHIT
+//	public Entity[] getFirstCollisionEntitiesTemp() {
+//		double collisionTime = getFirstCollisionTimeTemp();
+//		
+//	}
+//	
+//	public double getFirstCollisionTimeTemp() {
+//		double collisionTimeMin = -1;
+//		for (Entity entity1: entities.values()) {
+//			collisionTimeMin = iterateEntitiesTemp(collisionTimeMin, entity1);
+//			collisionTimeMin = iterateBoundariesTemp(collisionTimeMin, entity1);
+//		}
+//	
+//		return collisionTimeMin;
+//	}
+//
+//	private double iterateEntitiesTemp(double collisionTimeMin, Entity entity1) {
+//		double collisionTimeTemp;
+//		for (Entity entity2: entities.values()) {
+//			if (entity1 == entity2) continue;	// Only check if the entities are different.
+//			try {
+//				collisionTimeTemp = entity1.getTimeToCollision(entity2);
+//			}
+//			catch (IllegalArgumentException exc) {	// Exception thrown if the entities overlap.
+//				collisionTimeTemp = 0;	// If the exception is thrown, there is a collision at time 0.
+//			}
+//			
+//			if (!( (collisionTimeTemp < collisionTimeMin) || (collisionTimeMin == -1 ) )) continue;
+//			collisionTimeMin = collisionTimeTemp;	// This code is only reached if the new time is smaller than the old time.
+//		}
+//		return collisionTimeMin;
+//	}
+//	
+//	private double iterateBoundariesTemp(double collisionTimeMin, Entity entity1) {
+//		double collisionTimeTemp;
+//		try {
+//			collisionTimeTemp = entity1.getTimeToCollision(this);
+//		}
+//		catch (IllegalArgumentException exc) { // Exception thrown if the entity is overlapping.
+//			collisionTimeTemp = 0;	// If the exception is thrown, there is a collision at time 0.
+//		}
+//		if (!( (collisionTimeTemp < collisionTimeMin) || (collisionTimeMin == -1 ) )) return collisionTimeMin;
+//		collisionTimeMin = collisionTimeTemp;
+//		return collisionTimeMin;
+//	}
 	
 	
 	/**
@@ -369,7 +435,8 @@ public class World {
 	public double[] getFirstCollisionPosition() {
 		Entity[] collisionEntities = getFirstCollisionEntities();
 		if (collisionEntities[0] == collisionEntities[1])
-			return collisionEntities[0].getCollisionPosition(this);
+			if (getTimeToFirstCollision() != 0) return collisionEntities[0].getCollisionPosition(this);
+			else throw new IllegalArgumentException();
 		else
 			return getFirstCollisionEntities()[0].getCollisionPosition(getFirstCollisionEntities()[1]);
 	}
@@ -383,15 +450,20 @@ public class World {
 	 */
 	@Raw
 	public double getTimeToFirstCollision() {
-		double collisionTimeMin = -1;
+		double collisionTimeTemp, collisionTimeMin = -1;
 		for (Entity entity1: entities.values()) {
 			for (Entity entity2: entities.values()) {
 				if (entity1 != entity2) {
-					double collisionTimeTemp = entity1.getTimeToCollision(entity2);
+					try {
+						collisionTimeTemp = entity1.getTimeToCollision(entity2);
+					}
+					catch (IllegalArgumentException exc) {
+						return 0;
+					}
 					if ( (collisionTimeTemp < collisionTimeMin) || (collisionTimeMin == -1 ) ) collisionTimeMin = collisionTimeTemp;
 				}
 			}
-			double collisionTimeTemp = entity1.getTimeToCollision(this);
+			collisionTimeTemp = entity1.getTimeToCollision(this);
 			if (collisionTimeTemp < collisionTimeMin) collisionTimeMin = collisionTimeTemp;
 		}
 		
@@ -453,7 +525,7 @@ public class World {
 				update(collisionTimeMin);
 			}
 			catch (IllegalArgumentException exc) {// This exception is throw if the new position of an entity is invalid
-				throw new IllegalArgumentException();	// or if time is < 0.
+				throw new IllegalArgumentException();	
 			}
 			
 			if ( collisionEntitiesMin[0] == collisionEntitiesMin[1] )	// If the collision is with the boundary
@@ -483,7 +555,7 @@ public class World {
 				entity.move(time);
 			}
 			catch (IllegalArgumentException exc) {	// This exception is throw if the new position of this entity is invalid
-				throw new IllegalArgumentException();	// or if time is < 0.
+				throw new IllegalArgumentException();	
 			}
 			this.addEntity(entity);	// These exceptions are also never thrown (because nothing moves out of bounds in this method).
 			entity.setWorld(this);
