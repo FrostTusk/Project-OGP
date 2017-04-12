@@ -1,6 +1,16 @@
 package asteroids.junk;
+
 import asteroids.model.Ship;
 
+/**
+ * Do not use this test class! This test class was
+ * written at the very start of the assignment and is unnecessary.
+ * Use JUnit 4 test suites instead.
+ * This class should not be delivered in the final version
+ * just as the other classes in asteroids.junk.
+ * 
+ * @author Mathijs Hubrechtsen
+ */
 public class ManualTests {
 	private static double pi = Math.PI;
 	

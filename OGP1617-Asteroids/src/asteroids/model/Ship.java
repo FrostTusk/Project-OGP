@@ -48,6 +48,8 @@ import be.kuleuven.cs.som.annotate.*;
  *       	| canHaveAsRadius(this.getRadius())
  * @invar  	Each ship must have a valid mass.
  *       	| canHaveAsMass(this.getMass())
+ *       
+ * @author	Mathijs Hubrechtsen, Ruben Dhuyvetter
  */
 public class Ship extends Entity {
 	

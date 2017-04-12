@@ -36,6 +36,8 @@ import be.kuleuven.cs.som.annotate.*;
  * @invar  	The size of each world must be a valid size for any
  *         	world.
  *       	| isValidSize(getWidth(), getHeight())
+ *       
+ * @author	Mathijs Hubrechtsen
  */
 public class World {
 	

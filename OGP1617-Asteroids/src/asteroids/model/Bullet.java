@@ -37,6 +37,8 @@ import be.kuleuven.cs.som.annotate.*;
  *       	| this.canHaveAsRadius(this.getRadius())
  * @invar  	Each bullet must have a valid mass.
  *       	| this.canHaveAsMass(this.getMass())
+ *       
+ * @author	Mathijs Hubrechtsen, Ruben Dhuyvetter
  */
 public class Bullet extends Entity {
 	

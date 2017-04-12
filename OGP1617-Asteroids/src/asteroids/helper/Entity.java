@@ -45,6 +45,8 @@ import be.kuleuven.cs.som.annotate.*;
  *       	| canHaveAsRadius(this.getRadius())
  * @invar  	Each entity must have a valid mass.
  *       	| canHaveAsMass(this.getMass())
+ *       
+ * @author	Mathijs Hubrechtsen
  */
 public abstract class Entity {
 	
