@@ -1,6 +1,8 @@
 package asteroids.helper;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import asteroids.model.World;
 
@@ -61,7 +63,7 @@ public class Helper {
 	
 	
 	/**
-	 * Converts a given List to an array.
+	 * Converts a given List to an Array.
 	 * 
 	 * @param 	list
 	 * 			The list to be converted
@@ -78,7 +80,21 @@ public class Helper {
 		return result;
 	}
 	
-
+	
+	/**
+	 * Converts a given Set to a List.
+	 * 
+	 * @param 	list
+	 * 			The list to be converted
+	 * 
+	 * @return	Returns an array made up by the elements in list.
+	 */
+	public <T> List<T> convertSetToList(Set<T> set) {
+		List<T> list = new ArrayList<T>();
+		for (T item: set) list.add(item);
+		return list;
+	}
+	
 	/**
 	 * Calculates the cross product with a vector and itself.
 	 * 

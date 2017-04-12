@@ -251,7 +251,7 @@ public class World {
 	 */
 	@Raw
 	public boolean canHaveAsEntity(Entity entity) {
-		return (entity != null) && (!containsEntity(entity)) && (entity.canHaveAsWorld(this));
+		return (entity != null) && (!containsEntity(entity)) && (entity.isInWorld(this));
 	}	
 	
 	/**
@@ -275,7 +275,8 @@ public class World {
 	
 
 	/**
-	 * Add a given entity to this world.
+	 * Add a given entity to this world. This does net set 
+	 * the world of the entity to this world.
 	 * 
 	 * @param	entity
 	 * 			The entity to be added.
@@ -285,13 +286,13 @@ public class World {
 	@Raw
 	public void addEntity(Entity entity) throws IllegalArgumentException, NullPointerException {
 		if (entity == null) throw new NullPointerException();
-		if (! canHaveAsEntity(entity)) throw new IllegalArgumentException();
+		if ( (! canHaveAsEntity(entity)) || (! entity.canHaveAsWorld(this)) ) throw new IllegalArgumentException();
 		entities.put(entity.getPosition(), entity);
 	}
 	
 	/**
-	 * Remove a given entity from this world.
-	 * 
+	 * Remove a given entity from this world.This does net set 
+	 * the world of the entity to null.
 	 * @param	entity
 	 * 			The entity to be removed.
 	 * 
@@ -339,6 +340,7 @@ public class World {
 			collisionTimeMin = iterateBoundaries(collisionTimeMin, collisionEntitiesMin, entity1);
 		}
 		
+		if (collisionTimeMin == -1) return null;
 		return collisionEntitiesMin;
 	}
 
@@ -375,52 +377,6 @@ public class World {
 		collisionEntitiesMin[1] = entity1;
 		return collisionTimeMin;
 	}
-
-//	// TODO WORK ON THIS SHIT
-//	public Entity[] getFirstCollisionEntitiesTemp() {
-//		double collisionTime = getFirstCollisionTimeTemp();
-//		
-//	}
-//	
-//	public double getFirstCollisionTimeTemp() {
-//		double collisionTimeMin = -1;
-//		for (Entity entity1: entities.values()) {
-//			collisionTimeMin = iterateEntitiesTemp(collisionTimeMin, entity1);
-//			collisionTimeMin = iterateBoundariesTemp(collisionTimeMin, entity1);
-//		}
-//	
-//		return collisionTimeMin;
-//	}
-//
-//	private double iterateEntitiesTemp(double collisionTimeMin, Entity entity1) {
-//		double collisionTimeTemp;
-//		for (Entity entity2: entities.values()) {
-//			if (entity1 == entity2) continue;	// Only check if the entities are different.
-//			try {
-//				collisionTimeTemp = entity1.getTimeToCollision(entity2);
-//			}
-//			catch (IllegalArgumentException exc) {	// Exception thrown if the entities overlap.
-//				collisionTimeTemp = 0;	// If the exception is thrown, there is a collision at time 0.
-//			}
-//			
-//			if (!( (collisionTimeTemp < collisionTimeMin) || (collisionTimeMin == -1 ) )) continue;
-//			collisionTimeMin = collisionTimeTemp;	// This code is only reached if the new time is smaller than the old time.
-//		}
-//		return collisionTimeMin;
-//	}
-//	
-//	private double iterateBoundariesTemp(double collisionTimeMin, Entity entity1) {
-//		double collisionTimeTemp;
-//		try {
-//			collisionTimeTemp = entity1.getTimeToCollision(this);
-//		}
-//		catch (IllegalArgumentException exc) { // Exception thrown if the entity is overlapping.
-//			collisionTimeTemp = 0;	// If the exception is thrown, there is a collision at time 0.
-//		}
-//		if (!( (collisionTimeTemp < collisionTimeMin) || (collisionTimeMin == -1 ) )) return collisionTimeMin;
-//		collisionTimeMin = collisionTimeTemp;
-//		return collisionTimeMin;
-//	}
 	
 	
 	/**
@@ -490,18 +446,19 @@ public class World {
 		if (time < 0) throw new IllegalArgumentException();
 		Entity[] collisionEntitiesMin = getFirstCollisionEntities();
 		if (collisionEntitiesMin == null) resolveEvolve(-1, collisionEntitiesMin, time);	// There are no entities in this World.
-		
-		double collisionTimeMin;
-		if ( collisionEntitiesMin[0] == collisionEntitiesMin[1] )	// If the collision is with the boundary.
-			collisionTimeMin = collisionEntitiesMin[0].getTimeToCollision(this);
-		else	// If the collision is between 2 entities.
-			collisionTimeMin = collisionEntitiesMin[0].getTimeToCollision(collisionEntitiesMin[1]);
-		
-		try {	// This is the only possible exception that is thrown in this method (outside of the one for the parameter);
-			resolveEvolve(collisionTimeMin, collisionEntitiesMin, time); // All other exceptions will never occur in the execution of this method
-		}																 // "All other" = the ones in the method calls of this method.
-		catch (IllegalArgumentException exc) {// This exception is throw if the new position of an entity is invalid
-			throw new IllegalArgumentException();	// or if time is < 0.
+		else {
+			double collisionTimeMin;
+			if ( collisionEntitiesMin[0] == collisionEntitiesMin[1] )	// If the collision is with the boundary.
+				collisionTimeMin = collisionEntitiesMin[0].getTimeToCollision(this);
+			else	// If the collision is between 2 entities.
+				collisionTimeMin = collisionEntitiesMin[0].getTimeToCollision(collisionEntitiesMin[1]);
+			
+			try {	// This is the only possible exception that is thrown in this method (outside of the one for the parameter);
+				resolveEvolve(collisionTimeMin, collisionEntitiesMin, time); // All other exceptions will never occur in the execution of this method
+			}																 // "All other" = the ones in the method calls of this method.
+			catch (IllegalArgumentException exc) {// This exception is throw if the new position of an entity is invalid
+				throw new IllegalArgumentException();	// or if time is < 0.
+			}
 		}
 	}
 	

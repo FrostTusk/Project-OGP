@@ -2,6 +2,7 @@ package asteroids.model;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import asteroids.helper.Entity;
@@ -118,7 +119,7 @@ public class Ship extends Entity {
 		throws IllegalArgumentException {
 		this.minRadius = 10;	// First the constants are set.
 		setDensity(1.42 * Math.pow(10, 12));
-		setForce(1.1 * Math.pow(10, 12));
+		setForce(1.1 * Math.pow(10, 21));
 		
 		try {	// Check if the position can be set.
 			setPosition(positionX, positionY);
@@ -153,8 +154,9 @@ public class Ship extends Entity {
 				this.setWorld(null);
 			}
 			catch (IllegalArgumentException exc) {}	// Empty catch because if an IllegalArgumentException
-		}											// is thrown, it means that the association wasn't set to start with.		
-		for (Bullet bullet: getAllBullets()) {		// This means that the association already doesn't exist. We don't have to do anything.
+		}											// is thrown, it means that the association wasn't set to start with.	
+		List<Bullet> iterator = helper.convertSetToList(getAllBullets());// This means that the association already doesn't exist. We don't have to do anything.
+		for (Bullet bullet: iterator) {		
 			try {
 				this.removeBullet(bullet);
 				bullet.setShip(null);
@@ -499,14 +501,15 @@ public class Ship extends Entity {
 		bullet.setSource(this);
 		bullet.setShip(null);
 		bullet.setVelocity(250 * Math.cos(getOrientation()), 250 * Math.sin(getOrientation()));	
-		bullet.setPosition( getPosition().getPositionX() + getRadius() * Math.cos(getOrientation()) 
-								+ bullet.getRadius() * Math.cos(getOrientation()), 
-						    getPosition().getPositionY() + getRadius() * Math.sin(getOrientation()) 
-						    	+ bullet.getRadius() * Math.sin(getOrientation()) );
+		bullet.setPosition( getPosition().getPositionX() + Math.cos(getOrientation()) *
+								(getRadius() + bullet.getRadius() + 1),
+						    getPosition().getPositionY() +  Math.sin(getOrientation()) * 
+						    	(getRadius() + bullet.getRadius() + 1) );	// +1 otherwise bullet is reloaded immediatly.
 
 		for (Entity entity : world.getAllEntities()) if (bullet.getDistanceBetween(entity) <= 0) bullet.resolveCollision(entity);
 			
 		try {
+			world.addEntity(bullet);
 			bullet.setWorld(this.getWorld());
 		}
 		catch (IllegalArgumentException exc) {
@@ -709,7 +712,7 @@ public class Ship extends Entity {
 		if (position == null) return;	// There is no collision so the collision does not need to be resolved.
 		if (position[0] == this.world.getWidth() || position[0] == 0) 
 			setVelocity(-getVelocityX(), getVelocityY());
-		if (position[0] == this.world.getHeight() || position[1] == 0) 
+		if (position[1] == this.world.getHeight() || position[1] == 0) 
 			setVelocity(getVelocityX(), -getVelocityY());
 	}
 	
@@ -774,7 +777,7 @@ public class Ship extends Entity {
 	@Override
 	public void resolveCollisionBullet(Bullet bullet) throws IllegalArgumentException, NullPointerException {
 		if (bullet == null) throw new NullPointerException();
-		if (this.getDistanceBetween(bullet) <= 0) throw new IllegalArgumentException();
+//		if (this.getDistanceBetween(bullet) <= 0) throw new IllegalArgumentException();
 		if (bullet.getSource() == this) {
 			try {
 				reloadBullet(bullet);
