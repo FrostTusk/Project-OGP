@@ -27,17 +27,17 @@ import be.kuleuven.cs.som.annotate.*;
 /**
  * A class of bullets. //TODO Do we need to keep all these invariants? + Any more?
  * 
-* @invar  	The position of each bullet must be a valid position for any
-*         	bullet.
-*       	| this.getPosition().isValidPosition(this.position.getPositionX(), this.position.getPositionY())
-* @invar  	The speed of each bullet must be a valid speed for any
-*         	bullet.
-*       	| this.isValidSpeed(getVelocityX(), getVelocityY())
-* @invar  	Each bullet can have its radius as radius.
-*       	| this.canHaveAsRadius(this.getRadius())
-* @invar  	Each bullet must have a valid mass.
-*       	| this.canHaveAsMass(this.getMass())
-*/
+ * @invar  	The position of each bullet must be a valid position for any
+ *         	bullet.
+ *       	| this.getPosition().isValidPosition(this.position.getPositionX(), this.position.getPositionY())
+ * @invar  	The speed of each bullet must be a valid speed for any
+ *         	bullet.
+ *       	| this.isValidSpeed(getVelocityX(), getVelocityY())
+ * @invar  	Each bullet can have its radius as radius.
+ *       	| this.canHaveAsRadius(this.getRadius())
+ * @invar  	Each bullet must have a valid mass.
+ *       	| this.canHaveAsMass(this.getMass())
+ */
 public class Bullet extends Entity {
 	
 		/*

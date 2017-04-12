@@ -35,17 +35,17 @@ import be.kuleuven.cs.som.annotate.*;
 /**
  * A class of entities. //TODO Do we need to keep all these invariants? + Any more?
  * 
-* @invar  	The position of each entity must be a valid position for any
-*         	entity.
-*       	| isValidPosition(getPositionX(), getPositionY())
-* @invar  	The speed of each entity must be a valid speed for any
-*         	entity.
-*       	| isValidSpeed(getVelocityX(), getVelocityY())
-* @invar  	Each entity can have its radius as radius.
-*       	| canHaveAsRadius(this.getRadius())
-* @invar  	Each entity must have a valid mass.
-*       	| canHaveAsMass(this.getMass())
-*/
+ * @invar  	The position of each entity must be a valid position for any
+ *         	entity.
+ *       	| isValidPosition(getPositionX(), getPositionY())
+ * @invar  	The speed of each entity must be a valid speed for any
+ *         	entity.
+ *       	| isValidSpeed(getVelocityX(), getVelocityY())
+ * @invar  	Each entity can have its radius as radius.
+ *       	| canHaveAsRadius(this.getRadius())
+ * @invar  	Each entity must have a valid mass.
+ *       	| canHaveAsMass(this.getMass())
+ */
 public abstract class Entity {
 	
 	/*

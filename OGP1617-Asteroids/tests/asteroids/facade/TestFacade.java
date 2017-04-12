@@ -21,11 +21,14 @@ public class TestFacade {
 		facade = new Facade();
 	}
 
+	
+	
 		/*
 		 * |----------------------------|
 		 * | #Header-1# Ship Methods.	|
 		 * |----------------------------| 
 		 */
+	
 	
 			/*
 			 * |--------------------------------------------|
@@ -311,11 +314,13 @@ public class TestFacade {
 	}
 	
 	
+	
 			/*
 			 * |--------------------------------------------|
 			 * | 5. The next tests test the Orientation.	|
 			 * |--------------------------------------------| 
 			 */	
+	
 	
 	
 	@Test(expected = ModelException.class)
@@ -372,6 +377,7 @@ public class TestFacade {
 			 * |--------------------------------------------| 
 			 */	
 
+	
 	
 	@Test(expected = ModelException.class)
 	public void testMoveShipIsNull() throws ModelException {
@@ -516,11 +522,13 @@ public class TestFacade {
 	}
 	
 
-	 /*
-	  * |-------------------------------------------|
-	  * | 8. The next tests test the Turn method.	|
-	  * |-------------------------------------------| 
-	  */	
+	
+		 /*
+		  * |-------------------------------------------|
+		  * | 8. The next tests test the Turn method.	|
+		  * |-------------------------------------------| 
+		  */	
+	
 	
 	
 	@Test
@@ -581,12 +589,14 @@ public class TestFacade {
 		facade.turn(ship, Double.NaN);
 	}
 	
+	
 
-	 /*
-	  * |-----------------------------------------------|
-	  * | 9. The next tests test the Distance method.	|
-	  * |-----------------------------------------------| 
-	  */
+			 /*
+			  * |-----------------------------------------------|
+			  * | 9. The next tests test the Distance method.	|
+			  * |-----------------------------------------------| 
+			  */
+	
 	
 	
 	@Test(expected = ModelException.class)
@@ -645,11 +655,13 @@ public class TestFacade {
 	}
 	
 
-	 /*
-	  * |-----------------------------------------------|
-	  * | 10. The next tests test the Overlap method.	|
-	  * |-----------------------------------------------| 
-	  */	
+	
+			 /*
+			  * |-----------------------------------------------|
+			  * | 10. The next tests test the Overlap method.	|
+			  * |-----------------------------------------------| 
+			  */	
+	
 	
 	
 	@Test(expected = ModelException.class)
@@ -687,11 +699,13 @@ public class TestFacade {
 	}
 	
 	
-	/*
-	  * |-----------------------------------------------------------|
-	  * | 11. The next tests test the Collision Detection methods.	|
-	  * |-----------------------------------------------------------| 
-	  */
+	
+			/*
+			  * |-----------------------------------------------------------|
+			  * | 11. The next tests test the Collision Detection methods.	|
+			  * |-----------------------------------------------------------| 
+			  */
+	
 	
 	
 	@Test(expected = ModelException.class)
@@ -782,6 +796,8 @@ public class TestFacade {
 		assertEquals(Double.POSITIVE_INFINITY, facade.getTimeToCollision(ship1, ship1), EPSILON);
 	}
 	
+	
+	
 		/*
 		 * |----------------------------|
 		 * | #Header-2# Bullet Methods.	|
@@ -797,5 +813,6 @@ public class TestFacade {
 		 * |----------------------------| 
 		 */
 
+	
 
 }

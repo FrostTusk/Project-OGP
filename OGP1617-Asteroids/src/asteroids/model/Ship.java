@@ -35,20 +35,20 @@ import be.kuleuven.cs.som.annotate.*;
 /**
  * A class of ships. //TODO Do we need to keep all these invariants? + Any more?
  * 
-* @invar  	The position of each ship must be a valid position for any
-*         	ship.
-*       	| isValidPosition(getPositionX(), getPositionY())
-* @invar  	The speed of each ship must be a valid speed for any
-*         	ship.
-*       	| isValidSpeed(getVelocityX(), getVelocityY())
-* @invar  	The orientation of each ship must be a valid orientation for any
-*         	ship.
-*       	| isValidOrientation(getOrientation())
-* @invar  	Each ship can have its radius as radius.
-*       	| canHaveAsRadius(this.getRadius())
-* @invar  	Each ship must have a valid mass.
-*       	| canHaveAsMass(this.getMass())
-*/
+ * @invar  	The position of each ship must be a valid position for any
+ *         	ship.
+ *       	| isValidPosition(getPositionX(), getPositionY())
+ * @invar  	The speed of each ship must be a valid speed for any
+ *         	ship.
+ *       	| isValidSpeed(getVelocityX(), getVelocityY())
+ * @invar  	The orientation of each ship must be a valid orientation for any
+ *         	ship.
+ *       	| isValidOrientation(getOrientation())
+ * @invar  	Each ship can have its radius as radius.
+ *       	| canHaveAsRadius(this.getRadius())
+ * @invar  	Each ship must have a valid mass.
+ *       	| canHaveAsMass(this.getMass())
+ */
 public class Ship extends Entity {
 	
 		/*
@@ -346,14 +346,14 @@ public class Ship extends Entity {
 	
 	
 	/**
-	* Check whether this ship can have the given bullet as a bullet. 
-	*
-	* @param  	bullet
-	*         	The bullet to check.
-	*         
-	* @see implementation
-	* 		// TODO Bullet has to lie in the circle of Ship
-	*/
+	 * Check whether this ship can have the given bullet as a bullet. 
+	 *
+	 * @param  	bullet
+	 *         	The bullet to check.
+	 *         
+	 * @see implementation
+	 * 		// TODO Bullet has to lie in the circle of Ship
+	 */
 	@Raw
 	public boolean canHaveAsBullet(Bullet bullet) {
 		if ( (this.bullets.contains(bullet)) || (bullet == null) ) return false;
@@ -364,14 +364,14 @@ public class Ship extends Entity {
 	
 	
 	/**
-	* Add a given bullet to this ship's collection of bullets. 
-	* This method works immediately with the collection.
-	* Load 
-	* @param  	bullet
-	*         	The bullet to be added.
-	*         
-	* @see implementation
-	*/
+	 * Add a given bullet to this ship's collection of bullets. 
+	 * This method works immediately with the collection.
+	 * Load 
+	 * @param  	bullet
+	 *         	The bullet to be added.
+	 *         
+	 * @see implementation
+	 */
 	@Raw
 	private void addBullet(Bullet bullet) {
 		this.bullets.add(bullet);
@@ -379,13 +379,13 @@ public class Ship extends Entity {
 	}
 	
 	/**
-	* Remove a given bullet from this ship's collection of bullets. 
-	*
-	* @param  	bullet
-	*         	The bullet to be removed.
-	*         
-	* @see implementation
-	*/
+	 * Remove a given bullet from this ship's collection of bullets. 
+	 *
+	 * @param  	bullet
+	 *         	The bullet to be removed.
+	 *         
+	 * @see implementation
+	 */
 	@Raw // TODO @Raw?
 	public void removeBullet(Bullet bullet) throws IllegalArgumentException {
 		if (!this.bullets.contains(bullet)) throw new IllegalArgumentException();
@@ -396,14 +396,14 @@ public class Ship extends Entity {
 	
 	
 	/**
-	* Load a given bullet into this ship. Loading a bullet will add
-	* the given bullet to the ship's collection and set it's ship as this ship.
-	*  
-	* @param  	bullet
-	*         	The bullet to be loaded.
-	*         
-	* @see implementation
-	*/
+	 * Load a given bullet into this ship. Loading a bullet will add
+	 * the given bullet to the ship's collection and set it's ship as this ship.
+	 *  
+	 * @param  	bullet
+	 *         	The bullet to be loaded.
+	 *         
+	 * @see implementation
+	 */
 	public void loadBullet(Bullet bullet) throws IllegalArgumentException, NullPointerException {
 		if (bullet == null)	throw new NullPointerException();
 		if ( (!bullet.canHaveAsShip(this)) || (!this.canHaveAsBullet(bullet)) ) throw new IllegalArgumentException();
@@ -417,14 +417,14 @@ public class Ship extends Entity {
 	}
 	
 	/**
-	* Load a given bullet collection into this ship. Loading a bullet will add
-	* the given bullet to the ship's collection and set it's ship as this ship.
-	*  
-	* @param  	bullet
-	*         	The bullet to be loaded.
-	*         
-	* @see implementation
-	*/
+	 * Load a given bullet collection into this ship. Loading a bullet will add
+	 * the given bullet to the ship's collection and set it's ship as this ship.
+	 *  
+	 * @param  	bullet
+	 *         	The bullet to be loaded.
+	 *         
+	 * @see implementation
+	 */
 	public void loadBullets(Collection<Bullet> bullets) throws IllegalArgumentException, NullPointerException {
 		try {
 			for (Bullet bullet: bullets) loadBullet(bullet);
@@ -438,14 +438,14 @@ public class Ship extends Entity {
 	}
 	
 	/**
-	* Reload a given bullet into this ship.
-	*  
-	* @param  	bullet
-	*         	The bullet to be reloaded.
-	*         
-	* @see implementation
-	* 		// TODO declarative documentation.
-	*/
+	 * Reload a given bullet into this ship.
+	 *  
+	 * @param  	bullet
+	 *         	The bullet to be reloaded.
+	 *         
+	 * @see implementation
+	 * 		// TODO declarative documentation.
+	 */
 	public void reloadBullet(Bullet bullet) throws IllegalArgumentException, NullPointerException {
 		try {
 			bullet.resetSource(this);
@@ -462,11 +462,11 @@ public class Ship extends Entity {
 	
 	
 	/**
-	* Fires a bullet out of the collection of bullets.
-	*     
-	* @see implementation
-	* 		// TODO declarative documentation.
-	*/
+	 * Fires a bullet out of the collection of bullets.
+	 *     
+	 * @see implementation
+	 * 		// TODO declarative documentation.
+	 */
 	public void fireBullet() {
 		if (bullets.size() > 0)
 			for (Bullet bullet: bullets) {
@@ -477,14 +477,14 @@ public class Ship extends Entity {
 	}
 	
 	/**
-	* Fires a requested bullet out of the collection of bullets.
-	*     
-	* @param	bullet
-	* 			The bullet requested to be fired.
-	* 
-	* @see implementation
-	* 		// TODO declarative documentation.
-	*/
+	 * Fires a requested bullet out of the collection of bullets.
+	 *     
+	 * @param	bullet
+	 * 			The bullet requested to be fired.
+	 * 
+	 * @see implementation
+	 * 		// TODO declarative documentation.
+	 */
 	public void fireBullet(Bullet bullet) {
 		if ( (this.getWorld() == null) || (bullet == null) ) return;
 		
@@ -604,35 +604,35 @@ public class Ship extends Entity {
 	
 	
 	/**
-	* Variable registering the force of this ship.
-	*/
+	 * Variable registering the force of this ship.
+	 */
 	private double force;	// #Constant-1#
 	/**
-	* Variable registering the thruster of this ship.
-	*/
+	 * Variable registering the thruster of this ship.
+ 	 */
 	private Thruster thruster = new Thruster();
 	
 	
 	/**
-	* Return the force of this ship.
-	*/
+	 * Return the force of this ship.
+	 */
 	@Basic @Raw
 	public double getForce() {
 		return this.force;
 	}
 	
 	/**
-	* Return the status of this ship's thruster.
-	* True => On, False => Off
-	*/
+	 * Return the status of this ship's thruster.
+	 * true => On, false => Off
+	 */
 	@Basic @Raw
 	public boolean getThrustStatus() {
 		return this.thruster.getThrustStatus();
 	}
 	
 	/**
-	* Return the acceleration of this ship.
-	*/
+	 * Return the acceleration of this ship.
+	 */
 	@Basic @Raw
 	public double getAcceleration() {
 		return getForce() / getTotalMass();
