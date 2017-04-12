@@ -493,7 +493,7 @@ public class TestShip {
 	
 	
 	@Test
-	public void testMoveGeneric() throws ModelException {
+	public void testMoveGeneric() {
 		Ship ship = new Ship(100, 100, 30, -15, 0, 20, 20);
 		ship.move(1);
 		Position position = ship.getPosition();
@@ -568,64 +568,64 @@ public class TestShip {
 	
 	
 	@Test
-	public void testThrustXWhithMovingStart() throws ModelException {
-		Ship ship = facade.createShip(100, 100, 10, 10, 20, 0);
-		facade.thrust(ship, 5);
-		assertNotNull(facade.getShipVelocity(ship));
-		assertEquals(15, facade.getShipVelocity(ship)[0], EPSILON);
-		assertEquals(10, facade.getShipVelocity(ship)[1], EPSILON);
+	public void testThrustXWhithMovingStart() {
+		Ship ship = new Ship(100, 100, 10, 10, 0, 20, 0);
+		ship.thrust(5);;
+		assertNotNull(ship.getSpeed());
+		assertEquals(15, ship.getVelocityX(), EPSILON);
+		assertEquals(10, ship.getVelocityY(), EPSILON);
 	}
 	
 	@Test
-	public void testThrustYWhithMovingStart() throws ModelException {
-		Ship ship = facade.createShip(100, 100, 10, 10, 20, (Math.PI)/2);
-		facade.thrust(ship, 7);
-		assertNotNull(facade.getShipVelocity(ship));
-		assertEquals(10, facade.getShipVelocity(ship)[0], EPSILON);
-		assertEquals(17, facade.getShipVelocity(ship)[1], EPSILON);
+	public void testThrustYWhithMovingStart() {
+		Ship ship = new Ship(100, 100, 10, 10, (Math.PI)/2, 20, 0);
+		ship.thrust(7);;
+		assertNotNull(ship.getSpeed());
+		assertEquals(10, ship.getVelocityX(), EPSILON);
+		assertEquals(17, ship.getVelocityY(), EPSILON);
 	}
 		
 
 	@Test
-	public void testThrustOverflow() throws ModelException {
-		Ship ship = facade.createShip(100, 100, 0, 0, 20, 0);
-		facade.thrust(ship, 500000);
-		assertEquals(0, facade.getShipVelocity(ship)[0], EPSILON);
-		assertEquals(0, facade.getShipVelocity(ship)[1], EPSILON);
+	public void testThrustOverflow() {
+		Ship ship = new Ship(100, 100, 0, 0, 0, 20, 0);
+		ship.thrust(500000);
+		assertEquals(0, ship.getVelocityX(), EPSILON);
+		assertEquals(0, ship.getVelocityY(), EPSILON);
 	}
 	
 	@Test
-	public void testThrustNeg() throws ModelException {
-		Ship ship = facade.createShip(100, 100, 100, 100, 20, 0);
-		facade.thrust(ship, -10);
-		assertNotNull(facade.getShipVelocity(ship));
-		assertEquals(100, facade.getShipVelocity(ship)[0], EPSILON);
-		assertEquals(100, facade.getShipVelocity(ship)[1], EPSILON);
+	public void testThrustNeg() {
+		Ship ship = new Ship(100, 100, 100, 100, 0, 20, 0);
+		ship.thrust(-10);
+		assertNotNull(ship.getSpeed());
+		assertEquals(100, ship.getVelocityX(), EPSILON);
+		assertEquals(100, ship.getVelocityY(), EPSILON);
 	}
 	
 	
 	@Test
-	public void testThrustPosInfinity() throws ModelException {
-		Ship ship = facade.createShip(100, 100, 0, 0, 20, 0);
-		facade.thrust(ship, Double.POSITIVE_INFINITY);
-		assertEquals(0, facade.getShipVelocity(ship)[0], EPSILON);
-		assertEquals(0, facade.getShipVelocity(ship)[1], EPSILON);
+	public void testThrustPosInfinity() {
+		Ship ship = new Ship(100, 100, 0, 0, 0, 20, 0);
+		ship.thrust(Double.POSITIVE_INFINITY);
+		assertEquals(0, ship.getVelocityX(), EPSILON);
+		assertEquals(0, ship.getVelocityY(), EPSILON);
 	}
 	
 	@Test
-	public void testThrustNegInfinity() throws ModelException {
-		Ship ship = facade.createShip(100, 100, 0, 0, 20, 0);
-		facade.thrust(ship, Double.NEGATIVE_INFINITY);
-		assertEquals(0, facade.getShipVelocity(ship)[0], EPSILON);
-		assertEquals(0, facade.getShipVelocity(ship)[1], EPSILON);
+	public void testThrustNegInfinity() {
+		Ship ship = new Ship(100, 100, 0, 0, 0, 20, 0);
+		ship.thrust(Double.NEGATIVE_INFINITY);
+		assertEquals(0, ship.getVelocityX(), EPSILON);
+		assertEquals(0, ship.getVelocityY(), EPSILON);
 	}
 	
 	@Test
-	public void testThrustNaN() throws ModelException {
-		Ship ship = facade.createShip(100, 100, 0, 0, 20, 0);
-		facade.thrust(ship, Double.NaN);
-		assertEquals(0, facade.getShipVelocity(ship)[0], EPSILON);
-		assertEquals(0, facade.getShipVelocity(ship)[1], EPSILON);
+	public void testThrustNaN() {
+		Ship ship = new Ship(100, 100, 0, 0, 0, 20, 0);
+		ship.thrust(Double.NaN);
+		assertEquals(0, ship.getVelocityX(), EPSILON);
+		assertEquals(0, ship.getVelocityY(), EPSILON);
 	}
 	
 
@@ -639,64 +639,64 @@ public class TestShip {
 	
 	
 	@Test
-	public void testTurnGeneric() throws ModelException {
-		Ship ship = facade.createShip(100, 100, 30, -15, 20, 0);
-		facade.turn(ship, Math.PI);
-		assertNotNull(facade.getShipOrientation(ship));
-		assertEquals(Math.PI, facade.getShipOrientation(ship), EPSILON);
+	public void testTurnGeneric() {
+		Ship ship = new Ship(100, 100, 30, -15, 0, 20, 0);
+		ship.turn(Math.PI);
+		assertNotNull(ship.getOrientation());
+		assertEquals(Math.PI, ship.getOrientation(), EPSILON);
 	}
 	
 	
 	@Test
-	public void testTurnOisNeg() throws ModelException {
+	public void testTurnOisNeg() {
 		Ship ship = new Ship(100, 100, 30, -15, Math.PI, 20, 20);
-		facade.turn(ship, -Math.PI);
+		ship.turn(-Math.PI);
 		assertNotNull(ship.getOrientation());
 		assertEquals(0, ship.getOrientation(), EPSILON);
 	}
 	
 	@Test
-	public void testTurnOisZero() throws ModelException {
-		Ship ship = facade.createShip(100, 100, 30, -15, 20, 0);
-		facade.turn(ship, 0);
-		assertNotNull(facade.getShipOrientation(ship));
-		assertEquals(0, facade.getShipOrientation(ship), EPSILON);
+	public void testTurnOisZero() {
+		Ship ship = new Ship(100, 100, 30, -15, 0, 20, 0);
+		ship.turn(0);
+		assertNotNull(ship.getOrientation());
+		assertEquals(0, ship.getOrientation(), EPSILON);
 	}
 	
 	
 	@Test
-	public void testTurnOOverflow() throws ModelException {
-		Ship ship = facade.createShip(100, 100, 30, -15, 20, 2*Math.PI);
-		facade.turn(ship, Math.PI);
-		assertNotNull(facade.getShipOrientation(ship));
-		assertEquals(Math.PI, facade.getShipOrientation(ship), EPSILON);
+	public void testTurnOOverflow() {
+		Ship ship = new Ship(100, 100, 30, -15, 0, 20, 2*Math.PI);
+		ship.turn(Math.PI);
+		assertNotNull(ship.getOrientation());
+		assertEquals(Math.PI, ship.getOrientation(), EPSILON);
 	}
 	
 	@Test
-	public void testTurnOUnderflow() throws ModelException {
-		Ship ship = facade.createShip(100, 100, 30, -15, 20, 0);
-		facade.turn(ship, -2*Math.PI);
-		assertNotNull(facade.getShipOrientation(ship));
-		assertEquals(0, facade.getShipOrientation(ship), EPSILON);
+	public void testTurnOUnderflow() {
+		Ship ship = new Ship(100, 100, 30, -15, 0, 20, 0);
+		ship.turn(-2*Math.PI);
+		assertNotNull(ship.getOrientation());
+		assertEquals(0, ship.getOrientation(), EPSILON);
 	}
 	
 	
-	@Test(expected = ModelException.class)
-	public void testTurnOisPosInfinity() throws ModelException {
-		Ship ship = facade.createShip(100, 100, 30, -15, Math.PI, 20);
-		facade.turn(ship, Double.POSITIVE_INFINITY);
+	@Test(expected = AssertionError.class)
+	public void testTurnOisPosInfinity() {
+		Ship ship = new Ship(100, 100, 30, -15, Math.PI, 20, 0);
+		ship.turn(Double.POSITIVE_INFINITY);
 	}
 	
-	@Test(expected = ModelException.class)
-	public void testTurnOisNegInfinity() throws ModelException {
-		Ship ship = facade.createShip(100, 100, 30, -15, Math.PI, 20);
-		facade.turn(ship, Double.NEGATIVE_INFINITY);
+	@Test(expected = AssertionError.class)
+	public void testTurnOisNegInfinity() {
+		Ship ship = new Ship(100, 100, 30, -15, Math.PI, 20, 0);
+		ship.turn(Double.NEGATIVE_INFINITY);
 	}
 	
-	@Test(expected = ModelException.class)
-	public void testTurnOisNaN() throws ModelException {
-		Ship ship = facade.createShip(100, 100, 30, -15, Math.PI, 20);
-		facade.turn(ship, Double.NaN);
+	@Test(expected = AssertionError.class)
+	public void testTurnOisNaN() {
+		Ship ship = new Ship(100, 100, 30, -15, Math.PI, 20, 0);
+		ship.turn(Double.NaN);
 	}
 	
 
@@ -709,61 +709,61 @@ public class TestShip {
 	
 	
 	
-	@Test(expected = ModelException.class)
-	public void testDistanceShip1IsNull() throws ModelException {
+	@Test(expected = NullPointerException.class)
+	public void testDistanceShip1IsNull() {
 		Ship ship1 = null;
-		Ship ship2 = facade.createShip(100, 100, 30, -15, 20, 0);
-		assertEquals(0, facade.getDistanceBetween(ship1, ship2), EPSILON);
+		Ship ship2 = new Ship(100, 100, 30, -15, 0, 20, 0);
+		assertEquals(0, ship1.getDistanceBetween(ship2), EPSILON);
 	}
 	
-	@Test(expected = ModelException.class)
-	public void testDistanceShip2IsNull() throws ModelException {
-		Ship ship1 = facade.createShip(100, 100, 30, -15, 20, 0);
+	@Test(expected = NullPointerException.class)
+	public void testDistanceShip2IsNull() {
+		Ship ship1 = new Ship(100, 100, 30, -15, 0, 20, 0);
 		Ship ship2 = null;
-		assertEquals(0, facade.getDistanceBetween(ship1, ship2), EPSILON);
+		assertEquals(0, ship1.getDistanceBetween(ship2), EPSILON);
 	}
 	
 	
 	@Test
-	public void testDistanceIsPositiveLinearX() throws ModelException {
-		Ship ship1 = facade.createShip(130, 0, 0, 0, 10, 0);;
-		Ship ship2 = facade.createShip(100, 0, 0, 0, 10, 0);
-		assertEquals(10, facade.getDistanceBetween(ship1, ship2), EPSILON);
+	public void testDistanceIsPositiveLinearX() {
+		Ship ship1 = new Ship(130, 0, 0, 0, 0, 10, 0);
+		Ship ship2 = new Ship(100, 0, 0, 0, 0, 10, 0);
+		assertEquals(10, ship1.getDistanceBetween(ship2), EPSILON);
 	}
 	
 	@Test
-	public void testDistanceIsPositiveLinearY() throws ModelException {
-		Ship ship1 = facade.createShip(0, 140, 0, 0, 10, 0);;
-		Ship ship2 = facade.createShip(0, 100, 0, 0, 10, 0);
-		assertEquals(20, facade.getDistanceBetween(ship1, ship2), EPSILON);
+	public void testDistanceIsPositiveLinearY() {
+		Ship ship1 = new Ship(0, 140, 0, 0, 0, 10, 0);;
+		Ship ship2 = new Ship(0, 100, 0, 0, 0, 10, 0);
+		assertEquals(20, ship1.getDistanceBetween(ship2), EPSILON);
 	}
 	
 	@Test
-	public void testDistanceIsNegative() throws ModelException {
-		Ship ship2 = facade.createShip(105, 100, 0, 0, 10, 0);;
-		Ship ship1 = facade.createShip(100, 100, 0, 0, 10, 0);
-		assertEquals(-15, facade.getDistanceBetween(ship1, ship2), EPSILON);
+	public void testDistanceIsNegative() {
+		Ship ship2 = new Ship(105, 100, 0, 0, 0, 10, 0);;
+		Ship ship1 = new Ship(100, 100, 0, 0, 0, 10, 0);
+		assertEquals(-15, ship1.getDistanceBetween(ship2), EPSILON);
 	}
 	
 	@Test
-	public void testDistanceIsZero() throws ModelException {
-		Ship ship1 = facade.createShip(130, 0, 0, 0, 10, 0);;
-		Ship ship2 = facade.createShip(100, 0, 0, 0, 20, 0);
-		assertEquals(0, facade.getDistanceBetween(ship1, ship2), EPSILON);
+	public void testDistanceIsZero() {
+		Ship ship1 = new Ship(130, 0, 0, 0, 0, 10, 0);;
+		Ship ship2 = new Ship(100, 0, 0, 0, 0, 20, 0);
+		assertEquals(0, ship1.getDistanceBetween(ship2), EPSILON);
 	}
 	
 	
 	@Test
-	public void testDistanceSameShip() throws ModelException {
-		Ship ship1 = facade.createShip(100, 100, 30, -15, 20, 0);
-		assertEquals(0, facade.getDistanceBetween(ship1, ship1), EPSILON);
+	public void testDistanceSameShip() {
+		Ship ship1 = new Ship(100, 100, 30, -15, 0, 20, 0);
+		assertEquals(0, ship1.getDistanceBetween(ship1), EPSILON);
 	}
 	
 	@Test
-	public void testDistanceOver00() throws ModelException {
-		Ship ship1 = facade.createShip(20, 20, 30, 15, 10, 0);
-		Ship ship2 = facade.createShip(-20, -20, 0, 0, 10, 0);
-		assertEquals(36.568542, facade.getDistanceBetween(ship1, ship2), EPSILON);
+	public void testDistanceOver00() {
+		Ship ship1 = new Ship(20, 20, 30, 15, 0, 10, 0);
+		Ship ship2 = new Ship(-20, -20, 0, 0, 0, 10, 0);
+		assertEquals(36.568542, ship1.getDistanceBetween(ship2), EPSILON);
 	}
 	
 
@@ -776,40 +776,40 @@ public class TestShip {
 	
 	
 	
-	@Test(expected = ModelException.class)
-	public void testOverlapShip1IsNull() throws ModelException {
+	@Test(expected = NullPointerException.class)
+	public void testOverlapShip1IsNull() {
 		Ship ship1 = null;
-		Ship ship2 = facade.createShip(100, 100, 30, -15, 20, 0);
-		assertFalse(facade.overlap(ship1, ship2));
+		Ship ship2 = new Ship(100, 100, 30, -15, 0, 20, 0);
+		assertFalse(ship1.overlap(ship2));
 	}
 	
-	@Test(expected = ModelException.class)
-	public void testOverlapShip2IsNull() throws ModelException {
-		Ship ship1 = facade.createShip(100, 100, 30, -15, 20, 0);
+	@Test(expected = NullPointerException.class)
+	public void testOverlapShip2IsNull() {
+		Ship ship1 = new Ship(100, 100, 30, -15, 0, 20, 0);
 		Ship ship2 = null;
-		assertFalse(facade.overlap(ship1, ship2));
+		assertFalse(ship1.overlap(ship2));
 	}
 	
 	
 	@Test
-	public void testOverlapTrue() throws ModelException {
+	public void testOverlapTrue() {
 		Ship ship1 = new Ship(0, 0, 30, -15, Math.PI, 20, 20);
 		Ship ship2 = new Ship(5, 5, 30, -15, Math.PI, 20, 20);
 		assertTrue(ship1.overlap(ship2));
 	}
 	
 	@Test
-	public void testOverlapFalse() throws ModelException {
-		Ship ship1 = facade.createShip(0, 0, 30, -15, 10, 0);
-		Ship ship2 = facade.createShip(100, 100, 30, -15, 20, 0);
-		assertFalse(facade.overlap(ship1, ship2));
+	public void testOverlapFalse() {
+		Ship ship1 = new Ship(0, 0, 30, -15, 0, 10, 0);
+		Ship ship2 = new Ship(100, 100, 30, -15, 0, 20, 0);
+		assertFalse(ship1.overlap(ship2));
 	}
 	
 	
 	@Test
-	public void testSameShip() throws ModelException {
-		Ship ship1 = facade.createShip(0, 0, 30, -15, 10, 0);
-		assertTrue(facade.overlap(ship1, ship1));
+	public void testSameShip() {
+		Ship ship1 = new Ship(0, 0, 30, -15, 0, 10, 0);
+		assertTrue(ship1.overlap(ship1));
 	}
 	
 	
@@ -822,95 +822,95 @@ public class TestShip {
 	
 	
 	
-	@Test(expected = ModelException.class)
-	public void testCollisionDetectionTimeShip1IsNull1() throws ModelException {
+	@Test(expected = NullPointerException.class)
+	public void testCollisionDetectionTimeShip1IsNull1() {
 		Ship ship1 = null;
-		Ship ship2 = facade.createShip(30, 0, 0, 0, 10, 0);
-		facade.getTimeToCollision(ship1, ship2);
+		Ship ship2 = new Ship(30, 0, 0, 0, 0, 10, 0);
+		ship1.getTimeToCollision(ship2);
 	}
 	
-	@Test(expected = ModelException.class)
-	public void testCollisionDetectionTimeShip2IsNull1() throws ModelException {
-		Ship ship1 = facade.createShip(0, 0, 10, 0, 10, 0);
+	@Test(expected = NullPointerException.class)
+	public void testCollisionDetectionTimeShip2IsNull1() {
+		Ship ship1 = new Ship(0, 0, 10, 0, 0, 10, 0);
 		Ship ship2 = null;
-		facade.getTimeToCollision(ship1, ship2);
+		ship1.getTimeToCollision(ship2);
 	}
 	
 	
-	@Test(expected = ModelException.class)
-	public void testCollisionDetectionPositionShip1IsNull2() throws ModelException {
+	@Test(expected = NullPointerException.class)
+	public void testCollisionDetectionPositionShip1IsNull2() {
 		Ship ship1 = null;
-		Ship ship2 = facade.createShip(30, 0, 0, 0, 10, 0);
-		facade.getCollisionPosition(ship1, ship2);
+		Ship ship2 = new Ship(30, 0, 0, 0, 0, 10, 0);
+		ship1.getCollisionPosition(ship2);
 	}
 	
-	@Test(expected = ModelException.class)
-	public void testCollisionDetectionPositionShip2IsNull2() throws ModelException {
-		Ship ship1 = facade.createShip(0, 0, 10, 0, 10, 0);
+	@Test(expected = NullPointerException.class)
+	public void testCollisionDetectionPositionShip2IsNull2() {
+		Ship ship1 = new Ship(0, 0, 10, 0, 0, 10, 0);
 		Ship ship2 = null;
-		facade.getCollisionPosition(ship1, ship2);
+		ship1.getCollisionPosition(ship2);
 	}
 	
 	
 	@Test
-	public void testCollisionDetectionLinear() throws ModelException {
-		Ship ship1 = facade.createShip(0, 0, 10, 0, 10, 0);
-		Ship ship2 = facade.createShip(30, 0, 0, 0, 10, 0);
-		double[] position = facade.getCollisionPosition(ship1, ship2);
+	public void testCollisionDetectionLinear() {
+		Ship ship1 = new Ship(0, 0, 10, 0, 0, 10, 0);
+		Ship ship2 = new Ship(30, 0, 0, 0, 0, 10, 0);
+		double[] position = ship1.getCollisionPosition(ship2);
 		assertEquals(20, position[0], EPSILON);
 		assertEquals(0, position[1], EPSILON);
-		assertEquals(1, facade.getTimeToCollision(ship1, ship2), EPSILON);
+		assertEquals(1, ship1.getTimeToCollision(ship2), EPSILON);
 	}
 	
 	@Test
-	public void testCollisionDetectionXPOSYPOS() throws ModelException {
-		Ship ship1 = facade.createShip(0, 0, 10, 10, 10, 0);
-		Ship ship2 = facade.createShip(50, 50, 0, 0, 10, 0);
-		double[] position = facade.getCollisionPosition(ship1, ship2);
+	public void testCollisionDetectionXPOSYPOS() {
+		Ship ship1 = new Ship(0, 0, 10, 10, 0, 10, 0);
+		Ship ship2 = new Ship(50, 50, 0, 0, 0, 10, 0);
+		double[] position = ship1.getCollisionPosition(ship2);
 //		System.out.println(position[0]);
 //		System.out.println(position[1]);
 //		System.out.println(facade.getTimeToCollision(ship1, ship2));
 		// Position is approximately correct, I assume it's not exactly correct because of rounding.
 		assertTrue( (position[0] > 35) && (position[0] < 45) );
 		assertTrue( (position[1] > 35) && (position[1] < 45) );
-		assertTrue( (facade.getTimeToCollision(ship1, ship2) > 2) && (facade.getTimeToCollision(ship1, ship2) < 4) );
+		assertTrue(( ship1.getTimeToCollision(ship2) > 2) && (ship1.getTimeToCollision(ship2) < 4) );
 	}
 	// TODO testCollisionDetectionXPOSYNEG()
 	@Test
-	public void testCollisionDetectionXNEGYPOS() throws ModelException {		
-		Ship ship1 = facade.createShip(0, 0, -10, 10, 10, 0);
-		Ship ship2 = facade.createShip(-50, 50, 0, 0, 10, 0);
-		double[] position = facade.getCollisionPosition(ship1, ship2);
+	public void testCollisionDetectionXNEGYPOS() {		
+		Ship ship1 = new Ship(0, 0, -10, 10, 0, 10, 0);
+		Ship ship2 = new Ship(-50, 50, 0, 0, 0, 10, 0);
+		double[] position = ship1.getCollisionPosition(ship2);
 //		System.out.println(position[0]);
 //		System.out.println(position[1]);
 //		System.out.println(facade.getTimeToCollision(ship1, ship2));
 		// Position is as predicted here.
 		assertTrue( (position[0] < -35) && (position[0] > -45));
 		assertTrue( (position[1] > 35) && (position[1] < 45) );
-		assertTrue( (facade.getTimeToCollision(ship1, ship2) > 2) && (facade.getTimeToCollision(ship1, ship2) < 4) );
+		assertTrue( (ship1.getTimeToCollision(ship2) > 2) && (ship1.getTimeToCollision(ship2) < 4) );
 	}
 	
 	@Test
-	public void testCollisionDetectionXNEGYNEG() throws ModelException {
-		Ship ship1 = facade.createShip(0, 0, -10, -10, 10, 0);
-		Ship ship2 = facade.createShip(-50, -50, 0, 0, 10, 0);
-		double[] position = facade.getCollisionPosition(ship1, ship2);
+	public void testCollisionDetectionXNEGYNEG() {
+		Ship ship1 = new Ship(0, 0, -10, -10, 0, 10, 0);
+		Ship ship2 = new Ship(-50, -50, 0, 0, 0, 10, 0);
+		double[] position = ship1.getCollisionPosition(ship2);
 //		System.out.println(position[0]);
 //		System.out.println(position[1]);
 //		System.out.println(facade.getTimeToCollision(ship1, ship2));
 		// Position is as predicted here.
 		assertTrue( (position[0] < -35) && (position[0] > -45) );
 		assertTrue( (position[1] < -35) && (position[1] > -45) );
-		assertTrue( (facade.getTimeToCollision(ship1, ship2) > 2) && (facade.getTimeToCollision(ship1, ship2) < 4) );
+		assertTrue( (ship1.getTimeToCollision(ship2) > 2) && (ship1.getTimeToCollision(ship2) < 4) );
 	}
 	
 
-	@Test(expected = ModelException.class)
-	public void testCollisionDetectionSameShip() throws ModelException {		
-		Ship ship1 = facade.createShip(0, 0, 10, 0, 10, 0);
-		double[] position = facade.getCollisionPosition(ship1, ship1);
+	@Test(expected =IllegalArgumentException.class)
+	public void testCollisionDetectionSameShip() {		
+		Ship ship1 = new Ship(0, 0, 10, 0, 0, 10, 0);
+		double[] position = ship1.getCollisionPosition(ship1);
 		assertNull(position);
-		assertEquals(Double.POSITIVE_INFINITY, facade.getTimeToCollision(ship1, ship1), EPSILON);
+		assertEquals(Double.POSITIVE_INFINITY, ship1.getTimeToCollision(ship1), EPSILON);
 	}
 	
 }
