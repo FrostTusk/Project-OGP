@@ -871,6 +871,41 @@ public class TestBullet {
 		assertEquals(Double.POSITIVE_INFINITY, bullet1.getTimeToCollision(bullet2), EPSILON);
 	}
 	
+	@Test 
+	public void testBulletCollisionPositionGeneric() {
+		Bullet bullet1 = new Bullet(100, 100, -10, 0, 5);
+		Bullet bullet2 = new Bullet(10, 100, 0, 0, 5);
+		World world = new World(1000, 1000);
+		bullet1.setWorld(world);
+		bullet2.setWorld(world);
+		double[] position = bullet1.getCollisionPosition(bullet2);
+		assertEquals(15, position[0], EPSILON);
+		assertEquals(100, position[1], EPSILON);
+	}
+	
+	@Test 
+	public void testBulletCollisionPositionNoCollision() {
+		Bullet bullet1 = new Bullet(100, 100, 0, 0, 5);
+		Bullet bullet2 = new Bullet(10, 100, 0, 0, 5);
+		World world = new World(1000, 1000);
+		bullet1.setWorld(world);
+		bullet2.setWorld(world);
+		double[] position = bullet1.getCollisionPosition(bullet2);
+		assertTrue(position == null);
+	}
+	
+	@Test 
+	public void testBulletCollisionPositionOtherWorlds() {
+		Bullet bullet1 = new Bullet(100, 100, 0, 0, 5);
+		Bullet bullet2 = new Bullet(10, 100, 0, 0, 5);
+		World world1 = new World(1000, 1000);
+		World world2 = new World(1000, 1000);
+		bullet1.setWorld(world1);
+		bullet2.setWorld(world2);
+		double[] position = bullet1.getCollisionPosition(bullet2);
+		assertTrue(position == null);
+	}
+
 	
 			/*
 			 * |----------------------------------------------------|
