@@ -363,11 +363,15 @@ public class World {
 	 * @return	Returns the position of the first collision
 	 * 			of this world.
 	 * 			// TODO Declarative Documentation.
+	 * 			// TODO Boundaries
 	 */
 	@Raw
 	public double[] getFirstCollisionPosition() {
-		double[] vector = getFirstCollisionEntities()[0].getCollisionPosition(getFirstCollisionEntities()[1]);
-		return vector;
+		Entity[] collisionEntities = getFirstCollisionEntities();
+		if (collisionEntities[0] == collisionEntities[1])
+			return collisionEntities[0].getCollisionPosition(this);
+		else
+			return getFirstCollisionEntities()[0].getCollisionPosition(getFirstCollisionEntities()[1]);
 	}
 	
 	/**

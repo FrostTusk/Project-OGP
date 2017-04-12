@@ -354,8 +354,10 @@ public class TestWorld {
 		ship.setWorld(world);
 		world.addEntity(bullet);
 		bullet.setWorld(world);
-		assertEquals(Double.POSITIVE_INFINITY, world.getFirstCollisionPosition()[0], EPSILON);
-		assertEquals(Double.POSITIVE_INFINITY, world.getFirstCollisionPosition()[1], EPSILON);
+		if (world.getFirstCollisionPosition() != null) {		
+			assertEquals(Double.POSITIVE_INFINITY, world.getFirstCollisionPosition()[0], EPSILON);
+			assertEquals(Double.POSITIVE_INFINITY, world.getFirstCollisionPosition()[1], EPSILON);
+		}
 	}
 	
 	@Test

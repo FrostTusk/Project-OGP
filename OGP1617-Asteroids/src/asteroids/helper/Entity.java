@@ -751,9 +751,10 @@ public abstract class Entity {
 		if (! world.containsEntity(this)) return null;
 		
 		double time = getTimeToCollision(world);
-		if (time == Double.POSITIVE_INFINITY) return null;
+		double[] vector = {Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY};
+		if (time == Double.POSITIVE_INFINITY) return vector; // TODO Is this good?
 		
-		double[] vector = helper.calculatePosition(this, time);
+		vector = helper.calculatePosition(this, time);
 		if (vector[0] + this.getRadius() == world.getWidth()) vector[0] += this.getRadius();
 		else if (vector[0] - this.getRadius() == 0) vector[0] = 0;
 		if (vector[1] + this.getRadius() == world.getHeight()) vector[1] += this.getRadius();

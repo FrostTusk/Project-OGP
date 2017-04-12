@@ -595,10 +595,13 @@ public class TestBullet {
 		world.addEntity(ship);
 		world.addEntity(bullet);
 		ship.setWorld(world);
-		bullet.setWorld(world);
+		bullet.setShip(ship);
 		bullet.setSource(ship);
+		bullet.setShip(null);
+		bullet.setWorld(world);
 		bullet.resetSource(ship);
-		if (bullet.getSource() != ship) fail();
+		if (bullet.hasBeenFired() == true) fail();
+		if (bullet.getSource() != null) fail();
 	}
 	
 	@Test 
