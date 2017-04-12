@@ -9,10 +9,11 @@ import java.util.Set;
 import org.junit.Test;
 
 import asteroids.helper.Entity;
+import asteroids.helper.Position;
 import asteroids.model.Bullet;
 import asteroids.model.Ship;
 import asteroids.model.World;
-import asteroids.util.ModelException;
+
 
 public class TestWorld {
 	
@@ -29,7 +30,7 @@ public class TestWorld {
 	
 	
 	@Test
-	public void testCreateWorld() throws ModelException {
+	public void testCreateWorld() {
 		World world = new World(10, 10);
 		assertNotNull(world);
 	}
@@ -37,14 +38,14 @@ public class TestWorld {
 	
 	// TODO when entities are finished, check this test.
 	@Test
-	public void testCreateWorldTerminateWorld() throws ModelException {
+	public void testCreateWorldTerminateWorld() {
 		World world = new World(-15, -10);
 		assertNotNull(world);
 		world.terminate();
 	}
 	
 	@Test
-	public void testTerminateWorld() throws ModelException {
+	public void testTerminateWorld() {
 		World world = new World(-15, -10);
 		assertNotNull(world);
 		world.terminate();
@@ -60,7 +61,7 @@ public class TestWorld {
 	
 	
 	@Test
-	public void testCreateWorldSizeGeneric() throws ModelException {
+	public void testCreateWorldSizeGeneric() {
 		World world = new World(15, 10);
 		assertNotNull(world);
 		assertEquals(15, world.getWidth(), EPSILON);
@@ -69,7 +70,7 @@ public class TestWorld {
 	
 	
 	@Test
-	public void testCreateWorldSizeWidthZero() throws ModelException {
+	public void testCreateWorldSizeWidthZero() {
 		World world = new World(0, 0);
 		assertNotNull(world);
 		assertEquals(0, world.getWidth(), EPSILON);
@@ -77,7 +78,7 @@ public class TestWorld {
 	}
 	
 	@Test
-	public void testCreateWorldSizeWidthEdgeOverflow() throws ModelException {
+	public void testCreateWorldSizeWidthEdgeOverflow() {
 		World world = new World(Double.MAX_VALUE, 10);
 		assertNotNull(world);
 		assertEquals(Double.MAX_VALUE, world.getWidth(), EPSILON);
@@ -85,7 +86,7 @@ public class TestWorld {
 	}
 	
 	@Test
-	public void testCreateWorldSizeHeightEdgeOverflow() throws ModelException {
+	public void testCreateWorldSizeHeightEdgeOverflow() {
 		World world = new World(15, Double.MAX_VALUE);
 		assertNotNull(world);
 		assertEquals(15, world.getWidth(), EPSILON);
@@ -94,7 +95,7 @@ public class TestWorld {
 	
 	
 	@Test
-	public void testCreateWorldSizeWidthHeightEdgeOverflow() throws ModelException {
+	public void testCreateWorldSizeWidthHeightEdgeOverflow() {
 		World world = new World(Double.MAX_VALUE, Double.MAX_VALUE);
 		assertNotNull(world);
 		assertEquals(Double.MAX_VALUE, world.getWidth(), EPSILON);
@@ -103,7 +104,7 @@ public class TestWorld {
 	
 	
 	@Test
-	public void testCreateWorldSizeWidthOverflow() throws ModelException {
+	public void testCreateWorldSizeWidthOverflow() {
 		World world = new World(Double.MAX_VALUE + 50, 10);
 		assertNotNull(world);
 		assertEquals(Double.MAX_VALUE, world.getWidth(), EPSILON);
@@ -111,7 +112,7 @@ public class TestWorld {
 	}
 	
 	@Test
-	public void testCreateWorldSizeHeightOverflow() throws ModelException {
+	public void testCreateWorldSizeHeightOverflow() {
 		World world = new World(15, Double.MAX_VALUE + 50);
 		assertNotNull(world);
 		assertEquals(15, world.getWidth(), EPSILON);
@@ -119,7 +120,7 @@ public class TestWorld {
 	}
 	
 	@Test
-	public void testCreateWorldSizeWidthHeightOverflow() throws ModelException {
+	public void testCreateWorldSizeWidthHeightOverflow() {
 		World world = new World(Double.MAX_VALUE, Double.MAX_VALUE);
 		assertNotNull(world);
 		assertEquals(Double.MAX_VALUE, world.getWidth(), EPSILON);
@@ -127,7 +128,7 @@ public class TestWorld {
 	}
 	
 	@Test
-	public void testCreateWorldSizeWidthNeg() throws ModelException {
+	public void testCreateWorldSizeWidthNeg() {
 		World world = new World(-15, 10);
 		assertNotNull(world);
 		assertEquals(0, world.getWidth(), EPSILON);
@@ -135,7 +136,7 @@ public class TestWorld {
 	}
 	
 	@Test
-	public void testCreateWorldSizeHeightNeg() throws ModelException {
+	public void testCreateWorldSizeHeightNeg() {
 		World world = new World(15, -10);
 		assertNotNull(world);
 		assertEquals(15, world.getWidth(), EPSILON);
@@ -143,7 +144,7 @@ public class TestWorld {
 	}
 	
 	@Test
-	public void testCreateWorldSizeWidthHeightNeg() throws ModelException {
+	public void testCreateWorldSizeWidthHeightNeg() {
 		World world = new World(-15, -10);
 		assertNotNull(world);
 		assertEquals(0, world.getWidth(), EPSILON);
@@ -159,20 +160,23 @@ public class TestWorld {
 			 */	
 
 	@Test
-	public void testWorldIsValidSizeT() throws ModelException {
+	public void testWorldIsValidSizeT() {
 		assertTrue(World.isValidSize(0, 0));
 		assertTrue(World.isValidSize(100, 100));
 		assertTrue(World.isValidSize(100, 50));
 	}
 	
 	@Test
-	public void testWorldIsValidSizeF() throws ModelException {
+	public void testWorldIsValidSizeF() {
 		assertFalse(World.isValidSize(-10, -10));
 		assertFalse(World.isValidSize(10, -10));
 		assertFalse(World.isValidSize(-10, 10));
 		assertFalse(World.isValidSize(Double.NaN, 10));
 		assertFalse(World.isValidSize(Double.NaN, Double.NaN));
 		assertFalse(World.isValidSize(10, Double.NaN));
+		assertFalse(World.isValidSize(Double.POSITIVE_INFINITY, 10));
+		assertFalse(World.isValidSize(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY));
+		assertFalse(World.isValidSize(10, Double.POSITIVE_INFINITY));
 	}
 	
 	
@@ -200,7 +204,7 @@ public class TestWorld {
 	 */	
 	
 	@Test
-	public void testWorldCanContainEntityGeneric() throws ModelException {
+	public void testWorldCanContainEntityGeneric() {
 		World world = new World(1000, 1000);
 		Ship ship = new Ship(100, 100, 10, -10, Math.PI, 20, 10);
 		Bullet bullet = new Bullet(1, 1, 1, 1, 1);
@@ -209,7 +213,7 @@ public class TestWorld {
 	}
 	
 	@Test
-	public void testWorldCanContainEntityBoundariesF() throws ModelException {
+	public void testWorldCanContainEntityBoundariesF() {
 		World world = new World(1000, 1000);
 		Ship ship = new Ship(1000, 1000, 10, -10, Math.PI, 20, 10);
 		Bullet bullet = new Bullet(0, 0, 1, 1, 1);
@@ -218,7 +222,7 @@ public class TestWorld {
 	}
 	
 	@Test
-	public void testWorldCanContainEntityEntityInOtherWorld() throws ModelException {
+	public void testWorldCanContainEntityEntityInOtherWorld() {
 		World world1 = new World(1000, 1000);
 		World world2 = new World(1000, 1000);	
 		Ship ship = new Ship(500, 500, 10, -10, Math.PI, 20, 10);
@@ -232,7 +236,7 @@ public class TestWorld {
 	}
 	
 	@Test
-	public void testWorldCanContainEntityBulletOfShip() throws ModelException {
+	public void testWorldCanContainEntityBulletOfShip() {
 		World world = new World(1000, 1000);
 		Ship ship = new Ship(500, 500, 10, -10, Math.PI, 20, 10);
 		Bullet bullet = new Bullet(20, 20, 1, 1, 1);
@@ -242,7 +246,29 @@ public class TestWorld {
 	}
 	
 	@Test
-	public void testWorldContainsEntityT() throws ModelException {
+	public void testWorldCanContainEntityShip() {
+		World world = new World(1000, 1000);
+		Ship ship1 = new Ship(500, 500, 10, -10, Math.PI, 20, 10);
+		Ship ship2 = new Ship(1000, 500, 10, -10, Math.PI, 20, 10);
+		Ship ship3 = new Ship(900, 900, 10, -10, Math.PI, 200, 10);
+		Ship ship4 = new Ship(500, 500, 10, -10, Math.PI, 20, 10);
+		assertTrue(world.canHaveAsEntity(ship1));
+		assertTrue(world.canHaveAsEntity(ship4));
+		assertFalse(world.canHaveAsEntity(ship2));
+		assertFalse(world.canHaveAsEntity(ship3));
+	}
+	
+	@Test
+	public void testWorldCanContainEntityNull() {
+		World world = new World(1000, 1000);
+		Ship ship1 = null;
+		Ship ship2 = null;
+		assertFalse(world.canHaveAsEntity(ship1));
+		assertFalse(world.canHaveAsEntity(ship2));
+	}
+	
+	@Test
+	public void testWorldContainsEntityT() {
 		World world = new World(1000, 1000);
 		Ship ship = new Ship(500, 500, 10, -10, Math.PI, 20, 10);
 		Bullet bullet = new Bullet(20, 20, 1, 1, 1);
@@ -253,7 +279,7 @@ public class TestWorld {
 	}
 	
 	@Test
-	public void testWorldContainsEntityF() throws ModelException {
+	public void testWorldContainsEntityF() {
 		World world = new World(1000, 1000);
 		Ship ship = new Ship(500, 500, 10, -10, Math.PI, 20, 10);
 		Bullet bullet = new Bullet(20, 20, 1, 1, 1);
@@ -262,7 +288,7 @@ public class TestWorld {
 	}
 	
 	@Test
-	public void testWorldAddEntityAble() throws ModelException {
+	public void testWorldAddEntityAble() {
 		World world = new World(1000, 1000);
 		Ship ship = new Ship(100, 100, 10, -10, Math.PI, 20, 10);
 		Bullet bullet = new Bullet(1, 1, 1, 1, 1);
@@ -286,7 +312,7 @@ public class TestWorld {
 	}
 	
 	@Test
-	public void testWorldRemoveEntityGeneric() throws ModelException {
+	public void testWorldRemoveEntityGeneric() {
 		World world = new World(1000, 1000);
 		Ship ship = new Ship(100, 100, 10, -10, Math.PI, 20, 10);
 		Bullet bullet = new Bullet(1, 1, 1, 1, 1);
@@ -316,23 +342,7 @@ public class TestWorld {
 	}
 	
 	@Test
-	public void testWorldEvolveNoCollisions() throws IllegalArgumentException {
-		World world = new World(1000, 1000);
-		Ship ship = new Ship(100, 100, 10, -10, Math.PI, 20, 10);
-		Bullet bullet = new Bullet(1, 1, 10, 10, 1);
-		world.addEntity(ship);
-		ship.setWorld(world);
-		world.addEntity(bullet);
-		bullet.setWorld(world);
-		world.evolve(2);
-		assertEquals(120, ship.getPosition().getPositionX(), EPSILON);
-		assertEquals(80, ship.getPosition().getPositionY(), EPSILON);
-		assertEquals(21, bullet.getPosition().getPositionX(), EPSILON);
-		assertEquals(21, bullet.getPosition().getPositionY(), EPSILON);
-	}
-	
-	@Test
-	public void testWorldGetFirstCollisionPosition() throws ModelException {
+	public void testWorldGetFirstCollisionPosition() {
 		World world = new World(1000, 1000);
 		Ship ship = new Ship(150, 100, 0, 10, Math.PI, 20, 10);
 		Bullet bullet = new Bullet(150, 150, 0, 0, 1);
@@ -346,7 +356,7 @@ public class TestWorld {
 	}
 	
 	@Test
-	public void testWorldGetFirstCollisionPositionNoCollision() throws ModelException {
+	public void testWorldGetFirstCollisionPositionNoCollision() {
 		World world = new World(1000, 1000);
 		Ship ship = new Ship(150, 100, 0, 0, Math.PI, 20, 10);
 		Bullet bullet = new Bullet(150, 150, 0, 0, 1);
@@ -361,7 +371,7 @@ public class TestWorld {
 	}
 	
 	@Test
-	public void testWorldGetFirstCollisionTime() throws ModelException {
+	public void testWorldGetFirstCollisionTime() {
 		World world = new World(1000, 1000);
 		Ship ship1 = new Ship(100, 100, 0, 10, Math.PI, 20, 10);
 		Ship ship2 = new Ship(100, 150, 0, 0, Math.PI, 20, 10);
@@ -373,7 +383,7 @@ public class TestWorld {
 	}
 	
 	@Test
-	public void testWorldGetFirstCollisionTimeNoCollision() throws ModelException {
+	public void testWorldGetFirstCollisionTimeNoCollision() {
 		World world = new World(1000, 1000);
 		Ship ship1 = new Ship(100, 100, 0, 0, Math.PI, 20, 10);
 		Ship ship2 = new Ship(150, 150, 0, 0, Math.PI, 20, 10);
@@ -385,13 +395,13 @@ public class TestWorld {
 	}
 	
 	@Test
-	public void testWorldGetFirstCollisionTimeNoEntities() throws ModelException {
+	public void testWorldGetFirstCollisionTimeNoEntities() {
 		World world = new World(1000, 1000);
 		assertEquals(-1, world.getTimeToFirstCollision(), EPSILON);
 	}
 	
 	@Test
-	public void testWorldGetFirstCollisionEntitiesNoCollision() throws ModelException {
+	public void testWorldGetFirstCollisionEntitiesNoCollision() {
 		World world = new World(1000, 1000);
 		Ship ship1 = new Ship(100, 100, 0, 0, Math.PI, 20, 10);
 		Ship ship2 = new Ship(150, 150, 0, 0, Math.PI, 20, 10);
@@ -407,7 +417,7 @@ public class TestWorld {
 	}
 	
 	@Test
-	public void testWorldGetFirstCollisionEntitiesGeneric() throws ModelException {
+	public void testWorldGetFirstCollisionEntitiesGeneric() {
 		World world = new World(1000, 1000);
 		Ship ship1 = new Ship(100, 100, 10, 0, Math.PI, 20, 10);
 		Ship ship2 = new Ship(150, 100, 0, 0, Math.PI, 20, 10);
@@ -429,13 +439,13 @@ public class TestWorld {
 	}
 	
 	@Test
-	public void testWorldGetFirstCollisionEntitiesNoEntities() throws ModelException {
+	public void testWorldGetFirstCollisionEntitiesNoEntities() {
 		World world = new World(1000, 1000);
 		world.getFirstCollisionEntities();
 	}
 	
 	@Test
-	public void testWorldGetAllEntitiesGeneric() throws ModelException {
+	public void testWorldGetAllEntitiesGeneric() {
 		World world = new World(1000, 1000);
 		Ship ship1 = new Ship(100, 100, 10, 0, Math.PI, 20, 10);
 		Ship ship2 = new Ship(150, 100, 0, 0, Math.PI, 20, 10);
@@ -455,7 +465,7 @@ public class TestWorld {
 	}
 	
 	@Test
-	public void testWorldGetAllEntitiesAllShips() throws ModelException {
+	public void testWorldGetAllEntitiesAllShips() {
 		World world = new World(1000, 1000);
 		Ship ship1 = new Ship(100, 100, 10, 0, Math.PI, 20, 10);
 		Ship ship2 = new Ship(150, 100, 0, 0, Math.PI, 20, 10);
@@ -478,7 +488,7 @@ public class TestWorld {
 	}
 	
 	@Test
-	public void testWorldGetAllEntitiesAllBullets() throws ModelException {
+	public void testWorldGetAllEntitiesAllBullets() {
 		World world = new World(1000, 1000);
 		Bullet bullet1 = new Bullet(150, 100, 0, 0, 1);
 		Bullet bullet2 = new Bullet(150, 150, 0, 0, 1);
@@ -498,12 +508,91 @@ public class TestWorld {
 	}
 	
 	@Test
-	public void testWorldGetAllEntitiesNoEntities() throws ModelException {
+	public void testWorldGetAllEntitiesNoEntities() {
 		World world = new World(1000, 1000);
 		Set<Entity> entities = world.getAllEntities();
 		assertEquals(0, entities.size(), EPSILON);
 	}
 	
+	@Test
+	public void testWorldGetEntityAtPosition() {
+		World world = new World(1000, 1000);
+		Bullet bullet1 = new Bullet(150, 100, 0, 0, 1);
+		Bullet bullet2 = new Bullet(150, 150, 0, 0, 1);
+		Bullet bullet3 = new Bullet(150, 200, 0, 0, 1);
+		Position position1 = bullet1.getPosition();
+		Position position2 = bullet2.getPosition();
+		Position position3 = bullet3.getPosition();
+		for (Entity entity : world.getAllEntities()) {
+			if (world.getEntityAtPosition(position1) != bullet1 || world.getEntityAtPosition(position2) != bullet2 || world.getEntityAtPosition(position3) != bullet3) fail();
+		}
+	}
+	
+	
+			/*
+			 * |--------------------------------------------|
+			 * | 5. The next test test the evolve method	|
+			 * |--------------------------------------------| 
+			 */	
+	
+	@Test
+	public void testWorldEvolveNoMovement() {
+		World world = new World(1000, 1000);
+		Bullet bullet1 = new Bullet(150, 150, 0, 0, 1);
+		Bullet bullet2 = new Bullet(250, 250, 0, 0, 1);
+		Ship ship1 = new Ship(100, 100, 0, 0, Math.PI, 20, 10);
+		Ship ship2 = new Ship(200, 200, 0, 0, Math.PI, 20, 10);
+		world.addEntity(ship1);
+		world.addEntity(ship2);
+		world.addEntity(bullet1);
+		world.addEntity(bullet2);
+		world.evolve(2);
+		assertEquals(150, bullet1.getPosition().getPositionX(), EPSILON);
+		assertEquals(150, bullet1.getPosition().getPositionY(), EPSILON);
+		assertEquals(250, bullet2.getPosition().getPositionX(), EPSILON);
+		assertEquals(250, bullet2.getPosition().getPositionY(), EPSILON);
+		assertEquals(100, ship1.getPosition().getPositionX(), EPSILON);
+		assertEquals(100, ship1.getPosition().getPositionY(), EPSILON);
+		assertEquals(200, ship2.getPosition().getPositionX(), EPSILON);
+		assertEquals(200, ship2.getPosition().getPositionY(), EPSILON);
+	}
+	
+	@Test
+	public void testWorldEvolveNoEntities() {
+		World world = new World(1000, 1000);
+		world.evolve(2);
+	}
+	
+	@Test
+	public void testWorldEvolveGeneric() {
+		World world = new World(1000, 1000);
+		Bullet bullet = new Bullet(150, 150, 60, 0, 1);
+		Ship ship1 = new Ship(100, 100, 0, 0, Math.PI, 20, 10);
+		Ship ship2 = new Ship(200, 150, 0, 0, Math.PI, 20, 10);
+		world.addEntity(ship1);
+		world.addEntity(ship2);
+		world.addEntity(bullet);
+		bullet.setSource(ship1);
+		world.evolve(2);
+		assertTrue(ship2.isTerminated());
+		assertTrue(bullet.isTerminated());
+	}
+	
+	@Test
+	public void testWorldEvolveNoCollisions() throws IllegalArgumentException {
+		World world = new World(1000, 1000);
+		Ship ship = new Ship(100, 100, 10, -10, Math.PI, 20, 10);
+		Bullet bullet = new Bullet(1, 1, 10, 10, 1);
+		world.addEntity(ship);
+		ship.setWorld(world);
+		world.addEntity(bullet);
+		bullet.setWorld(world);
+		world.evolve(2);
+		assertEquals(120, ship.getPosition().getPositionX(), EPSILON);
+		assertEquals(80, ship.getPosition().getPositionY(), EPSILON);
+		assertEquals(21, bullet.getPosition().getPositionX(), EPSILON);
+		assertEquals(21, bullet.getPosition().getPositionY(), EPSILON);
+	}
 	
 	
 }
