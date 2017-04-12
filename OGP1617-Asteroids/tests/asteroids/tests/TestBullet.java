@@ -13,6 +13,19 @@ import asteroids.model.World;
 import asteroids.part2.facade.IFacade;
 import asteroids.util.ModelException;
 
+/* // TODO Get rid of throws ModelException!
+ * // TODO Do NOT get rid of tests without telling me!
+ * // Not even irrelevant ones. 
+ * Tests Index:
+ * 1. Tests for Initialization
+ * 2. Tests for Position
+ * 3. Tests for Speed
+ * 4. Tests for Radius
+ * 5. Tests for Mass
+ * 6. Test for Worlds
+ * 7. Tests for Resolving Collisions
+ */
+
 public class TestBullet {
 
 	private static final double EPSILON = 0.0001;
@@ -23,6 +36,8 @@ public class TestBullet {
 	public void setUp() {
 		facade = new Facade();
 	}
+	
+	
 	
 			/*
 			 * |--------------------------------------------|
@@ -39,13 +54,16 @@ public class TestBullet {
 	}
 	
 	
+	
 			/*
-			 * |---------------------------------------|
+			 * |----------------------------------------|
 			 * | 2. The next tests test the Position.	|
-			 * |---------------------------------------| 
+			 * |----------------------------------------| 
 			 */	
 
 	
+	
+// TODO Check this test.	
 //	@Test(expected = ModelException)
 //	public void testCreateBulletPosBulletIsNull() throws ModelException {
 //		Bullet bullet = null;
@@ -81,6 +99,7 @@ public class TestBullet {
 		assertEquals(0, position5.getPositionY(), EPSILON);
 	}
 	
+	
 	@Test(expected = IllegalArgumentException.class)
 	public void testCreateBulletXIsPosInfinity() throws ModelException {
 		new Bullet(Double.POSITIVE_INFINITY, 200, 10, -10, 20);
@@ -96,6 +115,7 @@ public class TestBullet {
 		new Bullet(Double.NaN, 200, 10, -10, 20);
 	}
 	
+	
 	@Test(expected = IllegalArgumentException.class)
 	public void testCreateBulletYIsPosInfinity() throws ModelException {
 		new Bullet(200, Double.POSITIVE_INFINITY, 10, -10, 20);
@@ -110,6 +130,7 @@ public class TestBullet {
 	public void testCreateBulletYIsNan() throws ModelException {
 		new Bullet(200, Double.NaN, 10, -10, 20);
 	}
+	
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testCreateBulletXYIsPosInfinity() throws ModelException {
@@ -129,12 +150,14 @@ public class TestBullet {
 	
 	
 			/*
-			 * |---------------------------------------|
-			 * | 3. The next tests test the Speed.		|
-			 * |---------------------------------------| 
+			 * |------------------------------------|
+			 * | 3. The next tests test the Speed.	|
+			 * |------------------------------------| 
 		  	 */	
 	
 	
+
+// TODO Check this test.
 //	@Test(expected = ModelException)
 //	public void testCreateBulletPosBulletIsNull() throws ModelException {
 //		Bullet bullet = null;
@@ -165,12 +188,14 @@ public class TestBullet {
 		assertEquals(0, bullet5.getVelocityY(), EPSILON);
 	}
 	
+	
 	@Test
 	public void testCreateBulletVelOverflow() throws ModelException {
 		Bullet bullet = new Bullet(200, 200, 500000, 500000, 20);
 		assertEquals(0, bullet.getVelocityX(), EPSILON);
 		assertEquals(0, bullet.getVelocityY(), EPSILON);
 	}
+	
 	
 	@Test
 	public void testCreateBulletVXIsPosInfinity() throws ModelException {
@@ -193,6 +218,7 @@ public class TestBullet {
 		assertEquals(0, bullet.getVelocityY(), EPSILON);
 	}
 	
+	
 	@Test
 	public void testCreateBulletVYIsPosInfinity() throws ModelException {
 		Bullet bullet = new Bullet(200, 200, 10, Double.POSITIVE_INFINITY, 20);
@@ -213,6 +239,7 @@ public class TestBullet {
 		assertEquals(0, bullet.getVelocityX(), EPSILON);
 		assertEquals(0, bullet.getVelocityY(), EPSILON);
 	}
+	
 	
 	@Test
 	public void testCreateBulletVXYIsPosInfinity() throws ModelException {
@@ -243,8 +270,9 @@ public class TestBullet {
 			 * |------------------------------------| 
 			 */	
 		
+	
 		
-		
+// TODO Check this test.		
 //	@Test(expected = ModelException.class)
 //	public void testCreateBulletRadiusBulletIsNull() throws ModelException {
 //		Bullet bullet = null;
@@ -262,6 +290,11 @@ public class TestBullet {
 	
 	
 	@Test(expected = IllegalArgumentException.class)
+	public void testCreateBulletRadiusUnderflow() throws ModelException {
+		new Bullet(100, 200, 10, -10, 0.5);
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
 	public void testCreateBulletRadiusNegative() throws ModelException {
 		new Bullet(100, 200, 10, -10, -50);
 	}
@@ -271,10 +304,6 @@ public class TestBullet {
 		new Bullet(100, 200, 10, -10, 0);
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
-	public void testCreateBulletRadiusUnderflow() throws ModelException {
-		new Bullet(100, 200, 10, -10, 0.5);
-	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testCreateBulletRadiusIsPosInfinity() throws ModelException {
@@ -291,11 +320,15 @@ public class TestBullet {
 		new Bullet(100, 200, 10, -10, Double.NaN);
 	}
 	
+	
+	
 			/*
-			* |-------------------------------------|
-			* | 4. The next tests test the Radius.	|
-			* |-------------------------------------| 
-			*/	
+			 * |------------------------------------|
+			 * | 5. The next tests test the Mass.	|
+			 * |------------------------------------| 
+			 */	
+	
+	
 	
 	@Test
 	public void testBulletSetMassGeneric() throws ModelException {
@@ -304,15 +337,39 @@ public class TestBullet {
 		bullet.setMass();
 		assertEquals((4/3) * Math.PI * Math.pow(50, 3) * (bullet.getDensity()), bullet.getMass(), EPSILON);
 	}
+	// TODO More tests for mass?
 	
 	
 	
 			/*
-			* |-----------------------------------------------------------------|
-			* | 6. The next tests test the interaction with other entities.		|
-		 	* |-----------------------------------------------------------------| 
-		 	*/	
+			 * |--------------------------------------------------------|
+			 * | 6. The next tests test the interaction with worlds.	|
+		 	 * |--------------------------------------------------------| 
+		 	 */	
 
+	
+	@Test // TODO This is actually irrelevant
+	public void testCanHaveAsWorldTrue() throws ModelException {
+		Bullet bullet1 = new Bullet(1, 1, 1, 1, 1);
+		Bullet bullet2 = new Bullet(10, 10, 1, 1, 1);
+		World world = new World(100, 100);
+		assertTrue(bullet1.canHaveAsWorld(world));
+		assertTrue(bullet2.canHaveAsWorld(world));
+	}
+	
+	@Test // TODO This is actually irrelevant
+	public void testCanHaveAsWorldFalse() throws ModelException {
+		Bullet bullet1 = new Bullet(100, 1, 1, 1, 1);
+		Bullet bullet2 = new Bullet(0, 1, 1, 1, 1);
+		Bullet bullet3 = new Bullet(1, 100, 1, 1, 1);
+		Bullet bullet4 = new Bullet(1, 0, 1, 1, 1);
+		World world = new World(100, 100);
+		assertFalse(bullet1.canHaveAsWorld(world));
+		assertFalse(bullet2.canHaveAsWorld(world));
+		assertFalse(bullet3.canHaveAsWorld(world));
+		assertFalse(bullet4.canHaveAsWorld(world));
+	}
+	
 	
 	@Test
 	public void testSetWorld() throws ModelException {
@@ -331,14 +388,85 @@ public class TestBullet {
 		assertNull(bullet.getWorld());
 	}
 	
+
+	// TODO Interaction with ships?
+			/*
+			 * |----------------------------------------------------|
+			 * | 7. The next tests test the resolving collisions.	|
+		 	 * |----------------------------------------------------| 
+		 	 */	
+	
+	
+	
 	@Test
-	public void testCollideWithBullet() throws ModelException {
-		Bullet bullet1 = new Bullet(100, 200, 0, 0, 20);
-		Bullet bullet2 = new Bullet(100, 200, 10, 20, 20);
-		bullet1.resolveCollisionBullet(bullet2);
-		assertTrue(bullet1.isTerminated());
-		assertTrue(bullet2.isTerminated());
+	public void testCollideWithWorldBulletCanBounce() throws ModelException {
+		Bullet bullet = new Bullet(50, 50, 0, 0, 20);
+		World world = new World(100, 100);
+		double counter = bullet.getBoundaryCollisionCounter();
+		bullet.setWorld(world);
+		bullet.resolveCollision(world);
+		assertTrue(counter + 1 == bullet.getBoundaryCollisionCounter());
 	}
+	
+// TODO Fix this test Mathijs.
+//	@Test
+//	public void testCollideWithWorldBulletCanNotBounce() throws ModelException {
+//		Bullet bullet = new Bullet(50, 50, 0, 0, 20);
+//		World world = new World(100, 100);
+//		double counter = bullet.getBoundaryCollisionCounter();
+//		bullet.setWorld(world);
+//		while (counter < bullet.getBoundaryCollisionMax()) {
+//			bullet.resolveCollision(world);
+//			counter += 1;
+//		}
+//		assertTrue(bullet.isTerminated());
+//	}
+	
+	
+	@Test
+	public void testCollideWithWorldVelocityXChanged() throws ModelException {
+		Bullet bullet = new Bullet(80, 50, 10, 10, 20);
+		World world = new World(100, 100);
+		double counter = bullet.getBoundaryCollisionCounter();
+		world.addEntity(bullet);
+		bullet.setWorld(world);
+		bullet.resolveCollision(world);
+		assertTrue(counter + 1 == bullet.getBoundaryCollisionCounter());
+		assertTrue(bullet.getVelocityX() == -10);
+		assertTrue(bullet.getVelocityY() == 10);
+	}
+	
+	//TODO
+	@Test
+	public void testCollideWithWorldVelocityYChanged() throws ModelException {
+		Bullet bullet = new Bullet(50, 80, 10, 10, 20);
+		World world = new World(100, 100);
+		double counter = bullet.getBoundaryCollisionCounter();
+		world.addEntity(bullet);
+		bullet.setWorld(world);
+		bullet.resolveCollision(world);
+		assertTrue(counter + 1 == bullet.getBoundaryCollisionCounter());
+		assertTrue(bullet.getVelocityX() == 10);
+		assertTrue(bullet.getVelocityY() == -10);
+	}
+	
+	
+	// TODO
+	@Test
+	public void testCollideWithWorldCorner() throws ModelException {
+		Bullet bullet = new Bullet(80, 80, 10, 10, 20);
+		World world = new World(100, 100);
+		double counter = bullet.getBoundaryCollisionCounter();
+		world.addEntity(bullet);
+		bullet.setWorld(world);
+		bullet.resolveCollision(world);
+		assertTrue(counter + 1 == bullet.getBoundaryCollisionCounter());
+		// TODO Separate case for corners.
+		assertTrue(bullet.getVelocityX() == -10);
+		assertTrue(bullet.getVelocityY() == -10);
+	}
+	
+	
 	
 	@Test
 	public void testCollideWithShipSource() throws ModelException {
@@ -370,95 +498,15 @@ public class TestBullet {
 		assertTrue(bullet.isTerminated());
 	}
 	
-	@Test
-	public void testCollideWithWorldBulletCanBounce() throws ModelException {
-		Bullet bullet = new Bullet(50, 50, 0, 0, 20);
-		World world = new World(100, 100);
-		double counter = bullet.getBoundaryCollisionCounter();
-		bullet.setWorld(world);
-		bullet.resolveCollision(world);
-		assertTrue(counter + 1 == bullet.getBoundaryCollisionCounter());
-	}
-	
-	@Test
-	public void testCollideWithWorldVelocityXChanged() throws ModelException {
-		Bullet bullet = new Bullet(80, 50, 10, 10, 20);
-		World world = new World(100, 100);
-		double counter = bullet.getBoundaryCollisionCounter();
-		world.addEntity(bullet);
-		bullet.setWorld(world);
-		bullet.resolveCollision(world);
-		assertTrue(counter + 1 == bullet.getBoundaryCollisionCounter());
-		assertTrue(bullet.getVelocityX() == -10);
-		assertTrue(bullet.getVelocityY() == 10);
-	}
-	
-	//TODO
-	@Test
-	public void testCollideWithWorldVelocityYChanged() throws ModelException {
-		Bullet bullet = new Bullet(50, 80, 10, 10, 20);
-		World world = new World(100, 100);
-		double counter = bullet.getBoundaryCollisionCounter();
-		world.addEntity(bullet);
-		bullet.setWorld(world);
-		bullet.resolveCollision(world);
-		assertTrue(counter + 1 == bullet.getBoundaryCollisionCounter());
-		assertTrue(bullet.getVelocityX() == 10);
-		assertTrue(bullet.getVelocityY() == -10);
-	}
-
-	// TODO
-	@Test
-	public void testCollideWithWorldCorner() throws ModelException {
-		Bullet bullet = new Bullet(80, 80, 10, 10, 20);
-		World world = new World(100, 100);
-		double counter = bullet.getBoundaryCollisionCounter();
-		world.addEntity(bullet);
-		bullet.setWorld(world);
-		bullet.resolveCollision(world);
-		assertTrue(counter + 1 == bullet.getBoundaryCollisionCounter());
-		// TODO Separate case for corners.
-		assertTrue(bullet.getVelocityX() == -10);
-		assertTrue(bullet.getVelocityY() == -10);
-	}
-	
-	// Werkt nog niet: world !contains bullet -> illArgExc
-//	@Test
-//	public void testCollideWithWorldBulletCanNotBounce() throws ModelException {
-//		Bullet bullet = new Bullet(50, 50, 0, 0, 20);
-//		World world = new World(100, 100);
-//		double counter = bullet.getBoundaryCollisionCounter();
-//		bullet.setWorld(world);
-//		while (counter < bullet.getBoundaryCollisionMax()) {
-//			bullet.resolveCollision(world);
-//			counter += 1;
-//		}
-//		assertTrue(bullet.isTerminated());
-//	}
-
-
-	@Test
-	public void testCanHaveAsWorldT() throws ModelException {
-		Bullet bullet1 = new Bullet(1, 1, 1, 1, 1);
-		Bullet bullet2 = new Bullet(10, 10, 1, 1, 1);
-		World world = new World(100, 100);
-		assertTrue(bullet1.canHaveAsWorld(world));
-		assertTrue(bullet2.canHaveAsWorld(world));
-	}
-	
-	@Test
-	public void testCanHaveAsWorldF() throws ModelException {
-		Bullet bullet1 = new Bullet(100, 1, 1, 1, 1);
-		Bullet bullet2 = new Bullet(0, 1, 1, 1, 1);
-		Bullet bullet3 = new Bullet(1, 100, 1, 1, 1);
-		Bullet bullet4 = new Bullet(1, 0, 1, 1, 1);
-		World world = new World(100, 100);
-		assertFalse(bullet1.canHaveAsWorld(world));
-		assertFalse(bullet2.canHaveAsWorld(world));
-		assertFalse(bullet3.canHaveAsWorld(world));
-		assertFalse(bullet4.canHaveAsWorld(world));
-	}
 	
 	
+	@Test
+	public void testCollideWithBullet() throws ModelException {
+		Bullet bullet1 = new Bullet(100, 200, 0, 0, 20);
+		Bullet bullet2 = new Bullet(100, 200, 10, 20, 20);
+		bullet1.resolveCollisionBullet(bullet2);
+		assertTrue(bullet1.isTerminated());
+		assertTrue(bullet2.isTerminated());
+	}
 	
 }

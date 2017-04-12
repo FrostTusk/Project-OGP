@@ -39,6 +39,8 @@ public class TestWorld {
 		world.terminate();
 	}
 	
+		
+	
 			/*
 			 * |--------------------------------------------|
 			 * | 2. The next test test the Size. (Basic)	|
@@ -63,6 +65,7 @@ public class TestWorld {
 		assertEquals(0, world.getWidth(), EPSILON);
 		assertEquals(0, world.getHeight(), EPSILON);
 	}
+	
 	
 	@Test
 	public void testCreateWorldSizeWidthEdgeOverflow() throws ModelException {
@@ -113,6 +116,7 @@ public class TestWorld {
 		assertEquals(Double.MAX_VALUE, world.getWidth(), EPSILON);
 		assertEquals(Double.MAX_VALUE, world.getHeight(), EPSILON);
 	}
+	
 	
 	@Test
 	public void testCreateWorldSizeWidthNeg() throws ModelException {

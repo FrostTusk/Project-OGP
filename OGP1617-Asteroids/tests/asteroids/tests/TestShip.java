@@ -18,6 +18,8 @@ import asteroids.util.ModelException;
 
 /* // TODO Rewrite facade ships to Ships
  * // TODO Get rid of throws ModelException!
+ * // TODO Do NOT get rid of tests without telling me!
+ * // Not even irrelevant ones. 
  * Tests Index:
  * 1. Tests for Initialization
  * 2. Tests for Position
