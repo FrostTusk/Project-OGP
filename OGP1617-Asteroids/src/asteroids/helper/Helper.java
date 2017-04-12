@@ -129,7 +129,7 @@ public class Helper {
 	 */
 	public boolean significantOverlap(Entity entity1, Entity entity2, double distance) throws IllegalArgumentException {
 		if ( (entity1 == null) || (entity2 == null) ) throw new IllegalArgumentException();
-		return distance <= (99/100)*(entity1.getRadius() + entity2.getRadius());
+		return distance <= (0.99)*(entity1.getRadius() + entity2.getRadius());
 	}
 	
 	
@@ -189,8 +189,8 @@ public class Helper {
 	 */
 	public boolean apparentlyCollide(Entity entity1, Entity entity2, double distance) throws IllegalArgumentException {
 		if ( (entity1 == null) || (entity2 == null) ) throw new IllegalArgumentException();
-		return ( distance >= (99/100) * (entity1.getRadius() + entity2.getRadius()) ) && 
-				( distance <= (101/100) * (entity1.getRadius() + entity2.getRadius()) ); 
+		return ( distance >= (0.99) * (entity1.getRadius() + entity2.getRadius()) ) && 
+				( distance <= (1.01) * (entity1.getRadius() + entity2.getRadius()) ); 
 	}
 	
 }

@@ -504,7 +504,7 @@ public class Ship extends Entity {
 						    getPosition().getPositionY() + getRadius() * Math.sin(getOrientation()) 
 						    	+ bullet.getRadius() * Math.sin(getOrientation()) );
 
-		for (Entity entity : world.getAllEntities()) if (bullet.overlap(entity)) bullet.resolveCollision(entity);
+		for (Entity entity : world.getAllEntities()) if (bullet.getDistanceBetween(entity) <= 0) bullet.resolveCollision(entity);
 			
 		try {
 			bullet.setWorld(this.getWorld());
@@ -777,7 +777,7 @@ public class Ship extends Entity {
 	@Override
 	public void resolveCollisionBullet(Bullet bullet) throws IllegalArgumentException, NullPointerException {
 		if (bullet == null) throw new NullPointerException();
-		if (!this.overlap(bullet)) throw new IllegalArgumentException();
+		if (this.getDistanceBetween(bullet) <= 0) throw new IllegalArgumentException();
 		if (bullet.getSource() == this) {
 			try {
 				reloadBullet(bullet);

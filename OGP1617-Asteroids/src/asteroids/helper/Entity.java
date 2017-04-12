@@ -562,20 +562,20 @@ public abstract class Entity {
 	
 	
 	/**
-	* Gets the distance between this entity and another given entity.
-	* This distance is the distance between the edges of both entities.
-	* 
-	* @param  	entity
-	* 			the entity to which you want to know the distance.
-	* 
-	* @return	For the current entity, returns the distance between the current entity and a given entity.
-	* 			If the two entities have the same position, the method returns zero.
-	* 			// TODO declarative documentation.
-	* 
-	* @throws 	NullPointerException
-	* 			The other entity was null.
-	* 			| entity == null
-	*/
+	 * Gets the distance between this entity and another given entity.
+	 * This distance is the distance between the edges of both entities.
+	 * 
+	 * @param  	entity
+	 * 			the entity to which you want to know the distance.
+	 * 
+	 * @return	For the current entity, returns the distance between the current entity and a given entity.
+	 * 			If the two entities have the same position, the method returns zero.
+	 * 			// TODO declarative documentation.
+	 * 
+	 * @throws 	NullPointerException
+	 * 			The other entity was null.
+	 * 			| entity == null
+	 */
 	@Raw
 	public double getDistanceBetween(Entity entity) throws NullPointerException {
 		if (entity == null) throw new NullPointerException();		
@@ -588,7 +588,7 @@ public abstract class Entity {
 		
 		// This clause is necessary because otherwise a negative value is returned when this method
 		// is called by an entity on itself. However this value should be 0.
-		if (distance == 0) return 0;
+		if (this == entity) return 0;
 			
 		// Use the radius' of the ships to calculate distance between the edges.
 		return distance - this.getRadius() - entity.getRadius();
@@ -641,7 +641,8 @@ public abstract class Entity {
 	@Raw
 	public boolean overlap(Entity entity) throws NullPointerException {
 		if (entity == null) throw new NullPointerException();
-		return helper.significantOverlap(this, entity, this.getDistanceBetween(entity));
+		if (entity == this) return true;
+		return helper.significantOverlap(this, entity, this.getDistanceBetween(entity) + this.getRadius() + entity.getRadius());
 	}
 	
 	

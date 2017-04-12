@@ -300,7 +300,7 @@ public class Bullet extends Entity {
 	@Raw
 	public void resetSource(Ship ship) throws IllegalArgumentException, NullPointerException {
 		if (ship == null) throw new NullPointerException();
-		if ( (!this.overlap(ship)) || (this.getSource() != ship) ) throw new IllegalArgumentException(); // TODO Is this right?
+		if ( (!(this.getDistanceBetween(ship) <= 0)) || (this.getSource() != ship) ) throw new IllegalArgumentException(); // TODO Is this right?
 		this.hasBeenFired = false;
 		this.setSource(null);
 		this.hasBeenFired = false;
