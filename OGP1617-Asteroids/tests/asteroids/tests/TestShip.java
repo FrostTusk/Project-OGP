@@ -366,25 +366,25 @@ public class TestShip {
 		new Ship(100, 200, 10, -10, 0, 10*Math.PI, 0);
 	}
 	
-	@Test(expected = ModelException.class)
-	public void testCreateShipOisNeg() throws ModelException {
-		facade.createShip(100, 200, 10, -10, 0, -Math.PI);
+	@Test(expected = AssertionError.class)
+	public void testCreateShipOisNeg() {
+		new Ship(100, 200, 10, -10, 0, -Math.PI, 0);
 	}
 	
 
-	@Test(expected = ModelException.class)
-	public void testCreateShipOrientationIsPosInfinity() throws ModelException {
-		facade.createShip(100, 200, 10, -10, 0, Double.POSITIVE_INFINITY);
+	@Test(expected = AssertionError.class)
+	public void testCreateShipOrientationIsPosInfinity() {
+		new Ship(100, 200, 10, -10, 0, Double.POSITIVE_INFINITY, 0);
 	}
 	
-	@Test(expected = ModelException.class)
-	public void testCreateShipOrientationIsNegInfinity() throws ModelException {
-		facade.createShip(100, 200, 10, -10, 0, Double.NEGATIVE_INFINITY);
+	@Test(expected = AssertionError.class)
+	public void testCreateShipOrientationIsNegInfinity() {
+		new Ship(100, 200, 10, -10, 0, Double.NEGATIVE_INFINITY, 0);
 	}
 	
-	@Test(expected = ModelException.class)
-	public void testCreateShipOisNaN() throws ModelException {
-		facade.createShip(100, 200, 10, -10, 0, Double.NaN);
+	@Test(expected = AssertionError.class)
+	public void testCreateShipOisNaN() {
+		new Ship(100, 200, 10, -10, 0, Double.NaN, 0);
 	}
 	
 	
@@ -398,20 +398,20 @@ public class TestShip {
 
 
 	@Test
-	public void testCreateShipMassGeneric() throws ModelException {
+	public void testCreateShipMassGeneric(){
 		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, Math.pow(10, 20));
 		assertEquals(Math.pow(10, 20), ship.getMass(), EPSILON);
 	}
 	
 	
 	@Test
-	public void testCreateShipMassUnderZero() throws ModelException {
+	public void testCreateShipMassUnderZero() {
 		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, -10);
 		assertEquals((4/3) * Math.PI * Math.pow(20, 3) * ship.getDensity(), ship.getMass(), EPSILON);
 	}
 	
 	@Test
-	public void testCreateShipMassZero() throws ModelException {
+	public void testCreateShipMassZero() {
 		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 0);
 		assertEquals((4/3) * Math.PI * Math.pow(20, 3) * ship.getDensity(), ship.getMass(), EPSILON);
 	}
@@ -427,7 +427,7 @@ public class TestShip {
 
 
 	@Test // TODO Technically, this is tested in other methods and is thus not really necessary
-	public void testShipCanHaveAsBulletTrue() throws ModelException {
+	public void testShipCanHaveAsBulletTrue() {
 		Bullet bullet = new Bullet(100, 200, 0, 0, 20);	
 		Ship ship1 = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
 		Ship ship2 = new Ship(200, 200, 10, -10, Math.PI, 20, 1);
@@ -436,7 +436,7 @@ public class TestShip {
 	}
 	
 	@Test
-	public void testShipCanHaveAsBulletFalse() throws ModelException {
+	public void testShipCanHaveAsBulletFalse() {
 		Bullet bullet = new Bullet(100, 200, 0, 0, 20);
 		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
 		ship.loadBullet(bullet);
@@ -444,7 +444,7 @@ public class TestShip {
 	}
 	
 	@Test
-	public void testShipCanHaveAsBulletBulletIsNull() throws ModelException {
+	public void testShipCanHaveAsBulletBulletIsNull() {
 		Bullet bullet = null;
 		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
 		assertFalse(ship.canHaveAsBullet(bullet));
@@ -452,7 +452,7 @@ public class TestShip {
 	
 	// TODO More of these tests:
 	@Test
-	public void testShipBulletLoadOnShip() throws ModelException {
+	public void testShipBulletLoadOnShip() {
 		Bullet bullet = new Bullet(100, 200, 0, 0, 20);	
 		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
 		ship.loadBullet(bullet);
@@ -461,7 +461,7 @@ public class TestShip {
 	
 	
 	@Test
-	public void testShipBulletRemovedWhenFired() throws ModelException {
+	public void testShipBulletRemovedWhenFired() {
 		Bullet bullet = new Bullet(100, 200, 0, 0, 20);	
 		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
 		World world = new World(1000, 1000);
@@ -481,57 +481,57 @@ public class TestShip {
 
 	
 	
-	@Test(expected = ModelException.class)
-	public void testMoveShipIsNull() throws ModelException {
+	@Test(expected = NullPointerException.class)
+	public void testMoveShipIsNull() {
 		Ship ship = null;
-		facade.move(ship, 1);
+		ship.move(1);
 	}
 	
 	
 	@Test
 	public void testMoveGeneric() throws ModelException {
-		Ship ship = facade.createShip(100, 100, 30, -15, 20, 0);
-		facade.move(ship, 1);
-		double[] position = facade.getShipPosition(ship);
+		Ship ship = new Ship(100, 100, 30, -15, 20, 0, 0);
+		ship.move(1);
+		Position position = ship.getPosition();
 		assertNotNull(position);
-		assertEquals(130, position[0], EPSILON);
-		assertEquals(85, position[1], EPSILON);
+		assertEquals(130, position.getPositionX(), EPSILON);
+		assertEquals(85, position.getPositionY(), EPSILON);
 	}
 	
 	
-	@Test(expected = ModelException.class)
-	public void testMoveTisNeg() throws ModelException {
-		Ship ship = facade.createShip(100, 100, 30, -15, 20, 0);
-		facade.move(ship, -1);
+	@Test(expected = IllegalArgumentException.class)
+	public void testMoveTisNeg() {
+		Ship ship = new Ship(100, 100, 30, -15, 20, 0, 0);
+		ship.move(-1);;
 	}
 	
 	@Test
-	public void testMoveTisZero() throws ModelException {
-		Ship ship = facade.createShip(100, 100, 30, -15, 20, 0);
-		facade.move(ship, 0);
-		double[] position = facade.getShipPosition(ship);
+	public void testMoveTisZero() {
+		Ship ship = new Ship(100, 100, 30, -15, 20, 0, 0);
+		ship.move(0);
+		Position position = ship.getPosition();
 		assertNotNull(position);
-		assertEquals(100, position[0], EPSILON);
-		assertEquals(100, position[1], EPSILON);
+		assertEquals(100, position.getPositionX(), EPSILON);
+		assertEquals(100, position.getPositionY(), EPSILON);
 	}
 	
 	
-	@Test(expected = ModelException.class)
-	public void testMoveTisPosInfinity() throws ModelException {
-		Ship ship = facade.createShip(100, 100, 30, -15, 20, 0);
-		facade.move(ship, Double.POSITIVE_INFINITY);
+	@Test(expected = IllegalArgumentException.class)
+	public void testMoveTisPosInfinity() {
+		Ship ship = new Ship(100, 100, 30, -15, 20, 0, 0);
+		ship.move(Double.POSITIVE_INFINITY);
 	}
 	
-	@Test(expected = ModelException.class)
-	public void testMoveTisNegInfinity() throws ModelException {
-		Ship ship = facade.createShip(100, 100, 30, -15, 20, 0);
-		facade.move(ship, Double.NEGATIVE_INFINITY);
+	@Test(expected = IllegalArgumentException.class)
+	public void testMoveTisNegInfinity() {
+		Ship ship = new Ship(100, 100, 30, -15, 20, 0, 0);
+		ship.move(Double.NEGATIVE_INFINITY);
 	}
 	
-	@Test(expected = ModelException.class)
-	public void testMoveTisNaN() throws ModelException {
-		Ship ship = facade.createShip(100, 100, 30, -15, 20, 0);
-		facade.move(ship, Double.NaN);
+	@Test(expected = IllegalArgumentException.class)
+	public void testMoveTisNaN() {
+		Ship ship = new Ship(100, 100, 30, -15, 20, 0, 0);
+		ship.move(Double.NaN);
 	}
 	
 	
@@ -545,21 +545,21 @@ public class TestShip {
 	
 	
 	@Test
-	public void testThrustX() throws ModelException {
-		Ship ship = facade.createShip(100, 100, 0, 0, 20, 0);
-		facade.thrust(ship, 10);
-		assertNotNull(facade.getShipVelocity(ship));
-		assertEquals(10, facade.getShipVelocity(ship)[0], EPSILON);
-		assertEquals(0, facade.getShipVelocity(ship)[1], EPSILON);
+	public void testThrustX() {
+		Ship ship = new Ship(100, 100, 0, 0, 20, 0, 0);
+		ship.thrust(10);
+		assertNotNull(ship.getSpeed());
+		assertEquals(10, ship.getVelocityX(), EPSILON);
+		assertEquals(0, ship.getVelocityY(), EPSILON);
 	}
 	
 	@Test
-	public void testThrustY() throws ModelException {
-		Ship ship = facade.createShip(100, 100, 0, 0, 20, (Math.PI)/2);
-		facade.thrust(ship, 15);
-		assertNotNull(facade.getShipVelocity(ship));
-		assertEquals(0, facade.getShipVelocity(ship)[0], EPSILON);
-		assertEquals(15, facade.getShipVelocity(ship)[1], EPSILON);
+	public void testThrustY() {
+		Ship ship = new Ship(100, 100, 0, 0, 20, (Math.PI)/2, 0);
+		ship.thrust(15);
+		assertNotNull(ship.getSpeed());
+		assertEquals(0, ship.getVelocityX(), EPSILON);
+		assertEquals(15, ship.getVelocityY(), EPSILON);
 	}
 	
 	
