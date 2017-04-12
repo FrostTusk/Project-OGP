@@ -2,6 +2,10 @@ package asteroids.tests;
 
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.junit.Test;
 
 import asteroids.helper.Entity;
@@ -37,6 +41,14 @@ public class TestWorld {
 		World world = new World(-15, -10);
 		assertNotNull(world);
 		world.terminate();
+	}
+	
+	@Test
+	public void testTerminateWorld() throws ModelException {
+		World world = new World(-15, -10);
+		assertNotNull(world);
+		world.terminate();
+		assertTrue(world.isTerminated());
 	}
 	
 			/*
@@ -146,6 +158,23 @@ public class TestWorld {
 			 * |--------------------------------------------| 
 			 */	
 
+	@Test
+	public void testWorldIsValidSizeT() throws ModelException {
+		assertTrue(World.isValidSize(0, 0));
+		assertTrue(World.isValidSize(100, 100));
+		assertTrue(World.isValidSize(100, 50));
+	}
+	
+	@Test
+	public void testWorldIsValidSizeF() throws ModelException {
+		assertFalse(World.isValidSize(-10, -10));
+		assertFalse(World.isValidSize(10, -10));
+		assertFalse(World.isValidSize(-10, 10));
+		assertFalse(World.isValidSize(Double.NaN, 10));
+		assertFalse(World.isValidSize(Double.NaN, Double.NaN));
+		assertFalse(World.isValidSize(10, Double.NaN));
+	}
+	
 	
 /*	The next test crashes the Test Suite, this is because it changes
  *	the upper bound (which is a static variable). All the other tests
@@ -171,7 +200,7 @@ public class TestWorld {
 	 */	
 	
 	@Test
-	public void testWorldCanContainEntityT() throws ModelException {
+	public void testWorldCanContainEntityGeneric() throws ModelException {
 		World world = new World(1000, 1000);
 		Ship ship = new Ship(100, 100, 10, -10, Math.PI, 20, 10);
 		Bullet bullet = new Bullet(1, 1, 1, 1, 1);
@@ -180,7 +209,7 @@ public class TestWorld {
 	}
 	
 	@Test
-	public void testWorldCanContainEntityF() throws ModelException {
+	public void testWorldCanContainEntityBoundariesF() throws ModelException {
 		World world = new World(1000, 1000);
 		Ship ship = new Ship(1000, 1000, 10, -10, Math.PI, 20, 10);
 		Bullet bullet = new Bullet(0, 0, 1, 1, 1);
@@ -189,10 +218,56 @@ public class TestWorld {
 	}
 	
 	@Test
+	public void testWorldCanContainEntityEntityInOtherWorld() throws ModelException {
+		World world1 = new World(1000, 1000);
+		World world2 = new World(1000, 1000);	
+		Ship ship = new Ship(500, 500, 10, -10, Math.PI, 20, 10);
+		Bullet bullet = new Bullet(20, 20, 1, 1, 1);
+		world2.addEntity(ship);
+		world2.addEntity(bullet);
+		ship.setWorld(world2);
+		bullet.setWorld(world2);
+		assertFalse(world1.canHaveAsEntity(ship));
+		assertFalse(world1.canHaveAsEntity(bullet));
+	}
+	
+	@Test
+	public void testWorldCanContainEntityBulletOfShip() throws ModelException {
+		World world = new World(1000, 1000);
+		Ship ship = new Ship(500, 500, 10, -10, Math.PI, 20, 10);
+		Bullet bullet = new Bullet(20, 20, 1, 1, 1);
+		ship.loadBullet(bullet);
+		assertTrue(world.canHaveAsEntity(ship));
+		assertFalse(world.canHaveAsEntity(bullet));
+	}
+	
+	@Test
+	public void testWorldContainsEntityT() throws ModelException {
+		World world = new World(1000, 1000);
+		Ship ship = new Ship(500, 500, 10, -10, Math.PI, 20, 10);
+		Bullet bullet = new Bullet(20, 20, 1, 1, 1);
+		world.addEntity(ship);
+		world.addEntity(bullet);
+		assertTrue(world.containsEntity(ship));
+		assertTrue(world.containsEntity(bullet));
+	}
+	
+	@Test
+	public void testWorldContainsEntityF() throws ModelException {
+		World world = new World(1000, 1000);
+		Ship ship = new Ship(500, 500, 10, -10, Math.PI, 20, 10);
+		Bullet bullet = new Bullet(20, 20, 1, 1, 1);
+		assertFalse(world.containsEntity(ship));
+		assertFalse(world.containsEntity(bullet));
+	}
+	
+	@Test
 	public void testWorldAddEntityAble() throws ModelException {
 		World world = new World(1000, 1000);
 		Ship ship = new Ship(100, 100, 10, -10, Math.PI, 20, 10);
 		Bullet bullet = new Bullet(1, 1, 1, 1, 1);
+		assertFalse(world.containsEntity(ship));
+		assertFalse(world.containsEntity(bullet));
 		world.addEntity(ship);
 		world.addEntity(bullet);
 		assertTrue(world.containsEntity(ship));
@@ -336,6 +411,76 @@ public class TestWorld {
 	public void testWorldGetFirstCollisionEntitiesNoEntities() throws ModelException {
 		World world = new World(1000, 1000);
 		world.getFirstCollisionEntities();
+	}
+	
+	@Test
+	public void testWorldGetAllEntitiesGeneric() throws ModelException {
+		World world = new World(1000, 1000);
+		Ship ship1 = new Ship(100, 100, 10, 0, Math.PI, 20, 10);
+		Ship ship2 = new Ship(150, 100, 0, 0, Math.PI, 20, 10);
+		Bullet bullet = new Bullet(150, 150, 0, 0, 1);
+		world.addEntity(ship1);
+		ship1.setWorld(world);
+		world.addEntity(ship2);
+		ship2.setWorld(world);
+		world.addEntity(bullet);
+		bullet.setWorld(world);
+		Set<Entity> entitiesTest = world.getAllEntities();
+		Set<Entity> entitiesReference = new HashSet<Entity>(Arrays.asList(ship1, ship2, bullet));
+		double counter = 0;
+		for (Entity entityTest : entitiesTest) for (Entity entityRef : entitiesReference) if (entityTest == entityRef) counter += 1;
+		if (counter != 3) fail();
+		assertEquals(3, entitiesTest.size(), EPSILON);
+	}
+	
+	@Test
+	public void testWorldGetAllEntitiesAllShips() throws ModelException {
+		World world = new World(1000, 1000);
+		Ship ship1 = new Ship(100, 100, 10, 0, Math.PI, 20, 10);
+		Ship ship2 = new Ship(150, 100, 0, 0, Math.PI, 20, 10);
+		Ship ship3 = new Ship(200, 100, 0, 0, Math.PI, 20, 10);
+		Ship ship4 = new Ship(250, 100, 0, 0, Math.PI, 20, 10);
+		world.addEntity(ship1);
+		ship1.setWorld(world);
+		world.addEntity(ship2);
+		ship2.setWorld(world);
+		world.addEntity(ship3);
+		ship3.setWorld(world);
+		world.addEntity(ship4);
+		ship4.setWorld(world);
+		Set<Entity> entities = world.getAllEntities();
+		Set<Ship> ships = world.getAllShips();
+		double counter = 0;
+		for (Ship ship : ships) for (Entity entity : entities) if (ship == entity) counter += 1;
+		if (counter != 4) fail();
+		assertEquals(4, entities.size(), EPSILON);
+	}
+	
+	@Test
+	public void testWorldGetAllEntitiesAllBullets() throws ModelException {
+		World world = new World(1000, 1000);
+		Bullet bullet1 = new Bullet(150, 100, 0, 0, 1);
+		Bullet bullet2 = new Bullet(150, 150, 0, 0, 1);
+		Bullet bullet3 = new Bullet(150, 200, 0, 0, 1);
+		world.addEntity(bullet1);
+		bullet1.setWorld(world);
+		world.addEntity(bullet2);
+		bullet2.setWorld(world);
+		world.addEntity(bullet3);
+		bullet3.setWorld(world);
+		Set<Entity> entities = world.getAllEntities();
+		Set<Bullet> bullets = new HashSet<Bullet>(Arrays.asList(bullet1, bullet2, bullet3));
+		double counter = 0;
+		for (Entity entityTest : entities) for (Bullet bullet : bullets) if (entityTest == bullet) counter += 1;
+		if (counter != 3) fail();
+		assertEquals(3, entities.size(), EPSILON);
+	}
+	
+	@Test
+	public void testWorldGetAllEntitiesNoEntities() throws ModelException {
+		World world = new World(1000, 1000);
+		Set<Entity> entities = world.getAllEntities();
+		assertEquals(0, entities.size(), EPSILON);
 	}
 	
 	
