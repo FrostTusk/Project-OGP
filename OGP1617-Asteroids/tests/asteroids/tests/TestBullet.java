@@ -11,7 +11,6 @@ import asteroids.model.Bullet;
 import asteroids.model.Ship;
 import asteroids.model.World;
 import asteroids.part2.facade.IFacade;
-import asteroids.util.ModelException;
 
 /* 
  * // TODO Do NOT get rid of tests without telling me!
@@ -444,19 +443,20 @@ public class TestBullet {
 		assertEquals((4/3) * Math.PI * Math.pow(50, 3) * (bullet.getDensity()), bullet.getMass(), EPSILON);
 	}
 	
-	@Test (expected = NullPointerException.class)
-	public void testBulletSetMassBulletNull() {
-		Bullet bullet = null;
-		bullet.setMass();
-		assertEquals((4/3) * Math.PI * Math.pow(50, 3) * bullet.getDensity(), bullet.getMass(), EPSILON);
-	}
+// The following tests are unnecessary:	
+//	@Test (expected = NullPointerException.class)
+//	public void testBulletSetMassBulletNull() {
+//		Bullet bullet = null;
+//		bullet.setMass();
+//		assertEquals((4/3) * Math.PI * Math.pow(50, 3) * bullet.getDensity(), bullet.getMass(), EPSILON);
+//	}
 	
-	@Test (expected = NullPointerException.class)
-	public void testBulletGetMassBulletNull() {
-		Bullet bullet = null;
-		bullet.getMass();
-		assertEquals((4/3) * Math.PI * Math.pow(50, 3) * bullet.getDensity(), bullet.getMass(), EPSILON);
-	}
+//	@Test (expected = NullPointerException.class)
+//	public void testBulletGetMassBulletNull() {
+//		Bullet bullet = null;
+//		bullet.getMass();
+//		assertEquals((4/3) * Math.PI * Math.pow(50, 3) * bullet.getDensity(), bullet.getMass(), EPSILON);
+//	}
 	
 	
 			/*
