@@ -360,35 +360,35 @@ public class TestShip {
 		Ship ship2 = new Ship(100, 200, 100, 200, Math.PI, 20, 0);
 		assertNotNull(ship2.getOrientation());
 		assertEquals(Math.PI, ship2.getOrientation(), EPSILON);
-		Ship ship3 = new Ship(100, 200, 100, 200, 2*Math.PI, 20, 0);
+		Ship ship3 = new Ship(100, 200, 100, 200, 2*Math.PI, 20, 20);
 		assertNotNull(ship3.getOrientation());
 		assertEquals(2*Math.PI, ship3.getOrientation(), EPSILON);
 	}
 	
 	@Test (expected = AssertionError.class)
 	public void testCreateShipOrientationOverflow() {
-		new Ship(100, 200, 10, -10, 10*Math.PI, 20, 0);
+		new Ship(100, 200, 10, -10, 10*Math.PI, 20, 20);
 	}
 	
 	@Test(expected = AssertionError.class)
 	public void testCreateShipOisNeg() {
-		new Ship(100, 200, 10, -10, 0, -Math.PI, 0);
+		new Ship(100, 200, 10, -10, -Math.PI, 20, 20);
 	}
 	
 
 	@Test(expected = AssertionError.class)
 	public void testCreateShipOrientationIsPosInfinity() {
-		new Ship(100, 200, 10, -10, 0, Double.POSITIVE_INFINITY, 0);
+		new Ship(100, 200, 10, -10, Double.POSITIVE_INFINITY, 20, 20);
 	}
 	
 	@Test(expected = AssertionError.class)
 	public void testCreateShipOrientationIsNegInfinity() {
-		new Ship(100, 200, 10, -10, 0, Double.NEGATIVE_INFINITY, 0);
+		new Ship(100, 200, 10, -10, Double.NEGATIVE_INFINITY, 20, 20);
 	}
 	
 	@Test(expected = AssertionError.class)
 	public void testCreateShipOisNaN() {
-		new Ship(100, 200, 10, -10, 0, Double.NaN, 0);
+		new Ship(100, 200, 10, -10, Double.NaN, 20, 0);
 	}
 	
 	
@@ -484,17 +484,17 @@ public class TestShip {
 			 */	
 
 	
-	
-	@Test(expected = NullPointerException.class)
-	public void testMoveShipIsNull() {
-		Ship ship = null;
-		ship.move(1);
-	}
+//	The next test is unnecessary:
+//	@Test(expected = NullPointerException.class)
+//	public void testMoveShipIsNull() {
+//		Ship ship = null;
+//		ship.move(1);
+//	}
 	
 	
 	@Test
 	public void testMoveGeneric() throws ModelException {
-		Ship ship = new Ship(100, 100, 30, -15, 20, 0, 0);
+		Ship ship = new Ship(100, 100, 30, -15, 0, 20, 20);
 		ship.move(1);
 		Position position = ship.getPosition();
 		assertNotNull(position);
@@ -505,13 +505,13 @@ public class TestShip {
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testMoveTisNeg() {
-		Ship ship = new Ship(100, 100, 30, -15, 20, 0, 0);
+		Ship ship = new Ship(100, 100, 30, -15, 0, 20, 20);
 		ship.move(-1);;
 	}
 	
 	@Test
 	public void testMoveTisZero() {
-		Ship ship = new Ship(100, 100, 30, -15, 20, 0, 0);
+		Ship ship = new Ship(100, 100, 30, -15, 0, 20, 20);
 		ship.move(0);
 		Position position = ship.getPosition();
 		assertNotNull(position);
@@ -522,19 +522,19 @@ public class TestShip {
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testMoveTisPosInfinity() {
-		Ship ship = new Ship(100, 100, 30, -15, 20, 0, 0);
+		Ship ship = new Ship(100, 100, 30, -15, 0, 20, 20);
 		ship.move(Double.POSITIVE_INFINITY);
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testMoveTisNegInfinity() {
-		Ship ship = new Ship(100, 100, 30, -15, 20, 0, 0);
+		Ship ship = new Ship(100, 100, 30, -15, 0, 20, 20);
 		ship.move(Double.NEGATIVE_INFINITY);
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testMoveTisNaN() {
-		Ship ship = new Ship(100, 100, 30, -15, 20, 0, 0);
+		Ship ship = new Ship(100, 100, 30, -15, 0, 20, 0);
 		ship.move(Double.NaN);
 	}
 	
@@ -550,7 +550,7 @@ public class TestShip {
 	
 	@Test
 	public void testThrustX() {
-		Ship ship = new Ship(100, 100, 0, 0, 20, 0, 0);
+		Ship ship = new Ship(100, 100, 0, 0, 0, 20, 0);
 		ship.thrust(10);
 		assertNotNull(ship.getSpeed());
 		assertEquals(10, ship.getVelocityX(), EPSILON);
@@ -559,7 +559,7 @@ public class TestShip {
 	
 	@Test
 	public void testThrustY() {
-		Ship ship = new Ship(100, 100, 0, 0, 20, (Math.PI)/2, 0);
+		Ship ship = new Ship(100, 100, 0, 0, (Math.PI)/2, 20, 0);
 		ship.thrust(15);
 		assertNotNull(ship.getSpeed());
 		assertEquals(0, ship.getVelocityX(), EPSILON);

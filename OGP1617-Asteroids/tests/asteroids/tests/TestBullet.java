@@ -61,13 +61,14 @@ public class TestBullet {
 		assertTrue(bullet.isTerminated());
 	}
 	
-	@Test (expected = NullPointerException.class)
-	public void testTerminateBulletNull() {
-		Bullet bullet = null;
-		assertFalse(bullet.isTerminated());
-		bullet.terminate();
-		assertTrue(bullet.isTerminated());
-	}
+//	The following test is unnecessary:	
+//	@Test (expected = NullPointerException.class)
+//	public void testTerminateBulletNull() {
+//		Bullet bullet = null;
+//		assertFalse(bullet.isTerminated());
+//		bullet.terminate();
+//		assertTrue(bullet.isTerminated());
+//	}
 	
 	
 	
@@ -572,7 +573,8 @@ public class TestBullet {
 	public void testBulletGetCollisionPositionWorldGeneric() {
 		Bullet bullet = new Bullet(2, 2, 1, 0, 1);
 		World world = new World(100, 100);
-		bullet.setWorld(world);
+		world.addEntity(bullet);
+		bullet.setWorld(world); // TODO For Mathijs: is this a good fix?
 		double[] position = bullet.getCollisionPosition(world);
 		if (position[0] != 100) fail();
 		if (position[1] != 2) fail();
