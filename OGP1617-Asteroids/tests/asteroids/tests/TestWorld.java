@@ -772,5 +772,23 @@ public class TestWorld {
 		assertEquals(-10, ship.getVelocityY(), EPSILON);
 	}
 	
+	@Test
+	public void testWorldEvolveCollisionShipOwnBullet() {
+		World world = new World(1000, 1000);
+		Ship ship = new Ship(500, 500, 0, 0, 0, 20, 10);
+		Bullet bullet = new Bullet(500, 500, 10, 10, 1);
+		world.addEntity(ship);
+		ship.setWorld(world);
+		ship.loadBullet(bullet);
+		ship.fireBullet(bullet);
+		assertEquals(250, bullet.getVelocityX(), EPSILON);
+		assertEquals(0, bullet.getVelocityY(), EPSILON);
+		ship.setPosition(800, 500);
+		assertEquals(0, ship.getBulletsCount(), EPSILON);
+		world.evolve(2);
+		assertEquals(1, ship.getBulletsCount(), EPSILON);
+		assertTrue(bullet.getShip() == ship);
+	}
+	
 	
 }

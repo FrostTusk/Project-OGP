@@ -641,6 +641,34 @@ public class TestShip {
 		ship.reloadBullet(bullet);
 		assertTrue(ship.getAllBullets().contains(bullet));
 	}
+	
+	@Test
+	public void testShipFireBulletHorizontal() {
+		Bullet bullet = new Bullet(100, 200, 0, 0, 10);	
+		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
+		World world = new World(1000, 1000);
+		world.addEntity(ship);
+		ship.loadBullet(bullet);
+		ship.fireBullet(bullet);
+		assertEquals(-250, bullet.getVelocityX(), EPSILON);
+		assertEquals(0, bullet.getVelocityY(), EPSILON);
+		assertTrue(bullet.hasBeenFired());
+		assertTrue(bullet.getSource() == ship);
+	}
+	
+	@Test
+	public void testShipFireBulletGeneric() {
+		Bullet bullet = new Bullet(100, 200, 0, 0, 10);	
+		Ship ship = new Ship(100, 200, 10, -10, 1, 20, 1);
+		World world = new World(1000, 1000);
+		world.addEntity(ship);
+		ship.loadBullet(bullet);
+		ship.fireBullet(bullet);
+		assertEquals(250*Math.cos(1), bullet.getVelocityX(), EPSILON);
+		assertEquals(250*Math.sin(1), bullet.getVelocityY(), EPSILON);
+		assertTrue(bullet.hasBeenFired());
+		assertTrue(bullet.getSource() == ship);
+	}
 
 	
 			/*
