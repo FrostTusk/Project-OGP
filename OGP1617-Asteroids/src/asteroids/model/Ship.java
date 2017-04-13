@@ -450,10 +450,10 @@ public class Ship extends Entity {
 	 */
 	public void reloadBullet(Bullet bullet) throws IllegalArgumentException, NullPointerException {
 		try {
-			bullet.resetSource(this);
+			bullet.setPosition(getPosition().getPositionX(), getPosition().getPositionY());
+			bullet.resetSource(this);	// TODO PROBLEM
 			if (bullet.getWorld() != null) bullet.getWorld().removeEntity(bullet);
 			bullet.setWorld(null);
-			bullet.setPosition(getPosition().getPositionX(), getPosition().getPositionY());
 			loadBullet(bullet);
 		}
 		catch (IllegalArgumentException exc) {
@@ -512,7 +512,7 @@ public class Ship extends Entity {
 						    getPosition().getPositionY() +  Math.sin(getOrientation()) * 
 						    	(getRadius() + bullet.getRadius() + 1) );	// +1 otherwise bullet is reloaded immediately.
 
-		// Next all the collisions with entities are resolved.
+		// Next all the collisions with entities are resolved.	// TODO PROBLEM IF THERE IS OVERLAP!
 		for (Entity entity : world.getAllEntities()) if (bullet.getDistanceBetween(entity) <= 0) bullet.resolveCollision(entity);
 			
 		try {

@@ -717,7 +717,7 @@ public abstract class Entity {
 	@Raw
 	public double getTimeToCollision(Entity entity) throws IllegalArgumentException, NullPointerException {
 		if (entity == null) throw new NullPointerException(); 
-		if (this.overlap(entity)) throw new IllegalArgumentException();
+		if (this.overlap(entity)) throw new IllegalArgumentException();	// TODO Clearly a problem
 //		if (this.getWorld() != entity.getWorld()) return Double.POSITIVE_INFINITY;	//TODO can they collide in the null world?
 		
 		double[] deltaR = {entity.getPosition().getPositionX() - this.getPosition().getPositionX(), 

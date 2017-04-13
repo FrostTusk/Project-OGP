@@ -296,14 +296,13 @@ public class Bullet extends Entity {
 	 *         
 	 * @see implementation
 	 * 		// TODO More documentation?
-	 */
+	 */	//TODO BUGGED!
 	@Raw
 	public void resetSource(Ship ship) throws IllegalArgumentException, NullPointerException {
 		if (ship == null) throw new NullPointerException();
 		if ( (!(this.getDistanceBetween(ship) <= 0)) || (this.getSource() != ship) ) throw new IllegalArgumentException(); // TODO Is this right?
 		this.hasBeenFired = false;
-		this.setSource(null);
-		this.hasBeenFired = false;
+		this.source = null;
 	}
 	
 	/**
@@ -463,7 +462,6 @@ public class Bullet extends Entity {
 	@Override
 	public void resolveCollisionShip(Ship ship) throws IllegalArgumentException, NullPointerException {
 		if (ship == null) throw new NullPointerException();
-//		if (!this.overlap(ship)) throw new IllegalArgumentException();
 		if (this.getSource() == ship) {
 			try {
 				ship.reloadBullet(this);
