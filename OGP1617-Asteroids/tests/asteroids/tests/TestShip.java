@@ -736,7 +736,7 @@ public class TestShip {
 	@Test
 	public void testThrustXWhithMovingStart() {
 		Ship ship = new Ship(100, 100, 10, 10, 0, 20, 0);
-		ship.thrust(5);;
+		ship.thrust(5);
 		assertNotNull(ship.getSpeed());
 		assertEquals(15, ship.getVelocityX(), EPSILON);
 		assertEquals(10, ship.getVelocityY(), EPSILON);
@@ -745,7 +745,7 @@ public class TestShip {
 	@Test
 	public void testThrustYWhithMovingStart() {
 		Ship ship = new Ship(100, 100, 10, 10, (Math.PI)/2, 20, 0);
-		ship.thrust(7);;
+		ship.thrust(7);
 		assertNotNull(ship.getSpeed());
 		assertEquals(10, ship.getVelocityX(), EPSILON);
 		assertEquals(17, ship.getVelocityY(), EPSILON);
@@ -792,6 +792,24 @@ public class TestShip {
 		ship.thrust(Double.NaN);
 		assertEquals(0, ship.getVelocityX(), EPSILON);
 		assertEquals(0, ship.getVelocityY(), EPSILON);
+	}
+	
+	@Test
+	public void testThrusterOn() {
+		Ship ship = new Ship(100, 100, 10, 10, 0, 20, 0);
+		assertTrue(ship.getThrustStatus() == false);
+		ship.thrustOn();
+		assertTrue(ship.getThrustStatus() == true);
+	}
+	
+	@Test
+	public void testThrusterOff() {
+		Ship ship = new Ship(100, 100, 10, 10, 0, 20, 0);
+		assertTrue(ship.getThrustStatus() == false);
+		ship.thrustOn();
+		assertTrue(ship.getThrustStatus() == true);
+		ship.thrustOff();
+		assertTrue(ship.getThrustStatus() == false);
 	}
 	
 
@@ -1049,7 +1067,20 @@ public class TestShip {
 		assertTrue( (position[1] > 35) && (position[1] < 45) );
 		assertTrue(( ship1.getTimeToCollision(ship2) > 2) && (ship1.getTimeToCollision(ship2) < 4) );
 	}
-	// TODO testCollisionDetectionXPOSYNEG()
+	@Test
+	public void testCollisionDetectionXPOSYNEG() {
+		Ship ship1 = new Ship(0, 0, 10, -10, 0, 10, 0);
+		Ship ship2 = new Ship(50, -50, 0, 0, 0, 10, 0);
+		double[] position = ship1.getCollisionPosition(ship2);
+//		System.out.println(position[0]);
+//		System.out.println(position[1]);
+//		System.out.println(facade.getTimeToCollision(ship1, ship2));
+		// Position is as predicted here.
+		assertTrue( (position[0] > 35) && (position[0] < 45) );
+		assertTrue( (position[1] < -35) && (position[1] > -45) );
+		assertTrue( (ship1.getTimeToCollision(ship2) > 2) && (ship1.getTimeToCollision(ship2) < 4) );
+	}
+	
 	@Test
 	public void testCollisionDetectionXNEGYPOS() {		
 		Ship ship1 = new Ship(0, 0, -10, 10, 0, 10, 0);
@@ -1124,12 +1155,113 @@ public class TestShip {
 		ship.setWorld(world);
 		assertTrue(ship.getWorld() == world);
 	}
-
+	
+	@Test
+	public void testShipIsInWorldT() {
+		Ship ship = new Ship(100, 100, -10, -10, 0, 10, 0);
+		World world = new World(1000, 1000);
+		assertTrue(ship.isInWorld(world));
+	}
+	
+	@Test
+	public void testShipIsInWorldF() {
+		Ship ship = new Ship(10000, 10000, -10, -10, 0, 10, 0);
+		World world = new World(1000, 1000);
+		assertFalse(ship.isInWorld(world));
+	}
+	
+	@Test
+	public void testShipIsInWorldApparently() {
+		Ship ship = new Ship(100, 100, -10, -10, 0, 100.1, 0);
+		World world = new World(1000, 1000);
+		assertTrue(ship.isInWorld(world));
+	}
+	
+	@Test
+	public void testCollideWithWorldVelocityXChanged() {
+		Ship ship = new Ship(950, 100, 10, 10, 0, 50, 0);
+		World world = new World(1000, 1000);
+		world.addEntity(ship);
+		ship.setWorld(world);
+		ship.resolveCollision(world);
+		assertTrue(ship.getVelocityX() == -10);
+		assertTrue(ship.getVelocityY() == 10);
+	}
+	
+	@Test
+	public void testCollideWithWorldVelocityYChanged() {
+		Ship ship = new Ship(100, 900, 10, 10, 0, 100, 0);
+		World world = new World(1000, 1000);
+		world.addEntity(ship);
+		ship.setWorld(world);
+		ship.resolveCollision(world);
+		assertTrue(ship.getVelocityX() == 10);
+		assertTrue(ship.getVelocityY() == -10);
+	}
+	
+	@Test
+	public void testCollideWithWorldVelocityXYChanged() {
+		Ship ship = new Ship(950, 950, 10, 10, 0, 50, 0);
+		World world = new World(1000, 1000);
+		world.addEntity(ship);
+		ship.setWorld(world);
+		ship.resolveCollision(world);
+		assertTrue(ship.getVelocityX() == -10);
+		assertTrue(ship.getVelocityY() == -10);
+	}
 			/*
  			 * |----------------------------------------------------------------|
  			 * | 15. The next tests test the interaction with other entities.	|
  			 * |----------------------------------------------------------------| 
 			 */	
+	
+	@Test
+	public void testCollideWithShip() {
+		Ship ship1 = new Ship(100, 100, -10, -10, 0, 25, 0);
+		Ship ship2 = new Ship(50, 50, 0, 0, 0, 25, 0);
+		World world = new World(1000, 1000);
+		world.addEntity(ship1);
+		world.addEntity(ship2);
+		assertTrue(ship1.getVelocityX() == -10);
+		assertTrue(ship1.getVelocityY() == -10);
+		assertTrue(ship2.getVelocityX() == 0);
+		assertTrue(ship2.getVelocityY() == 0);
+		ship1.resolveCollision(ship2);
+		assertFalse(ship1.getVelocityX() == -10);
+		assertFalse(ship1.getVelocityY() == -10);
+		assertFalse(ship2.getVelocityX() == 0);
+		assertFalse(ship2.getVelocityY() == 0);
+	}
+	
+	@Test
+	public void testCollideWithBulletSource() {
+		Bullet bullet = new Bullet(100, 100, 0, 0, 20);	
+		Ship ship = new Ship(100, 100, 10, -10, Math.PI, 20, 10);
+		World world = new World(1000, 1000);
+		ship.setWorld(world);
+		bullet.setShip(ship);
+		bullet.setSource(ship);
+		bullet.setShip(null);
+		double counter = ship.getBulletsCount();
+		bullet.resolveCollisionShip(ship);	
+		assertTrue(counter + 1 == ship.getBulletsCount());
+	}
+	
+	@Test
+	public void testCollideWithBulletNotSource() {
+		Bullet bullet = new Bullet(200, 200, 0, 0, 20);	
+		Ship ship1 = new Ship(100, 100, 10, -10, Math.PI, 20, 10);
+		Ship ship2 = new Ship(200, 200, 10, -10, Math.PI, 20, 10);
+		World world = new World(1000, 1000);
+		world.addEntity(ship1);
+		world.addEntity(ship2);
+		bullet.setShip(ship1);
+		bullet.setSource(ship1);
+		bullet.setShip(null);
+		bullet.resolveCollisionShip(ship2);	
+		assertTrue(ship2.isTerminated());
+		assertTrue(bullet.isTerminated());
+	}
 	
 	
 	
