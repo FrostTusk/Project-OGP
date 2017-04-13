@@ -634,9 +634,9 @@ public class TestShip {
 	public void testShipBulletReload() {
 		Bullet bullet = new Bullet(100, 200, 0, 0, 10);	
 		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
-		World world = new World(1000, 1000);
-		bullet.setWorld(world);
+		bullet.setShip(ship);
 		bullet.setSource(ship);
+		bullet.setShip(null);
 		assertFalse(ship.getAllBullets().contains(bullet));
 		ship.reloadBullet(bullet);
 		assertTrue(ship.getAllBullets().contains(bullet));
@@ -1195,7 +1195,7 @@ public class TestShip {
 		world.addEntity(ship);
 		ship.setWorld(world);
 		ship.resolveCollision(world);
-		assertTrue(ship.getVelocityX() == 10);
+		assertTrue(ship.getVelocityX() == -10);
 		assertTrue(ship.getVelocityY() == -10);
 	}
 	

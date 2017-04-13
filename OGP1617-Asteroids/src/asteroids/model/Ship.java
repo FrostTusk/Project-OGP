@@ -360,7 +360,8 @@ public class Ship extends Entity {
 	 */
 	@Raw
 	public boolean canHaveAsBullet(Bullet bullet) {
-		if ( (this.bullets.contains(bullet)) || (bullet == null) ) return false;
+		if ( (this.bullets.contains(bullet)) || (bullet == null) || 
+				(!helper.apparentlyWithinBoundaries(bullet, this)) ) return false;
 		return true;
 		//		if (bullet.canHaveAsShip(this)) return true; 
 //		return false;
@@ -712,8 +713,9 @@ public class Ship extends Entity {
 		if (position == null) return;	// There is no collision so the collision does not need to be resolved.
 		if (position[0] == this.world.getWidth() || position[0] == 0) 
 			setVelocity(-getVelocityX(), getVelocityY());
-		if (position[1] == this.world.getHeight() || position[1] == 0) 
-			setVelocity(getVelocityX(), -getVelocityY());
+		if ( (position[1] == this.world.getHeight() || position[1] == 0) ||
+			 (position[3] == this.world.getHeight() || position[3] == 0) )
+			setVelocity(getVelocityX(), -getVelocityY()); 
 	}
 	
 	/**

@@ -241,7 +241,7 @@ public class TestWorld {
 	public void testWorldCanContainEntityBulletOfShip() {
 		World world = new World(1000, 1000);
 		Ship ship = new Ship(500, 500, 10, -10, Math.PI, 20, 10);
-		Bullet bullet = new Bullet(20, 20, 1, 1, 1);
+		Bullet bullet = new Bullet(500, 500, 1, 1, 1);
 		ship.loadBullet(bullet);
 		assertTrue(world.canHaveAsEntity(ship));
 // TODO See last test.

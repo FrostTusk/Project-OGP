@@ -752,18 +752,35 @@ public abstract class Entity {
 		if (! world.containsEntity(this)) return null;
 		
 		double time = getTimeToCollision(world);
-		double[] vector = {Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY};
+		double[] vector = {Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY};
 		if (time == Double.POSITIVE_INFINITY) return vector; // TODO Is this good?
 		
-		vector = helper.calculatePosition(this, time);
+		vector[0] = helper.calculatePosition(this, time)[0];
+		vector[1] = helper.calculatePosition(this, time)[1];
+		vector[2] = helper.calculatePosition(this, time)[0];
+		vector[3] = helper.calculatePosition(this, time)[1];
 		if (vector[0] + this.getRadius() == world.getWidth()) vector[0] += this.getRadius();
 		else if (vector[0] - this.getRadius() == 0) vector[0] = 0;
-		if (vector[1] + this.getRadius() == world.getHeight()) vector[1] += this.getRadius();
+		else if (vector[1] + this.getRadius() == world.getHeight()) vector[1] += this.getRadius();
 		else if (vector[1] - this.getRadius() == 0) vector[1] = 0;
 		
+		if ( (vector[0] != vector[2]) ) { // If there is a collision with x boundary, we still have to check if there is a collision with the y boundary.
+			if (vector[3] + this.getRadius() == world.getHeight()) vector[3] += this.getRadius();
+			else if (vector[3] - this.getRadius() == 0) vector[3] = 0;
+			else {
+				vector[2] = Double.POSITIVE_INFINITY;
+				vector[3] = Double.POSITIVE_INFINITY;
+			}
+		}
+		else {
+			vector[2] = Double.POSITIVE_INFINITY;
+			vector[3] = Double.POSITIVE_INFINITY;
+		}
 		return vector;	
 	}
 	
+
+
 	/**
 	* Gets the collision position between this entity and a given entity.
 	* 
