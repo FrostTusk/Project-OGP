@@ -678,6 +678,8 @@ public abstract class Entity {
 		double[] distance = getDistanceBetween(world);
 		if ( (distance[0] == Double.POSITIVE_INFINITY) || (distance[1] == Double.POSITIVE_INFINITY) ||
 			 (distance[2] == Double.POSITIVE_INFINITY) || (distance[3] == Double.POSITIVE_INFINITY) ) return Double.POSITIVE_INFINITY;
+		if ( (distance[0] == 0) || (distance[1] == world.getWidth()) || (distance[2] == 0) || (distance[3] == world.getHeight()) )
+			return 0;
 		
 		double time1; // The shortest time to collision between this entity and the x boundaries of the given world.
 		if (getVelocityX() == 0) time1 = Double.POSITIVE_INFINITY;

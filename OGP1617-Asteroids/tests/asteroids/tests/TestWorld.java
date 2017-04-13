@@ -654,15 +654,15 @@ public class TestWorld {
 		assertEquals(0, counter, EPSILON);
 		assertEquals(90, bullet.getVelocityX(), EPSILON);
 		assertEquals(0, bullet.getVelocityY(), EPSILON);
-		world.evolve(12);
+		world.evolve(10);
 		assertEquals(-90, bullet.getVelocityX(), EPSILON);
 		assertEquals(0, bullet.getVelocityY(), EPSILON);
 		assertEquals(1, bullet.getBoundaryCollisionCounter(), EPSILON);
-		world.evolve(11);
+		world.evolve(10);
 		assertEquals(90, bullet.getVelocityX(), EPSILON);
 		assertEquals(0, bullet.getVelocityY(), EPSILON);
 		assertEquals(2, bullet.getBoundaryCollisionCounter(), EPSILON);
-		world.evolve(11);
+		world.evolve(10);
 		assertTrue(bullet.isTerminated());
 	}
 	

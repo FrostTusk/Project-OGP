@@ -344,6 +344,13 @@ public class World {
 		return collisionEntitiesMin;
 	}
 
+	/**
+	 * Iterates an entity over all other entities and finds the shortest time.
+	 * Helper Method for getFirstCollisionEntities().
+	 * 
+	 * @see implementation
+	 */
+	@Raw
 	private double iterateEntities(double collisionTimeMin, Entity[] collisionEntitiesMin, Entity entity1) {
 		double collisionTimeTemp;
 		for (Entity entity2: entities.values()) {
@@ -363,6 +370,13 @@ public class World {
 		return collisionTimeMin;
 	}
 	
+	/**
+	 * Iterates an entity over the boundary with this world and finds the shortest time.
+	 * Helper Method for getFirstCollisionEntities().
+	 * 
+	 * @see implementation
+	 */
+	@Raw
 	private double iterateBoundaries(double collisionTimeMin, Entity[] collisionEntitiesMin, Entity entity1) {
 		double collisionTimeTemp;
 		try {
@@ -491,7 +505,7 @@ public class World {
 				collisionEntitiesMin[0].resolveCollision(collisionEntitiesMin[1]);
 			evolve(time - collisionTimeMin);
 		}
-		update(time);
+		else update(time);
 	}
 	
 	
