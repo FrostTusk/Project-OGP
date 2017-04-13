@@ -2,6 +2,8 @@ package asteroids.tests;
 
 import static org.junit.Assert.*;
 
+import java.util.Collection;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,8 +15,7 @@ import asteroids.helper.Position;
 import asteroids.part1.facade.IFacade;
 import asteroids.util.ModelException;
 
-/* // TODO Rewrite facade ships to Ships
- * // TODO get rid of throwsModelException
+/* 
  * // TODO Do NOT get rid of tests without telling me!
  * // Not even irrelevant ones. 
  * Tests Index:
@@ -31,6 +32,8 @@ import asteroids.util.ModelException;
  * 11. Tests for Distance
  * 12. Tests for Overlap
  * 13. Tests for Collision Detection
+ * 14. tests for interaction with worlds
+ * 15.tests for interaction with entities
  */
 
 public class TestShip {
@@ -391,7 +394,6 @@ public class TestShip {
 		new Ship(100, 200, 10, -10, Double.NaN, 20, 0);
 	}
 	
-	
 		
 			/*
 			 * |------------------------------------|
@@ -419,6 +421,63 @@ public class TestShip {
 		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 0);
 		assertEquals((4/3) * Math.PI * Math.pow(20, 3) * ship.getDensity(), ship.getMass(), EPSILON);
 	}
+	
+	@Test
+	public void testShipTotalMassGeneric() {
+		Bullet bullet1 = new Bullet(100, 200, 0, 0, 20);	
+		Bullet bullet2 = new Bullet(100, 200, 0, 0, 20);	
+		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
+		ship.loadBullet(bullet1);
+		assertEquals(ship.getTotalMass(), ship.getMass() + bullet1.getMass(), EPSILON);
+		ship.loadBullet(bullet2);
+		assertEquals(ship.getTotalMass(), ship.getMass() + bullet1.getMass() + bullet2.getMass(), EPSILON);
+	}
+	
+	@Test
+	public void testShipTotalMassNoCargo() {
+		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
+		assertEquals(ship.getTotalMass(), ship.getMass(), EPSILON);
+	}
+	
+	@Test
+	public void testShipSetMassGeneric() {
+		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
+		assertEquals((4/3) * Math.PI * Math.pow(ship.getRadius(), 3) * ship.getDensity(), ship.getMass(), EPSILON);
+		ship.setMass(Math.pow(10, 20));
+		assertEquals(Math.pow(10, 20), ship.getMass(), EPSILON);
+	}
+	
+	@Test
+	public void testShipSetMassNeg() {
+		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
+		assertEquals((4/3) * Math.PI * Math.pow(ship.getRadius(), 3) * ship.getDensity(), ship.getMass(), EPSILON);
+		ship.setMass(-1);
+		assertEquals((4/3) * Math.PI * Math.pow(ship.getRadius(), 3) * ship.getDensity(), ship.getMass(), EPSILON);
+	}
+	
+	@Test
+	public void testShipSetMassNaN() {
+		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
+		assertEquals((4/3) * Math.PI * Math.pow(ship.getRadius(), 3) * ship.getDensity(), ship.getMass(), EPSILON);
+		ship.setMass(Double.NaN);
+		assertEquals((4/3) * Math.PI * Math.pow(ship.getRadius(), 3) * ship.getDensity(), ship.getMass(), EPSILON);
+	}
+	
+	@Test
+	public void testShipSetMassNegInf() {
+		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
+		assertEquals((4/3) * Math.PI * Math.pow(ship.getRadius(), 3) * ship.getDensity(), ship.getMass(), EPSILON);
+		ship.setMass(Double.NEGATIVE_INFINITY);
+		assertEquals((4/3) * Math.PI * Math.pow(ship.getRadius(), 3) * ship.getDensity(), ship.getMass(), EPSILON);
+	}
+	
+	@Test
+	public void testShipSetMassPosInf() {
+		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
+		assertEquals((4/3) * Math.PI * Math.pow(ship.getRadius(), 3) * ship.getDensity(), ship.getMass(), EPSILON);
+		ship.setMass(Double.POSITIVE_INFINITY);
+		assertEquals(Double.POSITIVE_INFINITY, ship.getMass(), EPSILON);
+	}
 
 	
 
@@ -431,7 +490,7 @@ public class TestShip {
 
 
 	@Test // TODO Technically, this is tested in other methods and is thus not really necessary
-	public void testShipCanHaveAsBulletTrue() {
+	public void testShipCanHaveAsBulletT() {
 		Bullet bullet = new Bullet(100, 200, 0, 0, 20);	
 		Ship ship1 = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
 		Ship ship2 = new Ship(200, 200, 10, -10, Math.PI, 20, 1);
@@ -440,7 +499,7 @@ public class TestShip {
 	}
 	
 	@Test
-	public void testShipCanHaveAsBulletFalse() {
+	public void testShipCanHaveAsBulletF() {
 		Bullet bullet = new Bullet(100, 200, 0, 0, 20);
 		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
 		ship.loadBullet(bullet);
@@ -456,11 +515,69 @@ public class TestShip {
 	
 	// TODO More of these tests:
 	@Test
-	public void testShipBulletLoadOnShip() {
+	public void testShipBulletLoadOnShipSingleBullet() {
 		Bullet bullet = new Bullet(100, 200, 0, 0, 20);	
 		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
 		ship.loadBullet(bullet);
 		assertTrue(ship.getAllBullets().contains(bullet));
+	}
+	
+	@Test
+	public void testShipBulletLoadOnShipMultipleBullets() {
+		Bullet bullet1 = new Bullet(100, 200, 0, 0, 20);	
+		Bullet bullet2= new Bullet(100, 200, 0, 0, 20);	
+		Bullet bullet3 = new Bullet(100, 200, 0, 0, 20);	
+		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
+		ship.loadBullet(bullet1);
+		ship.loadBullet(bullet2);
+		ship.loadBullet(bullet3);
+		assertTrue(ship.getAllBullets().contains(bullet1));
+		assertTrue(ship.getAllBullets().contains(bullet2));
+		assertTrue(ship.getAllBullets().contains(bullet3));
+	}
+	
+	@Test
+	public void testShipGetBulletsSetSize() {
+		Bullet bullet1 = new Bullet(100, 200, 0, 0, 20);	
+		Bullet bullet2= new Bullet(100, 200, 0, 0, 20);	
+		Bullet bullet3 = new Bullet(100, 200, 0, 0, 20);	
+		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
+		ship.loadBullet(bullet1);
+		ship.loadBullet(bullet2);
+		ship.loadBullet(bullet3);
+		assertTrue(ship.getBulletsCount() == 3);
+	}
+	
+	@Test
+	public void testShipGetBulletsSetSizeNoBullets() {
+		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
+		assertTrue(ship.getBulletsCount() == 0);
+	}
+	
+	@Test
+	public void testShipRemoveBullet() {
+		Bullet bullet1 = new Bullet(100, 200, 0, 0, 20);	
+		Bullet bullet2= new Bullet(100, 200, 0, 0, 20);	
+		Bullet bullet3 = new Bullet(100, 200, 0, 0, 20);	
+		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
+		ship.loadBullet(bullet1);
+		ship.loadBullet(bullet2);
+		ship.loadBullet(bullet3);
+		assertTrue(ship.getBulletsCount() == 3);
+		ship.removeBullet(bullet1);
+		assertTrue(ship.getBulletsCount() == 2);
+		assertFalse(ship.getAllBullets().contains(bullet1));
+		assertTrue(ship.getAllBullets().contains(bullet2));
+		assertTrue(ship.getAllBullets().contains(bullet3));
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testShipRemoveBulletNoBullets() {
+		Bullet bullet = new Bullet(100, 200, 0, 0, 20);
+		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
+		assertTrue(ship.getBulletsCount() == 0);
+		assertFalse(ship.getAllBullets().contains(bullet));
+		ship.removeBullet(bullet);
 	}
 	
 	
@@ -475,6 +592,55 @@ public class TestShip {
 		assertFalse(ship.getAllBullets().contains(bullet));
 	}
 	
+	@Test
+	public void testShipCanHaveAsBulletAlreadyAsBullet() {
+		Ship ship = new Ship(90, 90, -10, -10, 0, 20, 0);
+		Bullet bullet = new Bullet(100, 100, 0, 0, 1);
+		ship.loadBullet(bullet);
+		assertFalse(ship.canHaveAsBullet(bullet));
+	}
+	
+	@Test
+	public void testShipCanHaveAsBulletNotCompletelyInShipCircle() {
+		Ship ship = new Ship(95, 95, -10, -10, 0, 10, 0);
+		Bullet bullet = new Bullet(100, 100, 0, 0, 10);
+		assertFalse(ship.canHaveAsBullet(bullet));
+	}
+	
+	@Test
+	public void testShipCanHaveAsBulletSamePositionBulletLarger() {
+		Ship ship = new Ship(100, 100, -10, -10, 0, 10, 0);
+		Bullet bullet = new Bullet(100, 100, 0, 0, 20);
+		assertFalse(ship.canHaveAsBullet(bullet));
+	}
+	
+	@Test
+	public void testShipCanHaveAsBulletOtherPosition() {
+		Ship ship = new Ship(90, 90, -10, -10, 0, 20, 0);
+		Bullet bullet = new Bullet(1000, 1000, 0, 0, 1);
+		assertFalse(ship.canHaveAsBullet(bullet));
+	}
+	
+	@Test
+	public void testShipCanHaveAsBulletHasWorld() {
+		Ship ship = new Ship(100, 100, -10, -10, 0, 20, 0);
+		Bullet bullet = new Bullet(100, 100, 0, 0, 1);
+		World world = new World(1000, 1000);
+		bullet.setWorld(world);
+		assertTrue(ship.canHaveAsBullet(bullet));
+	}
+	
+	@Test
+	public void testShipBulletReload() {
+		Bullet bullet = new Bullet(100, 200, 0, 0, 10);	
+		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
+		World world = new World(1000, 1000);
+		bullet.setWorld(world);
+		bullet.setSource(ship);
+		assertFalse(ship.getAllBullets().contains(bullet));
+		ship.reloadBullet(bullet);
+		assertTrue(ship.getAllBullets().contains(bullet));
+	}
 
 	
 			/*
@@ -805,9 +971,17 @@ public class TestShip {
 		assertFalse(ship1.overlap(ship2));
 	}
 	
+	@Test
+	public void testOverlapTouching() {
+		Ship ship1 = new Ship(0, 0, 30, -15, 0, 50, 0);
+		Ship ship2 = new Ship(100, 0, 30, -15, 0, 50, 0);
+		assertFalse(ship1.overlap(ship2));
+		ship2 = new Ship(99, 0, 30, -15, 0, 50, 0);
+		assertTrue(ship1.overlap(ship2));
+	}
 	
 	@Test
-	public void testSameShip() {
+	public void testOverlapSameShip() {
 		Ship ship1 = new Ship(0, 0, 30, -15, 0, 10, 0);
 		assertTrue(ship1.overlap(ship1));
 	}
@@ -912,6 +1086,52 @@ public class TestShip {
 		assertNull(position);
 		assertEquals(Double.POSITIVE_INFINITY, ship1.getTimeToCollision(ship1), EPSILON);
 	}
+	
+			/*
+			 * |--------------------------------------------------------|
+			 * | 14. The next tests test the interaction with worlds.	|
+			 * |--------------------------------------------------------| 
+			 */	
+	
+	@Test
+	public void testCanHaveAsWorldT() {
+		Ship ship = new Ship(100, 100, -10, -10, 0, 10, 0);
+		World world = new World(1000, 1000);
+		assertTrue(ship.canHaveAsWorld(world));
+	}
+	
+	@Test
+	public void testCanHaveAsWorldShipHasOtherWorld() {
+		Ship ship = new Ship(100, 100, -10, -10, 0, 10, 0);
+		World world1 = new World(1000, 1000);
+		World world2 = new World(1000, 1000);
+		ship.setWorld(world2);
+		assertFalse(ship.canHaveAsWorld(world1));
+	}
+	
+	@Test
+	public void testCanHaveAsWorldShipOutsideBoundaries() {
+		Ship ship = new Ship(0, 100, -10, -10, 0, 10, 0);
+		World world = new World(1000, 1000);
+		assertFalse(ship.canHaveAsWorld(world));
+	}
+	
+	@Test
+	public void testShipSetWorld() {
+		Ship ship = new Ship(100, 100, -10, -10, 0, 10, 0);
+		World world = new World(1000, 1000);
+		assertTrue(ship.getWorld() == null);
+		ship.setWorld(world);
+		assertTrue(ship.getWorld() == world);
+	}
+
+			/*
+ 			 * |----------------------------------------------------------------|
+ 			 * | 15. The next tests test the interaction with other entities.	|
+ 			 * |----------------------------------------------------------------| 
+			 */	
+	
+	
 	
 }
 	
