@@ -451,6 +451,7 @@ public class Ship extends Entity {
 	public void reloadBullet(Bullet bullet) throws IllegalArgumentException, NullPointerException {
 		try {
 			bullet.resetSource(this);
+			if (bullet.getWorld() != null) bullet.getWorld().removeEntity(bullet);
 			bullet.setWorld(null);
 			bullet.setPosition(getPosition().getPositionX(), getPosition().getPositionY());
 			loadBullet(bullet);
@@ -488,7 +489,6 @@ public class Ship extends Entity {
 	 */
 	public void fireBullet(Bullet bullet) {
 		if ( (this.getWorld() == null) || (bullet == null) ) return;
-		
 		if (!bullets.contains(bullet)) fireBullet();
 		else fireBulletProcedure(bullet);
 	}

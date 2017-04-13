@@ -645,6 +645,7 @@ public class TestShip {
 		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
 		World world = new World(1000, 1000);
 		world.addEntity(ship);
+		ship.setWorld(world);
 		ship.loadBullet(bullet);
 		ship.fireBullet(bullet);
 		assertEquals(-250, bullet.getVelocityX(), EPSILON);
@@ -659,6 +660,7 @@ public class TestShip {
 		Ship ship = new Ship(100, 200, 10, -10, 1, 20, 1);
 		World world = new World(1000, 1000);
 		world.addEntity(ship);
+		ship.setWorld(world);
 		ship.loadBullet(bullet);
 		ship.fireBullet(bullet);
 		assertEquals(250*Math.cos(1), bullet.getVelocityX(), EPSILON);

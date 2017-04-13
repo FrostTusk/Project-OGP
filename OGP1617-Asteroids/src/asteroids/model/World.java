@@ -530,6 +530,13 @@ public class World {
 				collisionEntitiesMin[0].resolveCollision(collisionEntitiesMin[1]);
 			evolve(time - collisionTimeMin);
 		}
+//		else if (collisionTimeMin == 0) {
+//			if ( collisionEntitiesMin[0] == collisionEntitiesMin[1] )	// If the collision is with the boundary
+//				collisionEntitiesMin[0].resolveCollision(this);
+//			else	// If the collision is between 2 entities.
+//				collisionEntitiesMin[0].resolveCollision(collisionEntitiesMin[1]);
+//			evolve(time);
+//		}
 		else update(time);
 	}
 	
