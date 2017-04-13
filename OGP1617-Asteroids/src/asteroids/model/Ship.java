@@ -452,6 +452,7 @@ public class Ship extends Entity {
 		try {
 			bullet.resetSource(this);
 			bullet.setWorld(null);
+			bullet.setPosition(getPosition().getPositionX(), getPosition().getPositionY());
 			loadBullet(bullet);
 		}
 		catch (IllegalArgumentException exc) {

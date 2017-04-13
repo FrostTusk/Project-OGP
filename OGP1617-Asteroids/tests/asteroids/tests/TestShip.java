@@ -2,8 +2,6 @@ package asteroids.tests;
 
 import static org.junit.Assert.*;
 
-import java.util.Collection;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,7 +11,6 @@ import asteroids.model.World;
 import asteroids.facade.Facade;
 import asteroids.helper.Position;
 import asteroids.part1.facade.IFacade;
-import asteroids.util.ModelException;
 
 /* 
  * // TODO Do NOT get rid of tests without telling me!
@@ -921,12 +918,12 @@ public class TestShip {
 	
 	
 	
-	@Test(expected = NullPointerException.class)
-	public void testDistanceShip1IsNull() {
-		Ship ship1 = null;
-		Ship ship2 = new Ship(100, 100, 30, -15, 0, 20, 0);
-		assertEquals(0, ship1.getDistanceBetween(ship2), EPSILON);
-	}
+//	@Test(expected = NullPointerException.class)
+//	public void testDistanceShip1IsNull() {
+//		Ship ship1 = null;
+//		Ship ship2 = new Ship(100, 100, 30, -15, 0, 20, 0);
+//		assertEquals(0, ship1.getDistanceBetween(ship2), EPSILON);
+//	}
 	
 	@Test(expected = NullPointerException.class)
 	public void testDistanceShip2IsNull() {
@@ -988,12 +985,12 @@ public class TestShip {
 	
 	
 	
-	@Test(expected = NullPointerException.class)
-	public void testOverlapShip1IsNull() {
-		Ship ship1 = null;
-		Ship ship2 = new Ship(100, 100, 30, -15, 0, 20, 0);
-		assertFalse(ship1.overlap(ship2));
-	}
+//	@Test(expected = NullPointerException.class)
+//	public void testOverlapShip1IsNull() {
+//		Ship ship1 = null;
+//		Ship ship2 = new Ship(100, 100, 30, -15, 0, 20, 0);
+//		assertFalse(ship1.overlap(ship2));
+//	}
 	
 	@Test(expected = NullPointerException.class)
 	public void testOverlapShip2IsNull() {
@@ -1042,12 +1039,12 @@ public class TestShip {
 	
 	
 	
-	@Test(expected = NullPointerException.class)
-	public void testCollisionDetectionTimeShip1IsNull1() {
-		Ship ship1 = null;
-		Ship ship2 = new Ship(30, 0, 0, 0, 0, 10, 0);
-		ship1.getTimeToCollision(ship2);
-	}
+//	@Test(expected = NullPointerException.class)
+//	public void testCollisionDetectionTimeShip1IsNull1() {
+//		Ship ship1 = null;
+//		Ship ship2 = new Ship(30, 0, 0, 0, 0, 10, 0);
+//		ship1.getTimeToCollision(ship2);
+//	}
 	
 	@Test(expected = NullPointerException.class)
 	public void testCollisionDetectionTimeShip2IsNull1() {
@@ -1056,13 +1053,13 @@ public class TestShip {
 		ship1.getTimeToCollision(ship2);
 	}
 	
-	
-	@Test(expected = NullPointerException.class)
-	public void testCollisionDetectionPositionShip1IsNull2() {
-		Ship ship1 = null;
-		Ship ship2 = new Ship(30, 0, 0, 0, 0, 10, 0);
-		ship1.getCollisionPosition(ship2);
-	}
+//	
+//	@Test(expected = NullPointerException.class)
+//	public void testCollisionDetectionPositionShip1IsNull2() {
+//		Ship ship1 = null;
+//		Ship ship2 = new Ship(30, 0, 0, 0, 0, 10, 0);
+//		ship1.getCollisionPosition(ship2);
+//	}
 	
 	@Test(expected = NullPointerException.class)
 	public void testCollisionDetectionPositionShip2IsNull2() {

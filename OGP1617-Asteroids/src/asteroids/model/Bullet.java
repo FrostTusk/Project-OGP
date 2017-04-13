@@ -440,8 +440,10 @@ public class Bullet extends Entity {
 	public void resolveCollision(Entity entity) throws IllegalArgumentException, NullPointerException {
 		if (entity == null) throw new NullPointerException();
 		try {
-			if (entity.getType() == "Ship") resolveCollisionShip((Ship)entity);
-			else if (entity.getType() == "Bullet") resolveCollisionBullet((Bullet)entity);
+			if (entity.getType() == "Ship") 
+				resolveCollisionShip((Ship)entity);
+			else if (entity.getType() == "Bullet") 
+				resolveCollisionBullet((Bullet)entity);
 		}
 		catch (IllegalArgumentException exc) {
 			throw new IllegalArgumentException();

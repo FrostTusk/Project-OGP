@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import asteroids.helper.Entity;
+import asteroids.helper.Helper;
 import asteroids.helper.Position;
 
 import be.kuleuven.cs.som.annotate.*;
@@ -54,7 +55,10 @@ public class World {
 			 * |--------------------------------------------------------------------------------| 
 			 */
 	
-	
+	/**
+	 * Variable registering the helper for this ship.
+	 */
+	private Helper helper = new Helper();
 	
 	/**
 	 * Initialize this new world with given width and height.
@@ -285,6 +289,7 @@ public class World {
 	 */
 	@Raw
 	public void addEntity(Entity entity) throws IllegalArgumentException, NullPointerException {
+		updateMap();
 		if (entity == null) throw new NullPointerException();
 		if ( (! canHaveAsEntity(entity)) /*|| (! entity.canHaveAsWorld(this))*/ ) throw new IllegalArgumentException();	// TODO Is this right?
 		entities.put(entity.getPosition(), entity);
@@ -293,6 +298,7 @@ public class World {
 	/**
 	 * Remove a given entity from this world.This does net set 
 	 * the world of the entity to null.
+	 * 
 	 * @param	entity
 	 * 			The entity to be removed.
 	 * 
@@ -300,12 +306,30 @@ public class World {
 	 */
 	@Raw
 	public void removeEntity(Entity entity) throws IllegalArgumentException, NullPointerException {
+		updateMap();
 		if (entity == null) throw new NullPointerException();
 		if (!containsEntity(entity)) throw new IllegalArgumentException();
 		entities.remove(entity.getPosition());
 	}
 	
-	
+	/**
+	 * Updates the collection of entities. This method needs to be called whenever
+	 * a entities is called to ensure that the map is properly updated.
+	 *
+	 * @see implementation
+	 */
+	@Raw
+	public void updateMap() {
+		List<Position> iterator = helper.convertCollectionToList(entities.keySet());
+		for (Position position: iterator) {
+			if (position == null) entities.remove(position);
+			else if (entities.get(position).getPosition() != position) {
+					Entity entity = entities.get(position);
+					entities.remove(position);
+					this.addEntity(entity);
+			}
+		}
+	}
 	
 		/*
 	     * |--------------------------------|
@@ -457,6 +481,7 @@ public class World {
 	 * 			the time over which the world will evolve.
 	 */
 	public void evolve(double time) throws IllegalArgumentException {
+		updateMap();	// We need to update the map because it is possible that the positions of the entities have been changed.
 		if (time < 0) throw new IllegalArgumentException();
 		Entity[] collisionEntitiesMin = getFirstCollisionEntities();
 		if (collisionEntitiesMin == null) resolveEvolve(-1, collisionEntitiesMin, time);	// There are no entities in this World.
@@ -465,7 +490,7 @@ public class World {
 			if ( collisionEntitiesMin[0] == collisionEntitiesMin[1] )	// If the collision is with the boundary.
 				collisionTimeMin = collisionEntitiesMin[0].getTimeToCollision(this);
 			else	// If the collision is between 2 entities.
-				collisionTimeMin = collisionEntitiesMin[0].getTimeToCollision(collisionEntitiesMin[1]);
+				collisionTimeMin = collisionEntitiesMin[0].getTimeToCollision(collisionEntitiesMin[1]);	// TODO PROBLEM OVERLAP
 			
 			try {	// This is the only possible exception that is thrown in this method (outside of the one for the parameter);
 				resolveEvolve(collisionTimeMin, collisionEntitiesMin, time); // All other exceptions will never occur in the execution of this method

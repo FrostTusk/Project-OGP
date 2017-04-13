@@ -1,6 +1,7 @@
 package asteroids.helper;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -84,14 +85,28 @@ public class Helper {
 	/**
 	 * Converts a given Set to a List.
 	 * 
-	 * @param 	list
-	 * 			The list to be converted
+	 * @param 	set
+	 * 			The set to be converted
 	 * 
 	 * @return	Returns an array made up by the elements in list.
 	 */
 	public <T> List<T> convertSetToList(Set<T> set) {
 		List<T> list = new ArrayList<T>();
 		for (T item: set) list.add(item);
+		return list;
+	}
+	
+	/**
+	 * Converts a given Set to a List.
+	 * 
+	 * @param 	collection
+	 * 			The collection to be converted
+	 * 
+	 * @return	Returns an array made up by the elements in list.
+	 */
+	public <T> List<T> convertCollectionToList(Collection<T> collection) {
+		List<T> list = new ArrayList<T>();
+		for (T item: collection) list.add(item);
 		return list;
 	}
 	
