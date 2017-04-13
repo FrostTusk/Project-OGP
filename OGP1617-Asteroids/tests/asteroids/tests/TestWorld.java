@@ -567,25 +567,22 @@ public class TestWorld {
 	}
 	
 	@Test
-	public void testWorldEvolveGeneric() {
+	public void testWorldEvolveCollisionBetweenShipAndBullet() {
 		World world = new World(1000, 1000);
 		Bullet bullet = new Bullet(150, 150, 60, 0, 1);
 		Ship ship1 = new Ship(100, 100, 0, 0, Math.PI, 20, 10);
 		Ship ship2 = new Ship(200, 150, 0, 0, Math.PI, 20, 10);
 		world.addEntity(ship1);
-		ship1.setWorld(world);
 		world.addEntity(ship2);
-		ship2.setWorld(world);
 		world.addEntity(bullet);
-		bullet.setWorld(world);
 		bullet.setSource(ship1);
 		world.evolve(2);
-		assertTrue(bullet.isTerminated());
 		assertTrue(ship2.isTerminated());
+		assertTrue(bullet.isTerminated());
 	}
 	
 	@Test
-	public void testWorldEvolveNoCollisions() throws IllegalArgumentException {
+	public void testWorldEvolveNoCollisions() {
 		World world = new World(1000, 1000);
 		Ship ship = new Ship(100, 100, 10, -10, Math.PI, 20, 10);
 		Bullet bullet = new Bullet(1, 1, 10, 10, 1);
@@ -598,6 +595,181 @@ public class TestWorld {
 		assertEquals(80, ship.getPosition().getPositionY(), EPSILON);
 		assertEquals(21, bullet.getPosition().getPositionX(), EPSILON);
 		assertEquals(21, bullet.getPosition().getPositionY(), EPSILON);
+	}
+	
+	@Test
+	public void testWorldEvolveCollisionShip2InRest() {
+		World world = new World(1000, 1000);
+		Ship ship1 = new Ship(100, 500, 10, 0, Math.PI, 20, 10);
+		Ship ship2 = new Ship(500, 500, 0, 0, Math.PI, 20, 10);
+		Bullet bullet = new Bullet(5, 5, 0, 0, 1);
+		world.addEntity(ship1);
+		ship1.setWorld(world);
+		world.addEntity(ship2);
+		ship2.setWorld(world);
+		world.addEntity(bullet);
+		bullet.setWorld(world);
+		world.evolve(20);
+		assertEquals(10, ship1.getVelocityX(), EPSILON);
+		assertEquals(0, ship1.getVelocityY(), EPSILON);
+		assertEquals(0, ship2.getVelocityX(), EPSILON);
+		assertEquals(0, ship2.getVelocityY(), EPSILON);
+		world.evolve(30);
+		assertEquals(0, ship1.getVelocityY(), EPSILON);
+		assertEquals(0, ship2.getVelocityY(), EPSILON);
+		assertEquals(0, ship1.getVelocityX(), EPSILON);
+		assertEquals(10, ship2.getVelocityX(), EPSILON);
+	}
+	
+	@Test
+	public void testWorldEvolveCollisionBulletHorizontalBoundary() {
+		World world = new World(1000, 1000);
+		Ship ship1 = new Ship(100, 500, 0, 0, Math.PI, 20, 10);
+		Ship ship2 = new Ship(500, 500, 0, 0, Math.PI, 20, 10);
+		Bullet bullet = new Bullet(5, 5, -1, 10, 1);
+		world.addEntity(ship1);
+		ship1.setWorld(world);
+		world.addEntity(ship2);
+		ship2.setWorld(world);
+		world.addEntity(bullet);
+		bullet.setWorld(world);
+		double counter = bullet.getBoundaryCollisionCounter();
+		assertEquals(0, counter, EPSILON);
+		world.evolve(3);
+		assertEquals(-1, bullet.getVelocityX(), EPSILON);
+		assertEquals(10, bullet.getVelocityY(), EPSILON);
+		world.evolve(3);
+		assertEquals(1, bullet.getVelocityX(), EPSILON);
+		assertEquals(10, bullet.getVelocityY(), EPSILON);
+		assertEquals(1, bullet.getBoundaryCollisionCounter(), EPSILON);
+	}
+	
+	@Test
+	public void testWorldEvolveCollisionBulletHorizontalBoundaryCounterFull() {
+		World world = new World(1000, 1000);
+		Bullet bullet = new Bullet(900, 50, 90, 0, 10);
+		world.addEntity(bullet);
+		bullet.setWorld(world);
+		double counter = bullet.getBoundaryCollisionCounter();
+		assertEquals(0, counter, EPSILON);
+		assertEquals(90, bullet.getVelocityX(), EPSILON);
+		assertEquals(0, bullet.getVelocityY(), EPSILON);
+		world.evolve(12);
+		assertEquals(-90, bullet.getVelocityX(), EPSILON);
+		assertEquals(0, bullet.getVelocityY(), EPSILON);
+		assertEquals(1, bullet.getBoundaryCollisionCounter(), EPSILON);
+		world.evolve(11);
+		assertEquals(90, bullet.getVelocityX(), EPSILON);
+		assertEquals(0, bullet.getVelocityY(), EPSILON);
+		assertEquals(2, bullet.getBoundaryCollisionCounter(), EPSILON);
+		world.evolve(11);
+		assertTrue(bullet.isTerminated());
+	}
+	
+	@Test
+	public void testWorldEvolveCollisionBulletVerticalBoundary0() {
+		World world = new World(1000, 1000);
+		Ship ship1 = new Ship(100, 500, 0, 0, Math.PI, 20, 10);
+		Ship ship2 = new Ship(500, 500, 0, 0, Math.PI, 20, 10);
+		Bullet bullet = new Bullet(5, 5, 10, -1, 1);
+		world.addEntity(ship1);
+		ship1.setWorld(world);
+		world.addEntity(ship2);
+		ship2.setWorld(world);
+		world.addEntity(bullet);
+		bullet.setWorld(world);
+		double counter = bullet.getBoundaryCollisionCounter();
+		assertEquals(0, counter, EPSILON);
+		world.evolve(3);
+		assertEquals(10, bullet.getVelocityX(), EPSILON);
+		assertEquals(-1, bullet.getVelocityY(), EPSILON);
+		world.evolve(3);
+		assertEquals(10, bullet.getVelocityX(), EPSILON);
+		assertEquals(1, bullet.getVelocityY(), EPSILON);
+		assertEquals(1, bullet.getBoundaryCollisionCounter(), EPSILON);
+	}
+	
+	@Test
+	public void testWorldEvolveCollisionBulletHorizontalBoundaryWidth() {
+		World world = new World(1000, 1000);
+		Bullet bullet = new Bullet(900, 5, 10, 1, 1);
+		world.addEntity(bullet);
+		bullet.setWorld(world);
+		double counter = bullet.getBoundaryCollisionCounter();
+		assertEquals(0, counter, EPSILON);
+		world.evolve(7);
+		assertEquals(10, bullet.getVelocityX(), EPSILON);
+		assertEquals(1, bullet.getVelocityY(), EPSILON);
+		world.evolve(10);
+		assertEquals(-10, bullet.getVelocityX(), EPSILON);
+		assertEquals(1, bullet.getVelocityY(), EPSILON);
+		assertEquals(1, bullet.getBoundaryCollisionCounter(), EPSILON);
+	}
+	
+	@Test
+	public void testWorldEvolveCollisionShipBoundaryX() {
+		World world = new World(1000, 1000);
+		Ship ship1 = new Ship(900, 500, 0, 0, Math.PI, 20, 10);
+		Ship ship2 = new Ship(500, 500, 0, 0, Math.PI, 20, 10);
+		Bullet bullet = new Bullet(5, 5, -1, 10, 1);
+		world.addEntity(ship1);
+		ship1.setWorld(world);
+		world.addEntity(ship2);
+		ship2.setWorld(world);
+		world.addEntity(bullet);
+		bullet.setWorld(world);
+		double counter = bullet.getBoundaryCollisionCounter();
+		assertEquals(0, counter, EPSILON);
+		world.evolve(3);
+		assertEquals(-1, bullet.getVelocityX(), EPSILON);
+		assertEquals(10, bullet.getVelocityY(), EPSILON);
+		world.evolve(3);
+		assertEquals(1, bullet.getVelocityX(), EPSILON);
+		assertEquals(10, bullet.getVelocityY(), EPSILON);
+		assertEquals(1, bullet.getBoundaryCollisionCounter(), EPSILON);
+	}
+	
+	@Test
+	public void testWorldEvolveCollisionShipBoundaryY() {
+		World world = new World(1000, 1000);
+		Ship ship = new Ship(500, 900, 1, 10, Math.PI, 20, 10);
+		world.addEntity(ship);
+		ship.setWorld(world);
+		world.evolve(4);
+		assertEquals(1, ship.getVelocityX(), EPSILON);
+		assertEquals(10, ship.getVelocityY(), EPSILON);
+		world.evolve(3);
+		assertEquals(1, ship.getVelocityX(), EPSILON);
+		assertEquals(10, ship.getVelocityY(), EPSILON);
+		world.evolve(2);
+		assertEquals(1, ship.getVelocityX(), EPSILON);
+		assertEquals(-10, ship.getVelocityY(), EPSILON);
+	}
+	
+	@Test
+	public void testWorldEvolveCollisionShipStartsAgainstBoundaryMovesToBoundary() {
+		World world = new World(1000, 1000);
+		Ship ship = new Ship(800, 900, 0, 10, Math.PI, 100, 10);
+		world.addEntity(ship);
+		ship.setWorld(world);
+		assertEquals(0, ship.getVelocityX(), EPSILON);
+		assertEquals(10, ship.getVelocityY(), EPSILON);
+		world.evolve(1);
+		assertEquals(0, ship.getVelocityX(), EPSILON);
+		assertEquals(-10, ship.getVelocityY(), EPSILON);
+	}
+	
+	@Test
+	public void testWorldEvolveCollisionShipStartsAgainstBoundaryMovesFromBoundary() {
+		World world = new World(1000, 1000);
+		Ship ship = new Ship(800, 900, 0, -10, Math.PI, 100, 10);
+		world.addEntity(ship);
+		ship.setWorld(world);
+		assertEquals(0, ship.getVelocityX(), EPSILON);
+		assertEquals(-10, ship.getVelocityY(), EPSILON);
+		world.evolve(1);
+		assertEquals(0, ship.getVelocityX(), EPSILON);
+		assertEquals(-10, ship.getVelocityY(), EPSILON);
 	}
 	
 	
