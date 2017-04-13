@@ -110,7 +110,7 @@ public class Ship extends Entity {
 	 *         	 
 	 * @throws 	IllegalArgumentException
 	 *         	This new bullet cannot have the given X and Y position as position.
-	 *       	| ! this.getPosition().isValidPosition(positionX, positionY)	// TODO is this done right?
+	 *       	| ! new Position(0,0).isValidPosition(positionX, positionY)
 	 * @throws 	IllegalArgumentException
 	 *         	This new bullet cannot have the given radius as its radius.
 	 *       	| ! this.canHaveAsRadius(this.getRadius())
@@ -309,11 +309,12 @@ public class Ship extends Entity {
 	* @param  	world
 	*         	The world to check.
 	*         
-	* @see implementation
+	* @return	Returns whether or not this ship can have the given world as world.
+	* 			true if it can, false if not.
 	*/
 	@Override @Raw
 	public boolean canHaveAsWorld(World world) {
-		if (world == null) return true;	// TODO Is this a good fix?
+		if (world == null) return true;
 		return (getWorld() == null) && (isInWorld(world));
 	}
 	
@@ -355,8 +356,8 @@ public class Ship extends Entity {
 	 * @param  	bullet
 	 *         	The bullet to check.
 	 *         
-	 * @see implementation
-	 * 		// TODO Bullet has to lie in the circle of Ship
+	 * @return	Returns whether or not this ship can have the given bullet as bullet.
+	 * 			true if it can, false if not.
 	 */
 	@Raw
 	public boolean canHaveAsBullet(Bullet bullet) {
@@ -375,12 +376,11 @@ public class Ship extends Entity {
 	 * @param  	bullet
 	 *         	The bullet to be added.
 	 *         
-	 * @see implementation
+	 * @see implementation	// TODO @ see, sure?
 	 */
 	@Raw
 	private void addBullet(Bullet bullet) {
 		this.bullets.add(bullet);
-		
 	}
 	
 	/**
@@ -389,14 +389,12 @@ public class Ship extends Entity {
 	 * @param  	bullet
 	 *         	The bullet to be removed.
 	 *         
-	 * @see implementation
+	 * @see implementation // TODO @ see, sure?
 	 */
-	@Raw // TODO @Raw?
+	@Raw
 	public void removeBullet(Bullet bullet) throws IllegalArgumentException {
 		if (!this.bullets.contains(bullet)) throw new IllegalArgumentException();
 		this.bullets.remove(bullet);
-		// TODO	bullet.setShip(null); ?
-		// TODO bullet.setWorld(this.getWorld); ?
 	}
 	
 	
@@ -448,8 +446,7 @@ public class Ship extends Entity {
 	 * @param  	bullet
 	 *         	The bullet to be reloaded.
 	 *         
-	 * @see implementation
-	 * 		// TODO declarative documentation.
+	 * @see implementation // TODO @ see, sure?
 	 */
 	public void reloadBullet(Bullet bullet) throws IllegalArgumentException, NullPointerException {
 		try {
@@ -469,8 +466,7 @@ public class Ship extends Entity {
 	/**
 	 * Fires a bullet out of the collection of bullets.
 	 *     
-	 * @see implementation
-	 * 		// TODO declarative documentation.
+	 * @see implementation // TODO @ see, sure?
 	 */
 	public void fireBullet() {
 		if (bullets.size() > 0)
@@ -488,33 +484,42 @@ public class Ship extends Entity {
 	 * 			The bullet requested to be fired.
 	 * 
 	 * @see implementation
-	 * 		// TODO declarative documentation.
 	 */
 	public void fireBullet(Bullet bullet) {
 		if ( (this.getWorld() == null) || (bullet == null) ) return;
 		
-		if (!bullets.contains(bullet)) {
-			fireBullet();
-			return;
-		}
-		
-		this.removeBullet(bullet);
-		bullet.setSource(this);
+		if (!bullets.contains(bullet)) fireBullet();
+		else fireBulletProcedure(bullet);
+	}
+
+	/**
+	 * The procedure a fired bullet has to run through to actually be fired.
+	 * Helper Method for fireBullet().
+	 *     
+	 * @param	bullet
+	 * 			The bullet requested to be fired.
+	 * 
+	 * @see implementation
+	 */
+	private void fireBulletProcedure(Bullet bullet) {
+		bullet.setSource(this);	// First set the source to this ship.
+		removeBullet(bullet);	// Remove the association with the ship.
 		bullet.setShip(null);
-		bullet.setVelocity(250 * Math.cos(getOrientation()), 250 * Math.sin(getOrientation()));	
-		bullet.setPosition( getPosition().getPositionX() + Math.cos(getOrientation()) *
+		bullet.setVelocity(250 * Math.cos(getOrientation()), 250 * Math.sin(getOrientation()));	// Next the bullet is given 
+		bullet.setPosition( getPosition().getPositionX() + Math.cos(getOrientation()) *			// the current position/speed.
 								(getRadius() + bullet.getRadius() + 1),
 						    getPosition().getPositionY() +  Math.sin(getOrientation()) * 
-						    	(getRadius() + bullet.getRadius() + 1) );	// +1 otherwise bullet is reloaded immediatly.
+						    	(getRadius() + bullet.getRadius() + 1) );	// +1 otherwise bullet is reloaded immediately.
 
+		// Next all the collisions with entities are resolved.
 		for (Entity entity : world.getAllEntities()) if (bullet.getDistanceBetween(entity) <= 0) bullet.resolveCollision(entity);
 			
 		try {
-			world.addEntity(bullet);
-			bullet.setWorld(this.getWorld());
+			world.addEntity(bullet);	// Add the bullet to the collection of the world.
+			bullet.setWorld(this.getWorld());	// set the world of the bullet to the world of this ship.
 		}
-		catch (IllegalArgumentException exc) {
-			bullet.terminate();
+		catch (IllegalArgumentException exc) {	// If the bullet cannot exist in this world, an exception is thrown.
+			bullet.terminate();					// And the bullet needs to be terminated
 		}
 	}
 
@@ -702,7 +707,6 @@ public class Ship extends Entity {
 	 * 			The world to be used.
 	 * 
 	 * @see implementation
-	 * 		// TODO declarative documentation.
 	 * 		// TODO apparently collide?
 	 * 		// TODO what if they are not colliding?
 	 */
@@ -725,7 +729,6 @@ public class Ship extends Entity {
 	 * 			The entity to be used.
 	 * 
 	 * @see implementation
-	 * 		// TODO declarative documentation.
 	 */
 	@Override
 	public void resolveCollision(Entity entity) throws IllegalArgumentException, NullPointerException {
@@ -747,7 +750,6 @@ public class Ship extends Entity {
 	 * 			The ship to be used.
 	 * 
 	 * @see implementation
-	 * 		// TODO declarative documentation.
 	 */
 	@Override
 	public void resolveCollisionShip(Ship ship) throws NullPointerException {
@@ -774,7 +776,6 @@ public class Ship extends Entity {
 	 * 			The bullet to be used.
 	 * 
 	 * @see implementation
-	 * 		// TODO declarative documentation.
 	 */
 	@Override
 	public void resolveCollisionBullet(Bullet bullet) throws IllegalArgumentException, NullPointerException {

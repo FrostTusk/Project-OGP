@@ -670,7 +670,7 @@ public abstract class Entity {
 	* 
 	* @return	The time returned will be larger than 0 and will be equal to
 	* 			the time needed for the entity to reach a position where it collides with the boundaries of the world.
-	* 			// TODO declarative documentation.
+	* 			| this.getDistanceBetween(world) == 0
 	* 			// TODO apparently collide?
 	*/
 	@Raw
@@ -701,7 +701,7 @@ public abstract class Entity {
 	* 
 	* @return	The time returned will be larger than 0 and will be equal to
 	* 			the time needed for both entities to reach a position where they will collide with each other.
-	* 			// TODO declarative documentation.
+	* 			| this.getDistanceBetween(entity) == 0
 	* 			// TODO apparently collide?
 	* 
 	* @throws 	IllegalArgumentException
@@ -715,7 +715,7 @@ public abstract class Entity {
 	public double getTimeToCollision(Entity entity) throws IllegalArgumentException, NullPointerException {
 		if (entity == null) throw new NullPointerException(); 
 		if (this.overlap(entity)) throw new IllegalArgumentException();
-		if (this.getWorld() != entity.getWorld()) return Double.POSITIVE_INFINITY;	//TODO can they collide in the null world?
+//		if (this.getWorld() != entity.getWorld()) return Double.POSITIVE_INFINITY;	//TODO can they collide in the null world?
 		
 		double[] deltaR = {entity.getPosition().getPositionX() - this.getPosition().getPositionX(), 
 					   	   entity.getPosition().getPositionY() - this.getPosition().getPositionY()};
@@ -743,7 +743,7 @@ public abstract class Entity {
 	* 
 	* @return	The position returned will be the position where this ship and the world
 	* 			collide with each other. The method returns null if they never collide.
-	* 			// TODO declarative documentation.
+	* 			| this.getDistanceBetween(world) == 0
 	* 			// TODO null or infinity if they don't collide?
 	* 			// TODO problems with rounding?
 	*/
@@ -765,7 +765,7 @@ public abstract class Entity {
 		else if (vector[1] - this.getRadius() == 0) vector[1] = 0;
 		
 		if ( (vector[0] != vector[2]) ) { // If there is a collision with x boundary, we still have to check if there is a collision with the y boundary.
-			if (vector[3] + this.getRadius() == world.getHeight()) vector[3] += this.getRadius();
+			if (vector[3] + this.getRadius() == world.getHeight()) vector[3] += this.getRadius();	// This is for corners.
 			else if (vector[3] - this.getRadius() == 0) vector[3] = 0;
 			else {
 				vector[2] = Double.POSITIVE_INFINITY;
@@ -789,7 +789,7 @@ public abstract class Entity {
 	* 
 	* @return	The position returned will be the position where both entities
 	* 			collide with each other. The method returns null if they never collide.
-	* 			// TODO declarative documentation.
+	* 			| this.getDistanceBetween(entity) == 0
 	* 
 	* @throws 	Null
 	* 			The other entity was null.

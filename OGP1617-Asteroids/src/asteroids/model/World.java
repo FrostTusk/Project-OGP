@@ -286,7 +286,7 @@ public class World {
 	@Raw
 	public void addEntity(Entity entity) throws IllegalArgumentException, NullPointerException {
 		if (entity == null) throw new NullPointerException();
-		if ( (! canHaveAsEntity(entity)) || (! entity.canHaveAsWorld(this)) ) throw new IllegalArgumentException();
+		if ( (! canHaveAsEntity(entity)) /*|| (! entity.canHaveAsWorld(this))*/ ) throw new IllegalArgumentException();	// TODO Is this right?
 		entities.put(entity.getPosition(), entity);
 	}
 	
