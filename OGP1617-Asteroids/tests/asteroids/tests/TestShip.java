@@ -640,6 +640,22 @@ public class TestShip {
 	}
 	
 	@Test
+	public void testShipBulletReloadHasBounced() {
+		Bullet bullet = new Bullet(100, 200, 0, 0, 10);	
+		Ship ship = new Ship(100, 200, 0, 0, Math.PI, 20, 1);
+		World world = new World(500, 500);
+		world.addEntity(ship);
+		ship.loadBullet(bullet);
+		assertTrue(ship.getAllBullets().contains(bullet));
+		ship.fireBullet(bullet);
+		assertFalse(ship.getAllBullets().contains(bullet));
+		world.evolve(2);
+		assertEquals(1, bullet.getBoundaryCollisionCounter(), EPSILON);
+		ship.reloadBullet(bullet);
+		assertTrue(ship.getAllBullets().contains(bullet));
+	}
+	
+	@Test
 	public void testShipFireBulletHorizontal() {
 		Bullet bullet = new Bullet(100, 200, 0, 0, 10);	
 		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);

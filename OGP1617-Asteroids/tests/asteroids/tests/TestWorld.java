@@ -791,5 +791,22 @@ public class TestWorld {
 		assertTrue(bullet.getShip() == ship);
 	}
 	
+	@Test
+	public void testWorldEvolve2CollisionsSameTime() {
+		World world = new World(1000, 1000);
+		Ship ship1 = new Ship(500, 500, 0, 0, 0, 20, 10);
+		Ship ship2 = new Ship(700, 500, 0, 0, Math.PI, 20, 10);
+		Bullet bullet1 = new Bullet(500, 500, 10, 10, 1);
+		Bullet bullet2 = new Bullet(700, 500, 10, 10, 1);
+		world.addEntity(ship1);	
+		world.addEntity(ship2);
+		ship1.loadBullet(bullet1);
+		ship1.fireBullet(bullet1);
+		ship2.loadBullet(bullet2);
+		ship2.fireBullet(bullet2);
+		world.evolve(1);
+		
+	}
+	
 	
 }

@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import asteroids.facade.Facade;
+import asteroids.model.Bullet;
 import asteroids.model.Ship;
 import asteroids.part1.facade.IFacade;
 import asteroids.util.ModelException;
@@ -38,7 +39,7 @@ public class TestFacade {
 	
 	
 	
-	@Test
+	@Test @Deprecated
 	public void testCreateShip() throws ModelException {
 		Ship ship = facade.createShip(100, 200, 10, -10, 20, Math.PI);
 		assertNotNull(ship);
@@ -804,7 +805,11 @@ public class TestFacade {
 		 * |----------------------------| 
 		 */
 	
-	
+	@Test
+	public void testCreateBullet() throws ModelException {
+		Bullet bullet = ((Facade) facade).createBullet(1, 1, 1, 1, 1);
+		assertNotNull(bullet);
+	}
 	
 	
 		/*

@@ -16,7 +16,7 @@ import asteroids.model.World;
 
 public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 
-	@Override
+	@Override @Deprecated
 	public Ship createShip() throws ModelException {
 		// ship parameters = positionX, positionY, velocityX, velocityY, orientation, radius.
 		try {
@@ -30,11 +30,25 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 		}
 	}
 
-	@Override
+	@Override @Deprecated
 	public Ship createShip(double x, double y, double xVelocity, double yVelocity, double radius, double orientation)
 			throws ModelException {
 		try {
 			return new Ship(x, y, xVelocity, yVelocity, orientation, radius, 1);
+		}
+		catch (AssertionError exc) {
+			throw new ModelException(exc);
+		}
+		catch (IllegalArgumentException exc) {
+			throw new ModelException(exc);
+		}
+	}
+	
+	@Override
+	public Bullet createBullet(double x, double y, double xVelocity, double yVelocity, double radius)
+			throws ModelException {
+		try {
+			return new Bullet(x, y, xVelocity, yVelocity, radius);
 		}
 		catch (AssertionError exc) {
 			throw new ModelException(exc);
@@ -90,7 +104,7 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 		}
 	}
 
-	@Override
+	@Override @Deprecated
 	public void move(Ship ship, double dt) throws ModelException {
 		try {
 			ship.move(dt);
@@ -103,6 +117,7 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 		}
 	}
 
+	@Deprecated
 	@Override
 	public void thrust(Ship ship, double amount) throws ModelException {
 		try {
@@ -266,19 +281,19 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 		}
 	}
 
-	@Override
-	public Bullet createBullet(double x, double y, double xVelocity, double yVelocity, double radius)
-			throws ModelException {
-		try {
-			return new Bullet(x, y, xVelocity, yVelocity, radius);
-		}
-		catch (IllegalArgumentException exc) {
-			throw new ModelException(exc);
-		}
-		catch (NullPointerException exc) {
-			throw new ModelException(exc);
-		}
-	}
+//	@Override
+//	public Bullet createBullet(double x, double y, double xVelocity, double yVelocity, double radius)
+//			throws ModelException {
+//		try {
+//			return new Bullet(x, y, xVelocity, yVelocity, radius);
+//		}
+//		catch (IllegalArgumentException exc) {
+//			throw new ModelException(exc);
+//		}
+//		catch (NullPointerException exc) {
+//			throw new ModelException(exc);
+//		}
+//	}
 
 	@Override
 	public void terminateBullet(Bullet bullet) throws ModelException {
