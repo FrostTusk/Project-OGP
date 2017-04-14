@@ -1534,4 +1534,102 @@ public class TestFacade {
 		assertTrue(facade.getShipWorld(ship) == world);
 	}
 	
+	@Test
+	public void testHookupIsThrusterActive() throws ModelException {
+		Ship ship = facade.createShip(10, 10, 50, 0, 10, Math.PI, 0);
+		assertFalse(facade.isShipThrusterActive(ship));
+	}
+	
+	@Test
+	public void testHookupSetThrusterActive() throws ModelException {
+		Ship ship = facade.createShip(10, 10, 50, 0, 10, Math.PI, 0);
+		assertFalse(facade.isShipThrusterActive(ship));
+		facade.setThrusterActive(ship, true);
+		assertTrue(facade.isShipThrusterActive(ship));
+		facade.setThrusterActive(ship, false);
+		assertFalse(facade.isShipThrusterActive(ship));
+	}
+	
+	@Test
+	public void testHookupGetShipAcceleration() throws ModelException {
+		Ship ship = facade.createShip(10, 10, 50, 0, 10, Math.PI, 0);
+		assertEquals(0, facade.getShipAcceleration(ship), EPSILON);
+	}
+	
+	@Test
+	public void testHookupTerminateBullet() throws ModelException {
+		Bullet bullet = facade.createBullet(500, 500, 250, 0, 1);
+		assertNotNull(bullet);
+		assertFalse(facade.isTerminatedBullet(bullet));
+	}
+	
+	@Test
+	public void testHookupIsTerminatedBullet() throws ModelException {
+		Bullet bullet = facade.createBullet(500, 500, 250, 0, 1);
+		assertNotNull(bullet);
+		assertFalse(facade.isTerminatedBullet(bullet));
+		facade.terminateBullet(bullet);
+		assertTrue(facade.isTerminatedBullet(bullet));
+	}
+	
+	@Test
+	public void testHookupGetBulletPosition() throws ModelException {
+		Bullet bullet = facade.createBullet(500, 500, 250, 0, 1);
+		assertNotNull(bullet);
+		assertEquals(500, facade.getBulletPosition(bullet)[0], EPSILON);
+		assertEquals(500, facade.getBulletPosition(bullet)[1], EPSILON);
+	}
+	
+	@Test
+	public void testHookupGetBulletVelocity() throws ModelException {
+		Bullet bullet = facade.createBullet(500, 500, 250, 0, 1);
+		assertNotNull(bullet);
+		assertEquals(250, facade.getBulletVelocity(bullet)[0], EPSILON);
+		assertEquals(0, facade.getBulletVelocity(bullet)[1], EPSILON);
+	}
+	
+	@Test
+	public void testHookupGetBulletRadius() throws ModelException {
+		Bullet bullet = facade.createBullet(500, 500, 250, 0, 1);
+		assertNotNull(bullet);
+		assertEquals(1, facade.getBulletRadius(bullet), EPSILON);
+	}
+	
+	@Test
+	public void testHookupGetBulletMass() throws ModelException {
+		Bullet bullet = facade.createBullet(500, 500, 250, 0, 1);
+		assertNotNull(bullet);
+		assertEquals(2.4504422698000387*Math.pow(10, 13), facade.getBulletMass(bullet), EPSILON);
+	}
+	
+	@Test
+	public void testHookupGetBulletWorld() throws ModelException {
+		Bullet bullet = facade.createBullet(500, 500, 250, 0, 1);
+		World world = facade.createWorld(1000, 1000);
+		facade.addBulletToWorld(world, bullet);
+		assertEquals(world, facade.getBulletWorld(bullet));
+	}
+	
+	@Test
+	public void testHookupGetBulletShip() throws ModelException {
+		Bullet bullet = facade.createBullet(500, 500, 250, 0, 1);
+		Ship ship = facade.createShip(500, 500, 50, 0, 10, Math.PI, 0);
+		bullet.setShip(ship);
+		assertEquals(ship, facade.getBulletShip(bullet));
+	}
+	
+	@Test
+	public void testHookupGetBulletSource() throws ModelException {
+		Bullet bullet = facade.createBullet(500, 500, 250, 0, 1);
+		Ship ship = facade.createShip(500, 500, 50, 0, 10, Math.PI, 0);
+		World world = facade.createWorld(1000, 1000);
+		assertEquals(null, facade.getBulletSource(bullet));
+		facade.addShipToWorld(world, ship);
+		facade.loadBulletOnShip(ship, bullet);
+		facade.fireBullet(ship);
+		assertEquals(ship, facade.getBulletSource(bullet));
+		
+	}
+	
+	
 }
