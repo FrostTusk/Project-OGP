@@ -1,20 +1,16 @@
 package asteroids.facade;
 
-import asteroids.part1.facade.IFacade;
+import asteroids.part2.facade.IFacade;
 import asteroids.part2.CollisionListener;
 import asteroids.util.ModelException;
 
-import java.util.Collection;
-import java.util.Set;
+import java.util.*;
 
-import asteroids.helper.Entity;
-import asteroids.helper.Position;
-import asteroids.model.Bullet;
-import asteroids.model.Ship;
-import asteroids.model.World;
+import asteroids.helper.*;
+import asteroids.model.*;;
 
 
-public class Facade implements IFacade, asteroids.part2.facade.IFacade {
+public class Facade implements IFacade {
 
 	@Override @Deprecated
 	public Ship createShip() throws ModelException {
@@ -280,20 +276,6 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 			throw new ModelException(exc);
 		}
 	}
-
-//	@Override
-//	public Bullet createBullet(double x, double y, double xVelocity, double yVelocity, double radius)
-//			throws ModelException {
-//		try {
-//			return new Bullet(x, y, xVelocity, yVelocity, radius);
-//		}
-//		catch (IllegalArgumentException exc) {
-//			throw new ModelException(exc);
-//		}
-//		catch (NullPointerException exc) {
-//			throw new ModelException(exc);
-//		}
-//	}
 
 	@Override
 	public void terminateBullet(Bullet bullet) throws ModelException {
@@ -621,6 +603,9 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 		try {
 			return world.getTimeToFirstCollision();
 		}
+		catch (IllegalArgumentException exc) {
+			throw new ModelException(exc);
+		}
 		catch (NullPointerException exc) {
 			throw new ModelException(exc);
 		}
@@ -630,6 +615,9 @@ public class Facade implements IFacade, asteroids.part2.facade.IFacade {
 	public double[] getPositionNextCollision(World world) throws ModelException {
 		try {
 			return world.getFirstCollisionPosition();
+		}
+		catch (IllegalArgumentException exc) {
+			throw new ModelException(exc);
 		}
 		catch (NullPointerException exc) {
 			throw new ModelException(exc);

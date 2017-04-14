@@ -1,8 +1,6 @@
 package asteroids.helper;
 
-import asteroids.model.Bullet;
-import asteroids.model.Ship;
-import asteroids.model.World;
+import asteroids.model.*;
 
 import be.kuleuven.cs.som.annotate.*;
 
@@ -101,7 +99,7 @@ public abstract class Entity {
 	 * 
 	 * @see implementation.
 	 */
-	// TODO Does abstract require extra documentation?
+	@Raw
 	public abstract void terminate();
 	
 	
@@ -147,17 +145,17 @@ public abstract class Entity {
 	 * @throws 	IllegalArgumentException
 	 *         	The given position is not a valid position for any
 	 *         	bullet.
-	 *       	| ! this.getPosition().isValidPosition(positionX, positonY) TODO is this done right?
+	 *       	| ! new Position(0,0).isValidPosition(positionX, positionY)
 	 */
 	@Raw
 	public void setPosition(double positionX, double positionY) 
 			throws IllegalArgumentException {
 		try {
 			this.position = new Position(positionX, positionY);
-//			if (getWorld() != null) getWorld().updateMap(); 
+//			if (getWorld() != null) getWorld().updateMap(); // TODO Do we need to update the world?
 		}
 		catch(IllegalArgumentException exc) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException(exc);
 		}
 	}
 	
@@ -487,19 +485,7 @@ public abstract class Entity {
 		this.world = world;
 	}
 	
-//	/**
-//	* Remove the current world as world for this entity.
-//	*      
-//	* @see implementation
-//	*/
-//	 // TODO @Raw?
-//	public void deSetWorld() throws NullPointerException {
-//		if (getWorld() ==  null) throw new NullPointerException();
-//		this.world = null;
-//	}
-	
-	
-	
+
 	
 		/*
 	     * |--------------------------------|
@@ -537,7 +523,7 @@ public abstract class Entity {
 	 *         	The new position for this entity is not a valid position for any entity.
 	 *       	| ! isValidPosition(new.getPositionX(), new.getPositionY())
 	 */
-	// TODO @Raw?
+	@Raw
 	public void move(double time) throws IllegalArgumentException {
 		if (time < 0) throw new IllegalArgumentException();
 			
@@ -571,7 +557,6 @@ public abstract class Entity {
 	 * 
 	 * @return	For the current entity, returns the distance between the current entity and a given entity.
 	 * 			If the two entities have the same position, the method returns zero.
-	 * 			// TODO declarative documentation.
 	 * 
 	 * @throws 	NullPointerException
 	 * 			The other entity was null.
@@ -608,7 +593,6 @@ public abstract class Entity {
 	* 			position 1 contains the distance between this entity and boundary at x = world.getWidth().
 	* 			position 2 contains the distance between this entity and boundary at y = 0.
 	* 			position 3 contains the distance between this entity and boundary at y = world.getHeight().
-	* 			// TODO declarative documentation.
 	*/
 	@Raw
 	public double[] getDistanceBetween(World world) {
@@ -672,7 +656,7 @@ public abstract class Entity {
 	* @return	The time returned will be larger than 0 and will be equal to
 	* 			the time needed for the entity to reach a position where it collides with the boundaries of the world.
 	* 			| this.getDistanceBetween(world) == 0
-	* 			// TODO apparently collide?
+	* // TODO apparently collide?
 	*/
 	@Raw
 	public double getTimeToCollision(World world) {		
@@ -705,7 +689,6 @@ public abstract class Entity {
 	* @return	The time returned will be larger than 0 and will be equal to
 	* 			the time needed for both entities to reach a position where they will collide with each other.
 	* 			| this.getDistanceBetween(entity) == 0
-	* 			// TODO apparently collide?
 	* 
 	* @throws 	IllegalArgumentException
 	* 			The entity overlaps this entity.
@@ -713,12 +696,13 @@ public abstract class Entity {
 	* @throws 	NullPointerException
 	* 			The other entity was null.
 	* 			| entity == null
+	* // TODO apparently collide?
 	*/
 	@Raw
 	public double getTimeToCollision(Entity entity) throws IllegalArgumentException, NullPointerException {
 		if (entity == null) throw new NullPointerException(); 
-		if (this.overlap(entity)) throw new IllegalArgumentException();	// TODO Clearly a problem
-//		if (this.getWorld() != entity.getWorld()) return Double.POSITIVE_INFINITY;	//TODO can they collide in the null world?
+		if (this.overlap(entity)) throw new IllegalArgumentException();
+		if (this.getWorld() != entity.getWorld()) return Double.POSITIVE_INFINITY;
 		
 		double[] deltaR = {entity.getPosition().getPositionX() - this.getPosition().getPositionX(), 
 					   	   entity.getPosition().getPositionY() - this.getPosition().getPositionY()};
@@ -733,7 +717,7 @@ public abstract class Entity {
 		if (d <= 0) return Double.POSITIVE_INFINITY;
 		
 		double result = -( (helper.evaluateScalar(deltaV, deltaR) + Math.sqrt(d)) / helper.evaluateScalar(deltaV) );
-		if (result < 0 ) return 0;	// TODO Is this right?
+		if (result < 0 ) return 0;	// TODO Is this all right? It's just a fail-safe.
 		return result;
 	}
 	
@@ -747,33 +731,24 @@ public abstract class Entity {
 	* @return	The position returned will be the position where this ship and the world
 	* 			collide with each other. The method returns null if they never collide.
 	* 			| this.getDistanceBetween(world) == 0
-	* 			// TODO null or infinity if they don't collide?
-	* 			// TODO problems with rounding?
+	* // TODO Problems with rounding?
 	*/
 	@Raw
 	public double[] getCollisionPosition(World world) {	
-		if (! world.containsEntity(this)) return null;
-		
-		double time = getTimeToCollision(world);
 		double[] vector = {Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY};
-		if (time == Double.POSITIVE_INFINITY) return vector; // TODO Is this good?
+		double time = getTimeToCollision(world);
+		if (time == Double.POSITIVE_INFINITY) return vector; // TODO Is this right? Not null?
 		
-		vector[0] = helper.calculatePosition(this, time)[0];
-		vector[1] = helper.calculatePosition(this, time)[1];
-		vector[2] = helper.calculatePosition(this, time)[0];
-		vector[3] = helper.calculatePosition(this, time)[1];
-		if (vector[0] + this.getRadius() == world.getWidth()) vector[0] += this.getRadius();
+		vector = createDefaultVector(time);	// First create a default vector.
+		if (vector[0] + this.getRadius() == world.getWidth()) vector[0] += this.getRadius();	// Get the first collision position.
 		else if (vector[0] - this.getRadius() == 0) vector[0] = 0;
 		else if (vector[1] + this.getRadius() == world.getHeight()) vector[1] += this.getRadius();
 		else if (vector[1] - this.getRadius() == 0) vector[1] = 0;
 		
-		if ( (vector[0] != vector[2]) ) { // If there is a collision with x boundary, we still have to check if there is a collision with the y boundary.
-			if (vector[3] + this.getRadius() == world.getHeight()) vector[3] += this.getRadius();	// This is for corners.
-			else if (vector[3] - this.getRadius() == 0) vector[3] = 0;
-			else {
-				vector[2] = Double.POSITIVE_INFINITY;
-				vector[3] = Double.POSITIVE_INFINITY;
-			}
+		if ( (vector[0] != vector[2]) && ( (vector[3] + this.getRadius() == world.getHeight()) || // To cover corners:
+			 (vector[3] - this.getRadius() == 0)) ) { // If there is a collision with the x boundary, we still have to check 
+			if (vector[3] + this.getRadius() == world.getHeight()) vector[3] += this.getRadius();	// if there is a collision with the y boundary.
+			else if (vector[3] - this.getRadius() == 0) vector[3] = 0;								
 		}
 		else {
 			vector[2] = Double.POSITIVE_INFINITY;
@@ -782,8 +757,6 @@ public abstract class Entity {
 		return vector;	
 	}
 	
-
-
 	/**
 	* Gets the collision position between this entity and a given entity.
 	* 
@@ -794,22 +767,26 @@ public abstract class Entity {
 	* 			collide with each other. The method returns null if they never collide.
 	* 			| this.getDistanceBetween(entity) == 0
 	* 
-	* @throws 	Null
+	* @throws 	IllegalArgumentException
+	* 			The entity overlaps this entity.
+	* 			| entity == this
+	* @throws 	NullPointerException
 	* 			The other entity was null.
 	* 			| entity == null
+	* // TODO Problems with rounding?
 	*/
 	@Raw
 	public double[] getCollisionPosition(Entity entity) throws IllegalArgumentException, NullPointerException {
 		if (entity == null) throw new NullPointerException();
-		if (this.getWorld() != entity.getWorld()) return null;
 		double time;
 		try {
 			time = getTimeToCollision(entity);
 		}
 		catch (IllegalArgumentException exc) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException(exc);
 		}
 		if (time == Double.POSITIVE_INFINITY) return null;
+		if (this.getWorld() != entity.getWorld()) return null;
 		
 		double[] newPosition1 = helper.calculatePosition(this, time);
 		double[] newPosition2 = helper.calculatePosition(entity, time);
@@ -819,9 +796,8 @@ public abstract class Entity {
 		
 		// Calculate the angle between the x component of the vector between newPosition1 and newPosition2.
 		// This angle is the same as the one between the collisionPosition vector (out of the first ship) and it's x component.
-		double angle = Math.atan( Math.abs(newPosition2[1] - newPosition1[1]) / 
-								  Math.abs(newPosition2[0] - newPosition1[0]) );
-		
+		double angle = Math.atan( Math.abs(newPosition2[1] - newPosition1[1]) / Math.abs(newPosition2[0] - newPosition1[0]) );
+								  
 		// Calculate the exact position vector of the collision point by using the angle that has just been calculated
 		// and the first ship's new position vector.
 		double vector[] = {newPosition1[0] + signs[0] * this.getRadius() * Math.cos(angle), 
@@ -862,15 +838,35 @@ public abstract class Entity {
 	
 	
 	/**
-	 * A method that returns the signs to be used in the getCollisionPosition() method.
-	 * Helper method for getCollisionPosition().
+	 * A method that returns the default vector for the getCollisionPosition(World world) method.
+	 * Helper method for getCollisionPosition(World world).
+	 * 
+	 * @param 	time
+	 * 			The time until collision with the boundary.
+	 * 
+	 * @return 	Returns the default vector to be used in the getCollisionPosition(World world) method.
+	 */
+	@Raw
+	public double[] createDefaultVector(double time) {
+		double[] vector = new double[4];
+		vector[0] = helper.calculatePosition(this, time)[0];
+		vector[1] = helper.calculatePosition(this, time)[1];
+		vector[2] = helper.calculatePosition(this, time)[0];
+		vector[3] = helper.calculatePosition(this, time)[1];
+		return vector;
+	}
+	
+	
+	/**
+	 * A method that returns the signs to be used in the getCollisionPosition(Entity entity) method.
+	 * Helper method for getCollisionPosition(Entity entity).
 	 * 
 	 * @param 	position1
 	 * 			The first position to be used in the formula.
 	 * @param 	position2
 	 * 			The second position to be used in the formula.
 	 * 
-	 * @return 	The signs to be used in the getCollisionPosition() method
+	 * @return 	Returns the signs to be used in the getCollisionPosition() method
 	 */
 	@Raw
 	public double[] calculateSigns(double[] position1, double[] position2) {
@@ -885,11 +881,13 @@ public abstract class Entity {
 		return result;
 	}
 	
+	
 	/**
 	 * Returns the type of the class of this entity in string format.
 	 * 
 	 * @see implementation
 	 */
+	@Raw
 	public abstract String getType();
 
 }

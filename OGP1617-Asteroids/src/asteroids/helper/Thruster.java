@@ -1,6 +1,6 @@
 package asteroids.helper;
 
-import be.kuleuven.cs.som.annotate.*;;
+import be.kuleuven.cs.som.annotate.*;
 
 /** 
  * A class of thrusters.
