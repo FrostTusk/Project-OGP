@@ -190,8 +190,8 @@ public class Bullet extends Entity {
 	 */
 	@Override @Raw
 	public boolean canHaveAsWorld(World world) {
-		if (world == null) return true;	// TODO Is this a good fix?
-		return (getShip() == null) && (getWorld() == null) && (isInWorld(world));
+		if (world == null) return true;
+		return (getShip() == null) && ( (getWorld() == null) || (getWorld() == world) ) && (isInWorld(world));
 	}
 	
 	
@@ -267,7 +267,7 @@ public class Bullet extends Entity {
 	@Raw
 	public boolean canHaveAsShip(Ship ship) {
 		if (ship == null) return true;	// TODO Is this a good fix?
-		return ( (getShip() == null) && (getWorld() == null) );
+		return ( ((getShip() == null) || (getShip() == ship)) && (getWorld() == null) );
 	}
 	
 	

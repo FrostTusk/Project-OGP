@@ -315,7 +315,7 @@ public class Ship extends Entity {
 	@Override @Raw
 	public boolean canHaveAsWorld(World world) {
 		if (world == null) return true;
-		return (getWorld() == null) && (isInWorld(world));
+		return ( (getWorld() == null) || (getWorld() == world) ) && (isInWorld(world));
 	}
 	
 
@@ -605,6 +605,35 @@ public class Ship extends Entity {
 		setVelocity(newVelocityX, newVelocityY);
 	}
 	
+	/**
+	 * Thrusts a ship forwards (in the direction it's facing) with a given acceleration
+	 * in a given time interval.
+	 * 
+	 * @param  	acceleration
+	 *         	The acceleration with which the ship will thrust forwards.
+	 * @param	time
+	 * 			The time during which the ship will thrust forwards.
+	 *         
+	 * @post   	If the given acceleration is lower than 0, the velocity will change
+	 * 			with an acceleration of 0.
+	 *       	| if (acceleration < 0)
+	 *       	|	then (new.getVelocityX() == this.getVelocityX()) &&
+	 *       	|   	 (new.getVelocityY() == this.getVelocityY())
+	 *       
+	 * @effect	The X and Y velocity of this new ship is set to
+	 *         	the the current velocity plus the given acceleration in the current direction.
+	 * 			| this.setVelocity(this.getVelocityX() + acceleration * Math.cos(this.getOrientation()) * time,
+	 * 			|				   this.getVelocityY() + acceleration * Math.sin(this.getOrientation()) * time)
+	 *       
+	 */
+	public void thrust(double acceleration, double time) {
+		if (! (acceleration > 0)) acceleration = 0;
+		if (! (time > 0)) time = 0;
+		
+		double newVelocityX = getVelocityX() + acceleration * Math.cos(getOrientation()) * time;
+		double newVelocityY = getVelocityY() + acceleration * Math.sin(getOrientation()) * time;
+		setVelocity(newVelocityX, newVelocityY);
+	}
 	
 	
 			/*

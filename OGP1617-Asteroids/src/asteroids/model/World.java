@@ -289,10 +289,11 @@ public class World {
 	 */
 	@Raw
 	public void addEntity(Entity entity) throws IllegalArgumentException, NullPointerException {
-		updateMap();
+//		updateMap();
 		if (entity == null) throw new NullPointerException();
 		if ( (! canHaveAsEntity(entity)) /*|| (! entity.canHaveAsWorld(this))*/ ) throw new IllegalArgumentException();	// TODO Is this right?
 		entities.put(entity.getPosition(), entity);
+		entity.setWorld(this);
 	}
 	
 	/**
@@ -482,6 +483,7 @@ public class World {
 	 */
 	public void evolve(double time) throws IllegalArgumentException {
 		updateMap();	// We need to update the map because it is possible that the positions of the entities have been changed.
+		destroyOverlaps();	// Destroy all the entities that are currently invalid => overlap something.
 		if (time < 0) throw new IllegalArgumentException();
 		Entity[] collisionEntitiesMin = getFirstCollisionEntities();
 		if (collisionEntitiesMin == null) resolveEvolve(-1, collisionEntitiesMin, time);	// There are no entities in this World.
@@ -496,7 +498,7 @@ public class World {
 				resolveEvolve(collisionTimeMin, collisionEntitiesMin, time); // All other exceptions will never occur in the execution of this method
 			}																 // "All other" = the ones in the method calls of this method.
 			catch (IllegalArgumentException exc) {// This exception is throw if the new position of an entity is invalid
-				throw new IllegalArgumentException();	// or if time is < 0.
+				throw new IllegalArgumentException(exc);	// or if time is < 0.
 			}
 		}
 	}
@@ -521,7 +523,7 @@ public class World {
 				update(collisionTimeMin);
 			}
 			catch (IllegalArgumentException exc) {// This exception is throw if the new position of an entity is invalid
-				throw new IllegalArgumentException();	
+				throw new IllegalArgumentException(exc);	
 			}
 			
 			if ( collisionEntitiesMin[0] == collisionEntitiesMin[1] )	// If the collision is with the boundary
@@ -530,13 +532,6 @@ public class World {
 				collisionEntitiesMin[0].resolveCollision(collisionEntitiesMin[1]);
 			evolve(time - collisionTimeMin);
 		}
-//		else if (collisionTimeMin == 0) {
-//			if ( collisionEntitiesMin[0] == collisionEntitiesMin[1] )	// If the collision is with the boundary
-//				collisionEntitiesMin[0].resolveCollision(this);
-//			else	// If the collision is between 2 entities.
-//				collisionEntitiesMin[0].resolveCollision(collisionEntitiesMin[1]);
-//			evolve(time);
-//		}
 		else update(time);
 	}
 	
@@ -549,23 +544,39 @@ public class World {
 	 * 			the time over which the world has to be updated.
 	 */
 	private void update(double time) throws IllegalArgumentException {
-		List<Entity> entitiesList = new ArrayList<Entity>();
-		for (Entity entity: entities.values()) entitiesList.add(entity);	// Creates an iterator that the next
-		for (Entity entity: entitiesList) {									// for loop can iterate over, otherwise the map might
-			this.removeEntity(entity);										// be changed during execution.
-			entity.setWorld(null);
+		List<Entity> iterator = helper.convertCollectionToList(entities.values());	// Creates an iterator that the next
+		for (Entity entity: iterator) {									// for loop can iterate over, otherwise the map might
+//			this.removeEntity(entity);										// be changed during execution.
+//			entity.setWorld(null);
+			if ( (entity.getType() == "Ship") && ((Ship)entity).getThrustStatus()) ((Ship)entity).thrust(((Ship)entity).getAcceleration(), time);
 			try {	// The exceptions in removeEntity are never thrown in this method.
 				entity.move(time);
 			}
 			catch (IllegalArgumentException exc) {	// This exception is throw if the new position of this entity is invalid
-				throw new IllegalArgumentException();	
+				throw new IllegalArgumentException(exc);	
 			}
-			this.addEntity(entity);	// These exceptions are also never thrown (because nothing moves out of bounds in this method).
-			entity.setWorld(this);
+//			this.addEntity(entity);	// These exceptions are also never thrown (because nothing moves out of bounds in this method). TODO PROBLEM!
+//			entity.setWorld(this);
 		}
+		updateMap();
 	}
 	
-
+	
+	public void destroyOverlaps() {
+		List<Entity> iterator = helper.convertCollectionToList(entities.values());
+		for (Entity entity1: iterator) {
+			if (!entity1.isInWorld(this)) entity1.terminate();
+			if (entity1.isTerminated()) continue;
+			for (Entity entity2: iterator) {
+				if (entity1 == entity2) continue;
+				if (entity2.isTerminated()) continue;
+				if (entity1.overlap(entity2) || entity2.overlap(entity1)) {
+					entity1.terminate();
+					entity2.terminate();
+				}
+			}
+		}
+	}
 	
 		/*
 	     * |----------------------------|

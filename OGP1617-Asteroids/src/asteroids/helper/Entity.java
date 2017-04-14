@@ -154,7 +154,7 @@ public abstract class Entity {
 			throws IllegalArgumentException {
 		try {
 			this.position = new Position(positionX, positionY);
-			if (getWorld() != null) getWorld().updateMap(); 
+//			if (getWorld() != null) getWorld().updateMap(); 
 		}
 		catch(IllegalArgumentException exc) {
 			throw new IllegalArgumentException();

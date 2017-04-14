@@ -789,12 +789,12 @@ public class TestBullet {
 		Bullet bullet = new Bullet(100, 100, 0, 0, 20);
 		Ship ship = new Ship(100, 100, 10, -10, Math.PI, 20, 10);
 		world.addEntity(ship);
-		world.addEntity(bullet);
 		ship.setWorld(world);
 		bullet.setShip(ship);
 		bullet.setSource(ship);
 		bullet.setShip(null);
 		bullet.setWorld(world);
+		bullet.setWorld(null);	// TODO good fix?
 		bullet.resetSource(ship);
 		if (bullet.hasBeenFired() == true) fail();
 		if (bullet.getSource() != null) fail();
