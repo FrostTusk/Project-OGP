@@ -330,14 +330,17 @@ public class World {
 	@Raw
 	public void updateMap() {
 		List<Position> iterator = helper.convertCollectionToList(entities.keySet());
+		List<Entity> entitiesList = new ArrayList<Entity>();
 		for (Position position: iterator) {
 			if (position == null) entities.remove(position);
 			else if (entities.get(position).getPosition() != position) {
 					Entity entity = entities.get(position);
 					entities.remove(position);
-					this.addEntity(entity);
+					entitiesList.add(entity);
+//					this.addEntity(entity); TODO Fix this up
 			}
 		}
+		for (Entity entity: entitiesList) this.addEntity(entity);
 	}
 	
 	
@@ -537,8 +540,8 @@ public class World {
 	 * 			the time over which the world will evolve.
 	 */
 	public void evolve(double time) throws IllegalArgumentException {
-		updateMap();	// We need to update the map because it is possible that the positions of the entities have been changed.
 		destroyOverlaps();	// Destroy all the entities that are currently invalid => overlap something.
+		updateMap();	// We need to update the map because it is possible that the positions of the entities have been changed.
 		if (time < 0) throw new IllegalArgumentException();
 		Entity[] collisionEntitiesMin = getFirstCollisionEntities();
 //		// TODO Problem with intervals. // TODO Rewrite!
@@ -547,7 +550,10 @@ public class World {
 			double collisionTimeMin = -1;
 			for (int i = 0; i < 2; i ++) {
 				if (collisionEntitiesMin == null) collisionEntitiesMin = getFirstCollisionEntities(0);
-				if (collisionEntitiesMin == null) resolveEvolve(-1, collisionEntitiesMin, time);
+				if (collisionEntitiesMin == null) {
+					resolveEvolve(-1, collisionEntitiesMin, time);
+					return;
+				}
 				
 				if ( collisionEntitiesMin[0] == collisionEntitiesMin[1] )	// If the collision is with the boundary.
 					collisionTimeMin = collisionEntitiesMin[0].getTimeToCollision(this);
