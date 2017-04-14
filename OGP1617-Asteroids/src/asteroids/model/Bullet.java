@@ -129,7 +129,7 @@ public class Bullet extends Entity {
 				this.setWorld(null);
 			}
 			catch (IllegalArgumentException exc) {}	// Empty catch because if an IllegalArgument Exception
-		}											// is thrown, it means that the association wasn't set to start with.
+		}											// is thrown, it means that the association wasn't set to begin with.
 		if (getShip() != null) {					// This means that the association already doesn't exist. We don't have to do anything.
 			try {
 				getShip().removeBullet(this);

@@ -1,22 +1,20 @@
 package asteroids.helper;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import asteroids.model.World;
 
 /*
  * Methods Index:
  * 	1. Methods that handle the Initialization of the Helper
- * 	2. Generic tool-box methods
- * 	3. Approximation Methods
+ * 	2. Generic tool-box Methods
+ * 	3. Specific tool-box Methods to this project
+ * 	4. Approximation Methods
  */
 
 /**
  * A helper class that includes tool-box methods such as convert a list to an array,
- * calculate a position, evaluate the cross (scalar) product. This class also
+ * calculate a position, evaluate the cross (scalar) product, etc. This class also
  * includes the requested approximation methods.
  */
 public class Helper {
@@ -41,105 +39,7 @@ public class Helper {
 		     * | 2. The next methods are generic tool-box methods.	|
 		     * |----------------------------------------------------| 
 		     */
-
 	
-	
-	/**
-	 * Calculates the position of an entity after a given time.
-	 * The result is not returned as a Position Object because this
-	 * method should not throw an exception if the position is not valid.
-	 * 
-	 * @param 	entity
-	 * 		  	The entity to be used.
-	 * @param 	time
-	 * 			The time to be used.
-	 * 
-	 * @return	the position after the given time.
-	 */
-	public double[] calculatePosition(Entity entity, double time) {
-		double[] position = {entity.getPosition().getPositionX() + entity.getVelocityX() * time,
-						   	 entity.getPosition().getPositionY() + entity.getVelocityY() * time};
-		return position;
-	}
-	
-	
-	/**
-	 * Calculates if this entity overlaps with any other entities in a list.
-	 * 
-	 * @param 	entity1
-	 * 		  	The first entity to be used.
-	 * @param 	entities
-	 * 			The entities to be check.
-	 * 
-	 * @return	true if it does overlap, false if not.
-	 */
-	public boolean operlapsWithOtherEntities(Entity entity1, List<Entity> entities) {
-		for (Entity entity2: entities) if ( entity1.overlap(entity2) && (entity2 != entity1) ) return true;
-		return false;
-	}
-	
-	
-	/**
-	 * Converts a given List to an Array.
-	 * 
-	 * @param 	list
-	 * 			The list to be converted
-	 * 
-	 * @return	Returns an array made up by the elements in list.
-	 */	
-	public <T> Object[] convertListToArray(List<T> list) {
-		Object[] result = new Object[list.size()];
-		int count = 0;
-		for (Object object: list) {
-			result[count] = object;
-			count += 1;
-		}
-		return result;
-	}
-	
-	/**
-	 * Converts a given List to an Array.
-	 * 
-	 * @param 	list
-	 * 			The list to be converted
-	 * 
-	 * @return	Returns an array made up by the elements in list.
-	 */	
-	public <T> List<T> convertArrayToList(T[] array) {
-		List<T> list = new ArrayList<T>();
-		for (T item: array) list.add(item);
-		return list;
-	}
-	
-	
-	/**
-	 * Converts a given Set to a List.
-	 * 
-	 * @param 	collection
-	 * 			The collection to be converted
-	 * 
-	 * @return	Returns an array made up by the elements in list.
-	 */
-	public <T> List<T> convertCollectionToList(Collection<T> collection) {
-		List<T> list = new ArrayList<T>();
-		for (T item: collection) list.add(item);
-		return list;
-	}
-	
-	
-	/**
-	 * Converts a given Set to a List.
-	 * 
-	 * @param 	set
-	 * 			The set to be converted
-	 * 
-	 * @return	Returns an array made up by the elements in list.
-	 */
-	public <T> List<T> convertSetToList(Set<T> set) {
-		List<T> list = new ArrayList<T>();
-		for (T item: set) list.add(item);
-		return list;
-	}
 	
 	
 	/**
@@ -170,9 +70,138 @@ public class Helper {
 	
 	
 	
+	/**
+	 * Use linear search to check if a given tuple (array with size 2) exists in a given list.
+	 * 
+	 * @param 	tuple
+	 * 			The tuple to be looked for.
+	 * @param 	list
+	 * 			The List to look through.
+	 * 
+	 * @return	Return whether or not the given tuple is in the list.
+	 * 			true if it is, false if not.
+	 */
+	public boolean isInList(Object[] tuple, List<Object[]> list) {
+		if (tuple == null) return false;	// TODO throw NullPointerException?
+		if (tuple.length != 2) throw new IllegalArgumentException();
+		for (Object[] attempt: list)
+			if ( (attempt[0] == tuple[0]) && (attempt[1] == tuple[1]) ) return true;
+		return false;
+	}	
+	
+	
+	
+	/**
+	 * Converts a given Array to a new List.
+	 * 
+	 * @param 	array
+	 * 			The Array to be converted
+	 * 
+	 * @return	Returns a List made up by the elements in the given Array.
+	 */	
+	public <T> List<T> convertArrayToList(T[] array) {
+		List<T> list = new ArrayList<T>();
+		for (T item: array) list.add(item);
+		return list;
+	}
+	
+	/**
+	 * Converts a given List to a new Array.
+	 * 
+	 * @param 	list
+	 * 			The List to be converted
+	 * 
+	 * @return	Returns an Array made up by the elements in the given List.
+	 */	
+	public <T> Object[] convertListToArray(List<T> list) {
+		Object[] result = new Object[list.size()];
+		int count = 0;
+		for (Object object: list) {
+			result[count] = object;
+			count += 1;
+		}
+		return result;
+	}
+	
+
+	/**
+	 * Converts a given Collection to a new List.
+	 * 
+	 * @param 	collection
+	 * 			The Collection to be converted
+	 * 
+	 * @return	Returns a List made up by the elements in the given Collection.
+	 */
+	public <T> List<T> convertCollectionToList(Collection<T> collection) {
+		List<T> list = new ArrayList<T>();
+		for (T item: collection) list.add(item);
+		return list;
+	}
+	
+	
+	/**
+	 * Converts a given Set to a new List.
+	 * 
+	 * @param 	set
+	 * 			The Set to be converted
+	 * 
+	 * @return	Returns a List made up by the elements in the given Set.
+	 */
+	public <T> List<T> convertSetToList(Set<T> set) {
+		List<T> list = new ArrayList<T>();
+		for (T item: set) list.add(item);
+		return list;
+	}
+	
+	
+	
+			/*
+		     * |------------------------------------------------------------------------|
+		     * | 3. The next methods are specific tool-box methods for this project.	|
+		     * |------------------------------------------------------------------------| 
+		     */
+
+
+
+	/**
+	* Calculates the position of an entity after a given time.
+	* The result is not returned as a Position Object because this
+	* method should not throw an exception if the position is not valid.
+	* 
+	* @param 	entity
+	* 		  	The entity to be used.
+	* @param 	time
+	* 			The time to be used.
+	* 
+	* @return	the position after the given time.
+	*/
+	public double[] calculatePosition(Entity entity, double time) {
+		double[] position = {entity.getPosition().getPositionX() + entity.getVelocityX() * time,
+						   	 entity.getPosition().getPositionY() + entity.getVelocityY() * time};
+		return position;
+	}
+	
+	
+	/**
+	* Calculates if this entity overlaps with any other entities in a list.
+	* 
+	* @param 	entity1
+	* 		  	The first entity to be used.
+	* @param 	entities
+	* 			The entities to be check.
+	* 
+	* @return	true if it does overlap, false if not.
+	*/
+	public boolean operlapsWithOtherEntities(Entity entity1, List<Entity> entities) {
+		for (Entity entity2: entities) if ( entity1.overlap(entity2) && (entity2 != entity1) ) return true;
+		return false;
+	}
+
+
+
 			/*
 			 * |------------------------------------------------|
-		     * | 3. The next methods are approximation methods.	|
+		     * | 4. The next methods are approximation methods.	|
 		     * |------------------------------------------------| 
 		     */
 	

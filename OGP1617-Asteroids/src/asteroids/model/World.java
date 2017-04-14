@@ -35,11 +35,9 @@ import be.kuleuven.cs.som.annotate.*;
  */
 
 /**
- * A class of worlds. //TODO Do we need to keep all these invariants? + Any more?
+ * A class of worlds. //TODO Any more?
  * 
- * @invar  	The size of each world must be a valid size for any
- *         	world.
- *       	| isValidSize(getWidth(), getHeight())
+ * @invar   | isValidSize(getWidth(), getHeight())
  *       
  * @author	Mathijs Hubrechtsen
  */
@@ -59,6 +57,8 @@ public class World {
 			 * |--------------------------------------------------------------------------------| 
 			 */
 	
+	
+	
 	/**
 	 * Variable registering the helper for this ship.
 	 */
@@ -72,15 +72,7 @@ public class World {
 	 * @param	height
 	 * 			The height for this new world.
 	 * 
-	 * @see	implementation
-	 * 
-	 * @post    | if (isValidSize(width, height))
-	 *       	|   	new.getWidth() == width
-	 *       	|		new.getHeight() == height
-	 *       	| else  new.getWidth() == this.calculateDefaultSiz(width, height)[0]
-	 *       	|		new.getHeight() == this.calculateDefaultSiz(width, height)[1]
-	 * 
-	 * // TODO See implementation?
+	 * @see	implementation	// TODO Is this ok for cconstructors?
 	 */
 	public World(double width, double height) {
 		double[] temp = {width, height};
@@ -118,7 +110,7 @@ public class World {
 				entity.setWorld(null);
 			}
 			catch (IllegalArgumentException exc) {}	// Empty catch because if an IllegalArgumentException
-		}											// is thrown, it means that the association wasn't set to start with.		
+		}											// is thrown, it means that the association wasn't set to begin with.		
 		this.isTerminated = true;					// This means that the association already doesn't exist. We don't have to do anything.		
 	}
 	
@@ -185,7 +177,7 @@ public class World {
 	 */
 	@Raw
 	public static boolean isValidSize(double width, double height) {
-		return ( ( (width >= 0) && (width <= getUpperBound()) ) && ( (height >= 0) && (height <= getUpperBound()) ) );
+		return ( (width >= 0) && (width <= getUpperBound()) && (height >= 0) && (height <= getUpperBound()) );
 	}
 	
 	
@@ -215,12 +207,10 @@ public class World {
 	 */
 	public double[] calculateDefaultSize(double width, double height) {
 		double[] result = {width, height};
-		
 		if ( (width < 0) || (java.lang.Double.isNaN(width)) ) result[0] = 0;
 		else if (width > getUpperBound()) result[0] = getUpperBound();
 		if ( (height < 0) || (java.lang.Double.isNaN(width)) ) result[1] = 0;
 		else if (height > getUpperBound()) result[1] = getUpperBound();
-
 		return result;
 	}
 	
@@ -259,9 +249,8 @@ public class World {
 	@Raw
 	public boolean canHaveAsEntity(Entity entity) {
 		if (helper.operlapsWithOtherEntities(entity, helper.convertCollectionToList(entities.values()))) 
-			if (helper.operlapsWithOtherEntities(entity, helper.convertCollectionToList(entities.values())))
-				return false;
-		return (entity != null) && (!containsEntity(entity)) && (entity.isInWorld(this)) && (!entity.isTerminated());
+			return false;
+		return (entity != null) && (!entity.isTerminated()) && (!containsEntity(entity)) && (entity.isInWorld(this));
 	}	
 	
 	/**
@@ -285,7 +274,7 @@ public class World {
 	
 
 	/**
-	 * Add a given entity to this world. This does net set 
+	 * Add a given entity to this world. This does set 
 	 * the world of the entity to this world.
 	 * 
 	 * @param	entity
@@ -307,7 +296,7 @@ public class World {
 	}
 	
 	/**
-	 * Remove a given entity from this world.This does net set 
+	 * Remove a given entity from this world. This does set 
 	 * the world of the entity to null.
 	 * 
 	 * @param	entity
@@ -321,26 +310,26 @@ public class World {
 		if (entity == null) throw new NullPointerException();
 		if (!containsEntity(entity)) throw new IllegalArgumentException();
 		entities.remove(entity.getPosition());
+		entity.setWorld(null);
 	}
 	
 	
 	/**
 	 * Updates the collection of entities. This method needs to be called whenever
-	 * the position of an entity is changed or an entity has to be removed from the collection.
+	 * the position of an entity is changed.
 	 *
 	 * @see implementation
 	 */
 	@Raw
 	public void updateMap() {
-		List<Position> iterator = helper.convertCollectionToList(entities.keySet());
 		List<Entity> entitiesList = new ArrayList<Entity>();
+		List<Position> iterator = helper.convertCollectionToList(entities.keySet());
 		for (Position position: iterator) {
 			if (position == null) entities.remove(position);
 			else if (entities.get(position).getPosition() != position) {
 					Entity entity = entities.get(position);
 					entities.remove(position);
 					entitiesList.add(entity);
-//					this.addEntity(entity); TODO Fix this up
 			}
 		}
 		for (Entity entity: entitiesList) this.addEntity(entity);
@@ -372,7 +361,7 @@ public class World {
 	 * 			// TODO Declarative Documentation.
 	 */
 	@Raw
-	public Entity[] getFirstCollisionEntities() {
+	public Entity[] getFirstCollisionEntities() throws IllegalArgumentException {
 		double collisionTimeMin = -1;
 		Entity[] collisionEntitiesMin = new Entity[2];
 		
@@ -395,7 +384,7 @@ public class World {
 	 * 			// TODO Declarative Documentation.
 	 */
 	@Raw
-	public Entity[] getFirstCollisionEntities(double time) {
+	public Entity[] getFirstCollisionEntities(double time) throws IllegalArgumentException {
 		double collisionTimeMin = -1;
 		Entity[] collisionEntitiesMin = new Entity[2];
 		
@@ -408,24 +397,6 @@ public class World {
 		return collisionEntitiesMin;
 	}	
 	
-	/**
-	 * Gets the position of the first collision in the current world.
-	 * 
-	 * @return	Returns the position of the first collision
-	 * 			of this world.
-	 * 			// TODO Declarative Documentation.
-	 * 			// TODO Boundaries
-	 */
-	@Raw
-	public double[] getFirstCollisionPosition() {
-		Entity[] collisionEntities = getFirstCollisionEntities();
-		if (collisionEntities[0] == collisionEntities[1])
-			if (getTimeToFirstCollision() != 0) return collisionEntities[0].getCollisionPosition(this);
-			else throw new IllegalArgumentException();
-		else
-			return getFirstCollisionEntities()[0].getCollisionPosition(getFirstCollisionEntities()[1]);
-	}
-	
 	
 	/**
 	 * Gets the time of the first collision in the current world.
@@ -433,9 +404,13 @@ public class World {
 	 * @return	Returns the time of the first collision
 	 * 			of this world.
 	 * 			// TODO Declarative Documentation.
+	 * 
+	 * @throws	IllegalArgumentException
+	 * 			| (this.getFirstCollisionEntities()[0] != this.getFirstCollisionEntities()[1]) &&
+	 * 			| (this.getFirstCollisionEntities()[0].overlap(this.getFirstCollisionEntities()[1]))
 	 */
 	@Raw
-	public double getTimeToFirstCollision() {
+	public double getTimeToFirstCollision() throws IllegalArgumentException {
 		double collisionTimeTemp, collisionTimeMin = -1;
 		for (Entity entity1: entities.values()) {
 			for (Entity entity2: entities.values()) {
@@ -443,8 +418,8 @@ public class World {
 					try {
 						collisionTimeTemp = entity1.getTimeToCollision(entity2);
 					}
-					catch (IllegalArgumentException exc) {
-						return 0;
+					catch (IllegalArgumentException exc) {	// The First collision is already happening,
+						throw new IllegalArgumentException(exc);	// there is an overlap. Overlap is not legal for this method.
 					}
 					if ( (collisionTimeTemp < collisionTimeMin) || (collisionTimeMin == -1 ) ) collisionTimeMin = collisionTimeTemp;
 				}
@@ -452,11 +427,36 @@ public class World {
 			collisionTimeTemp = entity1.getTimeToCollision(this);
 			if (collisionTimeTemp < collisionTimeMin) collisionTimeMin = collisionTimeTemp;
 		}
-		
 		return collisionTimeMin;
 	}
 	
-
+	
+	/**
+	 * Gets the position of the first collision in the current world.
+	 * 
+	 * @return	Returns the position of the first collision
+	 * 			of this world.
+	 * 			// TODO Declarative Documentation.
+	 * 
+	 * @throws	IllegalArgumentException
+	 * 			| (this.getFirstCollisionEntities()[0] != this.getFirstCollisionEntities()[1]) &&
+	 * 			| (this.getFirstCollisionEntities()[0].overlap(this.getFirstCollisionEntities()[1]))
+	 */
+	@Raw
+	public double[] getFirstCollisionPosition() throws IllegalArgumentException {
+		Entity[] collisionEntities = getFirstCollisionEntities();
+		if (collisionEntities[0] == collisionEntities[1])
+				return collisionEntities[0].getCollisionPosition(this);
+		else
+			try {
+				return getFirstCollisionEntities()[0].getCollisionPosition(getFirstCollisionEntities()[1]);
+			}
+			catch (IllegalArgumentException exc) {
+				throw new IllegalArgumentException(exc);
+			}
+	}
+	
+	
 	
 			/*
 			 * |--------------------------------------------------------------------|
@@ -473,15 +473,16 @@ public class World {
 	 * @see implementation
 	 */
 	@Raw
-	private double iterateEntities(double collisionTimeMin, Entity[] collisionEntitiesMin, Entity entity1, double time) {
+	private double iterateEntities(double collisionTimeMin, Entity[] collisionEntitiesMin, Entity entity1, double time) 
+			throws IllegalArgumentException {
 		double collisionTimeTemp;
 		for (Entity entity2: entities.values()) {
 			if (entity1 == entity2) continue;	// Only check if the entities are different.
 			try {
 				collisionTimeTemp = entity1.getTimeToCollision(entity2);
 			}
-			catch (IllegalArgumentException exc) {	// Exception thrown if the entities overlap.
-				collisionTimeTemp = 0;	// If the exception is thrown, there is a collision at time 0.
+			catch (IllegalArgumentException exc) {	// The First collision is already happening,
+				throw new IllegalArgumentException(exc);	// there is an overlap. Overlap is not legal for this method.
 			}
 			
 			if ( !((collisionTimeTemp < collisionTimeMin) || (collisionTimeMin == -1 )) || (collisionTimeTemp <= time) ) continue;
@@ -499,13 +500,14 @@ public class World {
 	 * @see implementation
 	 */
 	@Raw
-	private double iterateBoundaries(double collisionTimeMin, Entity[] collisionEntitiesMin, Entity entity1, double time) {
+	private double iterateBoundaries(double collisionTimeMin, Entity[] collisionEntitiesMin, Entity entity1, double time) 
+			throws IllegalArgumentException {
 		double collisionTimeTemp;
 		try {
 			collisionTimeTemp = entity1.getTimeToCollision(this);
 		}
-		catch (IllegalArgumentException exc) { // Exception thrown if the entity is overlapping.
-			collisionTimeTemp = 0;	// If the exception is thrown, there is a collision at time 0.
+		catch (IllegalArgumentException exc) { // The First collision is already happening,
+			throw new IllegalArgumentException(exc);	// there is an overlap. Overlap is not legal for this method.
 		}
 		
 		if ( !((collisionTimeTemp < collisionTimeMin) || (collisionTimeMin == -1 )) || (collisionTimeTemp <= time) ) return collisionTimeMin;
@@ -529,6 +531,8 @@ public class World {
 			 * | 6. The next methods handle evolving the world.	|
 			 * |------------------------------------------------| 
 			 */
+	
+	
 	
 	/**
 	 * Map holding all entities that had a collision at time zero and have been updated
@@ -671,6 +675,10 @@ public class World {
 	}
 	
 	
+	/**
+	 * Finds all collisions that at zero that are not currently present
+	 * in the updatedEntities List.
+	 */
 	public Entity[] findOtherCollisionsAtZero() {
 		List<Entity> iterator = helper.convertCollectionToList(entities.values());
 		Entity[] collisionEntitiesMin= new Entity[2];
@@ -689,7 +697,10 @@ public class World {
 		return null;
 	}
 	
-	
+	/**
+	 * 
+	 * 
+	 */
 	public boolean alreadyFound(Entity[] collisionEntitiesMin) {
 		if (collisionEntitiesMin == null) return false;
 		for (Entity[] found: updatedEntities)
@@ -697,6 +708,8 @@ public class World {
 		return false;
 	}
 	
+	
+
 	
 	
 		/*
@@ -737,6 +750,19 @@ public class World {
 	
 	/**
 	 * Returns all entities registered in this world.
+	 * It is returned as a list.
+	 * 
+	 * @return	Returns all entities registered in this world.
+	 * 			| entity.getWorld() == this
+	 */
+	@Raw
+	public List<Entity> getAllEntitiesList() {
+		return helper.convertSetToList(getAllEntities());
+	}
+	
+	
+	/**
+	 * Returns all entities registered in this world.
 	 * 
 	 * @return	Returns all entities registered in this world.
 	 * 			| entity.getWorld() == this
@@ -747,11 +773,7 @@ public class World {
 		for (Entity entity: entities.values()) entitiesResult.add(entity);
 		return entitiesResult;
 	}
-	
-	public List<Entity> getAllEntitiesList() {
-		return helper.convertSetToList(getAllEntities());
-	}
-	
+		
 	/**
 	 * Returns all ships registered in this world.
 	 * 

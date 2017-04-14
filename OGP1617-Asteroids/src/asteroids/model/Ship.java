@@ -154,9 +154,9 @@ public class Ship extends Entity {
 				this.setWorld(null);
 			}
 			catch (IllegalArgumentException exc) {}	// Empty catch because if an IllegalArgumentException
-		}											// is thrown, it means that the association wasn't set to start with.	
-		List<Bullet> iterator = helper.convertSetToList(getAllBullets());// This means that the association already doesn't exist. We don't have to do anything.
-		for (Bullet bullet: iterator) {		
+		}											// is thrown, it means that the association wasn't set to begin with.	
+		List<Bullet> iterator = helper.convertSetToList(getAllBullets());	// This means that the association already doesn't exist. 
+		for (Bullet bullet: iterator) {							// We don't have to do anything.
 			try {
 				this.removeBullet(bullet);
 				bullet.setShip(null);
