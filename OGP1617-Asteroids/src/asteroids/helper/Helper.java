@@ -75,16 +75,16 @@ public class Helper {
 	 * 
 	 * @param 	tuple
 	 * 			The tuple to be looked for.
-	 * @param 	list
+	 * @param 	updatedEntities
 	 * 			The List to look through.
 	 * 
 	 * @return	Return whether or not the given tuple is in the list.
 	 * 			true if it is, false if not.
 	 */
-	public boolean isInList(Object[] tuple, List<Object[]> list) {
+	public <T> boolean isInList(Object[] tuple, List<T[]> updatedEntities) {
 		if (tuple == null) return false;	// TODO throw NullPointerException?
 		if (tuple.length != 2) throw new IllegalArgumentException();
-		for (Object[] attempt: list)
+		for (Object[] attempt: updatedEntities)
 			if ( (attempt[0] == tuple[0]) && (attempt[1] == tuple[1]) ) return true;
 		return false;
 	}	

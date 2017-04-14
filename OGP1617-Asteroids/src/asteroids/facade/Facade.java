@@ -7,7 +7,7 @@ import asteroids.util.ModelException;
 import java.util.*;
 
 import asteroids.helper.*;
-import asteroids.model.*;;
+import asteroids.model.*;
 
 
 public class Facade implements IFacade {

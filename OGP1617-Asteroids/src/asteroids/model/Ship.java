@@ -1,13 +1,8 @@
 package asteroids.model;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
+import java.util.*;
 import asteroids.helper.Entity;
 import asteroids.helper.Thruster;
-
 import be.kuleuven.cs.som.annotate.*;
 
 
@@ -155,8 +150,8 @@ public class Ship extends Entity {
 			}
 			catch (IllegalArgumentException exc) {}	// Empty catch because if an IllegalArgumentException
 		}											// is thrown, it means that the association wasn't set to begin with.	
-		List<Bullet> iterator = helper.convertSetToList(getAllBullets());	// This means that the association already doesn't exist. 
-		for (Bullet bullet: iterator) {							// We don't have to do anything.
+		List<Bullet> iterator = helper.convertSetToList(getAllBullets());	// This means that the association already doesn't exist 
+		for (Bullet bullet: iterator) {							// we don't have to do anything.
 			try {
 				this.removeBullet(bullet);
 				bullet.setShip(null);
@@ -333,6 +328,7 @@ public class Ship extends Entity {
 	*/
 	private Set<Bullet> bullets = new HashSet<Bullet>();
 	
+	
 	/**
 	 * Return the collection of bullets of this ship.
 	 */
@@ -361,22 +357,19 @@ public class Ship extends Entity {
 	 */
 	@Raw
 	public boolean canHaveAsBullet(Bullet bullet) {
-		if ( (this.bullets.contains(bullet)) || (bullet == null) || 
-				(!helper.apparentlyWithinBoundaries(bullet, this)) || (bullet.isTerminated()) ) return false;
-		return true;
-		//		if (bullet.canHaveAsShip(this)) return true; 
-//		return false;
+		return (bullet != null) && (!bullet.isTerminated()) && (!this.bullets.contains(bullet)) &&
+				(helper.apparentlyWithinBoundaries(bullet, this));
 	}
 	
 	
 	/**
 	 * Add a given bullet to this ship's collection of bullets. 
 	 * This method works immediately with the collection.
-	 * Load 
+	 * It does not load a bullet!
 	 * @param  	bullet
 	 *         	The bullet to be added.
 	 *         
-	 * @see implementation	// TODO @ see, sure?
+	 * @see implementation
 	 */
 	@Raw
 	private void addBullet(Bullet bullet) {
@@ -389,9 +382,9 @@ public class Ship extends Entity {
 	 * @param  	bullet
 	 *         	The bullet to be removed.
 	 *         
-	 * @see implementation // TODO @ see, sure?
+	 * @see implementation
 	 */
-	@Raw
+	@Raw // TODO Public, sure?
 	public void removeBullet(Bullet bullet) throws IllegalArgumentException {
 		if (!this.bullets.contains(bullet)) throw new IllegalArgumentException();
 		this.bullets.remove(bullet);
@@ -420,7 +413,7 @@ public class Ship extends Entity {
 	}
 	
 	/**
-	 * Load a given bullet collection into this ship. Loading a bullet will add
+	 * Load a given bullet collection onto this ship. Loading a bullet will add
 	 * the given bullet to the ship's collection and set it's ship as this ship.
 	 *  
 	 * @param  	bullet
@@ -446,13 +439,13 @@ public class Ship extends Entity {
 	 * @param  	bullet
 	 *         	The bullet to be reloaded.
 	 *         
-	 * @see implementation // TODO @ see, sure?
+	 * @see implementation
 	 */
 	public void reloadBullet(Bullet bullet) throws IllegalArgumentException, NullPointerException {
 		try {
 			if (bullet.getWorld() != null) bullet.getWorld().removeEntity(bullet);
 			bullet.setPosition(getPosition().getPositionX(), getPosition().getPositionY());
-			bullet.resetSource(this);	// TODO PROBLEM
+			bullet.resetSource(this);
 			bullet.setWorld(null);
 			loadBullet(bullet);
 		}
@@ -468,7 +461,7 @@ public class Ship extends Entity {
 	/**
 	 * Fires a bullet out of the collection of bullets.
 	 *     
-	 * @see implementation // TODO @ see, sure?
+	 * @see implementation
 	 */
 	public void fireBullet() {
 		if (bullets.size() > 0)
@@ -512,7 +505,7 @@ public class Ship extends Entity {
 						    getPosition().getPositionY() +  Math.sin(getOrientation()) * 
 						    	(getRadius() + bullet.getRadius() + 1) );	// +1 otherwise bullet is reloaded immediately.
 
-		// Next all the collisions with entities are resolved.	// TODO PROBLEM IF THERE IS OVERLAP!
+		// Next all the collisions with entities are resolved.
 		for (Entity entity : world.getAllEntities()) if (bullet.getDistanceBetween(entity) <= 0) bullet.resolveCollision(entity);
 			
 		try {
@@ -566,9 +559,9 @@ public class Ship extends Entity {
 	 *       	|	if (angle < 0)
 	 *       	|		then new.getOrientation() == this.getOrientation() + angle - 2*Math.PI
 	 */
+	@Raw
 	public void turn(double angle) {
 		assert isValidOrientation(Math.abs(angle));
-		
 		if (! isValidOrientation(getOrientation() + angle))
 			if (angle > 0) 
 				setOrientation(orientation + angle - 2*Math.PI);
@@ -597,9 +590,9 @@ public class Ship extends Entity {
 	 * 			|				   this.getVelocityY() + acceleration * Math.sin(this.getOrientation()))
 	 *       
 	 */
+	@Raw
 	public void thrust(double acceleration) {
-		if (! (acceleration > 0)) acceleration = 0;
-			
+		if (acceleration < 0) acceleration = 0;
 		double newVelocityX = getVelocityX() + acceleration * Math.cos(getOrientation());
 		double newVelocityY = getVelocityY() + acceleration * Math.sin(getOrientation());
 		setVelocity(newVelocityX, newVelocityY);
@@ -626,14 +619,15 @@ public class Ship extends Entity {
 	 * 			|				   this.getVelocityY() + acceleration * Math.sin(this.getOrientation()) * time)
 	 *       
 	 */
+	@Raw
 	public void thrust(double acceleration, double time) {
-		if (! (acceleration > 0)) acceleration = 0;
-		if (! (time > 0)) time = 0;
-		
+		if (acceleration < 0) acceleration = 0;
+		if (time < 0) time = 0;
 		double newVelocityX = getVelocityX() + acceleration * Math.cos(getOrientation()) * time;
 		double newVelocityY = getVelocityY() + acceleration * Math.sin(getOrientation()) * time;
 		setVelocity(newVelocityX, newVelocityY);
 	}
+	
 	
 	
 			/*
@@ -728,7 +722,8 @@ public class Ship extends Entity {
 			 * |----------------------------------------------------| 
 			 */
 
-	// TODO Are these Methods Raw?
+
+	
 	
 	/**
 	 * Resolves the collision between this ship and a given world.
@@ -744,7 +739,8 @@ public class Ship extends Entity {
 	public void resolveCollision(World world) throws NullPointerException {
 		if (world == null) throw new NullPointerException();
 		double[] position = getCollisionPosition(world);
-		if (position == null) return;	// There is no collision so the collision does not need to be resolved.
+		if (position[0] == Double.POSITIVE_INFINITY && position[1] == Double.POSITIVE_INFINITY) return;	
+		// There is no collision so the collision does not need to be resolved.
 		if (position[0] == this.world.getWidth() || position[0] == 0) 
 			setVelocity(-getVelocityX(), getVelocityY());
 		if ( (position[1] == this.world.getHeight() || position[1] == 0) ||
@@ -783,8 +779,7 @@ public class Ship extends Entity {
 	 */
 	@Override
 	public void resolveCollisionShip(Ship ship) throws NullPointerException {
-		if (ship == null) throw new NullPointerException();
-//		if (!this.overlap(ship)) throw new IllegalArgumentException();
+		if (ship == null) throw new NullPointerException();	// This method is pretty much a copy of the formula in the assignment.
 		double[] deltaV = {ship.getVelocityX() - getVelocityX(), ship.getVelocityY() - getVelocityY()};
 		double[] deltaR = {ship.getPosition().getPositionX() - getPosition().getPositionX(), 
 						   ship.getPosition().getPositionY() - getPosition().getPositionY()};
@@ -799,6 +794,7 @@ public class Ship extends Entity {
 		ship.setVelocity(ship.getVelocityX() - Jx/ship.getMass(), ship.getVelocityY() - Jy / ship.getMass());
 	}
 	
+	
 	/**
 	 * Resolves the collision between this ship and a given bullet.
 	 * 
@@ -810,8 +806,7 @@ public class Ship extends Entity {
 	@Override
 	public void resolveCollisionBullet(Bullet bullet) throws IllegalArgumentException, NullPointerException {
 		if (bullet == null) throw new NullPointerException();
-//		if (this.getDistanceBetween(bullet) <= 0) throw new IllegalArgumentException();
-		if (bullet.getSource() == this) {
+		if (bullet.getSource() == this) {	// Reload if this bullet hits it's source.
 			try {
 				reloadBullet(bullet);
 			}
@@ -819,7 +814,7 @@ public class Ship extends Entity {
 				throw new IllegalArgumentException(exc);
 			}
 		}
-		else {
+		else {	// Terminate otherwise.
 			this.terminate();
 			bullet.terminate();
 		}

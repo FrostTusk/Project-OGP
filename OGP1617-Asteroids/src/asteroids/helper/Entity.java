@@ -1,7 +1,6 @@
 package asteroids.helper;
 
 import asteroids.model.*;
-
 import be.kuleuven.cs.som.annotate.*;
 
 /* Constants:
@@ -702,7 +701,7 @@ public abstract class Entity {
 	public double getTimeToCollision(Entity entity) throws IllegalArgumentException, NullPointerException {
 		if (entity == null) throw new NullPointerException(); 
 		if (this.overlap(entity)) throw new IllegalArgumentException();
-		if (this.getWorld() != entity.getWorld()) return Double.POSITIVE_INFINITY;
+		if ( (this.getWorld() != entity.getWorld()) || (this.getWorld() == null) ) return Double.POSITIVE_INFINITY;
 		
 		double[] deltaR = {entity.getPosition().getPositionX() - this.getPosition().getPositionX(), 
 					   	   entity.getPosition().getPositionY() - this.getPosition().getPositionY()};
@@ -729,7 +728,7 @@ public abstract class Entity {
 	* 			The world of which the collision position needs to be calculated.
 	* 
 	* @return	The position returned will be the position where this ship and the world
-	* 			collide with each other. The method returns null if they never collide.
+	* 			collide with each other. The method returns infinity if they never collide.
 	* 			| this.getDistanceBetween(world) == 0
 	* // TODO Problems with rounding?
 	*/

@@ -15,6 +15,7 @@ import asteroids.helper.Position;
 import asteroids.model.Bullet;
 import asteroids.model.Ship;
 import asteroids.model.World;
+import asteroids.part2.CollisionListener;
 import asteroids.part2.facade.IFacade;
 import asteroids.util.ModelException;
 
@@ -1611,7 +1612,8 @@ public class TestFacade {
 		Bullet bullet = facade.createBullet(2, 2, 10, 10, 1);
 		facade.addBulletToWorld(world, bullet);
 		facade.addShipToWorld(world, ship);
-		world.evolve(2);
+		CollisionListener collisionListener = null;
+		facade.evolve(world, 2, collisionListener);
 		assertEquals(120, facade.getShipPosition(ship)[0], EPSILON);
 		assertEquals(80, facade.getShipPosition(ship)[1], EPSILON);
 		assertEquals(22, facade.getBulletPosition(bullet)[0], EPSILON);

@@ -1,16 +1,7 @@
 package asteroids.model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import asteroids.helper.Entity;
-import asteroids.helper.Helper;
-import asteroids.helper.Position;
-
+import java.util.*;
+import asteroids.helper.*;
 import be.kuleuven.cs.som.annotate.*;
 
 /* Constants:
@@ -248,6 +239,7 @@ public class World {
 	 */
 	@Raw
 	public boolean canHaveAsEntity(Entity entity) {
+		if (entity == null) return false;
 		if (helper.operlapsWithOtherEntities(entity, helper.convertCollectionToList(entities.values()))) 
 			return false;
 		return (entity != null) && (!entity.isTerminated()) && (!containsEntity(entity)) && (entity.isInWorld(this));
@@ -546,18 +538,19 @@ public class World {
 	 * @param	time
 	 * 			the time over which the world will evolve.
 	 */
+	// This method is longer than 20 lines, but I did not want to break it up in smaller methods because
+	// it made debugging quite difficult.
 	public void evolve(double time) throws IllegalArgumentException {
-		destroyOverlaps();	// Destroy all the entities that are currently invalid => overlap something.
-		updateMap();	// We need to update the map because it is possible that the positions of the entities have been changed.
 		if (time < 0) throw new IllegalArgumentException();
+		destroyOverlaps();	// Destroy all the entities that are currently invalid (overlap something).
+		updateMap();	// We need to update the map because it is possible that the positions of the entities have been changed.
 		Entity[] collisionEntitiesMin = getFirstCollisionEntities();
-//		// TODO Problem with intervals. // TODO Rewrite!
 		if (collisionEntitiesMin == null) resolveEvolve(-1, collisionEntitiesMin, time);	// There are no entities in this World.
 		else {
 			double collisionTimeMin = -1;
-			for (int i = 0; i < 2; i ++) {
-				if (collisionEntitiesMin == null) collisionEntitiesMin = getFirstCollisionEntities(0);
-				if (collisionEntitiesMin == null) {
+			for (int i = 0; i < 2; i ++) {	// This for loop is necessary to make sure that we can resolve collisions at time zero.
+				if (collisionEntitiesMin == null) collisionEntitiesMin = getFirstCollisionEntities(0);	// If not broken at end
+				if (collisionEntitiesMin == null) {	// These if statements ensure that the next collision is correct.
 					resolveEvolve(-1, collisionEntitiesMin, time);
 					return;
 				}
@@ -565,11 +558,11 @@ public class World {
 				if ( collisionEntitiesMin[0] == collisionEntitiesMin[1] )	// If the collision is with the boundary.
 					collisionTimeMin = collisionEntitiesMin[0].getTimeToCollision(this);
 				else	// If the collision is between 2 entities.
-					collisionTimeMin = collisionEntitiesMin[0].getTimeToCollision(collisionEntitiesMin[1]);	// TODO PROBLEM OVERLAP
+					collisionTimeMin = collisionEntitiesMin[0].getTimeToCollision(collisionEntitiesMin[1]);
 				
-				if ( alreadyFound(collisionEntitiesMin) && (collisionTimeMin == 0) ) 
-					collisionEntitiesMin = findOtherCollisionsAtZero(); // TODO Problem with intervals.
-				else break;													// TODO Find the next entities	
+				if ( (collisionTimeMin == 0) && helper.isInList(collisionEntitiesMin, updatedEntities) ) // If this collision has already
+					collisionEntitiesMin = findOtherCollisionsAtZero();	// been found and the time is zero, find another collision.
+				else break;	// If in normal case, break.													
 			}
 			
 			try {	// This is the only possible exception that is thrown in this method (outside of the one for the parameter);
@@ -592,19 +585,18 @@ public class World {
 	 * 			The entities involved in the first collision.
 	 * @param	time
 	 * 			the time over which the world has to be evolved.
-	 * 
 	 */
 	private void resolveEvolve(double collisionTimeMin, Entity[] collisionEntitiesMin, double time) 
 			throws IllegalArgumentException {
-		if ( (0 < collisionTimeMin) && (collisionTimeMin < time) ) {	// Collision time needs to be positive.-1 is also used to
-			try {														// shortcut immediately from this comparison to the end.
+		if ( (0 < collisionTimeMin) && (collisionTimeMin < time) ) {	// Collision time needs to be positive. -1 is also used to
+			try {				// shortcut immediately from this comparison to the end.
 				update(collisionTimeMin);
 			}
 			catch (IllegalArgumentException exc) {// This exception is throw if the new position of an entity is invalid
 				throw new IllegalArgumentException(exc);	
 			}
-		}
-		 if ( (0 <= collisionTimeMin) && (collisionTimeMin < time) ) {
+		}	// We don't include zero in the above procedure, because update clears updatedEntities.
+		if ( (0 <= collisionTimeMin) && (collisionTimeMin < time) ) {	// This is so we can also handle the zero case.
 				if ( collisionEntitiesMin[0] == collisionEntitiesMin[1] )	// If the collision is with the boundary
 					collisionEntitiesMin[0].resolveCollision(this);
 				else	// If the collision is between 2 entities.
@@ -637,9 +629,9 @@ public class World {
 	 *       	| ! new Position(0,0).isValidPosition(positionX, positionY)	// TODO There exists.
 	 */
 	private void update(double time) throws IllegalArgumentException {
-		updatedEntities.clear();
+		updatedEntities.clear();	// Clear the updated entities because we are moving positions and won't be stuck in a loop anymore.
 		List<Entity> iterator = helper.convertCollectionToList(entities.values());	// Creates an iterator that the next
-		for (Entity entity: iterator) {									// for loop can iterate over, otherwise the map might  be changed during execution.
+		for (Entity entity: iterator) {			// for loop can iterate over, otherwise the map might be changed during execution.
 			if ( (entity.getType() == "Ship") && ((Ship)entity).getThrustStatus()) ((Ship)entity).thrust(((Ship)entity).getAcceleration(), time);
 			try {	// The exceptions in removeEntity are never thrown in this method.
 				entity.move(time);
@@ -664,8 +656,8 @@ public class World {
 			if (!entity1.isInWorld(this)) entity1.terminate();	// If the entity "overlaps" the world, terminate it.
 			if (entity1.isTerminated()) continue;	// If it has been terminated, stop checking for it.
 			for (Entity entity2: iterator) {	// Otherwise find all overlaps with other entities.
-				if (entity1 == entity2) continue;
-				if (entity2.isTerminated()) continue;
+				if (entity1 == entity2) continue;	// These continue statements are necessary
+				if (entity2.isTerminated()) continue;	// So that overlap doesn't crash.
 				if (entity1.overlap(entity2) || entity2.overlap(entity1)) {	// If two entities overlap, destroy them.
 					entity1.terminate();
 					entity2.terminate();
@@ -687,29 +679,17 @@ public class World {
 			for (Entity entity2: iterator) {
 				collisionEntitiesMin[1] = entity2;
 				if (entity1 == entity2) continue;
-				if ( (entity1.getTimeToCollision(entity2) == 0) && (!alreadyFound(collisionEntitiesMin)) )
+				if ( (entity1.getTimeToCollision(entity2) == 0) && !helper.isInList(collisionEntitiesMin, updatedEntities) )
 					return collisionEntitiesMin;
 			}
 			collisionEntitiesMin[1] = entity1;
-			if ( (entity1.getTimeToCollision(this) == 0) && (!alreadyFound(collisionEntitiesMin)) )
+			if ( (entity1.getTimeToCollision(this) == 0) && !helper.isInList(collisionEntitiesMin, updatedEntities) )
 				return collisionEntitiesMin;
 		}
 		return null;
 	}
 	
-	/**
-	 * 
-	 * 
-	 */
-	public boolean alreadyFound(Entity[] collisionEntitiesMin) {
-		if (collisionEntitiesMin == null) return false;
-		for (Entity[] found: updatedEntities)
-			if ( (found[0] == collisionEntitiesMin[0]) && (found[1] == collisionEntitiesMin[1]) ) return true;
-		return false;
-	}
 	
-	
-
 	
 	
 		/*
@@ -735,7 +715,7 @@ public class World {
 	 * 
 	 * @return	Returns the entity at the given position. 
 	 * 			Returns null if there is no entity at that position.
-	 * 			// TODO Declarative Documentation.
+	 * 			// TODO Declarative Documentation?
 	 */
 	@Raw
 	public Entity getEntityAtPosition(Position position) {

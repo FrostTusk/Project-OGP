@@ -1089,66 +1089,81 @@ public class TestShip {
 	
 	@Test
 	public void testCollisionDetectionLinear() {
-		Ship ship1 = new Ship(0, 0, 10, 0, 0, 10, 0);
-		Ship ship2 = new Ship(30, 0, 0, 0, 0, 10, 0);
+		World world = new World(1000, 1000);
+		Ship ship1 = new Ship(100, 100, 10, 0, 0, 10, 0);
+		Ship ship2 = new Ship(130, 100, 0, 0, 0, 10, 0);
+		world.addEntity(ship1);
+		world.addEntity(ship2);
 		double[] position = ship1.getCollisionPosition(ship2);
-		assertEquals(20, position[0], EPSILON);
-		assertEquals(0, position[1], EPSILON);
+		assertEquals(120, position[0], EPSILON);
+		assertEquals(100, position[1], EPSILON);
 		assertEquals(1, ship1.getTimeToCollision(ship2), EPSILON);
 	}
 	
 	@Test
 	public void testCollisionDetectionXPOSYPOS() {
-		Ship ship1 = new Ship(0, 0, 10, 10, 0, 10, 0);
-		Ship ship2 = new Ship(50, 50, 0, 0, 0, 10, 0);
+		World world = new World(1000, 1000);
+		Ship ship1 = new Ship(100, 100, 10, 10, 0, 10, 0);
+		Ship ship2 = new Ship(150, 150, 0, 0, 0, 10, 0);
+		world.addEntity(ship1);
+		world.addEntity(ship2);
 		double[] position = ship1.getCollisionPosition(ship2);
 //		System.out.println(position[0]);
 //		System.out.println(position[1]);
 //		System.out.println(facade.getTimeToCollision(ship1, ship2));
 		// Position is approximately correct, I assume it's not exactly correct because of rounding.
-		assertTrue( (position[0] > 35) && (position[0] < 45) );
-		assertTrue( (position[1] > 35) && (position[1] < 45) );
+		assertTrue( (position[0] > 135) && (position[0] < 145) );
+		assertTrue( (position[1] > 135) && (position[1] < 145) );
 		assertTrue(( ship1.getTimeToCollision(ship2) > 2) && (ship1.getTimeToCollision(ship2) < 4) );
 	}
 	@Test
 	public void testCollisionDetectionXPOSYNEG() {
-		Ship ship1 = new Ship(0, 0, 10, -10, 0, 10, 0);
-		Ship ship2 = new Ship(50, -50, 0, 0, 0, 10, 0);
+		World world = new World(1000, 1000);
+		Ship ship1 = new Ship(100, 100, 10, -10, 0, 10, 0);
+		Ship ship2 = new Ship(150, 50, 0, 0, 0, 10, 0);
+		world.addEntity(ship1);
+		world.addEntity(ship2);
 		double[] position = ship1.getCollisionPosition(ship2);
 //		System.out.println(position[0]);
 //		System.out.println(position[1]);
 //		System.out.println(facade.getTimeToCollision(ship1, ship2));
 		// Position is as predicted here.
-		assertTrue( (position[0] > 35) && (position[0] < 45) );
-		assertTrue( (position[1] < -35) && (position[1] > -45) );
+		assertTrue( (position[0] > 135) && (position[0] < 145) );
+		assertTrue( (position[1] < 65) && (position[1] > 55) );
 		assertTrue( (ship1.getTimeToCollision(ship2) > 2) && (ship1.getTimeToCollision(ship2) < 4) );
 	}
 	
 	@Test
 	public void testCollisionDetectionXNEGYPOS() {		
-		Ship ship1 = new Ship(0, 0, -10, 10, 0, 10, 0);
-		Ship ship2 = new Ship(-50, 50, 0, 0, 0, 10, 0);
+		World world = new World(1000, 1000);
+		Ship ship1 = new Ship(100, 100, -10, 10, 0, 10, 0);
+		Ship ship2 = new Ship(50, 150, 0, 0, 0, 10, 0);
+		world.addEntity(ship1);
+		world.addEntity(ship2);
 		double[] position = ship1.getCollisionPosition(ship2);
 //		System.out.println(position[0]);
 //		System.out.println(position[1]);
 //		System.out.println(facade.getTimeToCollision(ship1, ship2));
 		// Position is as predicted here.
-		assertTrue( (position[0] < -35) && (position[0] > -45));
-		assertTrue( (position[1] > 35) && (position[1] < 45) );
+		assertTrue( (position[0] < 75) && (position[0] > 55));
+		assertTrue( (position[1] > 135) && (position[1] < 145) );
 		assertTrue( (ship1.getTimeToCollision(ship2) > 2) && (ship1.getTimeToCollision(ship2) < 4) );
 	}
 	
 	@Test
 	public void testCollisionDetectionXNEGYNEG() {
-		Ship ship1 = new Ship(0, 0, -10, -10, 0, 10, 0);
-		Ship ship2 = new Ship(-50, -50, 0, 0, 0, 10, 0);
+		World world = new World(1000, 1000);
+		Ship ship1 = new Ship(100, 100, -10, -10, 0, 10, 0);
+		Ship ship2 = new Ship(50, 50, 0, 0, 0, 10, 0);
+		world.addEntity(ship1);
+		world.addEntity(ship2);
 		double[] position = ship1.getCollisionPosition(ship2);
 //		System.out.println(position[0]);
 //		System.out.println(position[1]);
 //		System.out.println(facade.getTimeToCollision(ship1, ship2));
 		// Position is as predicted here.
-		assertTrue( (position[0] < -35) && (position[0] > -45) );
-		assertTrue( (position[1] < -35) && (position[1] > -45) );
+		assertTrue( (position[0] < 75) && (position[0] > 55) );
+		assertTrue( (position[1] < 75) && (position[1] > 55) );
 		assertTrue( (ship1.getTimeToCollision(ship2) > 2) && (ship1.getTimeToCollision(ship2) < 4) );
 	}
 	

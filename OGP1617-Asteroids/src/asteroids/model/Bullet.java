@@ -1,7 +1,6 @@
 package asteroids.model;
 
 import asteroids.helper.Entity;
-
 import be.kuleuven.cs.som.annotate.*;
 
 /* Constants:
@@ -73,23 +72,7 @@ public class Bullet extends Entity {
 	 * @param  	mass
 	 *         	The mass for this new bullet.
 	 * 
-	 * @post   	The radius of this new bullet is equal to the given
-	 *         	radius.
-	 *       	| new.getRadius() == radius
-	 *       
-	 * @effect 	The positions of this new bullet are set to
-	 *         	the given X position and Y position.
-	 *       	| this.setPosition(positionX, positionY)
-	 * @effect	The X and Y velocity of this new bullet are set to
-	 *         	the given velocityX and velocityY.
-	 *         	| this.setVelocity(velocityX, velocityY)
-	 *                  	 
-	 * @throws 	IllegalArgumentException
-	 *         	This new bullet cannot have the given X and Y position as position.
-	 *       	| ! this.getPosition().isValidPosition(positionX, positionY)	// TODO is this done right?
-	 * @throws 	IllegalArgumentException
-	 *         	This new bullet cannot have the given radius as its radius.
-	 *       	| ! this.canHaveAsRadius(this.getRadius())
+	 * @see implementation
 	 */
 	public Bullet(double positionX, double positionY, double velocityX, double velocityY, double radius)
 		throws IllegalArgumentException {
@@ -126,11 +109,10 @@ public class Bullet extends Entity {
 		if (getWorld() != null) { 
 			try {
 				getWorld().removeEntity(this);
-				this.setWorld(null);
 			}
 			catch (IllegalArgumentException exc) {}	// Empty catch because if an IllegalArgument Exception
-		}											// is thrown, it means that the association wasn't set to begin with.
-		if (getShip() != null) {					// This means that the association already doesn't exist. We don't have to do anything.
+		}								// is thrown, it means that the association wasn't set to begin with.
+		if (getShip() != null) {		// This means that the association already doesn't exist. We don't have to do anything.
 			try {
 				getShip().removeBullet(this);
 				setShip(null);
@@ -191,7 +173,7 @@ public class Bullet extends Entity {
 	@Override @Raw
 	public boolean canHaveAsWorld(World world) {
 		if (world == null) return true;
-		return (getShip() == null) && ( (getWorld() == null) || (getWorld() == world) ) && (isInWorld(world)) && !(world.isTerminated());
+		return (!world.isTerminated()) && (getShip() == null) && ( (getWorld() == null) || (getWorld() == world) ) && (isInWorld(world));
 	}
 	
 	
@@ -266,8 +248,9 @@ public class Bullet extends Entity {
      */
 	@Raw
 	public boolean canHaveAsShip(Ship ship) {
-		if (ship == null) return true;	// TODO Is this a good fix?
-		return ( ((getShip() == null) || (getShip() == ship)) && (getWorld() == null) && !(ship.isTerminated()));
+		if (ship == null) return true;
+		return (!ship.isTerminated()) && (getWorld() == null) && ((getShip() == null) || (getShip() == ship)) 
+				/*&& (helper.apparentlyWithinBoundaries(this, ship))*/;
 	}
 	
 	
@@ -295,13 +278,12 @@ public class Bullet extends Entity {
 	 *         	The ship to reset as source ship for this bullet.
 	 *         
 	 * @see implementation
-	 * 		// TODO More documentation?
-	 */	//TODO BUGGED!
+	 */
 	@Raw
 	public void resetSource(Ship ship) throws IllegalArgumentException, NullPointerException {
 		if (ship == null) throw new NullPointerException();
-		if ( (!(this.getDistanceBetween(ship) <= 0)) || (this.getSource() != ship) ) throw new IllegalArgumentException(); // TODO Is this right?
-		this.hasBeenFired = false;
+		if ( (getDistanceBetween(ship) > 0) || (getSource() != ship) ) throw new IllegalArgumentException();	// Since this 
+		this.hasBeenFired = false;			// method may only be called during reload, these checks are necessary.
 		this.source = null;
 	}
 	
@@ -315,7 +297,7 @@ public class Bullet extends Entity {
 	 */
 	@Raw
 	public void setShip(Ship ship) throws IllegalArgumentException {
-		if (! canHaveAsShip(ship)) throw new IllegalArgumentException();
+		if (!canHaveAsShip(ship)) throw new IllegalArgumentException();
 		this.ship = ship;
 	}
 	
@@ -329,12 +311,12 @@ public class Bullet extends Entity {
 	
 		
 			/*
-			 * |----------------------------------------------------------------|
+			 * |------------------------------------------------------------|
 			 * | 5. The next methods handle the Boundary Collision Counter.	|
-			 * |----------------------------------------------------------------| 
+			 * |------------------------------------------------------------| 
 			 */
 	
-	// TODO rewrite as a Class.
+
 	
 	/**
 	 * Variable registering the maximum amount of boundary collisions allowed for this bullet.
@@ -397,7 +379,7 @@ public class Bullet extends Entity {
 			 * |----------------------------------------------------| 
 			 */
 	
-	// Are these Methods Raw?
+
 	
 	/**
 	 * Resolves the collision between this bullet and a given world.
@@ -406,7 +388,6 @@ public class Bullet extends Entity {
 	 * 			The world to be used.
 	 * 
 	 * @see implementation
-	 * 		// TODO declarative documentation.
 	 * 		// TODO apparently collide?
 	 * 		// TODO what if they are not colliding?
 	 */
@@ -416,15 +397,17 @@ public class Bullet extends Entity {
 		setBoundaryCollisionCounter(getBoundaryCollisionCounter() + 1);
 		if (getBoundaryCollisionCounter() < getBoundaryCollisionMax()) {
 			double[] position = getCollisionPosition(world);
-			if (position == null) return;	// There is no collision so the collision does not need to be resolved.
-			if (position[0] == this.world.getWidth() || position[0] == 0) 
+			if (position[0] == Double.POSITIVE_INFINITY && position[1] == Double.POSITIVE_INFINITY) return;	
+			// There is no collision so the collision does not need to be resolved.
+			if (position[0] == this.world.getWidth() || position[0] == 0) // Check collision with the x boundary.
 				setVelocity(-getVelocityX(), getVelocityY());
-			if ( (position[1] == this.world.getHeight() || position[1] == 0) ||
-			     (position[3] == this.world.getHeight() || position[3] == 0) ) 
+			if ( (position[1] == this.world.getHeight() || position[1] == 0) ||	// Check collision with y boundary
+			     (position[3] == this.world.getHeight() || position[3] == 0) ) 	// or with corner.
 				setVelocity(getVelocityX(), -getVelocityY());
 		}
-		else this.terminate();
+		else this.terminate();	// Terminate the bullet if it has exceeded the max amount of bounces.
 	}
+	
 	
 	/**
 	 * Resolves the collision between this ship and a given entity.
@@ -433,7 +416,6 @@ public class Bullet extends Entity {
 	 * 			The entity to be used.
 	 * 
 	 * @see implementation
-	 * 		// TODO declarative documentation.
 	 */
 	@Override
 	public void resolveCollision(Entity entity) throws IllegalArgumentException, NullPointerException {
@@ -457,12 +439,11 @@ public class Bullet extends Entity {
 	 * 			The ship to be collided with.
 	 * 
 	 * @see implementation
-	 * 		// TODO declarative documentation.
 	 */
 	@Override
 	public void resolveCollisionShip(Ship ship) throws IllegalArgumentException, NullPointerException {
 		if (ship == null) throw new NullPointerException();
-		if (this.getSource() == ship) {
+		if (this.getSource() == ship) {	// Reload if this bullet hits it's source.
 			try {
 				ship.reloadBullet(this);
 			}
@@ -470,7 +451,7 @@ public class Bullet extends Entity {
 				throw new IllegalArgumentException(exc);
 			}
 		}
-		else {
+		else {	// Terminate otherwise.
 			this.terminate();
 			ship.terminate();
 		}
@@ -483,7 +464,6 @@ public class Bullet extends Entity {
 	 * 			The bullet to be used.
 	 * 
 	 * @see implementation
-	 * 		// TODO declarative documentation.
 	 */
 	@Override
 	public void resolveCollisionBullet(Bullet bullet) throws NullPointerException {

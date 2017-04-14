@@ -842,8 +842,11 @@ public class TestBullet {
 	
 	@Test 
 	public void testBulletGetTimeToCollisionGeneric() {
-		Bullet bullet1 = new Bullet(100, 100, 0, 0, 20);
-		Bullet bullet2 = new Bullet(10, 100, 10, 0, 20);
+		World world = new World(1000, 1000);
+		Bullet bullet1 = new Bullet(140, 100, 0, 0, 20);
+		Bullet bullet2 = new Bullet(50, 100, 10, 0, 20);
+		world.addEntity(bullet1);
+		world.addEntity(bullet2);
 		assertEquals(5, bullet1.getTimeToCollision(bullet2), EPSILON);
 	}
 	
