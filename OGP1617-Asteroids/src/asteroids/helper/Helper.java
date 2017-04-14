@@ -64,6 +64,22 @@ public class Helper {
 	
 	
 	/**
+	 * Calculates if this entity overlaps with any other entities in a list.
+	 * 
+	 * @param 	entity1
+	 * 		  	The first entity to be used.
+	 * @param 	entities
+	 * 			The entities to be check.
+	 * 
+	 * @return	true if it does overlap, false if not.
+	 */
+	public boolean operlapsWithOtherEntities(Entity entity1, List<Entity> entities) {
+		for (Entity entity2: entities) if ( entity1.overlap(entity2) && (entity2 != entity1) ) return true;
+		return false;
+	}
+	
+	
+	/**
 	 * Converts a given List to an Array.
 	 * 
 	 * @param 	list
@@ -109,6 +125,7 @@ public class Helper {
 		for (T item: collection) list.add(item);
 		return list;
 	}
+	
 	
 	/**
 	 * Converts a given Set to a List.

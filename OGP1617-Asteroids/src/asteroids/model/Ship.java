@@ -315,7 +315,7 @@ public class Ship extends Entity {
 	@Override @Raw
 	public boolean canHaveAsWorld(World world) {
 		if (world == null) return true;
-		return ( (getWorld() == null) || (getWorld() == world) ) && (isInWorld(world));
+		return ( (getWorld() == null) || (getWorld() == world) ) && (isInWorld(world)) && !(world.isTerminated());
 	}
 	
 
@@ -362,7 +362,7 @@ public class Ship extends Entity {
 	@Raw
 	public boolean canHaveAsBullet(Bullet bullet) {
 		if ( (this.bullets.contains(bullet)) || (bullet == null) || 
-				(!helper.apparentlyWithinBoundaries(bullet, this)) ) return false;
+				(!helper.apparentlyWithinBoundaries(bullet, this)) || (bullet.isTerminated()) ) return false;
 		return true;
 		//		if (bullet.canHaveAsShip(this)) return true; 
 //		return false;
@@ -450,14 +450,14 @@ public class Ship extends Entity {
 	 */
 	public void reloadBullet(Bullet bullet) throws IllegalArgumentException, NullPointerException {
 		try {
+			if (bullet.getWorld() != null) bullet.getWorld().removeEntity(bullet);
 			bullet.setPosition(getPosition().getPositionX(), getPosition().getPositionY());
 			bullet.resetSource(this);	// TODO PROBLEM
-			if (bullet.getWorld() != null) bullet.getWorld().removeEntity(bullet);
 			bullet.setWorld(null);
 			loadBullet(bullet);
 		}
 		catch (IllegalArgumentException exc) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException(exc);
 		}
 		catch (NullPointerException exc) {
 			throw new NullPointerException();
@@ -768,7 +768,7 @@ public class Ship extends Entity {
 			else if (entity.getType() == "Bullet") resolveCollisionBullet((Bullet)entity);
 		}
 		catch (IllegalArgumentException exc) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException(exc);
 		}
 	}
 
@@ -816,7 +816,7 @@ public class Ship extends Entity {
 				reloadBullet(bullet);
 			}
 			catch (IllegalArgumentException exc) {
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException(exc);
 			}
 		}
 		else {

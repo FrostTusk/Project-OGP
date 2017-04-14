@@ -191,7 +191,7 @@ public class Bullet extends Entity {
 	@Override @Raw
 	public boolean canHaveAsWorld(World world) {
 		if (world == null) return true;
-		return (getShip() == null) && ( (getWorld() == null) || (getWorld() == world) ) && (isInWorld(world));
+		return (getShip() == null) && ( (getWorld() == null) || (getWorld() == world) ) && (isInWorld(world)) && !(world.isTerminated());
 	}
 	
 	
@@ -267,7 +267,7 @@ public class Bullet extends Entity {
 	@Raw
 	public boolean canHaveAsShip(Ship ship) {
 		if (ship == null) return true;	// TODO Is this a good fix?
-		return ( ((getShip() == null) || (getShip() == ship)) && (getWorld() == null) );
+		return ( ((getShip() == null) || (getShip() == ship)) && (getWorld() == null) && !(ship.isTerminated()));
 	}
 	
 	
@@ -445,7 +445,7 @@ public class Bullet extends Entity {
 				resolveCollisionBullet((Bullet)entity);
 		}
 		catch (IllegalArgumentException exc) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException(exc);
 		}
 	}
 	
@@ -467,7 +467,7 @@ public class Bullet extends Entity {
 				ship.reloadBullet(this);
 			}
 			catch (IllegalArgumentException exc) {
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException(exc);
 			}
 		}
 		else {

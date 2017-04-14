@@ -258,7 +258,10 @@ public class World {
 	 */
 	@Raw
 	public boolean canHaveAsEntity(Entity entity) {
-		return (entity != null) && (!containsEntity(entity)) && (entity.isInWorld(this));
+		if (helper.operlapsWithOtherEntities(entity, helper.convertCollectionToList(entities.values()))) 
+			if (helper.operlapsWithOtherEntities(entity, helper.convertCollectionToList(entities.values())))
+				return false;
+		return (entity != null) && (!containsEntity(entity)) && (entity.isInWorld(this)) && (!entity.isTerminated());
 	}	
 	
 	/**
@@ -743,6 +746,10 @@ public class World {
 		Set<Entity> entitiesResult = new HashSet<Entity>();
 		for (Entity entity: entities.values()) entitiesResult.add(entity);
 		return entitiesResult;
+	}
+	
+	public List<Entity> getAllEntitiesList() {
+		return helper.convertSetToList(getAllEntities());
 	}
 	
 	/**
