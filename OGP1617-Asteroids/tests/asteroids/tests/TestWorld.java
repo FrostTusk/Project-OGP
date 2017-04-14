@@ -792,10 +792,10 @@ public class TestWorld {
 	}
 	
 	@Test
-	public void testWorldEvolve2CollisionsSameTime() {
+	public void testWorldEvolve2CollisionsSameTimeBulletShip() {
 		World world = new World(1000, 1000);
 		Ship ship1 = new Ship(500, 500, 0, 0, 0, 20, 10);
-		Ship ship2 = new Ship(700, 500, 0, 0, Math.PI, 20, 10);
+		Ship ship2 = new Ship(700, 500, 0, 0, Math.PI/2, 20, 10);
 		Bullet bullet1 = new Bullet(500, 500, 10, 10, 1);
 		Bullet bullet2 = new Bullet(700, 500, 10, 10, 1);
 		world.addEntity(ship1);	
@@ -804,9 +804,55 @@ public class TestWorld {
 		ship1.fireBullet(bullet1);
 		ship2.loadBullet(bullet2);
 		ship2.fireBullet(bullet2);
-		world.evolve(1);
-		
+		ship1.setPosition(700, 700);
+		world.evolve(2);
+		assertTrue(bullet1.isTerminated());
+		assertTrue(bullet2.isTerminated());
+		assertTrue(ship1.isTerminated());
+		assertTrue(ship2.isTerminated());
 	}
 	
+	@Test
+	public void testWorldEvolve2CollisionsSameTimeBulletBullet() {
+		World world = new World(1000, 1000);
+		Bullet bullet1 = new Bullet(500, 500, 250, 0, 1);
+		Bullet bullet2 = new Bullet(700, 500, 0, 0, 1);
+		Bullet bullet3 = new Bullet(500, 700, 250, 0, 1);
+		Bullet bullet4 = new Bullet(700, 700, 0, 0, 1);
+		world.addEntity(bullet1);
+		world.addEntity(bullet2);
+		world.addEntity(bullet3);
+		world.addEntity(bullet4);
+		world.evolve(2);
+		assertTrue(bullet1.isTerminated());
+		assertTrue(bullet2.isTerminated());
+		assertTrue(bullet3.isTerminated());
+		assertTrue(bullet4.isTerminated());
+	}
+	
+	@Test
+	public void testWorldEvolve2CollisionsSameTimeBulletBoundary() {
+		World world = new World(1000, 1000);
+		Bullet bullet1 = new Bullet(900, 100, 250, 0, 1);
+		Bullet bullet2 = new Bullet(100, 100, -250, 0, 1);
+		world.addEntity(bullet1);
+		world.addEntity(bullet2);
+		assertEquals(0, bullet1.getBoundaryCollisionCounter(), EPSILON);
+		assertEquals(0, bullet2.getBoundaryCollisionCounter(), EPSILON);
+		world.evolve(2);
+		assertEquals(1, bullet1.getBoundaryCollisionCounter(), EPSILON);
+		assertEquals(1, bullet2.getBoundaryCollisionCounter(), EPSILON);	}
+	
+	@Test
+	public void testWorldEvolve2CollisionsSameTimeShipBoundary() {
+		World world = new World(1000, 1000);
+		Ship ship1 = new Ship(950, 500, 20, 0, 0, 20, 10);
+		Ship ship2 = new Ship(950, 400, 20, 0, 0, 20, 10);
+		world.addEntity(ship1);	
+		world.addEntity(ship2);
+		world.evolve(2);
+		assertEquals(-20, ship1.getVelocityX(), EPSILON);
+		assertEquals(-20, ship2.getVelocityX(), EPSILON);
+	}
 	
 }
