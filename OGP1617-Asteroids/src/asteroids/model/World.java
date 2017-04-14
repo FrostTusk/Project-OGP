@@ -40,6 +40,7 @@ import be.kuleuven.cs.som.annotate.*;
  *       
  * @author	Mathijs Hubrechtsen
  */
+@SuppressWarnings("unused")
 public class World {
 	
 		/*
@@ -289,11 +290,15 @@ public class World {
 	 */
 	@Raw
 	public void addEntity(Entity entity) throws IllegalArgumentException, NullPointerException {
-//		updateMap();
 		if (entity == null) throw new NullPointerException();
 		if ( (! canHaveAsEntity(entity)) /*|| (! entity.canHaveAsWorld(this))*/ ) throw new IllegalArgumentException();	// TODO Is this right?
 		entities.put(entity.getPosition(), entity);
-		entity.setWorld(this);
+		try {
+			entity.setWorld(this);
+		}
+		catch (IllegalArgumentException exc) {
+			throw new IllegalArgumentException(exc);
+		}
 	}
 	
 	/**
@@ -313,9 +318,10 @@ public class World {
 		entities.remove(entity.getPosition());
 	}
 	
+	
 	/**
 	 * Updates the collection of entities. This method needs to be called whenever
-	 * a entities is called to ensure that the map is properly updated.
+	 * the position of an entity is changed or an entity has to be removed from the collection.
 	 *
 	 * @see implementation
 	 */
@@ -530,10 +536,20 @@ public class World {
 				collisionEntitiesMin[0].resolveCollision(this);
 			else	// If the collision is between 2 entities.
 				collisionEntitiesMin[0].resolveCollision(collisionEntitiesMin[1]);
+			updateMap();
 			evolve(time - collisionTimeMin);
 		}
 		else update(time);
 	}
+	
+
+	
+			/*
+			 * |------------------------------------------------|
+			 * | 5. The next methods handle evolving the world.	|
+			 * |------------------------------------------------| 
+			 */
+	
 	
 	
 	/**
@@ -542,12 +558,14 @@ public class World {
 	 * 
 	 * @param	time
 	 * 			the time over which the world has to be updated.
+	 * 
+	 * @throws 	IllegalArgumentException
+	 *         	The new position of an entity is invalid.
+	 *       	| ! new Position(0,0).isValidPosition(positionX, positionY)	// TODO There exists.
 	 */
 	private void update(double time) throws IllegalArgumentException {
 		List<Entity> iterator = helper.convertCollectionToList(entities.values());	// Creates an iterator that the next
-		for (Entity entity: iterator) {									// for loop can iterate over, otherwise the map might
-//			this.removeEntity(entity);										// be changed during execution.
-//			entity.setWorld(null);
+		for (Entity entity: iterator) {									// for loop can iterate over, otherwise the map might  be changed during execution.
 			if ( (entity.getType() == "Ship") && ((Ship)entity).getThrustStatus()) ((Ship)entity).thrust(((Ship)entity).getAcceleration(), time);
 			try {	// The exceptions in removeEntity are never thrown in this method.
 				entity.move(time);
@@ -555,28 +573,34 @@ public class World {
 			catch (IllegalArgumentException exc) {	// This exception is throw if the new position of this entity is invalid
 				throw new IllegalArgumentException(exc);	
 			}
-//			this.addEntity(entity);	// These exceptions are also never thrown (because nothing moves out of bounds in this method). TODO PROBLEM!
-//			entity.setWorld(this);
 		}
-		updateMap();
+		updateMap();	// Positions were changed, the map needs to be updated.
 	}
 	
 	
+	/**
+	 * Destroys all overlapping entities in the current world.
+	 * If an entity overlaps with 2 other entities, one of the entities will not be destroyed.
+	 * The same holds true for boundaries and entity + boundary overlaps.
+	 * Helper method of evolve().
+	 */
 	public void destroyOverlaps() {
-		List<Entity> iterator = helper.convertCollectionToList(entities.values());
-		for (Entity entity1: iterator) {
-			if (!entity1.isInWorld(this)) entity1.terminate();
-			if (entity1.isTerminated()) continue;
-			for (Entity entity2: iterator) {
+		List<Entity> iterator = helper.convertCollectionToList(entities.values());	// Creates an iterator
+		for (Entity entity1: iterator) {	// that iterates over all the entities of this world.
+			if (!entity1.isInWorld(this)) entity1.terminate();	// If the entity "overlaps" the world, terminate it.
+			if (entity1.isTerminated()) continue;	// If it has been terminated, stop checking for it.
+			for (Entity entity2: iterator) {	// Otherwise find all overlaps with other entities.
 				if (entity1 == entity2) continue;
 				if (entity2.isTerminated()) continue;
-				if (entity1.overlap(entity2) || entity2.overlap(entity1)) {
+				if (entity1.overlap(entity2) || entity2.overlap(entity1)) {	// If two entities overlap, destroy them.
 					entity1.terminate();
 					entity2.terminate();
 				}
 			}
 		}
 	}
+	
+	
 	
 		/*
 	     * |----------------------------|
@@ -614,18 +638,17 @@ public class World {
 		}
 	}
 	
+	
 	/**
 	 * Returns all entities registered in this world.
 	 * 
 	 * @return	Returns all entities registered in this world.
-	 * 			// TODO Declarative Documentation.
+	 * 			| entity.getWorld() == this
 	 */
 	@Raw
 	public Set<Entity> getAllEntities() {
 		Set<Entity> entitiesResult = new HashSet<Entity>();
-		for (Entity entity: entities.values()) {
-			entitiesResult.add(entity);
-		}
+		for (Entity entity: entities.values()) entitiesResult.add(entity);
 		return entitiesResult;
 	}
 	
@@ -633,15 +656,14 @@ public class World {
 	 * Returns all ships registered in this world.
 	 * 
 	 * @return	Returns all ships registered in this world.
-	 * 			// TODO Declarative Documentation.
+	 * 			| ship.getWorld() == this
 	 */
 	@Raw
 	public Set<Ship> getAllShips() {
 		Set<Entity> entitiesResult = getAllEntities();
 		Set<Ship> shipsResult = new HashSet<Ship>();
-		for (Entity entity: entitiesResult)
+		for (Entity entity: entitiesResult) 
 			if (entity.getType() == "Ship") shipsResult.add((Ship)entity);
-		
 		return shipsResult;
 	}
 	
@@ -649,7 +671,7 @@ public class World {
 	 * Returns all bullets registered in this world.
 	 * 
 	 * @return 	Returns all bullets registered in this world.
-	 * 			// TODO Declarative Documentation.
+	 * 			| bullet.getWorld() == this
 	 */
 	@Raw
 	public Set<Bullet> getAllBullets() {
@@ -657,7 +679,6 @@ public class World {
 		Set<Bullet> bulletsResult = new HashSet<Bullet>();
 		for (Entity entity: entitiesResult)
 			if (entity.getType() == "Bullet") bulletsResult.add((Bullet)entity);
-		
 		return bulletsResult;
 	}
 	

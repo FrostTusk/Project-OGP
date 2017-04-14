@@ -8,9 +8,10 @@ import org.junit.Test;
 import asteroids.facade.Facade;
 import asteroids.model.Bullet;
 import asteroids.model.Ship;
-import asteroids.part1.facade.IFacade;
+import asteroids.part2.facade.IFacade;
 import asteroids.util.ModelException;
 
+@SuppressWarnings("deprecation")
 public class TestFacade {
 
 	private static final double EPSILON = 0.0001;
