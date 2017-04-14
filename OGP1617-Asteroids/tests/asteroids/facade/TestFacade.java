@@ -1520,4 +1520,18 @@ public class TestFacade {
 		assertTrue(facade.isTerminatedShip(ship));
 	}
 	
+	@Test
+	public void testHookupGetShipMass() throws ModelException {
+		Ship ship = facade.createShip(10, 10, 50, 0, 10, Math.PI, Math.pow(10, 30));
+		assertEquals(Math.pow(10, 30), facade.getShipMass(ship), EPSILON);
+	}
+	
+	@Test
+	public void testHookupGetShipWorld() throws ModelException {
+		Ship ship = facade.createShip(10, 10, 50, 0, 10, Math.PI, 0);
+		World world = facade.createWorld(800, 800);
+		ship.setWorld(world);
+		assertTrue(facade.getShipWorld(ship) == world);
+	}
+	
 }
