@@ -575,7 +575,7 @@ public class Facade implements IFacade {
 	@Override
 	public double getTimeCollisionEntity(Object entity1, Object entity2) throws ModelException {
 		try {
-			return ((Entity) entity1).getTimeToCollision((Entity)entity1);
+			return ((Entity) entity1).getTimeToCollision((Entity)entity2);
 		}
 		catch (IllegalArgumentException exc) {
 			throw new ModelException(exc);
@@ -588,7 +588,7 @@ public class Facade implements IFacade {
 	@Override
 	public double[] getPositionCollisionEntity(Object entity1, Object entity2) throws ModelException {
 		try {
-			return ((Entity) entity1).getCollisionPosition((Entity)entity1);
+			return ((Entity) entity1).getCollisionPosition((Entity)entity2);
 		}
 		catch (IllegalArgumentException exc) {
 			throw new ModelException(exc);

@@ -324,7 +324,9 @@ public class World {
 					entitiesList.add(entity);
 			}
 		}
-		for (Entity entity: entitiesList) this.addEntity(entity);
+		for (Entity entity: entitiesList) /*this.addEntity(entity);*/{
+			entities.put(entity.getPosition(), entity);
+		}
 	}
 	
 	
@@ -588,7 +590,7 @@ public class World {
 	 */
 	private void resolveEvolve(double collisionTimeMin, Entity[] collisionEntitiesMin, double time) 
 			throws IllegalArgumentException {
-		if ( (0 < collisionTimeMin) && (collisionTimeMin < time) ) {	// Collision time needs to be positive. -1 is also used to
+		if ( (0 < collisionTimeMin) && (collisionTimeMin <= time) ) {	// Collision time needs to be positive. -1 is also used to
 			try {				// shortcut immediately from this comparison to the end.
 				update(collisionTimeMin);
 			}
@@ -596,7 +598,7 @@ public class World {
 				throw new IllegalArgumentException(exc);	
 			}
 		}	// We don't include zero in the above procedure, because update clears updatedEntities.
-		if ( (0 <= collisionTimeMin) && (collisionTimeMin < time) ) {	// This is so we can also handle the zero case.
+		if ( (0 <= collisionTimeMin) && (collisionTimeMin <= time) ) {	// This is so we can also handle the zero case.
 				if ( collisionEntitiesMin[0] == collisionEntitiesMin[1] )	// If the collision is with the boundary
 					collisionEntitiesMin[0].resolveCollision(this);
 				else	// If the collision is between 2 entities.
@@ -653,7 +655,10 @@ public class World {
 	public void destroyOverlaps() {
 		List<Entity> iterator = helper.convertCollectionToList(entities.values());	// Creates an iterator
 		for (Entity entity1: iterator) {	// that iterates over all the entities of this world.
-			if (!entity1.isInWorld(this)) entity1.terminate();	// If the entity "overlaps" the world, terminate it.
+			if (!entity1.isInWorld(this)) {
+				;	// This is to be able to debug at terminate.
+				entity1.terminate();	// If the entity "overlaps" the world, terminate it.
+			}
 			if (entity1.isTerminated()) continue;	// If it has been terminated, stop checking for it.
 			for (Entity entity2: iterator) {	// Otherwise find all overlaps with other entities.
 				if (entity1 == entity2) continue;	// These continue statements are necessary

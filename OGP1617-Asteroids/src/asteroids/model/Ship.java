@@ -791,7 +791,7 @@ public class Ship extends Entity {
 		double Jy = J * (ship.getPosition().getPositionY() - getPosition().getPositionY()) / (getRadius() + ship.getRadius());
 		
 		this.setVelocity(getVelocityX() + Jx/getMass(), getVelocityY() + Jy/getMass());
-		ship.setVelocity(ship.getVelocityX() - Jx/ship.getMass(), ship.getVelocityY() - Jy / ship.getMass());
+		ship.setVelocity(ship.getVelocityX() - Jx/ship.getMass(), ship.getVelocityY() - Jy/ship.getMass());
 	}
 	
 	

@@ -860,7 +860,9 @@ public class TestWorld {
 		World world = new World(1000, 1000);
 		Ship ship = new Ship(950, 500, 30, 10, 0, 20, 10);
 		world.addEntity(ship);	
-		world.evolve(2);
+		world.evolve(1);
+		world.evolve(1);
+		assertTrue(ship.isTerminated());
 		assertEquals(-30, ship.getVelocityX(), EPSILON);
 		assertEquals(10, ship.getVelocityY(), EPSILON);
 	}

@@ -11,11 +11,9 @@ import org.junit.Test;
 
 import asteroids.facade.Facade;
 import asteroids.helper.Entity;
-import asteroids.helper.Position;
 import asteroids.model.Bullet;
 import asteroids.model.Ship;
 import asteroids.model.World;
-import asteroids.part2.CollisionListener;
 import asteroids.part2.facade.IFacade;
 import asteroids.util.ModelException;
 
