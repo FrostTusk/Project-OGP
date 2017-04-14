@@ -651,7 +651,7 @@ public class TestShip {
 		assertFalse(ship.getAllBullets().contains(bullet));
 		world.evolve(2);
 		assertEquals(1, bullet.getBoundaryCollisionCounter(), EPSILON);
-		ship.reloadBullet(bullet);
+//		ship.reloadBullet(bullet); TODO Already collided in evolve
 		assertTrue(ship.getAllBullets().contains(bullet));
 	}
 	

@@ -81,6 +81,34 @@ public class Helper {
 		return result;
 	}
 	
+	/**
+	 * Converts a given List to an Array.
+	 * 
+	 * @param 	list
+	 * 			The list to be converted
+	 * 
+	 * @return	Returns an array made up by the elements in list.
+	 */	
+	public <T> List<T> convertArrayToList(T[] array) {
+		List<T> list = new ArrayList<T>();
+		for (T item: array) list.add(item);
+		return list;
+	}
+	
+	
+	/**
+	 * Converts a given Set to a List.
+	 * 
+	 * @param 	collection
+	 * 			The collection to be converted
+	 * 
+	 * @return	Returns an array made up by the elements in list.
+	 */
+	public <T> List<T> convertCollectionToList(Collection<T> collection) {
+		List<T> list = new ArrayList<T>();
+		for (T item: collection) list.add(item);
+		return list;
+	}
 	
 	/**
 	 * Converts a given Set to a List.
@@ -96,19 +124,6 @@ public class Helper {
 		return list;
 	}
 	
-	/**
-	 * Converts a given Set to a List.
-	 * 
-	 * @param 	collection
-	 * 			The collection to be converted
-	 * 
-	 * @return	Returns an array made up by the elements in list.
-	 */
-	public <T> List<T> convertCollectionToList(Collection<T> collection) {
-		List<T> list = new ArrayList<T>();
-		for (T item: collection) list.add(item);
-		return list;
-	}
 	
 	/**
 	 * Calculates the cross product with a vector and itself.

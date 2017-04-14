@@ -25,10 +25,13 @@ import be.kuleuven.cs.som.annotate.*;
  * #2# Association Methods
  * 		3. Methods that handle the relation with Entities
  * #3# Advanced Methods
- * 		4. Methods that handle Collision Detection 
- * 		5. Methods that handle evolving the world
+ * 		4. Methods that handle Collision Detection
+ * 		5. Helper Methods for Collision Detection
+ * #4# Evolve Methods 
+ * 		6. Methods that handle evolving the world
+ * 		7. Helper Methods for evolving the world
  * #4# Query Methods
- * 		6. Methods that handle queries of the world
+ * 		8. Methods that handle queries of the world
  */
 
 /**
@@ -40,7 +43,7 @@ import be.kuleuven.cs.som.annotate.*;
  *       
  * @author	Mathijs Hubrechtsen
  */
-@SuppressWarnings("unused")
+
 public class World {
 	
 		/*
@@ -194,7 +197,6 @@ public class World {
 	 * 
 	 * @see implementation
 	 */
-	// TODO Should this method be public?
 	@Raw
 	public void setUpperBound(double newUpperBound) {
 		upperBound = newUpperBound;
@@ -291,7 +293,7 @@ public class World {
 	@Raw
 	public void addEntity(Entity entity) throws IllegalArgumentException, NullPointerException {
 		if (entity == null) throw new NullPointerException();
-		if ( (! canHaveAsEntity(entity)) /*|| (! entity.canHaveAsWorld(this))*/ ) throw new IllegalArgumentException();	// TODO Is this right?
+		if (! canHaveAsEntity(entity)) throw new IllegalArgumentException();
 		entities.put(entity.getPosition(), entity);
 		try {
 			entity.setWorld(this);
@@ -338,6 +340,8 @@ public class World {
 		}
 	}
 	
+	
+	
 		/*
 	     * |--------------------------------|
 	     * | #Header-3# Advanced Methods.	|
@@ -367,62 +371,36 @@ public class World {
 		Entity[] collisionEntitiesMin = new Entity[2];
 		
 		for (Entity entity1: entities.values()) {
-			collisionTimeMin = iterateEntities(collisionTimeMin, collisionEntitiesMin, entity1);
-			collisionTimeMin = iterateBoundaries(collisionTimeMin, collisionEntitiesMin, entity1);
+			collisionTimeMin = iterateEntities(collisionTimeMin, collisionEntitiesMin, entity1, -1);
+			collisionTimeMin = iterateBoundaries(collisionTimeMin, collisionEntitiesMin, entity1, -1);
 		}
 		
 		if (collisionTimeMin == -1) return null;
 		return collisionEntitiesMin;
-	}
-
-	/**
-	 * Iterates an entity over all other entities and finds the shortest time.
-	 * Helper Method for getFirstCollisionEntities().
-	 * 
-	 * @see implementation
-	 */
-	@Raw
-	private double iterateEntities(double collisionTimeMin, Entity[] collisionEntitiesMin, Entity entity1) {
-		double collisionTimeTemp;
-		for (Entity entity2: entities.values()) {
-			if (entity1 == entity2) continue;	// Only check if the entities are different.
-			try {
-				collisionTimeTemp = entity1.getTimeToCollision(entity2);
-			}
-			catch (IllegalArgumentException exc) {	// Exception thrown if the entities overlap.
-				collisionTimeTemp = 0;	// If the exception is thrown, there is a collision at time 0.
-			}
-			
-			if (!( (collisionTimeTemp < collisionTimeMin) || (collisionTimeMin == -1 ) )) continue;
-			collisionTimeMin = collisionTimeTemp;	// This code is only reached if the new time is smaller
-			collisionEntitiesMin[0] = entity1;	// Than the old time.
-			collisionEntitiesMin[1] = entity2;
-		}
-		return collisionTimeMin;
-	}
+	}	
+	
 	
 	/**
-	 * Iterates an entity over the boundary with this world and finds the shortest time.
-	 * Helper Method for getFirstCollisionEntities().
+	 * Gets the entities involved in the first collision in the current world starting from a certain value.
 	 * 
-	 * @see implementation
+	 * @return	Returns the entities involved in the first collision
+	 * 			of this world. If a boundary is involved the entities returned
+	 * 			will be the entity involved in the boundary collision and itself.
+	 * 			// TODO Declarative Documentation.
 	 */
 	@Raw
-	private double iterateBoundaries(double collisionTimeMin, Entity[] collisionEntitiesMin, Entity entity1) {
-		double collisionTimeTemp;
-		try {
-			collisionTimeTemp = entity1.getTimeToCollision(this);
+	public Entity[] getFirstCollisionEntities(double time) {
+		double collisionTimeMin = -1;
+		Entity[] collisionEntitiesMin = new Entity[2];
+		
+		for (Entity entity1: entities.values()) {
+			collisionTimeMin = iterateEntities(collisionTimeMin, collisionEntitiesMin, entity1, time);
+			collisionTimeMin = iterateBoundaries(collisionTimeMin, collisionEntitiesMin, entity1, time);
 		}
-		catch (IllegalArgumentException exc) { // Exception thrown if the entity is overlapping.
-			collisionTimeTemp = 0;	// If the exception is thrown, there is a collision at time 0.
-		}
-		if (!( (collisionTimeTemp < collisionTimeMin) || (collisionTimeMin == -1 ) )) return collisionTimeMin;
-		collisionTimeMin = collisionTimeTemp;
-		collisionEntitiesMin[0] = entity1;
-		collisionEntitiesMin[1] = entity1;
-		return collisionTimeMin;
-	}
-	
+		
+		if (collisionTimeMin == -1) return null;
+		return collisionEntitiesMin;
+	}	
 	
 	/**
 	 * Gets the position of the first collision in the current world.
@@ -441,6 +419,7 @@ public class World {
 		else
 			return getFirstCollisionEntities()[0].getCollisionPosition(getFirstCollisionEntities()[1]);
 	}
+	
 	
 	/**
 	 * Gets the time of the first collision in the current world.
@@ -471,14 +450,84 @@ public class World {
 		return collisionTimeMin;
 	}
 	
-	
 
+	
+			/*
+			 * |--------------------------------------------------------------------|
+			 * | 5. The next methods handle helper methods for Collision Detection.	|
+			 * |--------------------------------------------------------------------| 
+			 */
+	
+	
+	
+	/**
+	 * Iterates an entity over all other entities and finds the shortest time.
+	 * Helper Method for getFirstCollisionEntities().
+	 * 
+	 * @see implementation
+	 */
+	@Raw
+	private double iterateEntities(double collisionTimeMin, Entity[] collisionEntitiesMin, Entity entity1, double time) {
+		double collisionTimeTemp;
+		for (Entity entity2: entities.values()) {
+			if (entity1 == entity2) continue;	// Only check if the entities are different.
+			try {
+				collisionTimeTemp = entity1.getTimeToCollision(entity2);
+			}
+			catch (IllegalArgumentException exc) {	// Exception thrown if the entities overlap.
+				collisionTimeTemp = 0;	// If the exception is thrown, there is a collision at time 0.
+			}
+			
+			if ( !((collisionTimeTemp < collisionTimeMin) || (collisionTimeMin == -1 )) || (collisionTimeTemp <= time) ) continue;
+			collisionTimeMin = collisionTimeTemp;	// This code is only reached if the new time is smaller
+			collisionEntitiesMin[0] = entity1;	// Than the old time.
+			collisionEntitiesMin[1] = entity2;
+		}
+		return collisionTimeMin;
+	}
+	
+	/**
+	 * Iterates an entity over the boundary with this world and finds the shortest time.
+	 * Helper Method for getFirstCollisionEntities().
+	 * 
+	 * @see implementation
+	 */
+	@Raw
+	private double iterateBoundaries(double collisionTimeMin, Entity[] collisionEntitiesMin, Entity entity1, double time) {
+		double collisionTimeTemp;
+		try {
+			collisionTimeTemp = entity1.getTimeToCollision(this);
+		}
+		catch (IllegalArgumentException exc) { // Exception thrown if the entity is overlapping.
+			collisionTimeTemp = 0;	// If the exception is thrown, there is a collision at time 0.
+		}
+		
+		if ( !((collisionTimeTemp < collisionTimeMin) || (collisionTimeMin == -1 )) || (collisionTimeTemp <= time) ) return collisionTimeMin;
+		collisionTimeMin = collisionTimeTemp;
+		collisionEntitiesMin[0] = entity1;
+		collisionEntitiesMin[1] = entity1;
+		return collisionTimeMin;
+	}
+	
+	
+	
+		/*
+	     * |----------------------------|
+	     * | #Header-4# Evolve Methods.	|
+	     * |----------------------------| 
+	     */
+	
+	
 			/*
 			 * |------------------------------------------------|
-			 * | 5. The next methods handle evolving the world.	|
+			 * | 6. The next methods handle evolving the world.	|
 			 * |------------------------------------------------| 
 			 */
 	
+	/**
+	 * Map holding all entities that had a collision at time zero and have been updated
+	 */
+	private List<Entity[]> updatedEntities = new ArrayList<Entity[]>();
 	
 	
 	/**
@@ -492,13 +541,23 @@ public class World {
 		destroyOverlaps();	// Destroy all the entities that are currently invalid => overlap something.
 		if (time < 0) throw new IllegalArgumentException();
 		Entity[] collisionEntitiesMin = getFirstCollisionEntities();
+//		// TODO Problem with intervals. // TODO Rewrite!
 		if (collisionEntitiesMin == null) resolveEvolve(-1, collisionEntitiesMin, time);	// There are no entities in this World.
 		else {
-			double collisionTimeMin;
-			if ( collisionEntitiesMin[0] == collisionEntitiesMin[1] )	// If the collision is with the boundary.
-				collisionTimeMin = collisionEntitiesMin[0].getTimeToCollision(this);
-			else	// If the collision is between 2 entities.
-				collisionTimeMin = collisionEntitiesMin[0].getTimeToCollision(collisionEntitiesMin[1]);	// TODO PROBLEM OVERLAP
+			double collisionTimeMin = -1;
+			for (int i = 0; i < 2; i ++) {
+				if (collisionEntitiesMin == null) collisionEntitiesMin = getFirstCollisionEntities(0);
+				if (collisionEntitiesMin == null) resolveEvolve(-1, collisionEntitiesMin, time);
+				
+				if ( collisionEntitiesMin[0] == collisionEntitiesMin[1] )	// If the collision is with the boundary.
+					collisionTimeMin = collisionEntitiesMin[0].getTimeToCollision(this);
+				else	// If the collision is between 2 entities.
+					collisionTimeMin = collisionEntitiesMin[0].getTimeToCollision(collisionEntitiesMin[1]);	// TODO PROBLEM OVERLAP
+				
+				if ( alreadyFound(collisionEntitiesMin) && (collisionTimeMin == 0) ) 
+					collisionEntitiesMin = findOtherCollisionsAtZero(); // TODO Problem with intervals.
+				else break;													// TODO Find the next entities	
+			}
 			
 			try {	// This is the only possible exception that is thrown in this method (outside of the one for the parameter);
 				resolveEvolve(collisionTimeMin, collisionEntitiesMin, time); // All other exceptions will never occur in the execution of this method
@@ -531,23 +590,24 @@ public class World {
 			catch (IllegalArgumentException exc) {// This exception is throw if the new position of an entity is invalid
 				throw new IllegalArgumentException(exc);	
 			}
-			
-			if ( collisionEntitiesMin[0] == collisionEntitiesMin[1] )	// If the collision is with the boundary
-				collisionEntitiesMin[0].resolveCollision(this);
-			else	// If the collision is between 2 entities.
-				collisionEntitiesMin[0].resolveCollision(collisionEntitiesMin[1]);
-			updateMap();
-			evolve(time - collisionTimeMin);
 		}
+		 if ( (0 <= collisionTimeMin) && (collisionTimeMin < time) ) {
+				if ( collisionEntitiesMin[0] == collisionEntitiesMin[1] )	// If the collision is with the boundary
+					collisionEntitiesMin[0].resolveCollision(this);
+				else	// If the collision is between 2 entities.
+					collisionEntitiesMin[0].resolveCollision(collisionEntitiesMin[1]);
+				updatedEntities.add(collisionEntitiesMin);
+				evolve(time - collisionTimeMin);
+		 }
 		else update(time);
 	}
 	
 
 	
 			/*
-			 * |------------------------------------------------|
-			 * | 5. The next methods handle evolving the world.	|
-			 * |------------------------------------------------| 
+			 * |--------------------------------------------------------------------|
+			 * | 7. The next methods handle helper methods for evolving the world.	|
+			 * |--------------------------------------------------------------------| 
 			 */
 	
 	
@@ -564,6 +624,7 @@ public class World {
 	 *       	| ! new Position(0,0).isValidPosition(positionX, positionY)	// TODO There exists.
 	 */
 	private void update(double time) throws IllegalArgumentException {
+		updatedEntities.clear();
 		List<Entity> iterator = helper.convertCollectionToList(entities.values());	// Creates an iterator that the next
 		for (Entity entity: iterator) {									// for loop can iterate over, otherwise the map might  be changed during execution.
 			if ( (entity.getType() == "Ship") && ((Ship)entity).getThrustStatus()) ((Ship)entity).thrust(((Ship)entity).getAcceleration(), time);
@@ -601,18 +662,44 @@ public class World {
 	}
 	
 	
+	public Entity[] findOtherCollisionsAtZero() {
+		List<Entity> iterator = helper.convertCollectionToList(entities.values());
+		Entity[] collisionEntitiesMin= new Entity[2];
+		for (Entity entity1: iterator) {
+			collisionEntitiesMin[0] = entity1;
+			for (Entity entity2: iterator) {
+				collisionEntitiesMin[1] = entity2;
+				if (entity1 == entity2) continue;
+				if ( (entity1.getTimeToCollision(entity2) == 0) && (!alreadyFound(collisionEntitiesMin)) )
+					return collisionEntitiesMin;
+			}
+			collisionEntitiesMin[1] = entity1;
+			if ( (entity1.getTimeToCollision(this) == 0) && (!alreadyFound(collisionEntitiesMin)) )
+				return collisionEntitiesMin;
+		}
+		return null;
+	}
+	
+	
+	public boolean alreadyFound(Entity[] collisionEntitiesMin) {
+		if (collisionEntitiesMin == null) return false;
+		for (Entity[] found: updatedEntities)
+			if ( (found[0] == collisionEntitiesMin[0]) && (found[1] == collisionEntitiesMin[1]) ) return true;
+		return false;
+	}
+	
+	
 	
 		/*
 	     * |----------------------------|
-	     * | #Header-4# Query Methods.	|
+	     * | #Header-5# Query Methods.	|
 	     * |----------------------------| 
 	     */
 	
 	
-	
 			/*
 			 * |----------------------------------------------------|
-			 * | 6. The next methods handle queries of the world.	|
+			 * | 8. The next methods handle queries of the world.	|
 			 * |----------------------------------------------------| 
 			 */
 
