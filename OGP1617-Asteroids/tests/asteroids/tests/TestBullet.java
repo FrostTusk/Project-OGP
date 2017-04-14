@@ -2,15 +2,13 @@ package asteroids.tests;
 
 import static org.junit.Assert.*;
 
-import org.junit.Before;
 import org.junit.Test;
 
-import asteroids.facade.Facade;
 import asteroids.helper.Position;
 import asteroids.model.Bullet;
 import asteroids.model.Ship;
 import asteroids.model.World;
-import asteroids.part2.facade.IFacade;
+
 
 /* 
  * // TODO Do NOT get rid of tests without telling me!
@@ -28,14 +26,6 @@ import asteroids.part2.facade.IFacade;
 public class TestBullet {
 
 	private static final double EPSILON = 0.0001;
-
-	IFacade facade;
-
-	@Before
-	public void setUp() {
-		facade = new Facade();
-	}
-	
 	
 	
 			/*
