@@ -3,7 +3,9 @@ package asteroids.facade;
 import static org.junit.Assert.*;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.Before;
@@ -1626,7 +1628,246 @@ public class TestFacade {
 		facade.loadBulletOnShip(ship, bullet);
 		facade.fireBullet(ship);
 		assertEquals(ship, facade.getBulletSource(bullet));
-		
+	}
+	
+	@Test
+	public void testHookupCreateWorld() throws ModelException {
+		World world = facade.createWorld(1000, 1000);
+		assertNotNull(world);
+	}
+	
+	@Test
+	public void testHookupTerminateWorld() throws ModelException {
+		World world = facade.createWorld(1000, 1000);
+		facade.terminateWorld(world);
+		assertTrue(facade.isTerminatedWorld(world));
+	}
+	
+	@Test
+	public void testHookupIsTerminatedWorld() throws ModelException {
+		World world = facade.createWorld(1000, 1000);
+		assertNotNull(world);
+		assertFalse(facade.isTerminatedWorld(world));
+		facade.terminateWorld(world);
+		assertTrue(facade.isTerminatedWorld(world));
+	}
+	
+	@Test
+	public void testHookupGetWorldSize() throws ModelException {
+		World world = facade.createWorld(1000, 1200);
+		assertEquals(1000, facade.getWorldSize(world)[0], EPSILON);
+		assertEquals(1200, facade.getWorldSize(world)[1], EPSILON);
+	}
+	
+	@Test
+	public void testHookupGetWorldShips() throws ModelException {
+		World world = facade.createWorld(1000, 1200);
+		Ship ship = facade.createShip(10, 10, 50, 0, 10, Math.PI, 0);		
+		facade.addShipToWorld(world, ship);
+		Set<Ship> ships = world.getAllShips();
+		assertEquals(ships, facade.getWorldShips(world));
+	}
+	
+	@Test
+	public void testHookupGetWorldBullets() throws ModelException {
+		World world = facade.createWorld(1000, 1200);
+		Bullet bullet = facade.createBullet(500, 500, 250, 0, 1);		
+		facade.addBulletToWorld(world, bullet);
+		Set<Bullet> bullets = world.getAllBullets();
+		assertEquals(bullets, facade.getWorldBullets(world));
+	}
+	
+	@Test
+	public void testHookupAddShipToWorld() throws ModelException {
+		World world = facade.createWorld(1000, 1200);
+		Ship ship = facade.createShip(10, 10, 50, 0, 10, Math.PI, 0);		
+		facade.addShipToWorld(world, ship);
+		assertTrue(facade.getWorldShips(world).contains(ship));
+	}
+	
+	@Test
+	public void testHookupRemoveShipFromWorld() throws ModelException {
+		World world = facade.createWorld(1000, 1200);
+		Ship ship = facade.createShip(10, 10, 50, 0, 10, Math.PI, 0);		
+		facade.addShipToWorld(world, ship);
+		assertTrue(facade.getWorldShips(world).contains(ship));
+		facade.removeShipFromWorld(world, ship);
+		assertFalse(facade.getWorldShips(world).contains(ship));
+	}
+	
+	@Test
+	public void testHookupAddBulletToWorld() throws ModelException {
+		World world = facade.createWorld(1000, 1200);
+		Bullet bullet = facade.createBullet(500, 500, 250, 0, 1);	
+		facade.addBulletToWorld(world, bullet);
+		assertTrue(facade.getWorldBullets(world).contains(bullet));
+	}
+	
+	@Test
+	public void testHookupRemoveBulletFromWorld() throws ModelException {
+		World world = facade.createWorld(1000, 1200);
+		Bullet bullet = facade.createBullet(500, 500, 250, 0, 1);	
+		facade.addBulletToWorld(world, bullet);
+		assertTrue(facade.getWorldBullets(world).contains(bullet));
+		facade.removeBulletFromWorld(world, bullet);
+		assertFalse(facade.getWorldBullets(world).contains(bullet));
+	}
+	
+	@Test
+	public void testHookupGetBulletsOnShip() throws ModelException {
+		Ship ship = facade.createShip(500, 500, 50, 0, 10, Math.PI, 0);	
+		Bullet bullet = facade.createBullet(500, 500, 250, 0, 1);	
+		facade.loadBulletOnShip(ship, bullet);
+		Set<Bullet> bullets = ship.getAllBullets();
+		assertEquals(bullets, facade.getBulletsOnShip(ship));
+	}
+	
+	@Test
+	public void testHookupGetNbBulletsOnShip() throws ModelException {
+		Ship ship = facade.createShip(500, 500, 50, 0, 10, Math.PI, 0);	
+		Bullet bullet = facade.createBullet(500, 500, 250, 0, 1);	
+		facade.loadBulletOnShip(ship, bullet);
+		assertEquals(1, facade.getNbBulletsOnShip(ship));
+	}
+	
+	@Test
+	public void testHookupLoadBulletOnShip() throws ModelException {
+		Ship ship = facade.createShip(500, 500, 50, 0, 10, Math.PI, 0);	
+		Bullet bullet = facade.createBullet(500, 500, 250, 0, 1);	
+		assertEquals(0, facade.getNbBulletsOnShip(ship));
+		facade.loadBulletOnShip(ship, bullet);
+		assertEquals(1, facade.getNbBulletsOnShip(ship));
+	}
+	
+	@Test
+	public void testHookupLoadBulletsOnShip() throws ModelException {
+		Ship ship = facade.createShip(500, 500, 50, 0, 10, Math.PI, 0);	
+		Bullet bullet1 = facade.createBullet(500, 500, 250, 0, 1);
+		Bullet bullet2 = facade.createBullet(500, 500, 250, 0, 1);
+		List<Bullet> bullets = Arrays.asList(bullet1, bullet2);
+		assertEquals(0, facade.getNbBulletsOnShip(ship));
+		facade.loadBulletsOnShip(ship, bullets);
+		assertEquals(2, facade.getNbBulletsOnShip(ship));
+	}
+	
+	@Test
+	public void testHookupRemoveBulletFromShip() throws ModelException {
+		Ship ship = facade.createShip(500, 500, 50, 0, 10, Math.PI, 0);	
+		Bullet bullet1 = facade.createBullet(500, 500, 250, 0, 1);
+		Bullet bullet2 = facade.createBullet(500, 500, 250, 0, 1);
+		facade.loadBulletOnShip(ship, bullet1);
+		facade.loadBulletOnShip(ship, bullet2);
+		assertTrue(ship.getAllBullets().contains(bullet1));
+		assertTrue(ship.getAllBullets().contains(bullet2));
+		facade.removeBulletFromShip(ship, bullet2);
+		assertTrue(ship.getAllBullets().contains(bullet1));
+		assertFalse(ship.getAllBullets().contains(bullet2));
+	}
+	
+	@Test
+	public void testHookupFireBullet() throws ModelException {
+		World world = facade.createWorld(1000, 1200);
+		Ship ship = facade.createShip(500, 500, 50, 0, 10, Math.PI, 0);	
+		Bullet bullet = facade.createBullet(500, 500, 250, 0, 1);
+		facade.addShipToWorld(world, ship);
+		facade.loadBulletOnShip(ship, bullet);
+		facade.fireBullet(ship);
+		assertTrue(bullet.hasBeenFired());
+	}
+	
+	@Test
+	public void testHookupGetTimeCollisionBoundary() throws ModelException {
+		World world = facade.createWorld(1000, 1200);
+		Ship ship = facade.createShip(490, 500, 50, 0, 10, Math.PI, 0);	
+		facade.addShipToWorld(world, ship);
+		assertEquals(10, facade.getTimeCollisionBoundary(ship), EPSILON);
+	}
+
+	@Test
+	public void testHookupGetPositionCollisionBoundary() throws ModelException {
+		World world = facade.createWorld(1000, 1200);
+		Ship ship = facade.createShip(500, 500, 50, 0, 10, Math.PI, 0);	
+		facade.addShipToWorld(world, ship);
+		assertEquals(1000, facade.getPositionCollisionBoundary(ship)[0], EPSILON);
+		assertEquals(500, facade.getPositionCollisionBoundary(ship)[1], EPSILON);
+	}
+	
+	@Test
+	public void testHookupGetTimeCollisionEntity() throws ModelException {
+		World world = facade.createWorld(1000, 1200);
+		Ship ship1 = facade.createShip(490, 500, 50, 0, 10, Math.PI, 0);	
+		Ship ship2 = facade.createShip(610, 500, -50, 0, 10, Math.PI, 0);	
+		facade.addShipToWorld(world, ship1);
+		facade.addShipToWorld(world, ship2);
+		assertEquals(1, facade.getTimeCollisionEntity(ship1, ship2), EPSILON);
+	}
+
+	@Test
+	public void testHookupGetPositionCollisionEntity() throws ModelException {
+		World world = facade.createWorld(1000, 1200);
+		Ship ship1 = facade.createShip(490, 500, 50, 0, 10, Math.PI, 0);	
+		Ship ship2 = facade.createShip(610, 500, -50, 0, 10, Math.PI, 0);	
+		facade.addShipToWorld(world, ship1);
+		facade.addShipToWorld(world, ship2);
+		assertEquals(550, facade.getPositionCollisionEntity(ship1, ship2)[0], EPSILON);
+		assertEquals(500, facade.getPositionCollisionEntity(ship1, ship2)[1], EPSILON);
+	}
+	
+	@Test
+	public void testHookupGetTimeNextCollision() throws ModelException {
+		World world = facade.createWorld(1000, 1200);
+		Ship ship1 = facade.createShip(490, 500, 50, 0, 10, Math.PI, 0);	
+		Ship ship2 = facade.createShip(610, 500, -50, 0, 10, Math.PI, 0);	
+		facade.addShipToWorld(world, ship1);
+		facade.addShipToWorld(world, ship2);
+		assertEquals(1, facade.getTimeNextCollision(world), EPSILON);
+	}
+
+	@Test
+	public void testHookupGetPositionNextCollision() throws ModelException {
+		World world = facade.createWorld(1000, 1200);
+		Ship ship1 = facade.createShip(490, 500, 50, 0, 10, Math.PI, 0);	
+		Ship ship2 = facade.createShip(610, 500, -50, 0, 10, Math.PI, 0);	
+		facade.addShipToWorld(world, ship1);
+		facade.addShipToWorld(world, ship2);
+		assertEquals(550, facade.getPositionNextCollision(world)[0], EPSILON);
+		assertEquals(500, facade.getPositionNextCollision(world)[1], EPSILON);
+	}
+	
+	@Test
+	public void testHookupEvolve() throws ModelException {
+		World world = facade.createWorld(1000, 1200);
+		Ship ship1 = facade.createShip(600, 500, 50, 0, 10, Math.PI, 0);	
+		Ship ship2 = facade.createShip(600, 600, -50, 0, 10, Math.PI, 0);	
+		facade.addShipToWorld(world, ship1);
+		facade.addShipToWorld(world, ship2);
+		facade.evolve(world, 2, null);
+		assertEquals(700, facade.getShipPosition(ship1)[0], EPSILON);
+		assertEquals(500, facade.getShipPosition(ship1)[1], EPSILON);
+		assertEquals(500, facade.getShipPosition(ship2)[0], EPSILON);
+		assertEquals(600, facade.getShipPosition(ship2)[1], EPSILON);
+	}
+	
+	@Test
+	public void testHookupGetEntityAt() throws ModelException {
+		World world = facade.createWorld(1000, 1200);
+		Ship ship1 = facade.createShip(600, 500, 50, 0, 10, Math.PI, 0);	
+		Ship ship2 = facade.createShip(600, 600, -50, 0, 10, Math.PI, 0);	
+		facade.addShipToWorld(world, ship1);
+		facade.addShipToWorld(world, ship2);
+		assertEquals(ship1, facade.getEntityAt(world, 600, 500));
+		assertEquals(ship2, facade.getEntityAt(world, 600, 600));
+	}
+	
+	@Test
+	public void testHookupGetWorldEntities() throws ModelException {
+		World world = facade.createWorld(1000, 1200);
+		Bullet bullet = facade.createBullet(500, 500, 250, 0, 1);
+		Ship ship = facade.createShip(10, 10, 50, 0, 10, Math.PI, 0);		
+		facade.addShipToWorld(world, ship);
+		facade.addBulletToWorld(world, bullet);
+		Set<Entity> entities = world.getAllEntities();
+		assertEquals(entities, facade.getEntities(world));
 	}
 	
 	
