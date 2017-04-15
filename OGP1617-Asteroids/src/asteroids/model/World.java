@@ -95,7 +95,8 @@ public class World {
 	 */
 	@Raw
 	public void terminate() {
-		for (Entity entity: entities.values()) {
+		for (Entity entity: entitiesString.values()) {
+//		for (Entity entity: entities.values()) {
 			try {
 				this.removeEntity(entity);
 				entity.setWorld(null);
@@ -225,8 +226,8 @@ public class World {
 	/**
 	 * Map holding all entities of this world.
 	 */
-	private Map<Position, Entity> entities = new HashMap<Position, Entity>();
-//	private Map<String, Entity> entities = new HashMap<String, Entity>();	// TODO Use this implementation!
+//	private Map<Position, Entity> entities = new HashMap<Position, Entity>();
+	private Map<String, Entity> entitiesString = new HashMap<String, Entity>();	// TODO Use this implementation!
 	
 	/**
 	 * Check whether a given in entity can be in this world.
@@ -240,7 +241,8 @@ public class World {
 	@Raw
 	public boolean canHaveAsEntity(Entity entity) {
 		if (entity == null) return false;
-		if (helper.operlapsWithOtherEntities(entity, helper.convertCollectionToList(entities.values()))) 
+//		if (helper.operlapsWithOtherEntities(entity, helper.convertCollectionToList(entities.values()))) 
+		if (helper.operlapsWithOtherEntities(entity, helper.convertCollectionToList(entitiesString.values()))) 
 			return false;
 		return (entity != null) && (!entity.isTerminated()) && (!containsEntity(entity)) && (entity.isInWorld(this));
 	}	
@@ -257,7 +259,8 @@ public class World {
 	@Raw
 	public boolean containsEntity(Entity entity) {
         try {
-           return entities.get(entity.getPosition()) == entity;
+//           return entities.get(entity.getPosition()) == entity;
+            return entitiesString.get(helper.convertPositionToString(entity.getPosition())) == entity;
         }
         catch (NullPointerException exc) {
             return false;
@@ -278,7 +281,8 @@ public class World {
 	public void addEntity(Entity entity) throws IllegalArgumentException, NullPointerException {
 		if (entity == null) throw new NullPointerException();
 		if (! canHaveAsEntity(entity)) throw new IllegalArgumentException();
-		entities.put(entity.getPosition(), entity);
+//		entities.put(entity.getPosition(), entity);
+		entitiesString.put(helper.convertPositionToString(entity.getPosition()), entity);
 		try {
 			entity.setWorld(this);
 		}
@@ -301,7 +305,8 @@ public class World {
 		updateMap();
 		if (entity == null) throw new NullPointerException();
 		if (!containsEntity(entity)) throw new IllegalArgumentException();
-		entities.remove(entity.getPosition());
+//		entities.remove(entity.getPosition());
+		entitiesString.remove(helper.convertPositionToString(entity.getPosition()));
 		entity.setWorld(null);
 	}
 	
@@ -315,20 +320,38 @@ public class World {
 	@Raw
 	public void updateMap() {
 		List<Entity> entitiesList = new ArrayList<Entity>();
-		List<Position> iterator = helper.convertCollectionToList(entities.keySet());
-		for (Position position: iterator) {
-			if (position == null) entities.remove(position);
-			else if (entities.get(position).getPosition() != position) {
-					Entity entity = entities.get(position);
-					entities.remove(position);
-					entitiesList.add(entity);
-			}
-		}
-		for (Entity entity: entitiesList) /*this.addEntity(entity);*/{
-			entities.put(entity.getPosition(), entity);
-		}
+		List<String> iterator = helper.convertCollectionToList(entitiesString.keySet());
+//		List<Position> iterator = helper.convertCollectionToList(entities.keySet());
+//		for (Position position: iterator) {
+//			if (position == null) entities.remove(position);
+//			else if (entities.get(position).getPosition() != position) {
+//					Entity entity = entities.get(position);
+//					entities.remove(position);
+//					entitiesList.add(entity);
+//			}
+//		}
+//		for (Entity entity: entitiesList) /*this.addEntity(entity);*/{
+//			entities.put(entity.getPosition(), entity);
+//		}
+		
+	  for (String position: iterator) {
+	  	if (position == null) entitiesString.remove(position);
+	  	else if (!helper.convertPositionToString(entitiesString.get(position).getPosition()).equals(position)) {
+	  		Entity entity = entitiesString.get(position);
+	  		entitiesString.remove(position);
+	  		entitiesList.add(entity);
+	  	}
+	  }
+	  
+	  for (Entity entity: entitiesList) /*this.addEntity;*/
+	  	entitiesString.put(helper.convertPositionToString(entity.getPosition()), entity);
+	 
 	}
 	
+	
+//	public String convertPositionToString(Position position) {
+//		return Double.toString(position.getPositionX()) + "," + Double.toString(position.getPositionY());
+//	}
 	
 	
 		/*
@@ -359,7 +382,8 @@ public class World {
 		double collisionTimeMin = -1;
 		Entity[] collisionEntitiesMin = new Entity[2];
 		
-		for (Entity entity1: entities.values()) {
+//		for (Entity entity1: entities.values()) {
+		for (Entity entity1: entitiesString.values()) {
 			collisionTimeMin = iterateEntities(collisionTimeMin, collisionEntitiesMin, entity1, -1);
 			collisionTimeMin = iterateBoundaries(collisionTimeMin, collisionEntitiesMin, entity1, -1);
 		}
@@ -382,7 +406,8 @@ public class World {
 		double collisionTimeMin = -1;
 		Entity[] collisionEntitiesMin = new Entity[2];
 		
-		for (Entity entity1: entities.values()) {
+//		for (Entity entity1: entities.values()) {
+		for (Entity entity1: entitiesString.values()) {
 			collisionTimeMin = iterateEntities(collisionTimeMin, collisionEntitiesMin, entity1, time);
 			collisionTimeMin = iterateBoundaries(collisionTimeMin, collisionEntitiesMin, entity1, time);
 		}
@@ -407,8 +432,10 @@ public class World {
 	public double getTimeToFirstCollision() throws IllegalArgumentException {
 		double collisionTimeTemp;
 		double collisionTimeMin = -1;
-		for (Entity entity1: entities.values()) {
-			for (Entity entity2: entities.values()) {
+//		for (Entity entity1: entities.values()) {
+		for (Entity entity1: entitiesString.values()) {
+//			for (Entity entity2: entities.values()) {
+			for (Entity entity2: entitiesString.values()) {
 				if (entity1 == entity2) continue;
 				try {
 					collisionTimeTemp = entity1.getTimeToCollision(entity2);
@@ -470,7 +497,8 @@ public class World {
 	private double iterateEntities(double collisionTimeMin, Entity[] collisionEntitiesMin, Entity entity1, double time) 
 			throws IllegalArgumentException {
 		double collisionTimeTemp;
-		for (Entity entity2: entities.values()) {
+//		for (Entity entity2: entities.values()) {
+		for (Entity entity2: entitiesString.values()) {
 			if (entity1 == entity2) continue;	// Only check if the entities are different.
 			try {
 				collisionTimeTemp = entity1.getTimeToCollision(entity2);
@@ -632,7 +660,8 @@ public class World {
 	 */
 	private void update(double time) throws IllegalArgumentException {
 		updatedEntities.clear();	// Clear the updated entities because we are moving positions and won't be stuck in a loop anymore.
-		List<Entity> iterator = helper.convertCollectionToList(entities.values());	// Creates an iterator that the next
+//		List<Entity> iterator = helper.convertCollectionToList(entities.values());	// Creates an iterator that the next
+		List<Entity> iterator = helper.convertCollectionToList(entitiesString.values());	// Creates an iterator that the next
 		for (Entity entity: iterator) {			// for loop can iterate over, otherwise the map might be changed during execution.
 			if ( (entity.getType() == "Ship") && ((Ship)entity).getThrustStatus()) ((Ship)entity).thrust(((Ship)entity).getAcceleration(), time);
 			try {	// The exceptions in removeEntity are never thrown in this method.
@@ -653,7 +682,8 @@ public class World {
 	 * Helper method of evolve().
 	 */
 	public void destroyOverlaps() {
-		List<Entity> iterator = helper.convertCollectionToList(entities.values());	// Creates an iterator
+//		List<Entity> iterator = helper.convertCollectionToList(entities.values());	// Creates an iterator
+		List<Entity> iterator = helper.convertCollectionToList(entitiesString.values());	// Creates an iterator
 		for (Entity entity1: iterator) {	// that iterates over all the entities of this world.
 			if (!entity1.isInWorld(this)) {
 				;	// This is to be able to debug at terminate. #Bug-1#
@@ -677,7 +707,8 @@ public class World {
 	 * in the updatedEntities List.
 	 */
 	public Entity[] findOtherCollisionsAtZero() {
-		List<Entity> iterator = helper.convertCollectionToList(entities.values());
+//		List<Entity> iterator = helper.convertCollectionToList(entities.values());
+		List<Entity> iterator = helper.convertCollectionToList(entitiesString.values());
 		Entity[] collisionEntitiesMin= new Entity[2];
 		for (Entity entity1: iterator) {
 			collisionEntitiesMin[0] = entity1;
@@ -725,7 +756,8 @@ public class World {
 	@Raw
 	public Entity getEntityAtPosition(Position position) {
 		try {
-			return entities.get(position);
+//			return entities.get(position);
+			return entitiesString.get(helper.convertPositionToString(position));
 		}
 		catch (NullPointerException exc) {
 			return null;
@@ -755,7 +787,8 @@ public class World {
 	@Raw
 	public Set<Entity> getAllEntities() {
 		Set<Entity> entitiesResult = new HashSet<Entity>();
-		for (Entity entity: entities.values()) entitiesResult.add(entity);
+//		for (Entity entity: entities.values()) entitiesResult.add(entity);
+		for (Entity entity: entitiesString.values()) entitiesResult.add(entity);
 		return entitiesResult;
 	}
 		

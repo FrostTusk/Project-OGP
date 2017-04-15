@@ -161,6 +161,11 @@ public class Helper {
 		     * |------------------------------------------------------------------------| 
 		     */
 
+	
+	// TODO Documentation
+	public String convertPositionToString(Position position) {
+		return Double.toString(position.getPositionX()) + "," + Double.toString(position.getPositionY());
+	}
 
 
 	/**
