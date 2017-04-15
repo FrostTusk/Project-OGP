@@ -12,6 +12,7 @@ this = the world the entity is in
 	2. entity is in getAllEntitiesList()
 	3. entity is not in updatedEntities
 	4. updatedEntities is empty => last call was update?
+	5. the velocity where he collides is not changed.	
 
 
 Possible Theories:

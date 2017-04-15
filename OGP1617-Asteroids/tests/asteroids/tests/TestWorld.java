@@ -877,15 +877,25 @@ public class TestWorld {
 	}
 	
 	@Test
-	public void testWorldEvolveRicochetShip() {
-		World world = new World(1000, 1000);
-		Ship ship = new Ship(100, 100, 100, 50, 0, 10, 10);
-		world.addEntity(ship);
+	public void testWorldEvolveRicochetShipSalamanderBug() {
+		World world1 = new World(1000, 1000);
+		Ship ship1 = new Ship(100, 100, 100, 50, 0, 10, 10);
+		World world2 = new World(1000, 1000);
+		Ship ship2 = new Ship(100, 100, 100, 50, 0, 10, 10);
+		world1.addEntity(ship1);
+		world2.addEntity(ship2);
 		for (int i = 0; i < 10; i++) {
 			;	// TODO debug here.
-			world.evolve(10);
+			world1.evolve(10);
+			if (ship1.isTerminated()) {
+				for (int j = 0; j < (i - 1); j++) {
+					;	// TODO debug here.
+					world2.evolve(10);
+				}
+				world2.evolve(10);
+			}
 		}
-		assertFalse(ship.isTerminated());
+		assertFalse(ship1.isTerminated());
 	}
 	
 }

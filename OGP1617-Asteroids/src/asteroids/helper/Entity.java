@@ -655,7 +655,7 @@ public abstract class Entity {
 	* @return	The time returned will be larger than 0 and will be equal to
 	* 			the time needed for the entity to reach a position where it collides with the boundaries of the world.
 	* 			| this.getDistanceBetween(world) == 0
-	* // TODO apparently collide?
+	* // TODO apparently collide?	// TODO If Ship, account for thruster!
 	*/
 	@Raw
 	public double getTimeToCollision(World world) {		
@@ -695,7 +695,7 @@ public abstract class Entity {
 	* @throws 	NullPointerException
 	* 			The other entity was null.
 	* 			| entity == null
-	* // TODO apparently collide?
+	* // TODO apparently collide?	// TODO If Ship, account for thruster!
 	*/
 	@Raw
 	public double getTimeToCollision(Entity entity) throws IllegalArgumentException, NullPointerException {
@@ -889,4 +889,64 @@ public abstract class Entity {
 	@Raw
 	public abstract String getType();
 
+	
+	public double[] getBoundaryCollision(World world) {
+		double[] collisionBoundaries = this.getDistanceBetween(world);
+		int minimumBoundary = 0;
+		double[] result = new double[2]; 
+		for (int i = 1; i < 4; i++) {
+			if (collisionBoundaries[i] == collisionBoundaries[minimumBoundary]) {
+				minimumBoundary = i;
+				result[0] = minimumBoundary;
+				result[1] = 4;
+			}
+			else if (collisionBoundaries[i] <= collisionBoundaries[minimumBoundary])
+				result[1] = i;
+		}
+		return result;
+	}
+	
+	
+	public double getTimeToNextBoundaryCollision(World world) {
+		double[] distance = getDistanceBetween(world);	
+		double[] timeNew = new double[6];
+		timeNew[0] = Double.POSITIVE_INFINITY;
+		timeNew[1] = distance[0] / -getVelocityX();
+		timeNew[2] = distance[1] / getVelocityX();
+		timeNew[3] = Double.POSITIVE_INFINITY;
+		timeNew[4] = distance[2] / -getVelocityY();
+		timeNew[5] = distance[3] / getVelocityY();
+		int smallest = findSecondSmallestNotZero(timeNew);
+		return timeNew[smallest];
+	}
+
+	
+	public int findSecondSmallestNotZero(double[] array) {
+		int smallest = 0;
+		int otherSmallest = -1;
+		int otherOtherSmallest = -1;
+		for (int i = 1; i < array.length; i++)
+			if (array[i] < array[smallest]) smallest = i;
+		
+		for (int j = 0; j < array.length; j++) {
+			if (j == smallest) continue;
+			if ( (otherSmallest == -1) || (array[j] < array[otherSmallest]) )
+				otherSmallest = j;
+		}
+		
+		int result = otherSmallest;
+		
+		if (array[otherSmallest] == 0) {
+			for (int k = 0; k < array.length; k++) {
+				if (k == smallest) continue;
+				if (k == otherSmallest) continue;
+				if ( (otherOtherSmallest == -1) || (array[k] < array[otherOtherSmallest]) )
+					otherOtherSmallest = k;
+			}
+			result = otherOtherSmallest;
+		}
+		
+		return result;
+	}
+	
 }
