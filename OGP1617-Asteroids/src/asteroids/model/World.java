@@ -405,21 +405,21 @@ public class World {
 	 */
 	@Raw
 	public double getTimeToFirstCollision() throws IllegalArgumentException {
-		double collisionTimeTemp, collisionTimeMin = -1;
+		double collisionTimeTemp;
+		double collisionTimeMin = -1;
 		for (Entity entity1: entities.values()) {
 			for (Entity entity2: entities.values()) {
-				if (entity1 != entity2) {
-					try {
-						collisionTimeTemp = entity1.getTimeToCollision(entity2);
-					}
-					catch (IllegalArgumentException exc) {	// The First collision is already happening,
-						throw new IllegalArgumentException(exc);	// there is an overlap. Overlap is not legal for this method.
-					}
-					if ( (collisionTimeTemp < collisionTimeMin) || (collisionTimeMin == -1 ) ) collisionTimeMin = collisionTimeTemp;
+				if (entity1 == entity2) continue;
+				try {
+					collisionTimeTemp = entity1.getTimeToCollision(entity2);
 				}
+				catch (IllegalArgumentException exc) {	// The First collision is already happening,
+					throw new IllegalArgumentException(exc);	// there is an overlap. Overlap is not legal for this method.
+				}
+				if ( (collisionTimeTemp < collisionTimeMin) || (collisionTimeMin == -1 ) ) collisionTimeMin = collisionTimeTemp;
 			}
 			collisionTimeTemp = entity1.getTimeToCollision(this);
-			if (collisionTimeTemp < collisionTimeMin) collisionTimeMin = collisionTimeTemp;
+			if ( (collisionTimeTemp < collisionTimeMin) || (collisionTimeMin == -1 ) ) collisionTimeMin = collisionTimeTemp;
 		}
 		return collisionTimeMin;
 	}
@@ -551,7 +551,7 @@ public class World {
 		else {
 			double collisionTimeMin = -1;
 			for (int i = 0; i < 2; i ++) {	// This for loop is necessary to make sure that we can resolve collisions at time zero.
-				if (collisionEntitiesMin == null) collisionEntitiesMin = getFirstCollisionEntities(0);	// If not broken at end
+				if (collisionEntitiesMin == null) collisionEntitiesMin = getFirstCollisionEntities(0);	// If not break at end.
 				if (collisionEntitiesMin == null) {	// These if statements ensure that the next collision is correct.
 					resolveEvolve(-1, collisionEntitiesMin, time);
 					return;
@@ -656,7 +656,7 @@ public class World {
 		List<Entity> iterator = helper.convertCollectionToList(entities.values());	// Creates an iterator
 		for (Entity entity1: iterator) {	// that iterates over all the entities of this world.
 			if (!entity1.isInWorld(this)) {
-				;	// This is to be able to debug at terminate.
+				;	// This is to be able to debug at terminate. #Bug-1#
 				entity1.terminate();	// If the entity "overlaps" the world, terminate it.
 			}
 			if (entity1.isTerminated()) continue;	// If it has been terminated, stop checking for it.

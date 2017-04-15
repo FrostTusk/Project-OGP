@@ -670,6 +670,7 @@ public class Ship extends Entity {
 	 */
 	@Basic @Raw
 	public double getAcceleration() {
+		if (!getThrustStatus()) return 0;
 		return getForce() / getTotalMass();
 	}
 	

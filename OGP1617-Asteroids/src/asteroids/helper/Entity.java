@@ -660,19 +660,19 @@ public abstract class Entity {
 	@Raw
 	public double getTimeToCollision(World world) {		
 		double[] distance = getDistanceBetween(world);
-		if ( (distance[0] == Double.POSITIVE_INFINITY) || (distance[1] == Double.POSITIVE_INFINITY) ||
-			 (distance[2] == Double.POSITIVE_INFINITY) || (distance[3] == Double.POSITIVE_INFINITY) ) return Double.POSITIVE_INFINITY;
+//		if ( (distance[0] == Double.POSITIVE_INFINITY) || (distance[1] == Double.POSITIVE_INFINITY) ||	// TODO Test!
+//			 (distance[2] == Double.POSITIVE_INFINITY) || (distance[3] == Double.POSITIVE_INFINITY) ) return Double.POSITIVE_INFINITY;
 		if ( (distance[0] == 0) || (distance[1] == world.getWidth()) || (distance[2] == 0) || (distance[3] == world.getHeight()) )
 			return 0;
 		
 		double time1; // The shortest time to collision between this entity and the x boundaries of the given world.
 		if (getVelocityX() == 0) time1 = Double.POSITIVE_INFINITY;
-		if (getVelocityX() < 0) time1 = distance[0] / -getVelocityX();
+		else if (getVelocityX() < 0) time1 = distance[0] / -getVelocityX();
 		else time1 = distance[1] / getVelocityX();
 		
 		double time2; // The shortest time to collision between this entity and the y boundaries of the given world.
 		if (getVelocityY() == 0) time2 = Double.POSITIVE_INFINITY;
-		if (getVelocityY() < 0) time2 = distance[2] / -getVelocityY();
+		else if (getVelocityY() < 0) time2 = distance[2] / -getVelocityY();
 		else time2 = distance[3] / getVelocityY();
 		
 		if (time1 < time2) return time1;		

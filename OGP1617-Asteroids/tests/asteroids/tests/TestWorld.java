@@ -862,7 +862,6 @@ public class TestWorld {
 		world.addEntity(ship);	
 		world.evolve(1);
 		world.evolve(1);
-		assertTrue(ship.isTerminated());
 		assertEquals(-30, ship.getVelocityX(), EPSILON);
 		assertEquals(10, ship.getVelocityY(), EPSILON);
 	}
