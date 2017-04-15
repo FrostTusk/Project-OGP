@@ -841,7 +841,7 @@ public class TestWorld {
 		assertEquals(0, bullet2.getBoundaryCollisionCounter(), EPSILON);
 		world.evolve(2);
 		assertEquals(1, bullet1.getBoundaryCollisionCounter(), EPSILON);
-		assertEquals(1, bullet2.getBoundaryCollisionCounter(), EPSILON);	}
+		assertEquals(1, bullet2.getBoundaryCollisionCounter(), EPSILON);}
 	
 	@Test
 	public void testWorldEvolve2CollisionsSameTimeShipBoundary() {
@@ -864,6 +864,18 @@ public class TestWorld {
 		world.evolve(1);
 		assertEquals(-30, ship.getVelocityX(), EPSILON);
 		assertEquals(10, ship.getVelocityY(), EPSILON);
+	}
+	
+	@Test
+	public void testWorldEvolveRicochetShip() {
+		World world = new World(1000, 1000);
+		Ship ship = new Ship(100, 100, 100, 50, 0, 10, 10);
+		world.addEntity(ship);
+		for (int i = 0; i < 10; i++) {
+			;	// TODO debug here.
+			world.evolve(10);
+		}
+		assertFalse(ship.isTerminated());
 	}
 	
 }

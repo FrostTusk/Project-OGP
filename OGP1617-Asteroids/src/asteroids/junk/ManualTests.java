@@ -1,14 +1,14 @@
 package asteroids.junk;
 
+import java.util.HashMap;
+import java.util.Map;
+import asteroids.helper.Entity;
 import asteroids.model.Ship;
 
 /**
- * Do not use this test class! This test class was
- * written at the very start of the assignment and is unnecessary.
- * Use JUnit 4 test suites instead. Use this class only to test
- * very little things.
- * This class should not be delivered in the final version
- * just as the other classes in asteroids.junk.
+ * Do not use this test class as a test suite! Use JUnit 4 test suites 
+ * for unit tests instead! Use this class only to test or try out
+ * things in java syntax/semantics.
  * 
  * @author Mathijs Hubrechtsen
  */
@@ -16,17 +16,28 @@ public class ManualTests {
 	private static double pi = Math.PI;
 	private static boolean debug = false;
 	private static boolean showOriginalTests = false;
+	private static Map<String, Entity> entities = new HashMap<String, Entity>();
 	
 	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		// ship parameters = positionX, positionY, velocityX, velocityY, orientation, shape
 
-		boolean test;
+		boolean test;	// Test if 0 is properly compared with a double in java.
 		if (0.1 > 0) test = true;
 		else test = false;
 		System.out.println(test);
 		
-		if (showOriginalTests) runOriginalTestHandler();
+		Ship ship1 = new Ship(0, 0, 100, 100, 0, 20, 10);	// Test if maps work as expected
+		Ship ship2 = new Ship(10, 10, 100, 100, 0, 20, 10);	// with Strings in java
+		entities.put("HELLO", ship1);
+		System.out.println(entities.toString());
+		entities.put("HELLO", ship2);
+		System.out.println(entities.toString());
+		System.out.println(entities.get("HELLO"));
+		if (debug) summary((Ship)entities.get("HELLO"), false);
+		
+		// Original Tests that were written at the very start of the project:
+		if (showOriginalTests) runOriginalTestHandler();	
 	}
 	
 	
@@ -59,12 +70,11 @@ public class ManualTests {
 		System.out.println("");
 	}
 	
-	
 	public static void runTestSingle(Ship ship, boolean debug) {
 		summary(ship, debug);
 	}
 	
-	
+		
 	public static void summary(Ship ship, boolean debug) {
 		System.out.println("Basic:");
 		System.out.format("PositionX = %f%n", ship.getPosition().getPositionX());

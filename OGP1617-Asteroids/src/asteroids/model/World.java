@@ -226,7 +226,7 @@ public class World {
 	 * Map holding all entities of this world.
 	 */
 	private Map<Position, Entity> entities = new HashMap<Position, Entity>();
-
+//	private Map<String, Entity> entities = new HashMap<String, Entity>();	// TODO Use this implementation!
 	
 	/**
 	 * Check whether a given in entity can be in this world.
