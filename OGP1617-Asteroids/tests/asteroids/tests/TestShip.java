@@ -909,6 +909,13 @@ public class TestShip {
 		assertEquals(0, ship.getOrientation(), EPSILON);
 	}
 	
+	@Test
+	public void testTurnAtHighSpeed() {
+		Ship ship = new Ship(100, 100, 100000, 100000, 0, 20, 0);
+		ship.turn(Math.PI);
+		assertNotNull(ship.getOrientation());
+		assertEquals(Math.PI, ship.getOrientation(), EPSILON);
+	}
 	
 	@Test(expected = AssertionError.class)
 	public void testTurnOisPosInfinity() {
@@ -1265,6 +1272,17 @@ public class TestShip {
 	
 	@Test
 	public void testCollideWithWorldVelocityXYChanged() {
+		Ship ship = new Ship(950, 950, 10, 10, 0, 50, 0);
+		World world = new World(1000, 1000);
+		world.addEntity(ship);
+		ship.setWorld(world);
+		ship.resolveCollision(world);
+		assertTrue(ship.getVelocityX() == -10);
+		assertTrue(ship.getVelocityY() == -10);
+	}
+	
+	@Test
+	public void testCollideWithWorldHighSpeed() {
 		Ship ship = new Ship(950, 950, 10, 10, 0, 50, 0);
 		World world = new World(1000, 1000);
 		world.addEntity(ship);
