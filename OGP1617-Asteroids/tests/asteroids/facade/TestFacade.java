@@ -1078,7 +1078,7 @@ public class TestFacade {
 		assertEquals(97, facade.getTimeCollisionBoundary(bullet), EPSILON);
 	} 
 
-	@Test // TODO reasoning.
+	@Test
 	public void testBulletGetTimeToCollisionWorldTouchingNoCollision() throws ModelException {
 		Bullet bullet = facade.createBullet(2, 2, 0, 0, 2);
 		World world = facade.createWorld(100, 100);
@@ -1410,11 +1410,15 @@ public class TestFacade {
 		assertTrue(facade.isTerminatedBullet(bullet4));
 	}
 	
-	/*
-	*|------------------------------|
-	*| #Header-4# Hookup Tests.		|
-	*|------------------------------| 
-	*/
+	
+	
+			/*
+			 *|-----------------------------|
+			 *| #Header-4# Hook-Up Tests.	|
+			 *|-----------------------------| 
+			 */
+	
+	
 	
 	@Test
 	public void testHookupCreateBullet() throws ModelException {

@@ -52,6 +52,8 @@ public class TestWorld {
 		assertTrue(world.isTerminated());
 	}
 	
+	
+	
 			/*
 			 * |--------------------------------------------|
 			 * | 2. The next test test the Size. (Basic)	|
@@ -158,6 +160,8 @@ public class TestWorld {
 			 * | 3. The next test test the Size. (Advanced)	|
 			 * |--------------------------------------------| 
 			 */	
+	
+	
 
 	@Test
 	public void testWorldIsValidSizeT() {
@@ -197,11 +201,14 @@ public class TestWorld {
 //	}
 	
 	
-	/*
-	 * |----------------------------------------------------|
-	 * | 4. The next test test the relation with Entities	|
-	 * |----------------------------------------------------| 
-	 */	
+	
+			/*
+			 * |----------------------------------------------------|
+			 * | 4. The next test test the relation with Entities	|
+			 * |----------------------------------------------------| 
+			 */	
+	
+	
 	
 	@Test
 	public void testWorldCanContainEntityGeneric() {
@@ -533,11 +540,14 @@ public class TestWorld {
 	}
 	
 	
+	
 			/*
 			 * |--------------------------------------------|
 			 * | 5. The next test test the evolve method	|
 			 * |--------------------------------------------| 
 			 */	
+	
+	
 	
 	@Test
 	public void testWorldEvolveNoMovement() {

@@ -686,12 +686,14 @@ public class TestShip {
 	}
 
 	
+	
 			/*
 			 * |--------------------------------------------|
 			 * | 8. The next tests test the Move method.	|
 			 * |--------------------------------------------| 
 			 */	
 
+	
 	
 //	The next test is unnecessary:
 //	@Test(expected = NullPointerException.class)
@@ -857,11 +859,11 @@ public class TestShip {
 	
 
 	
-			 /*
-			  * |-------------------------------------------|
-			  * | 10. The next tests test the Turn method.	|
-			  * |-------------------------------------------| 
-			  */	
+			/*
+			 * |--------------------------------------------|
+			 * | 10. The next tests test the Turn method.	|
+			 * |--------------------------------------------| 
+			 */	
 	
 	
 	
@@ -928,11 +930,11 @@ public class TestShip {
 	
 
 	
-			 /*
-			  * |-----------------------------------------------|
-			  * | 11. The next tests test the Distance method.	|
-			  * |-----------------------------------------------| 
-			  */
+			/*
+			 * |------------------------------------------------|
+			 * | 11. The next tests test the Distance method.	|
+			 * |------------------------------------------------| 
+			 */
 	
 	
 	
@@ -995,11 +997,11 @@ public class TestShip {
 	
 
 	
-			 /*
-			  * |-----------------------------------------------|
-			  * | 12. The next tests test the Overlap method.	|
-			  * |-----------------------------------------------| 
-			  */	
+			/*
+			 * |------------------------------------------------|
+		     * | 12. The next tests test the Overlap method.	|
+		     * |------------------------------------------------| 
+		     */	
 	
 	
 	
@@ -1176,11 +1178,15 @@ public class TestShip {
 		assertEquals(Double.POSITIVE_INFINITY, ship1.getTimeToCollision(ship1), EPSILON);
 	}
 	
+	
+	
 			/*
 			 * |--------------------------------------------------------|
 			 * | 14. The next tests test the interaction with worlds.	|
 			 * |--------------------------------------------------------| 
 			 */	
+	
+	
 	
 	@Test
 	public void testCanHaveAsWorldT() {
@@ -1267,11 +1273,16 @@ public class TestShip {
 		assertTrue(ship.getVelocityX() == -10);
 		assertTrue(ship.getVelocityY() == -10);
 	}
+	
+	
+	
 			/*
  			 * |----------------------------------------------------------------|
  			 * | 15. The next tests test the interaction with other entities.	|
  			 * |----------------------------------------------------------------| 
 			 */	
+	
+	
 	
 	@Test
 	public void testCollideWithShip() {
@@ -1320,8 +1331,6 @@ public class TestShip {
 		assertTrue(ship2.isTerminated());
 		assertTrue(bullet.isTerminated());
 	}
-	
-	
-	
+		
 }
 	

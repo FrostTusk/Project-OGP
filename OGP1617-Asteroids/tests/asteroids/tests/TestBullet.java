@@ -352,6 +352,7 @@ public class TestBullet {
 	}
 	
 	
+	
 			/*
 			 * |------------------------------------|
 			 * | 4. The next tests test the Radius.	|
@@ -450,11 +451,13 @@ public class TestBullet {
 //	}
 	
 	
+	
 			/*
 			 * |--------------------------------------------------------|
 			 * | 6. The next tests test the interaction with worlds.	|
 		 	 * |--------------------------------------------------------| 
 		 	 */	
+	
 
 	
 	@Test // TODO This is actually irrelevant
@@ -594,6 +597,7 @@ public class TestBullet {
 		assertEquals(0, bullet.getTimeToCollision(world), EPSILON);
 	}
 	
+	
 
 			/*
 			 * |----------------------------------------------------|
@@ -712,11 +716,15 @@ public class TestBullet {
 		assertTrue(bullet2.isTerminated());
 	}
 	
-		/*
-		 * |--------------------------------------------------------|
-		 * | 8. The next tests test the interaction with entities.	|
-		 * |--------------------------------------------------------| 
-		 */	
+	
+	
+			/*
+			 * |--------------------------------------------------------|
+			 * | 8. The next tests test the interaction with entities.	|
+			 * |--------------------------------------------------------| 
+			 */	
+	
+	
 	
 	@Test
 	public void testCanHaveAsShipT() {
@@ -900,11 +908,14 @@ public class TestBullet {
 	}
 
 	
+	
 			/*
-			 * |----------------------------------------------------|
-			 * | 9. The next tests test the move method.			|
-			 * |----------------------------------------------------| 
+			 * |--------------------------------------------|
+			 * | 9. The next tests test the move method.	|
+			 * |--------------------------------------------| 
 			 */	
+	
+	
 
 	@Test
 	public void testBulletMoveGeneric() {
