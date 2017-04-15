@@ -1,0 +1,2 @@
+1. Ship/(Bullet?) is sometimes destroyed due to overlapping with boundaries
+2. Multiple collision points are shown (that do not seem to predict anything)
