@@ -14,6 +14,14 @@ import asteroids.model.Bullet;
 import asteroids.model.Ship;
 import asteroids.model.World;
 
+/* 
+ * Tests Index:
+ * 1. Tests for Initialization
+ * 2. Tests for Size (basic)
+ * 3. Tests for Size (advanced)
+ * 4. Tests for Entities
+ * 5. Tests for evolve
+ */
 
 public class TestWorld {
 	
@@ -36,20 +44,26 @@ public class TestWorld {
 	}
 	
 	
-	// TODO when entities are finished, check this test.
-	@Test
-	public void testCreateWorldTerminateWorld() {
-		World world = new World(-15, -10);
-		assertNotNull(world);
-		world.terminate();
-	}
-	
 	@Test
 	public void testTerminateWorld() {
-		World world = new World(-15, -10);
+		World world = new World(15, -10);
 		assertNotNull(world);
 		world.terminate();
 		assertTrue(world.isTerminated());
+	}
+	
+	@Test
+	public void testTerminateWorldWithEntities() {
+		World world = new World(100, 100);
+		Ship ship = new Ship (20, 20, 0, 0, 0, 10, 10);
+		Bullet bullet = new Bullet (70, 70, 0, 0, 1);
+		world.addEntity(ship);
+		world.addEntity(bullet);
+		assertNotNull(world);
+		world.terminate();
+		assertTrue(world.isTerminated());
+		assertTrue(ship.getWorld() != world);
+		assertTrue(bullet.getWorld() != world);
 	}
 	
 	
@@ -129,6 +143,7 @@ public class TestWorld {
 		assertEquals(Double.MAX_VALUE, world.getHeight(), EPSILON);
 	}
 	
+	
 	@Test
 	public void testCreateWorldSizeWidthNeg() {
 		World world = new World(-15, 10);
@@ -184,12 +199,12 @@ public class TestWorld {
 	}
 	
 	
-/*	The next test crashes the Test Suite, this is because it changes
- *	the upper bound (which is a static variable). All the other tests
- *	create worlds with sizes above 5, which will mean they all fail.
- */
+//	/*	The next test crashes the Test Suite, this is because it changes
+//	 *	the upper bound (which is a static variable). Almost all the other tests
+//	 *	create worlds with sizes above 5, which will mean they almost all fail.
+//	 */
 //	@Test
-//	public void testCreateWorldNewUpperBound() throws ModelException {
+//	public void testCreateWorldNewUpperBound() {
 //		World world1 = new World(15, 10);
 //		assertNotNull(world1);
 //		world1.setUpperBound(5);
@@ -201,7 +216,7 @@ public class TestWorld {
 //	}
 	
 	
-	
+		
 			/*
 			 * |----------------------------------------------------|
 			 * | 4. The next test test the relation with Entities	|
@@ -229,30 +244,13 @@ public class TestWorld {
 	}
 	
 	@Test
-	public void testWorldCanContainEntityEntityInOtherWorld() {
-//		World world1 = new World(1000, 1000);
-		World world2 = new World(1000, 1000);	
-		Ship ship = new Ship(500, 500, 10, -10, Math.PI, 20, 10);
-		Bullet bullet = new Bullet(20, 20, 1, 1, 1);
-		world2.addEntity(ship);
-		world2.addEntity(bullet);
-		ship.setWorld(world2);
-		bullet.setWorld(world2);
-// TODO Bad usage of canHaveAsEntity => this is more of a test if the bullet can have the world
-// Technically it's the entity that can't have 2 worlds at the same time, not the world.
-//		assertFalse(world1.canHaveAsEntity(ship));
-//		assertFalse(world1.canHaveAsEntity(bullet));
-	}
-	
-	@Test
 	public void testWorldCanContainEntityBulletOfShip() {
 		World world = new World(1000, 1000);
 		Ship ship = new Ship(500, 500, 10, -10, Math.PI, 20, 10);
 		Bullet bullet = new Bullet(500, 500, 1, 1, 1);
 		ship.loadBullet(bullet);
 		assertTrue(world.canHaveAsEntity(ship));
-// TODO See last test.
-//		assertFalse(world.canHaveAsEntity(bullet));
+		assertFalse(bullet.canHaveAsWorld(world));
 	}
 	
 	@Test
@@ -277,6 +275,7 @@ public class TestWorld {
 		assertFalse(world.canHaveAsEntity(ship2));
 	}
 	
+	
 	@Test
 	public void testWorldContainsEntityT() {
 		World world = new World(1000, 1000);
@@ -296,6 +295,7 @@ public class TestWorld {
 		assertFalse(world.containsEntity(ship));
 		assertFalse(world.containsEntity(bullet));
 	}
+	
 	
 	@Test
 	public void testWorldAddEntityAble() {
@@ -320,6 +320,7 @@ public class TestWorld {
 		assertFalse(world.containsEntity(ship));
 		assertFalse(world.containsEntity(bullet));
 	}
+	
 	
 	@Test
 	public void testWorldRemoveEntityGeneric() {
@@ -351,6 +352,7 @@ public class TestWorld {
 		assertFalse(world.containsEntity(bullet));
 	}
 	
+	
 	@Test
 	public void testWorldGetFirstCollisionPosition() {
 		World world = new World(1000, 1000);
@@ -379,6 +381,7 @@ public class TestWorld {
 			assertEquals(Double.POSITIVE_INFINITY, world.getFirstCollisionPosition()[1], EPSILON);
 		}
 	}
+	
 	
 	@Test
 	public void testWorldGetFirstCollisionTime() {
@@ -426,6 +429,7 @@ public class TestWorld {
 		else fail();
 	}
 	
+	
 	@Test
 	public void testWorldGetFirstCollisionEntitiesGeneric() {
 		World world = new World(1000, 1000);
@@ -453,6 +457,7 @@ public class TestWorld {
 		World world = new World(1000, 1000);
 		world.getFirstCollisionEntities();
 	}
+	
 	
 	@Test
 	public void testWorldGetAllEntitiesGeneric() {
@@ -757,19 +762,6 @@ public class TestWorld {
 		assertEquals(-10, ship.getVelocityY(), EPSILON);
 	}
 	
-//	@Test
-//	public void testWorldEvolveCollisionShipStartsAgainstBoundaryMovesToBoundary() {
-//		World world = new World(1000, 1000);
-//		Ship ship = new Ship(800, 900, 0, 10, Math.PI, 100, 10);
-//		world.addEntity(ship);
-//		ship.setWorld(world);
-//		assertEquals(0, ship.getVelocityX(), EPSILON);
-//		assertEquals(10, ship.getVelocityY(), EPSILON);
-//		world.evolve(1);
-//		assertEquals(0, ship.getVelocityX(), EPSILON);
-//		assertEquals(-10, ship.getVelocityY(), EPSILON);
-//	}
-	
 	@Test
 	public void testWorldEvolveCollisionShipStartsAgainstBoundaryMovesFromBoundary() {
 		World world = new World(1000, 1000);
@@ -888,7 +880,7 @@ public class TestWorld {
 			world1.evolve(10);
 			if (ship1.isTerminated()) {
 				for (int j = 0; j < (i - 1); j++) {
-					;	// TODO debug here.
+					;	// debug here for salamander => fixed
 					world2.evolve(10);
 				}
 				world2.evolve(10);

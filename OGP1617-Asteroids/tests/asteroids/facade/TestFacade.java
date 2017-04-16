@@ -18,6 +18,37 @@ import asteroids.model.World;
 import asteroids.part2.facade.IFacade;
 import asteroids.util.ModelException;
 
+/* 
+ * Tests Index:
+ * #1# Ship Tests
+ * 		1. Tests for Initialization
+ * 		2. Tests for Position
+ * 		3. Tests for Speed
+ * 		4. Tests for Radius
+ * 		5. Tests for Orientation
+ * 		6. Tests for Move
+ * 		7. Tests for Thrust
+ * 		8. Tests for Turn
+ * 		9. Tests for Distance
+ * 		10. Tests for Overlap
+ * 		11. Tests for Collision Detection
+ * #2# Bullet Tests
+ * 		12. Tests for Initialization
+ * 		13. Tests for Position
+ * 		14. Tests for Speed
+ * 		15. Tests for Radius
+ * 		16. Tests for Mass
+ * 		17. Tests for Worlds
+ * 		18. Tests for Ships
+ * #3# World Tests
+ * 		19. Tests for Initialization
+ * 		20. Tests for Size
+ * 		21. Tests for Entities
+ * 		22. Tests for Evolve
+ * #4# Hook-Up Tests
+ */
+
+
 @SuppressWarnings("deprecation")
 public class TestFacade {
 
@@ -547,6 +578,7 @@ public class TestFacade {
 		assertNotNull(facade.getShipOrientation(ship));
 		assertEquals(Math.PI, facade.getShipOrientation(ship), EPSILON);
 	}
+	
 
 	@Test
 	public void testTurnOisZero() throws ModelException {
@@ -564,6 +596,7 @@ public class TestFacade {
 		assertEquals(0, facade.getShipOrientation(ship), EPSILON);
 	}
 	
+	
 	@Test
 	public void testTurnOOverflow() throws ModelException {
 		Ship ship = facade.createShip(100, 100, 30, -15, 20, 2*Math.PI);
@@ -579,6 +612,7 @@ public class TestFacade {
 		assertNotNull(facade.getShipOrientation(ship));
 		assertEquals(0, facade.getShipOrientation(ship), EPSILON);
 	}
+	
 	
 	@Test(expected = ModelException.class)
 	public void testTurnOisPosInfinity() throws ModelException {
@@ -687,6 +721,7 @@ public class TestFacade {
 		assertFalse(facade.overlap(ship1, ship2));
 	}
 	
+	
 	@Test
 	public void testOverlapT() throws ModelException {
 		Ship ship1 = facade.createShip(0, 0, 30, -15, 10, 0);
@@ -701,6 +736,7 @@ public class TestFacade {
 		assertFalse(facade.overlap(ship1, ship2));
 	}
 	
+	
 	@Test
 	public void testSameShip() throws ModelException {
 		Ship ship1 = facade.createShip(0, 0, 30, -15, 10, 0);
@@ -710,10 +746,10 @@ public class TestFacade {
 	
 	
 			/*
-			  * |-----------------------------------------------------------|
-			  * | 11. The next tests test the Collision Detection methods.	|
-			  * |-----------------------------------------------------------| 
-			  */
+			 * |------------------------------------------------------------|
+			 * | 11. The next tests test the Collision Detection methods.	|
+			 * |------------------------------------------------------------| 
+			 */
 	
 	
 	
@@ -745,11 +781,6 @@ public class TestFacade {
 		facade.getCollisionPosition(ship1, ship2);
 	}
 	
-
-	
-	
-	
-	
 	@Test(expected = ModelException.class)
 	public void testCollisionDetectionSameShip() throws ModelException {		
 		Ship ship1 = facade.createShip(0, 0, 10, 0, 10, 0);
@@ -762,15 +793,16 @@ public class TestFacade {
 	
 		/*
 		 * |----------------------------|
-		 * | #Header-2# Bullet Methods.	|
+		 * | #Header-2# Bullet Tests.	|
 		 * |----------------------------| 
 		 */
 	
-	/*
-	 * |--------------------------------------------|
-	 * | 1. The next test test the Initialization.	|
-	 * |--------------------------------------------| 
-	 */	
+	
+			/*
+			 * |--------------------------------------------|
+			 * | 12. The next test test the Initialization.	|
+			 * |--------------------------------------------| 
+			 */	
 
 
 
@@ -790,12 +822,12 @@ public class TestFacade {
 	}
 
 
-	/*
-	 * |----------------------------------------|
-	 * | 2. The next tests test the Position.	|
-	 * |----------------------------------------| 
-	 */	
-
+	
+			/*
+			 * |----------------------------------------|
+			 * | 13. The next tests test the Position.	|
+			 * |----------------------------------------| 
+			 */	
 
 
 	
@@ -805,6 +837,7 @@ public class TestFacade {
 		facade.getBulletPosition(bullet);
 	}
 
+	
 	@Test
 	public void testCreatBulletPosGeneric() throws ModelException {
 		Bullet bullet1 = facade.createBullet(100, 200, 10, -10, 20);
@@ -877,14 +910,15 @@ public class TestFacade {
 	}
 
 
+	
+			/*
+			 * |------------------------------------|
+			 * | 14. The next tests test the Speed.	|
+			 * |------------------------------------| 
+			 */	
 
-	/*
-	 * |------------------------------------|
-	 * | 3. The next tests test the Speed.	|
-	 * |------------------------------------| 
-	 */	
 
-
+	
 	@Test
 	public void testCreatBulletVelGeneric() throws ModelException {
 		Bullet bullet1 = facade.createBullet(100, 200, 10, 20, 20);
@@ -984,12 +1018,13 @@ public class TestFacade {
 
 	
 
-	/*
-	 * |------------------------------------|
-	 * | 4. The next tests test the Radius.	|
-	 * |------------------------------------| 
-	 */	
+			/*
+			 * |----------------------------------------|
+			 * | 15. The next tests test the Radius.	|
+			 * |----------------------------------------| 
+			 */	
 
+	
 
 	@Test
 	public void testCreateBulletRadiusGeneric() throws ModelException {
@@ -1032,11 +1067,13 @@ public class TestFacade {
 
 
 
-	/*
-	 * |------------------------------------|
-	 * | 5. The next tests test the Mass.	|
-	 * |------------------------------------| 
-	 */	
+			/*
+			 * |------------------------------------|
+			 * | 16. The next tests test the Mass.	|
+			 * |------------------------------------| 
+			 */	
+	
+	
 
 	@Test
 	public void testBulletGetMassGeneric() throws ModelException {
@@ -1062,11 +1099,12 @@ public class TestFacade {
 	}
 
 
-	/*
-	 * |--------------------------------------------------------|
-	 * | 6. The next tests test the interaction with worlds.	|
-	 * |--------------------------------------------------------| 
-	 */	
+	
+			/*
+			 * |--------------------------------------------------------|
+			 * | 17. The next tests test the interaction with worlds.	|
+			 * |--------------------------------------------------------| 
+			 */	
 
 
 
@@ -1130,16 +1168,15 @@ public class TestFacade {
 	}
 
 	
-	/*
-	 * |--------------------------------------------------------|
-	 * | 8. The next tests test the interaction with entities.	|
-	 * |--------------------------------------------------------| 
-	 */	
+	
+			/*
+			 * |--------------------------------------------------------|
+			 * | 18. The next tests test the interaction with entities.	|
+			 * |--------------------------------------------------------| 
+			 */	
 
 
 	
-
-
 	@Test(expected = ModelException.class)
 	public void testBulletGetTimeToCollisionOverlap() throws ModelException {
 		Bullet bullet1 = facade.createBullet(100, 100, 0, 0, 20);
@@ -1148,15 +1185,22 @@ public class TestFacade {
 	}
 
 	
-
 	
-
 		/*
-		*|------------------------------|
-		*| #Header-3# World Methods.	|
-		*|------------------------------| 
-		*/
-
+		 *|-----------------------------|
+		 *| #Header-3# World Methods.	|
+		 *|-----------------------------| 
+		 */
+	
+	
+			/*
+			 * |--------------------------------------------|
+			 * | 19. The next test test the Initialization.	|
+			 * |--------------------------------------------| 
+			 */	
+	
+	
+	
 	@Test
 	public void testCreateWorld() throws ModelException {
 		World world = facade.createWorld(10, 10);
@@ -1178,10 +1222,12 @@ public class TestFacade {
 		assertTrue(facade.isTerminatedWorld(world));
 	}
 	
+	
+	
 			/*
-			 * |--------------------------------------------|
-			 * | 2. The next test test the Size. (Basic)	|
-			 * |--------------------------------------------| 
+			 * |----------------------------------|
+			 * | 20. The next test test the Size. |
+			 * |----------------------------------| 
 			 */	
 
 	
@@ -1219,7 +1265,6 @@ public class TestFacade {
 		assertEquals(Double.MAX_VALUE, facade.getWorldSize(world)[1], EPSILON);
 	}
 	
-	
 	@Test
 	public void testCreateWorldSizeWidthHeightEdgeOverflow() throws ModelException {
 		World world = facade.createWorld(Double.MAX_VALUE, Double.MAX_VALUE);
@@ -1253,6 +1298,7 @@ public class TestFacade {
 		assertEquals(Double.MAX_VALUE, facade.getWorldSize(world)[1], EPSILON);
 	}
 	
+	
 	@Test
 	public void testCreateWorldSizeWidthNeg() throws ModelException {
 		World world = facade.createWorld(-15, 10);
@@ -1278,15 +1324,13 @@ public class TestFacade {
 	}
 	
 	
-	/*
-	 * |----------------------------------------------------|
-	 * | 4. The next test test the relation with Entities	|
-	 * |----------------------------------------------------| 
-	 */	
 	
-	
-	
-	
+			/*
+			 * |----------------------------------------------------|
+			 * | 21. The next test test the relation with Entities.	|
+			 * |----------------------------------------------------| 
+			 */	
+			
 
 	
 	@Test
@@ -1295,9 +1339,6 @@ public class TestFacade {
 		assertEquals(-1, facade.getTimeNextCollision(world), EPSILON);
 	}
 	
-
-	
-
 	
 	@Test
 	public void testWorldGetAllEntitiesAllBullets() throws ModelException {
@@ -1338,9 +1379,10 @@ public class TestFacade {
 	}
 	
 	
+	
 			/*
 			 * |--------------------------------------------|
-			 * | 5. The next test test the evolve method	|
+			 * | 22. The next test test the evolve method.	|
 			 * |--------------------------------------------| 
 			 */	
 	
@@ -1351,8 +1393,6 @@ public class TestFacade {
 		World world = facade.createWorld(1000, 1000);
 		world.evolve(2);
 	}
-	
-	
 	
 	@Test
 	public void testWorldEvolveCollisionBulletHorizontalBoundaryCounterFull() throws ModelException {
@@ -1374,7 +1414,6 @@ public class TestFacade {
 		world.evolve(10);
 		assertTrue(facade.isTerminatedBullet(bullet));
 	}
-	
 	
 	@Test
 	public void testWorldEvolveCollisionBulletHorizontalBoundaryWidth() throws ModelException {
@@ -1412,11 +1451,11 @@ public class TestFacade {
 	
 	
 	
-			/*
-			 *|-----------------------------|
-			 *| #Header-4# Hook-Up Tests.	|
-			 *|-----------------------------| 
-			 */
+		/*
+		 *|-----------------------------|
+		 *| #Header-4# Hook-Up Tests.	|
+		 *|-----------------------------| 
+		 */
 	
 	
 	

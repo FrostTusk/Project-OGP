@@ -98,7 +98,7 @@ public class World {
 	 */
 	@Raw
 	public void terminate() {
-		for (Entity entity: entities.values()) {
+		for (Entity entity: getAllEntitiesList()) {
 			try {
 				this.removeEntity(entity);
 				entity.setWorld(null);

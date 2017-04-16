@@ -2,19 +2,17 @@ package asteroids.tests;
 
 import static org.junit.Assert.*;
 
-import org.junit.Before;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.junit.Test;
 
 import asteroids.model.Bullet;
 import asteroids.model.Ship;
 import asteroids.model.World;
-import asteroids.facade.Facade;
 import asteroids.helper.Position;
-import asteroids.part1.facade.IFacade;
 
 /* 
- * // TODO Do NOT get rid of tests without telling me!
- * // Not even irrelevant ones. 
  * Tests Index:
  * 1. Tests for Initialization
  * 2. Tests for Position
@@ -30,20 +28,13 @@ import asteroids.part1.facade.IFacade;
  * 12. Tests for Overlap
  * 13. Tests for Collision Detection
  * 14. tests for interaction with worlds
- * 15.tests for interaction with entities
+ * 15. Tests for interaction with entities
  */
 
 public class TestShip {
 
 	private static final double EPSILON = 0.0001;
-
-	IFacade facade;
-
-	@Before
-	public void setUp() {
-		facade = new Facade();
-	}
-
+	
 	
 	
 			/*
@@ -73,14 +64,6 @@ public class TestShip {
 			 * |----------------------------------------| 
 			 */	
 
-	
-	
-//	The following test is unnecessary:
-//	@Test(expected = NullPointerException.class)
-//	public void testCreateShipPosShipIsNull() {
-//		Ship ship = null;
-//		ship.getPosition();
-//	}
 	
 	
 	@Test
@@ -167,14 +150,6 @@ public class TestShip {
 			 * |------------------------------------| 
 			 */	
 	
-	
-	
-//	The following test is unnecessary:
-//	@Test(expected = NullPointerException.class)
-//	public void testCreateShipVelShipIsNull() {
-//		Ship ship = null;
-//		ship.getSpeed();
-//	}
 	
 	
 	@Test
@@ -286,14 +261,6 @@ public class TestShip {
 			 * |------------------------------------| 
 			 */	
 	
-
-	
-//	The following test is unnecessary:
-//	@Test(expected = NullPointerException.class)
-//	public void testCreateShipRadiusShipIsNull() {
-//		Ship ship = null;
-//		ship.getRadius();
-//	}
 	
 	
 	@Test
@@ -344,13 +311,6 @@ public class TestShip {
 			 */	
 	
 
-	
-//	The following test is unnecessay:
-//	@Test(expected = NullPointerException.class)
-//	public void testCreateShipOShipIsNull() {
-//		Ship ship = null;
-//		ship.getOrientation();
-//	}
 	
 	@Test
 	public void testCreateShipOGeneric() {
@@ -419,6 +379,7 @@ public class TestShip {
 		assertEquals((4/3) * Math.PI * Math.pow(20, 3) * ship.getDensity(), ship.getMass(), EPSILON);
 	}
 	
+	
 	@Test
 	public void testShipTotalMassGeneric() {
 		Bullet bullet1 = new Bullet(100, 200, 0, 0, 20);	
@@ -430,11 +391,13 @@ public class TestShip {
 		assertEquals(ship.getTotalMass(), ship.getMass() + bullet1.getMass() + bullet2.getMass(), EPSILON);
 	}
 	
+
 	@Test
 	public void testShipTotalMassNoCargo() {
 		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
 		assertEquals(ship.getTotalMass(), ship.getMass(), EPSILON);
 	}
+	
 	
 	@Test
 	public void testShipSetMassGeneric() {
@@ -444,6 +407,7 @@ public class TestShip {
 		assertEquals(Math.pow(10, 20), ship.getMass(), EPSILON);
 	}
 	
+	
 	@Test
 	public void testShipSetMassNeg() {
 		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
@@ -452,12 +416,13 @@ public class TestShip {
 		assertEquals((4/3) * Math.PI * Math.pow(ship.getRadius(), 3) * ship.getDensity(), ship.getMass(), EPSILON);
 	}
 	
+	
 	@Test
-	public void testShipSetMassNaN() {
+	public void testShipSetMassPosInf() {
 		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
 		assertEquals((4/3) * Math.PI * Math.pow(ship.getRadius(), 3) * ship.getDensity(), ship.getMass(), EPSILON);
-		ship.setMass(Double.NaN);
-		assertEquals((4/3) * Math.PI * Math.pow(ship.getRadius(), 3) * ship.getDensity(), ship.getMass(), EPSILON);
+		ship.setMass(Double.POSITIVE_INFINITY);
+		assertEquals(Double.POSITIVE_INFINITY, ship.getMass(), EPSILON);
 	}
 	
 	@Test
@@ -469,11 +434,11 @@ public class TestShip {
 	}
 	
 	@Test
-	public void testShipSetMassPosInf() {
+	public void testShipSetMassNaN() {
 		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
 		assertEquals((4/3) * Math.PI * Math.pow(ship.getRadius(), 3) * ship.getDensity(), ship.getMass(), EPSILON);
-		ship.setMass(Double.POSITIVE_INFINITY);
-		assertEquals(Double.POSITIVE_INFINITY, ship.getMass(), EPSILON);
+		ship.setMass(Double.NaN);
+		assertEquals((4/3) * Math.PI * Math.pow(ship.getRadius(), 3) * ship.getDensity(), ship.getMass(), EPSILON);
 	}
 
 	
@@ -486,7 +451,7 @@ public class TestShip {
 
 
 
-	@Test // TODO Technically, this is tested in other methods and is thus not really necessary
+	@Test
 	public void testShipCanHaveAsBulletT() {
 		Bullet bullet = new Bullet(100, 200, 0, 0, 20);	
 		Ship ship1 = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
@@ -508,85 +473,6 @@ public class TestShip {
 		Bullet bullet = null;
 		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
 		assertFalse(ship.canHaveAsBullet(bullet));
-	}
-	
-	// TODO More of these tests:
-	@Test
-	public void testShipBulletLoadOnShipSingleBullet() {
-		Bullet bullet = new Bullet(100, 200, 0, 0, 20);	
-		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
-		ship.loadBullet(bullet);
-		assertTrue(ship.getAllBullets().contains(bullet));
-	}
-	
-	@Test
-	public void testShipBulletLoadOnShipMultipleBullets() {
-		Bullet bullet1 = new Bullet(100, 200, 0, 0, 20);	
-		Bullet bullet2= new Bullet(100, 200, 0, 0, 20);	
-		Bullet bullet3 = new Bullet(100, 200, 0, 0, 20);	
-		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
-		ship.loadBullet(bullet1);
-		ship.loadBullet(bullet2);
-		ship.loadBullet(bullet3);
-		assertTrue(ship.getAllBullets().contains(bullet1));
-		assertTrue(ship.getAllBullets().contains(bullet2));
-		assertTrue(ship.getAllBullets().contains(bullet3));
-	}
-	
-	@Test
-	public void testShipGetBulletsSetSize() {
-		Bullet bullet1 = new Bullet(100, 200, 0, 0, 20);	
-		Bullet bullet2= new Bullet(100, 200, 0, 0, 20);	
-		Bullet bullet3 = new Bullet(100, 200, 0, 0, 20);	
-		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
-		ship.loadBullet(bullet1);
-		ship.loadBullet(bullet2);
-		ship.loadBullet(bullet3);
-		assertTrue(ship.getBulletsCount() == 3);
-	}
-	
-	@Test
-	public void testShipGetBulletsSetSizeNoBullets() {
-		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
-		assertTrue(ship.getBulletsCount() == 0);
-	}
-	
-	@Test
-	public void testShipRemoveBullet() {
-		Bullet bullet1 = new Bullet(100, 200, 0, 0, 20);	
-		Bullet bullet2= new Bullet(100, 200, 0, 0, 20);	
-		Bullet bullet3 = new Bullet(100, 200, 0, 0, 20);	
-		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
-		ship.loadBullet(bullet1);
-		ship.loadBullet(bullet2);
-		ship.loadBullet(bullet3);
-		assertTrue(ship.getBulletsCount() == 3);
-		ship.removeBullet(bullet1);
-		assertTrue(ship.getBulletsCount() == 2);
-		assertFalse(ship.getAllBullets().contains(bullet1));
-		assertTrue(ship.getAllBullets().contains(bullet2));
-		assertTrue(ship.getAllBullets().contains(bullet3));
-	}
-	
-	@Test(expected = IllegalArgumentException.class)
-	public void testShipRemoveBulletNoBullets() {
-		Bullet bullet = new Bullet(100, 200, 0, 0, 20);
-		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
-		assertTrue(ship.getBulletsCount() == 0);
-		assertFalse(ship.getAllBullets().contains(bullet));
-		ship.removeBullet(bullet);
-	}
-	
-	
-	@Test
-	public void testShipBulletRemovedWhenFired() {
-		Bullet bullet = new Bullet(100, 200, 0, 0, 20);	
-		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
-		World world = new World(1000, 1000);
-		ship.setWorld(world);
-		ship.loadBullet(bullet);
-		ship.fireBullet(bullet);
-		assertFalse(ship.getAllBullets().contains(bullet));
 	}
 	
 	@Test
@@ -627,6 +513,89 @@ public class TestShip {
 		assertTrue(ship.canHaveAsBullet(bullet));
 	}
 	
+	
+	@Test
+	public void testShipBulletLoadOnShipSingleBullet() {
+		Bullet bullet = new Bullet(100, 200, 0, 0, 20);	
+		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
+		ship.loadBullet(bullet);
+		assertTrue(ship.getAllBullets().contains(bullet));
+	}
+	
+	@Test
+	public void testShipBulletLoadOnShipMultipleBullets() {
+		Bullet bullet1 = new Bullet(100, 200, 0, 0, 20);	
+		Bullet bullet2= new Bullet(100, 200, 0, 0, 20);	
+		Bullet bullet3 = new Bullet(100, 200, 0, 0, 20);	
+		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
+		Set<Bullet> bullets = new HashSet<Bullet>();
+		bullets.add(bullet1);
+		bullets.add(bullet2);
+		bullets.add(bullet3);
+		ship.loadBullets(bullets);
+		assertTrue(ship.getAllBullets().contains(bullet1));
+		assertTrue(ship.getAllBullets().contains(bullet2));
+		assertTrue(ship.getAllBullets().contains(bullet3));
+	}
+	
+	
+	@Test
+	public void testShipGetBulletsSetSize() {
+		Bullet bullet1 = new Bullet(100, 200, 0, 0, 20);	
+		Bullet bullet2= new Bullet(100, 200, 0, 0, 20);	
+		Bullet bullet3 = new Bullet(100, 200, 0, 0, 20);	
+		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
+		ship.loadBullet(bullet1);
+		ship.loadBullet(bullet2);
+		ship.loadBullet(bullet3);
+		assertTrue(ship.getBulletsCount() == 3);
+	}
+	
+	@Test
+	public void testShipGetBulletsSetSizeNoBullets() {
+		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
+		assertTrue(ship.getBulletsCount() == 0);
+	}
+	
+	
+	@Test
+	public void testShipRemoveBullet() {
+		Bullet bullet1 = new Bullet(100, 200, 0, 0, 20);	
+		Bullet bullet2= new Bullet(100, 200, 0, 0, 20);	
+		Bullet bullet3 = new Bullet(100, 200, 0, 0, 20);	
+		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
+		ship.loadBullet(bullet1);
+		ship.loadBullet(bullet2);
+		ship.loadBullet(bullet3);
+		assertTrue(ship.getBulletsCount() == 3);
+		ship.removeBullet(bullet1);
+		assertTrue(ship.getBulletsCount() == 2);
+		assertFalse(ship.getAllBullets().contains(bullet1));
+		assertTrue(ship.getAllBullets().contains(bullet2));
+		assertTrue(ship.getAllBullets().contains(bullet3));
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testShipRemoveBulletNoBullets() {
+		Bullet bullet = new Bullet(100, 200, 0, 0, 20);
+		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
+		assertTrue(ship.getBulletsCount() == 0);
+		assertFalse(ship.getAllBullets().contains(bullet));
+		ship.removeBullet(bullet);
+	}
+	
+	@Test
+	public void testShipBulletRemovedWhenFired() {
+		Bullet bullet = new Bullet(100, 200, 0, 0, 20);	
+		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
+		World world = new World(1000, 1000);
+		ship.setWorld(world);
+		ship.loadBullet(bullet);
+		ship.fireBullet(bullet);
+		assertFalse(ship.getAllBullets().contains(bullet));
+	}
+	
+
 	@Test
 	public void testShipBulletReload() {
 		Bullet bullet = new Bullet(100, 200, 0, 0, 10);	
@@ -651,24 +620,9 @@ public class TestShip {
 		assertFalse(ship.getAllBullets().contains(bullet));
 		world.evolve(2);
 		assertEquals(1, bullet.getBoundaryCollisionCounter(), EPSILON);
-//		ship.reloadBullet(bullet); TODO Already collided in evolve
 		assertTrue(ship.getAllBullets().contains(bullet));
 	}
 	
-	@Test
-	public void testShipFireBulletHorizontal() {
-		Bullet bullet = new Bullet(100, 200, 0, 0, 10);	
-		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
-		World world = new World(1000, 1000);
-		world.addEntity(ship);
-		ship.setWorld(world);
-		ship.loadBullet(bullet);
-		ship.fireBullet(bullet);
-		assertEquals(-250, bullet.getVelocityX(), EPSILON);
-		assertEquals(0, bullet.getVelocityY(), EPSILON);
-		assertTrue(bullet.hasBeenFired());
-		assertTrue(bullet.getSource() == ship);
-	}
 	
 	@Test
 	public void testShipFireBulletGeneric() {
@@ -684,6 +638,22 @@ public class TestShip {
 		assertTrue(bullet.hasBeenFired());
 		assertTrue(bullet.getSource() == ship);
 	}
+	
+	
+	@Test
+	public void testShipFireBulletHorizontal() {
+		Bullet bullet = new Bullet(100, 200, 0, 0, 10);	
+		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
+		World world = new World(1000, 1000);
+		world.addEntity(ship);
+		ship.setWorld(world);
+		ship.loadBullet(bullet);
+		ship.fireBullet(bullet);
+		assertEquals(-250, bullet.getVelocityX(), EPSILON);
+		assertEquals(0, bullet.getVelocityY(), EPSILON);
+		assertTrue(bullet.hasBeenFired());
+		assertTrue(bullet.getSource() == ship);
+	}
 
 	
 	
@@ -694,13 +664,6 @@ public class TestShip {
 			 */	
 
 	
-	
-//	The next test is unnecessary:
-//	@Test(expected = NullPointerException.class)
-//	public void testMoveShipIsNull() {
-//		Ship ship = null;
-//		ship.move(1);
-//	}
 	
 	
 	@Test
@@ -839,6 +802,7 @@ public class TestShip {
 		assertEquals(0, ship.getVelocityY(), EPSILON);
 	}
 	
+	
 	@Test
 	public void testThrusterOn() {
 		Ship ship = new Ship(100, 100, 10, 10, 0, 20, 0);
@@ -909,13 +873,6 @@ public class TestShip {
 		assertEquals(0, ship.getOrientation(), EPSILON);
 	}
 	
-	@Test
-	public void testTurnAtHighSpeed() {
-		Ship ship = new Ship(100, 100, 100000, 100000, 0, 20, 0);
-		ship.turn(Math.PI);
-		assertNotNull(ship.getOrientation());
-		assertEquals(Math.PI, ship.getOrientation(), EPSILON);
-	}
 	
 	@Test(expected = AssertionError.class)
 	public void testTurnOisPosInfinity() {
@@ -935,6 +892,15 @@ public class TestShip {
 		ship.turn(Double.NaN);
 	}
 	
+	
+	@Test
+	public void testTurnAtHighSpeed() {
+		Ship ship = new Ship(100, 100, 100000, 100000, 0, 20, 0);
+		ship.turn(Math.PI);
+		assertNotNull(ship.getOrientation());
+		assertEquals(Math.PI, ship.getOrientation(), EPSILON);
+	}
+	
 
 	
 			/*
@@ -944,13 +910,6 @@ public class TestShip {
 			 */
 	
 	
-	
-//	@Test(expected = NullPointerException.class)
-//	public void testDistanceShip1IsNull() {
-//		Ship ship1 = null;
-//		Ship ship2 = new Ship(100, 100, 30, -15, 0, 20, 0);
-//		assertEquals(0, ship1.getDistanceBetween(ship2), EPSILON);
-//	}
 	
 	@Test(expected = NullPointerException.class)
 	public void testDistanceShip2IsNull() {
@@ -1012,13 +971,6 @@ public class TestShip {
 	
 	
 	
-//	@Test(expected = NullPointerException.class)
-//	public void testOverlapShip1IsNull() {
-//		Ship ship1 = null;
-//		Ship ship2 = new Ship(100, 100, 30, -15, 0, 20, 0);
-//		assertFalse(ship1.overlap(ship2));
-//	}
-	
 	@Test(expected = NullPointerException.class)
 	public void testOverlapShip2IsNull() {
 		Ship ship1 = new Ship(100, 100, 30, -15, 0, 20, 0);
@@ -1066,27 +1018,13 @@ public class TestShip {
 	
 	
 	
-//	@Test(expected = NullPointerException.class)
-//	public void testCollisionDetectionTimeShip1IsNull1() {
-//		Ship ship1 = null;
-//		Ship ship2 = new Ship(30, 0, 0, 0, 0, 10, 0);
-//		ship1.getTimeToCollision(ship2);
-//	}
-	
 	@Test(expected = NullPointerException.class)
 	public void testCollisionDetectionTimeShip2IsNull1() {
 		Ship ship1 = new Ship(0, 0, 10, 0, 0, 10, 0);
 		Ship ship2 = null;
 		ship1.getTimeToCollision(ship2);
 	}
-	
-	
-//	@Test(expected = NullPointerException.class)
-//	public void testCollisionDetectionPositionShip1IsNull2() {
-//		Ship ship1 = null;
-//		Ship ship2 = new Ship(30, 0, 0, 0, 0, 10, 0);
-//		ship1.getCollisionPosition(ship2);
-//	}
+
 	
 	@Test(expected = NullPointerException.class)
 	public void testCollisionDetectionPositionShip2IsNull2() {
@@ -1218,6 +1156,7 @@ public class TestShip {
 		assertFalse(ship.canHaveAsWorld(world));
 	}
 	
+	
 	@Test
 	public void testShipSetWorld() {
 		Ship ship = new Ship(100, 100, -10, -10, 0, 10, 0);
@@ -1226,6 +1165,7 @@ public class TestShip {
 		ship.setWorld(world);
 		assertTrue(ship.getWorld() == world);
 	}
+	
 	
 	@Test
 	public void testShipIsInWorldT() {
@@ -1247,6 +1187,7 @@ public class TestShip {
 		World world = new World(1000, 1000);
 		assertTrue(ship.isInWorld(world));
 	}
+	
 	
 	@Test
 	public void testCollideWithWorldVelocityXChanged() {
@@ -1295,9 +1236,9 @@ public class TestShip {
 	
 	
 			/*
- 			 * |----------------------------------------------------------------|
- 			 * | 15. The next tests test the interaction with other entities.	|
- 			 * |----------------------------------------------------------------| 
+ 			 * |------------------------------------------------|
+ 			 * | 15. The next tests test resolving collisions.	|
+ 			 * |------------------------------------------------| 
 			 */	
 	
 	
@@ -1319,6 +1260,7 @@ public class TestShip {
 		assertFalse(ship2.getVelocityX() == 0);
 		assertFalse(ship2.getVelocityY() == 0);
 	}
+	
 	
 	@Test
 	public void testCollideWithBulletSource() {
