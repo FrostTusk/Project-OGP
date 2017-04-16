@@ -647,20 +647,75 @@ public abstract class Entity {
 	
 	
 	/**
-	* Gets the time to collision between this entity and a given world.
-	* 
-	* @param  	world
-	* 			The world to which the collision time needs to be calculated.
-	* 
-	* @return	The time returned will be larger than 0 and will be equal to
-	* 			the time needed for the entity to reach a position where it collides with the boundaries of the world.
-	* 			| this.getDistanceBetween(world) == 0
-	* // TODO apparently collide?	// TODO If Ship, account for thruster!
-	*/
+	 * Gets the boundaries involved in the collision. So, if there is a collision, returns
+	 * which boundaries are involved in it.
+	 * 
+	 * @param  	world
+	 * 			The world to which the collision boundaries need to be calculated.
+	 * 
+	 * @return	If there is collision, returns which boundaries are involved in it. Else the closest boundary
+	 * 			are returned.
+	 * 			// TODO Declarative
+	 */
 	@Raw
-	public double getTimeToCollision(World world) {		
+	public double[] getCollisionBoundaries(World world) {
+		double[] distanceToBoundaries = this.getDistanceBetween(world);
+		int minimumBoundary = 0;
+		double[] result = new double[2]; 
+		for (int i = 1; i < 4; i++) {
+			if (distanceToBoundaries[i] == distanceToBoundaries[minimumBoundary]) {
+				minimumBoundary = i;
+				result[0] = minimumBoundary;
+				result[1] = 4;
+			}
+			else if (distanceToBoundaries[i] <= distanceToBoundaries[minimumBoundary])
+				result[1] = i;
+		}
+		return result;
+	}
+	
+	
+	/**
+	 * Gets the time until the second non zero collision with a boundary by this entity.
+	 * Helper Method used to fix the Salamander bug in World.
+	 * @param  	world
+	 * 			he world to which the collision time needs to be calculated.
+	 * 
+	 * @return	The time returned will be equal to the time to second non zero collision with a
+	 * 			boundary and this entity.
+	 * 			| this.getDistanceBetween(world) == 0
+	 */
+	@Raw
+	public double getTimeToSecondCollisionNonZero(World world) {
+		double[] distance = getDistanceBetween(world);	
+		double[] timeNew = new double[6];
+		timeNew[0] = Double.POSITIVE_INFINITY;
+		timeNew[1] = distance[0] / -getVelocityX();
+		timeNew[2] = distance[1] / getVelocityX();
+		timeNew[3] = Double.POSITIVE_INFINITY;
+		timeNew[4] = distance[2] / -getVelocityY();
+		timeNew[5] = distance[3] / getVelocityY();
+		int smallest = helper.findSecondSmallestNotZero(timeNew);
+		return timeNew[smallest];
+	}
+
+	
+	/**
+	 * Gets the time to collision between this entity and a given world. This method
+	 * is not the one described in the assignment, it does not account for the thruster.
+	 * 
+	 * @param  	world
+	 * 			The world to which the collision time needs to be calculated.
+	 * 
+	 * @return	The time returned will be larger than 0 and will be equal to
+	 * 			the time needed for the entity to reach a position where it collides with the boundaries of the world.
+	 * 			| this.getDistanceBetween(world) == 0
+	 * // TODO apparently collide?	// TODO If Ship, account for thruster!
+	 */
+	@Raw
+	public double getTimeToCollisionNoThrust(World world) {		
 		double[] distance = getDistanceBetween(world);
-//		if ( (distance[0] == Double.POSITIVE_INFINITY) || (distance[1] == Double.POSITIVE_INFINITY) ||	// TODO Test!
+//		if ( (distance[0] == Double.POSITIVE_INFINITY) || (distance[1] == Double.POSITIVE_INFINITY) ||
 //			 (distance[2] == Double.POSITIVE_INFINITY) || (distance[3] == Double.POSITIVE_INFINITY) ) return Double.POSITIVE_INFINITY;
 		if ( (distance[0] == 0) || (distance[1] == world.getWidth()) || (distance[2] == 0) || (distance[3] == world.getHeight()) )
 			return 0;
@@ -677,6 +732,38 @@ public abstract class Entity {
 		
 		if (time1 < time2) return time1;		
 		return time2;
+	}
+	
+	/**
+	* Gets the time to collision between this entity and a given world. This method
+	* is exactly the one as described in the assignment, we have no idea how to account
+	* for the thruster. Here we replace the second entity with the collision point between
+	* world and entity.
+	* 
+	* @param  	world
+	* 			The world to which the collision time needs to be calculated.
+	* 
+	* @return	The time returned will be larger than 0 and will be equal to
+	* 			the time needed for the entity to reach a position where it collides with the boundaries of the world.
+	* 			| this.getDistanceBetween(world) == 0
+	* // TODO If Ship, account for thruster!
+	*/
+	@Raw
+	public double getTimeToCollision(World world) {		
+		double[] distance = getDistanceBetween(world);
+		if ( (distance[0] == 0) || (distance[1] == world.getWidth()) || (distance[2] == 0) || (distance[3] == world.getHeight()) )
+			return 0;
+		
+		double[] collisionPosition = getCollisionPosition(world);
+		double[] deltaV = {this.getVelocityX(), this.getVelocityY()};
+		double[] deltaR = {this.getPosition().getPositionX() - collisionPosition[0], 
+						   this.getPosition().getPositionY() - collisionPosition[1]};
+		
+		if (helper.evaluateScalar(deltaR, deltaV) >= 0)	return Double.POSITIVE_INFINITY;;
+		double d = Math.pow(helper.evaluateScalar(deltaV, deltaR), 2) -
+					(helper.evaluateScalar(deltaV)*(helper.evaluateScalar(deltaR) - Math.pow(this.getRadius(), 2)));
+		if (d <= 0) return Double.POSITIVE_INFINITY;
+		return -( (helper.evaluateScalar(deltaV, deltaR) + Math.sqrt(d)) / helper.evaluateScalar(deltaV) );
 	}
 	
 	/**
@@ -735,7 +822,7 @@ public abstract class Entity {
 	@Raw
 	public double[] getCollisionPosition(World world) {	
 		double[] vector = {Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY};
-		double time = getTimeToCollision(world);
+		double time = getTimeToCollisionNoThrust(world);
 		if (time == Double.POSITIVE_INFINITY) return vector; // TODO Is this right? Not null?
 		
 		vector = createDefaultVector(time);	// First create a default vector.
@@ -889,66 +976,4 @@ public abstract class Entity {
 	@Raw
 	public abstract String getType();
 
-	
-	// TODO Fix the following methods/Documentation:
-	
-	
-	public double[] getBoundaryCollision(World world) {
-		double[] collisionBoundaries = this.getDistanceBetween(world);
-		int minimumBoundary = 0;
-		double[] result = new double[2]; 
-		for (int i = 1; i < 4; i++) {
-			if (collisionBoundaries[i] == collisionBoundaries[minimumBoundary]) {
-				minimumBoundary = i;
-				result[0] = minimumBoundary;
-				result[1] = 4;
-			}
-			else if (collisionBoundaries[i] <= collisionBoundaries[minimumBoundary])
-				result[1] = i;
-		}
-		return result;
-	}
-	
-	
-	public double getTimeToNextBoundaryCollision(World world) {
-		double[] distance = getDistanceBetween(world);	
-		double[] timeNew = new double[6];
-		timeNew[0] = Double.POSITIVE_INFINITY;
-		timeNew[1] = distance[0] / -getVelocityX();
-		timeNew[2] = distance[1] / getVelocityX();
-		timeNew[3] = Double.POSITIVE_INFINITY;
-		timeNew[4] = distance[2] / -getVelocityY();
-		timeNew[5] = distance[3] / getVelocityY();
-		int smallest = findSecondSmallestNotZero(timeNew);
-		return timeNew[smallest];
-	}
-
-	
-	public int findSecondSmallestNotZero(double[] array) {
-		int smallest = 0;
-		int otherSmallest = -1;
-		int otherOtherSmallest = -1;
-		for (int i = 1; i < array.length; i++)
-			if (array[i] < array[smallest]) smallest = i;
-		
-		for (int j = 0; j < array.length; j++) {
-			if (j == smallest) continue;
-			if ( (otherSmallest == -1) || (array[j] < array[otherSmallest]) )
-				otherSmallest = j;
-		}
-		
-		int result = otherSmallest;
-		if (array[otherSmallest] == 0) {
-			for (int k = 0; k < array.length; k++) {
-				if (k == smallest) continue;
-				if (k == otherSmallest) continue;
-				if ( (otherOtherSmallest == -1) || (array[k] < array[otherOtherSmallest]) )
-					otherOtherSmallest = k;
-			}
-			result = otherOtherSmallest;
-		}
-		
-		return result;
-	}
-	
 }

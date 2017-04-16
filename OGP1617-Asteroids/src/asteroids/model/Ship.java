@@ -695,7 +695,7 @@ public class Ship extends Entity {
 	@Raw
 	public void thrustOn() {
 		this.thruster.thrustOn();
-		thrust(getAcceleration());
+//		thrust(getAcceleration());
 	}
 	
 	/**

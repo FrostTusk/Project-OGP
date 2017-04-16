@@ -70,6 +70,42 @@ public class Helper {
 	
 	
 	
+	/** 
+	 * Find the second smallest non zero element in an array and returns it's position.
+	 * 	
+	 * @param	array
+	 * 			The array to be searched
+	 * 
+	 * @return	Returns the position of the second smallest non zero element in the given array.
+	 */
+	public int findSecondSmallestNotZero(double[] array) {
+		int smallest = 0;
+		for (int i = 1; i < array.length; i++)	// First perform a linear search to find the smallest element.
+			if (array[i] < array[smallest]) smallest = i;
+		
+		int otherSmallest = -1;
+		for (int j = 0; j < array.length; j++) {	// Perform a linear search but skip the smallest.
+			if (j == smallest) continue;
+			if ( (otherSmallest == -1) || (array[j] < array[otherSmallest]) )
+				otherSmallest = j;
+		}
+		
+		int otherOtherSmallest = -1;
+		int result = otherSmallest;
+		if (array[otherSmallest] == 0) {	// If the second smallest is also zero, find the next one.
+			for (int k = 0; k < array.length; k++) {
+				if (k == smallest) continue;	// Perform a linear search but skip the smallest.
+				if (k == otherSmallest) continue;	// Perform a linear search but skip the second smallest.
+				if ( (otherOtherSmallest == -1) || (array[k] < array[otherOtherSmallest]) )
+					otherOtherSmallest = k;
+			}
+			result = otherOtherSmallest;
+		}
+		return result;
+	}
+	
+	
+	
 	/**
 	 * Use linear search to check if a given tuple (array with size 2) exists in a given list.
 	 * 

@@ -646,7 +646,7 @@ public class World {
 		if ( (0 <= collisionTimeMin) && (collisionTimeMin <= time) ) {
 				if ( collisionEntitiesMin[0] == collisionEntitiesMin[1] ) {	// If the collision is with the boundary.
 					collisionEntitiesMin[0].resolveCollision(this);	// This entity is added to the boundary tracker.
-					boundaryTracker.put(collisionEntitiesMin[0], collisionEntitiesMin[0].getBoundaryCollision(this));
+					boundaryTracker.put(collisionEntitiesMin[0], collisionEntitiesMin[0].getCollisionBoundaries(this));
 				}
 				else	// If the collision is between 2 entities.
 					collisionEntitiesMin[0].resolveCollision(collisionEntitiesMin[1]);
@@ -689,13 +689,13 @@ public class World {
 		collisionTracker.clear();	// Clears the trackers because we are moving positions and won't be stuck in a loop anymore.
 		boundaryTracker.clear();
 		for (Entity entity: getAllEntitiesList()) {	// getAllEntitiesList(), returns a new list, iterating is possible.
-			if ( (entity.getType() == "Ship") && ((Ship)entity).getThrustStatus()) ((Ship)entity).thrust(((Ship)entity).getAcceleration(), time);
 			try {
 				entity.move(time);
 			}
 			catch (IllegalArgumentException exc) {	// This exception is throw if the new position of this entity is invalid
 				throw new IllegalArgumentException(exc);	
 			}
+			if ( (entity.getType() == "Ship") && ((Ship)entity).getThrustStatus()) ((Ship)entity).thrust(((Ship)entity).getAcceleration(), time);
 		}
 		updateMap();	// Positions were changed, the map needs to be updated.
 	}
@@ -714,7 +714,7 @@ public class World {
 		for (Entity entity: getAllEntities()) {
 			double collisionTimeTemp =  entity.getTimeToCollision(this);
 			if (collisionTimeTemp == 0)
-				collisionTimeTemp =  entity.getTimeToNextBoundaryCollision(this);
+				collisionTimeTemp =  entity.getTimeToSecondCollisionNonZero(this);
 			if ((collisionTimeTemp < collisionTimeMin) || (collisionTimeMin == -1 )) {
 				collisionTimeMin = collisionTimeTemp;
 				collisionEntitiesMin[0] = entity;
@@ -740,7 +740,7 @@ public class World {
 	public boolean collidesWithTrackedBoundary(Entity[] entity) {
 		if (entity[0] != entity[1]) return false;
 		double[] lastBoundaries;
-		double[] currentBoundaries = entity[0].getBoundaryCollision(this);
+		double[] currentBoundaries = entity[0].getCollisionBoundaries(this);
 		try {
 			lastBoundaries = boundaryTracker.get(entity[0]);
 		}
