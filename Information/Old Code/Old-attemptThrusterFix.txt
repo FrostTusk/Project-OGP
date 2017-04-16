@@ -1,0 +1,18 @@
+private double calculateTime(double distance, double velocity, boolean XDirection) {
+  double acceleration;
+  double newVelocity = velocity;
+  if ( (this.getType() == "Ship") && (((Ship)this).getThrustStatus()) ) {
+    if (XDirection) acceleration = ((Ship)this).getAcceleration() + Math.cos(((Ship)this).getOrientation());
+    else acceleration = ((Ship)this).getAcceleration() + Math.sin(((Ship)this).getOrientation());
+    double counter = 0;
+    newVelocity = velocity + acceleration * counter;
+    while (distance - newVelocity >= 0) {
+      distance = distance - newVelocity;
+      newVelocity = velocity + acceleration * counter;
+      counter += 1;
+    }
+    double time = distance / newVelocity;
+    return time + counter;
+  }
+  else return distance/velocity;
+}
