@@ -98,7 +98,6 @@ public class World {
 	@Raw
 	public void terminate() {
 		for (Entity entity: entities.values()) {
-//		for (Entity entity: entities.values()) {
 			try {
 				this.removeEntity(entity);
 				entity.setWorld(null);
@@ -228,7 +227,7 @@ public class World {
 	/**
 	 * Map holding all entities of this world.
 	 */
-	private Map<String, Entity> entities = new HashMap<String, Entity>();	// TODO Use this implementation!
+	private Map<String, Entity> entities = new HashMap<String, Entity>();
 	
 	/**
 	 * Check whether a given in entity can be in this world.
@@ -314,22 +313,23 @@ public class World {
 	 * @see implementation
 	 */
 	@Raw
-	private void updateMap() {	// TODO Write commentary.
-		List<Entity> entitiesList = new ArrayList<Entity>();
-		List<String> iterator = helper.convertCollectionToList(entities.keySet());
+	private void updateMap() {
+		List<Entity> entitiesList = new ArrayList<Entity>();	// A buffer list that will hold all entities that were changed.
+		List<String> iterator = helper.convertCollectionToList(entities.keySet());	// Creates a position iterator.
 			
-		for (String position: iterator) {
-			if (position == null) entities.remove(position);
+		for (String position: iterator) {	// Iterate over all the positions
+			if (position == null) entities.remove(position);	// If a position is null, remove it.
 			else if (!helper.convertPositionToString(entities.get(position).getPosition()).equals(position)) {
-				Entity entity = entities.get(position);
-		  		entities.remove(position);
+				Entity entity = entities.get(position);	// If the position was changed, remove the position
+		  		entities.remove(position);	// from the map and add it to the buffer list.
 		  		entitiesList.add(entity);
 			}
 		}
-	  
-		for (Entity entity: entitiesList)
+		
+		for (Entity entity: entitiesList)	// Add all changed entities to the map.
 			entities.put(helper.convertPositionToString(entity.getPosition()), entity);
-	}
+	}	// Currently this method doesn't work with the add and removeEntity methods, 
+		// because if it does, there are issues if the collection is invalid.
 	
 	
 	
@@ -361,7 +361,7 @@ public class World {
 		double collisionTimeMin = -1;
 		Entity[] collisionEntitiesMin = new Entity[2];
 		
-		for (Entity entity1: getAllEntitiesList()) {
+		for (Entity entity1: getAllEntitiesList()) {	// iterate over all the entities to find the first collision.
 			collisionTimeMin = iterateEntities(collisionTimeMin, collisionEntitiesMin, entity1, -1);
 			collisionTimeMin = iterateBoundaries(collisionTimeMin, collisionEntitiesMin, entity1, -1);
 		}
@@ -442,7 +442,7 @@ public class World {
 	public double[] getFirstCollisionPosition() throws IllegalArgumentException {
 		Entity[] collisionEntities = getFirstCollisionEntities();
 		if (collisionEntities[0] == collisionEntities[1])
-				return collisionEntities[0].getCollisionPosition(this);
+			return collisionEntities[0].getCollisionPosition(this);
 		else
 			try {
 				return getFirstCollisionEntities()[0].getCollisionPosition(getFirstCollisionEntities()[1]);
@@ -461,8 +461,19 @@ public class World {
 			 */
 	
 	
-	
+	/**
+	 * Returns the time to collision between the entities in an array.
+	 * The array must be correctly built.
+	 * Handler method used in the evolve method to negate code bloat.
+	 * 
+	 * @param	collisionEntitiesMin
+	 * 			The entity array involved in the collision.
+	 * 
+	 * @see implementation
+	 */
+	@Raw
 	public double getTimeToCollisionEntitities(Entity[] collisionEntitiesMin) {
+		if (collisionEntitiesMin.length != 2) return -1;
 		if ( collisionEntitiesMin[0] == collisionEntitiesMin[1] )	// If the collision is with the boundary.
 			return collisionEntitiesMin[0].getTimeToCollision(this);
 		else	// If the collision is between 2 entities.
@@ -480,7 +491,6 @@ public class World {
 	private double iterateEntities(double collisionTimeMin, Entity[] collisionEntitiesMin, Entity entity1, double time) 
 			throws IllegalArgumentException {
 		double collisionTimeTemp;
-//		for (Entity entity2: entities.values()) {
 		for (Entity entity2: getAllEntitiesList()) {
 			if (entity1 == entity2) continue;	// Only check if the entities are different.
 			try {
@@ -683,7 +693,8 @@ public class World {
 	 * 
 	 * @throws 	IllegalArgumentException
 	 *         	The new position of an entity is invalid.
-	 *       	| ! new Position(0,0).isValidPosition(positionX, positionY)	// TODO There exists.
+	 *       	| ! for some entity in getAllEntitiesList(): new Position(0,0).isValidPosition(entity.move(time).getPosition.getPositionX(),
+	 *       		 entity.move(time).getPosition.getPositionY())
 	 */
 	private void update(double time) throws IllegalArgumentException {
 		collisionTracker.clear();	// Clears the trackers because we are moving positions and won't be stuck in a loop anymore.
@@ -703,17 +714,22 @@ public class World {
 	
 	/**
 	 * Handler method for the Salamander bug.
-	 * TODO Explain the Salamander bug.
+	 * The Salamander bug is a bug that happens when sometimes a ship
+	 * reaches a boundary and for some reason, it's collision isn't handled.
+	 * This has as consequence that it's destroyed at the first next evolve call.
+	 * This method handles the case when there just was a collision with the boundary, and there is 
+	 * another one at time 0, this method will then find the next collision that's not at time zero.
+	 * Helper Method for evolve().
 	 * 
 	 * @param	time
 	 * 			The time over which the world will evolve.
 	 */
 	private void handleSalamander(double time) {
-		double collisionTimeMin = -1;	// TODO Write commentary
+		double collisionTimeMin = -1;
 		Entity[] collisionEntitiesMin = new Entity[2];
-		for (Entity entity: getAllEntities()) {
+		for (Entity entity: getAllEntities()) {	// Find the second non-zero collision with a boundary.
 			double collisionTimeTemp =  entity.getTimeToCollision(this);
-			if (collisionTimeTemp == 0)
+			if (collisionTimeTemp == 0)	// If the collision is at time zero, find the non zero collision with the boundary.
 				collisionTimeTemp =  entity.getTimeToSecondCollisionNonZero(this);
 			if ((collisionTimeTemp < collisionTimeMin) || (collisionTimeMin == -1 )) {
 				collisionTimeMin = collisionTimeTemp;
@@ -721,8 +737,7 @@ public class World {
 				collisionEntitiesMin[1] = entity;
 			}
 		}
-		resolveEvolve(collisionEntitiesMin, collisionTimeMin, time);
-		return;
+		resolveEvolve(collisionEntitiesMin, collisionTimeMin, time);	// Resolve the evolve.
 	}
 	
 	
@@ -805,7 +820,8 @@ public class World {
 	 * 
 	 * @return	Returns the entity at the given position. 
 	 * 			Returns null if there is no entity at that position.
-	 * 			// TODO Declarative Documentation?
+	 * 			| ( (result.getPosition().getPositionX() == position.getPositionX()) &&
+	 * 			|   (result.getPosition().getPositionY() == position.getPositionY()) )
 	 */
 	@Raw
 	public Entity getEntityAtPosition(Position position) {

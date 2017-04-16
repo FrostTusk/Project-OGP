@@ -1,7 +1,6 @@
 package asteroids.helper;
 
 import java.util.*;
-
 import asteroids.model.World;
 
 /*
@@ -117,7 +116,7 @@ public class Helper {
 	 * @return	Return whether or not the given tuple is in the list.
 	 * 			true if it is, false if not.
 	 */
-	public <T> boolean isInList(Object[] tuple, List<T[]> updatedEntities) {
+	public <T> boolean isInList(Object[] tuple, List<T[]> updatedEntities) throws IllegalArgumentException {
 		if (tuple == null) return false;	// TODO throw NullPointerException?
 		if (tuple.length != 2) throw new IllegalArgumentException();
 		for (Object[] attempt: updatedEntities)
@@ -198,24 +197,32 @@ public class Helper {
 		     */
 
 	
-	// TODO Documentation
+	
+	/**
+	 * Converts a given Position to it's String format.
+	 * 
+	 * @param	position
+	 * 			The position to be used.
+	 * 
+	 * @return	Returns the position in it's String format.
+	 */
 	public String convertPositionToString(Position position) {
 		return Double.toString(position.getPositionX()) + "," + Double.toString(position.getPositionY());
 	}
 
 
 	/**
-	* Calculates the position of an entity after a given time.
-	* The result is not returned as a Position Object because this
-	* method should not throw an exception if the position is not valid.
-	* 
-	* @param 	entity
-	* 		  	The entity to be used.
-	* @param 	time
-	* 			The time to be used.
-	* 
-	* @return	the position after the given time.
-	*/
+	 * Calculates the position of an entity after a given time.
+	 * The result is not returned as a Position Object because this
+	 * method should not throw an exception if the position is not valid.
+	 * 
+	 * @param 	entity
+	 * 		  	The entity to be used.
+	 * @param 	time
+	 * 			The time to be used.
+	 * 
+	 * @return	the position after the given time.
+	 */
 	public double[] calculatePosition(Entity entity, double time) {
 		double[] position = {entity.getPosition().getPositionX() + entity.getVelocityX() * time,
 						   	 entity.getPosition().getPositionY() + entity.getVelocityY() * time};
@@ -224,15 +231,15 @@ public class Helper {
 	
 	
 	/**
-	* Calculates if this entity overlaps with any other entities in a list.
-	* 
-	* @param 	entity1
-	* 		  	The first entity to be used.
-	* @param 	entities
-	* 			The entities to be check.
-	* 
-	* @return	true if it does overlap, false if not.
-	*/
+	 * Calculates if this entity overlaps with any other entities in a list.
+	 * 
+	 * @param 	entity1
+	 * 		  	The first entity to be used.
+	 *  @param 	entities
+	 * 			The entities to be check.
+	 * 
+	 * @return	true if it does overlap, false if not.
+	 */
 	public boolean operlapsWithOtherEntities(Entity entity1, List<Entity> entities) {
 		for (Entity entity2: entities) if ( entity1.overlap(entity2) && (entity2 != entity1) ) return true;
 		return false;

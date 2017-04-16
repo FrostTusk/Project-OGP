@@ -24,7 +24,7 @@ import be.kuleuven.cs.som.annotate.*;
  */
 
 /**
- * A class of bullets. //TODO Do we need to keep all these invariants? + Any more?
+ * A class of bullets.
  * 
  * @invar  	The position of each bullet must be a valid position for any
  *         	bullet.
@@ -36,6 +36,10 @@ import be.kuleuven.cs.som.annotate.*;
  *       	| this.canHaveAsRadius(this.getRadius())
  * @invar  	Each bullet must have a valid mass.
  *       	| this.canHaveAsMass(this.getMass())
+ * @invar	Each bullet can have its world as world.
+ * 			| this.canHaveAsWorld(this.getWorld())
+ * @invar	Each bullet can have its ship as ship.
+ * 			| this.canHaveAsShip(this.getShip())
  *       
  * @author	Mathijs Hubrechtsen, Ruben Dhuyvetter
  */
@@ -388,8 +392,7 @@ public class Bullet extends Entity {
 	 * 			The world to be used.
 	 * 
 	 * @see implementation
-	 * 		// TODO apparently collide?
-	 * 		// TODO what if they are not colliding?
+	 * // TODO Problems with rounding? 
 	 */
 	@Override
 	public void resolveCollision(World world) throws NullPointerException {

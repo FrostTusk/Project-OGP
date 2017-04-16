@@ -28,7 +28,7 @@ import be.kuleuven.cs.som.annotate.*;
  */
 
 /**
- * A class of ships. //TODO Do we need to keep all these invariants? + Any more?
+ * A class of ships.
  * 
  * @invar  	The position of each ship must be a valid position for any
  *         	ship.
@@ -43,6 +43,8 @@ import be.kuleuven.cs.som.annotate.*;
  *       	| canHaveAsRadius(this.getRadius())
  * @invar  	Each ship must have a valid mass.
  *       	| canHaveAsMass(this.getMass())
+ * @invar	Each ship can have all its bullets as bullet.
+ * 			| for each bullet in bullets: canHaveAsBullet(bullet)
  *       
  * @author	Mathijs Hubrechtsen, Ruben Dhuyvetter
  */
@@ -255,6 +257,7 @@ public class Ship extends Entity {
 	 */
 	@Raw
 	public boolean isValidMass(double mass) {
+		if (Double.isNaN(mass)) return false;
 		return mass > (4/3) * Math.PI * Math.pow(getRadius(), 3) * getDensity();
 	}
 	
@@ -275,7 +278,7 @@ public class Ship extends Entity {
 	 *       	|   then new.getMass() == (4/3) * Math.PI * Math.pow(this.getRadius(), 3) * this.getDensity()
 	 */
 	@Raw
-	public void setMass(double mass) {
+	public void setMass(double mass) { 
 		if (isValidMass(mass)) this.mass = mass;
 		else this.mass = (4/3) * Math.PI * Math.pow(getRadius(), 3) * getDensity();
 	}
@@ -383,7 +386,7 @@ public class Ship extends Entity {
 	 *         
 	 * @see implementation
 	 */
-	@Raw // TODO Public, sure?
+	@Raw
 	public void removeBullet(Bullet bullet) throws IllegalArgumentException {
 		if (!this.bullets.contains(bullet)) throw new IllegalArgumentException();
 		this.bullets.remove(bullet);
@@ -732,8 +735,7 @@ public class Ship extends Entity {
 	 * 			The world to be used.
 	 * 
 	 * @see implementation
-	 * 		// TODO apparently collide?
-	 * 		// TODO what if they are not colliding?
+	 * // TODO Problems with rounding? 
 	 */
 	@Override
 	public void resolveCollision(World world) throws NullPointerException {

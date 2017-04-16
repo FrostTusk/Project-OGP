@@ -640,7 +640,7 @@ public class Facade implements IFacade {
 	@Override
 	public Object getEntityAt(World world, double x, double y) throws ModelException {
 		try {
-			return world.getEntityAtPosition(new Position(x, y));	// TODO Problem with id.
+			return world.getEntityAtPosition(new Position(x, y));
 		}
 		catch (NullPointerException exc) {
 			throw new ModelException(exc);

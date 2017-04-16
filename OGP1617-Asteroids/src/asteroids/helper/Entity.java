@@ -30,19 +30,22 @@ import be.kuleuven.cs.som.annotate.*;
  */
 
 /**
- * A class of entities. //TODO Do we need to keep all these invariants? + Any more?
+ * A class of entities.
  * 
  * @invar  	The position of each entity must be a valid position for any
  *         	entity.
- *       	| isValidPosition(getPositionX(), getPositionY())
+ *       	| this.isValidPosition(getPositionX(), getPositionY())
  * @invar  	The speed of each entity must be a valid speed for any
  *         	entity.
- *       	| isValidSpeed(getVelocityX(), getVelocityY())
+ *       	| this.isValidSpeed(getVelocityX(), getVelocityY())
  * @invar  	Each entity can have its radius as radius.
- *       	| canHaveAsRadius(this.getRadius())
+ *       	| this.canHaveAsRadius(this.getRadius())
  * @invar  	Each entity must have a valid mass.
- *       	| canHaveAsMass(this.getMass())
- *       
+ *       	| this.canHaveAsMass(this.getMass())
+ * @invar	Each entity can have its world as world.
+ * 			| this.canHaveAsWorld(this.getWorld())
+ * 
+ *   
  * @author	Mathijs Hubrechtsen
  */
 public abstract class Entity {
@@ -151,7 +154,6 @@ public abstract class Entity {
 			throws IllegalArgumentException {
 		try {
 			this.position = new Position(positionX, positionY);
-//			if (getWorld() != null) getWorld().updateMap(); // TODO Do we need to update the world?
 		}
 		catch(IllegalArgumentException exc) {
 			throw new IllegalArgumentException(exc);
@@ -653,9 +655,9 @@ public abstract class Entity {
 	 * @param  	world
 	 * 			The world to which the collision boundaries need to be calculated.
 	 * 
-	 * @return	If there is collision, returns which boundaries are involved in it. Else the closest boundary
+	 * @return	If there is collision, returns which boundaries are involved in it. Else the closest boundaries
 	 * 			are returned.
-	 * 			// TODO Declarative
+	 * // TODO Declarative?
 	 */
 	@Raw
 	public double[] getCollisionBoundaries(World world) {
@@ -710,13 +712,11 @@ public abstract class Entity {
 	 * @return	The time returned will be larger than 0 and will be equal to
 	 * 			the time needed for the entity to reach a position where it collides with the boundaries of the world.
 	 * 			| this.getDistanceBetween(world) == 0
-	 * // TODO apparently collide?	// TODO If Ship, account for thruster!
+	 * // TODO Problems with rounding?	// TODO If Ship, account for thruster?
 	 */
 	@Raw
 	public double getTimeToCollisionNoThrust(World world) {		
 		double[] distance = getDistanceBetween(world);
-//		if ( (distance[0] == Double.POSITIVE_INFINITY) || (distance[1] == Double.POSITIVE_INFINITY) ||
-//			 (distance[2] == Double.POSITIVE_INFINITY) || (distance[3] == Double.POSITIVE_INFINITY) ) return Double.POSITIVE_INFINITY;
 		if ( (distance[0] == 0) || (distance[1] == world.getWidth()) || (distance[2] == 0) || (distance[3] == world.getHeight()) )
 			return 0;
 		
@@ -746,7 +746,7 @@ public abstract class Entity {
 	* @return	The time returned will be larger than 0 and will be equal to
 	* 			the time needed for the entity to reach a position where it collides with the boundaries of the world.
 	* 			| this.getDistanceBetween(world) == 0
-	* // TODO If Ship, account for thruster!
+	* // TODO Problems with rounding?	// TODO If Ship, account for thruster?
 	*/
 	@Raw
 	public double getTimeToCollision(World world) {		
@@ -763,7 +763,10 @@ public abstract class Entity {
 		double d = Math.pow(helper.evaluateScalar(deltaV, deltaR), 2) -
 					(helper.evaluateScalar(deltaV)*(helper.evaluateScalar(deltaR) - Math.pow(this.getRadius(), 2)));
 		if (d <= 0) return Double.POSITIVE_INFINITY;
-		return -( (helper.evaluateScalar(deltaV, deltaR) + Math.sqrt(d)) / helper.evaluateScalar(deltaV) );
+		
+		double result =  -( (helper.evaluateScalar(deltaV, deltaR) + Math.sqrt(d)) / helper.evaluateScalar(deltaV) );
+		if (result < 0 ) return 0;	// Fail-Safe
+		return result;
 	}
 	
 	/**
@@ -782,7 +785,7 @@ public abstract class Entity {
 	* @throws 	NullPointerException
 	* 			The other entity was null.
 	* 			| entity == null
-	* // TODO apparently collide?	// TODO If Ship, account for thruster!
+	* // TODO Problems with rounding?	// TODO If Ship, account for thruster?
 	*/
 	@Raw
 	public double getTimeToCollision(Entity entity) throws IllegalArgumentException, NullPointerException {
@@ -803,7 +806,7 @@ public abstract class Entity {
 		if (d <= 0) return Double.POSITIVE_INFINITY;
 		
 		double result = -( (helper.evaluateScalar(deltaV, deltaR) + Math.sqrt(d)) / helper.evaluateScalar(deltaV) );
-		if (result < 0 ) return 0;	// TODO Is this all right? It's just a fail-safe.
+		if (result < 0 ) return 0;	// Fail-Safe
 		return result;
 	}
 	
@@ -900,10 +903,45 @@ public abstract class Entity {
 			 */
 	
 	
-	// TODO Documentation
+	
+	/**
+	 * Resolves the collision between this entity and a given world.
+	 * 
+	 * @param 	ship
+	 * 			The ship to be used.
+	 * 
+	 * @see implementation
+	 */
 	public abstract void resolveCollision(World world);
+	
+	/**
+	 * Resolves the collision between this entity and a given entity.
+	 * 
+	 * @param 	ship
+	 * 			The ship to be used.
+	 * 
+	 * @see implementation
+	 */
 	public abstract void resolveCollision(Entity entity);
+	
+	/**
+	 * Resolves the collision between this entity and a given ship.
+	 * 
+	 * @param 	ship
+	 * 			The ship to be used.
+	 * 
+	 * @see implementation
+	 */
 	public abstract void resolveCollisionShip(Ship ship);
+	
+	/**
+	 * Resolves the collision between this entity and a given bullet.
+	 * 
+	 * @param 	ship
+	 * 			The ship to be used.
+	 * 
+	 * @see implementation
+	 */
 	public abstract void resolveCollisionBullet(Bullet bullet);
 
 	
