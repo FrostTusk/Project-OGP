@@ -28,9 +28,10 @@ import be.kuleuven.cs.som.annotate.*;
  */
 
 /**
- * A class of worlds. //TODO Any more?
+ * A class of worlds.
  * 
- * @invar   | isValidSize(getWidth(), getHeight())
+ * @invar   | this.isValidSize(getWidth(), getHeight())
+ * @invar	| for each entity in getAllEntities(): this.canHaveAsEntity(entity)
  *       
  * @author	Mathijs Hubrechtsen
  */
@@ -164,9 +165,8 @@ public class World {
 	 *       	The width to check.
 	 * @param	height
 	 * 			The height to check.
-	 *         
-	 * @return	Returns whether the given width and height make up a valid size or not.
-	 * 			true if it is, false if not.
+	 * 
+	 * @see implementation
 	 */
 	@Raw
 	public static boolean isValidSize(double width, double height) {
@@ -235,8 +235,7 @@ public class World {
 	 * @param	entity
 	 * 			The entity to be checked.
 	 * 
-	 * @return 	Returns whether this world can have the given entity as entity.
-	 * 			true if it can, false if not.
+	 * @see implementation
 	 */
 	@Raw
 	public boolean canHaveAsEntity(Entity entity) {
@@ -251,8 +250,7 @@ public class World {
 	 * @param	entity
 	 * 			The entity to be checked.
 	 * 
-	 * @return 	Returns whether this world already has the given entity in 
-	 * 			it's collection of entities. true if it can, false if not.
+	 * @see implementation
 	 */
 	@Raw
 	public boolean containsEntity(Entity entity) {
@@ -350,13 +348,16 @@ public class World {
 
 	/**
 	 * Gets the entities involved first collision in the current world.
+	 * For the throws, see iterateEntities/iterateBoundaries.
 	 * 
 	 * @return	Returns the entities involved in the first collision
 	 * 			of this world. If a boundary is involved the entities returned
 	 * 			will be the entity involved in the boundary collision and itself.
-	 * 			// TODO Declarative Documentation.
+	 * 			| for each entity1: entity: getAllEntitiesList():
+	 * 			| for each entity2: entity: getAllEntitiesList():
+	 * 			| this.getTimeToCollisionEntities(result) <= this.getTimeToCollisionEntities({entity1, entity2})
 	 */
-	@Raw
+	@Raw 
 	public Entity[] getFirstCollisionEntities() throws IllegalArgumentException {
 		double collisionTimeMin = -1;
 		Entity[] collisionEntitiesMin = new Entity[2];
@@ -373,11 +374,15 @@ public class World {
 	
 	/**
 	 * Gets the entities involved in the first collision in the current world starting from a certain value.
+	 * For the throws, see iterateEntities/iterateBoundaries.
 	 * 
 	 * @return	Returns the entities involved in the first collision
 	 * 			of this world. If a boundary is involved the entities returned
 	 * 			will be the entity involved in the boundary collision and itself.
-	 * 			// TODO Declarative Documentation.
+	 * 			| for each entity1: entity: getAllEntitiesList():
+	 * 			| for each entity2: entity: getAllEntitiesList():
+	 * 			| if (this.getTimeToCollisionEntities({entity1, entity2}) > time)
+	 * 			| this.getTimeToCollisionEntities(result) <= this.getTimeToCollisionEntities({entity1, entity2})
 	 */
 	@Raw
 	public Entity[] getFirstCollisionEntities(double time) throws IllegalArgumentException {
@@ -399,7 +404,9 @@ public class World {
 	 * 
 	 * @return	Returns the time of the first collision
 	 * 			of this world.
-	 * 			// TODO Declarative Documentation.
+	 * 			| for each entity1: entity: getAllEntitiesList():
+	 * 			| for each entity2: entity: getAllEntitiesList():
+	 * 			| result <= this.getTimeToCollisionEntities({entity1, entity2})
 	 * 
 	 * @throws	IllegalArgumentException
 	 * 			| (this.getFirstCollisionEntities()[0] != this.getFirstCollisionEntities()[1]) &&
@@ -432,7 +439,13 @@ public class World {
 	 * 
 	 * @return	Returns the position of the first collision
 	 * 			of this world.
-	 * 			// TODO Declarative Documentation.
+	 * 			| for some entity1: entity: getAllEntitiesList():
+	 * 			| for some entity2: entity: getAllEntitiesList():
+	 * 			| if (getTimeToCollisionEntities({entity1, entity2) == getTimeToFirstCollision())
+	 * 			| 	if (entity1 == entity2)
+	 * 			|		result == getCollisionPosition(entity1)
+	 * 			|	else
+	 * 			|		result == entity1.getCollisionPosition(entity2)
 	 * 
 	 * @throws	IllegalArgumentException
 	 * 			| (this.getFirstCollisionEntities()[0] != this.getFirstCollisionEntities()[1]) &&
@@ -459,6 +472,7 @@ public class World {
 			 * | 5. The next methods handle helper methods for Collision Detection.	|
 			 * |--------------------------------------------------------------------| 
 			 */
+	
 	
 	
 	/**
@@ -751,6 +765,8 @@ public class World {
 	 * 			the second entity.
 	 * 
 	 * @return	Returns whether or not the given entity collides with a tracked boundary.
+	 * 			| result == for all boundary in entity[0].getCollisionBoundaries():
+	 * 			| 			!boundaryTracker.get(Entity[0]).contains(boundary)
 	 */
 	public boolean collidesWithTrackedBoundary(Entity[] entity) {
 		if (entity[0] != entity[1]) return false;
@@ -911,6 +927,7 @@ public class World {
 	 * Destroys all overlapping entities in the current world.
 	 * If an entity overlaps with 2 other entities, one of the entities will not be destroyed.
 	 * The same holds true for boundaries and entity and boundary overlaps.
+	 * @see implementation
 	 */
 	public void destroyOverlaps() {
 		for (Entity entity1: getAllEntitiesList()) {	// getAllEntitiesList(), returns a new list, iterating is possible.

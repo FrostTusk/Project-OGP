@@ -1,9 +1,8 @@
 package asteroids.junk;
 
-import java.util.HashMap;
-import java.util.Map;
-import asteroids.helper.Entity;
-import asteroids.model.Ship;
+import java.util.*;
+import asteroids.helper.*;
+import asteroids.model.*;
 
 /**
  * Do not use this test class as a test suite! Use JUnit 4 test suites 
@@ -12,19 +11,36 @@ import asteroids.model.Ship;
  * 
  * @author Mathijs Hubrechtsen
  */
+@SuppressWarnings("unused")
 public class ManualTests {
-	private static double pi = Math.PI;
+
+	/**
+	 * Variable whether debug mode needs to be used or not.
+	 */
 	private static boolean debug = false;
+	/**
+	 * Variable whether debug mode needs to original tests need to be shown or not.
+	 */
 	private static boolean showOriginalTests = false;
+	
+	/**
+	 * Variable registering a test map.
+	 */
 	private static Map<String, Entity> entities = new HashMap<String, Entity>();
 	
-	@SuppressWarnings("unused")
+	
+	/**
+	 * Main Method
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		// ship parameters = positionX, positionY, velocityX, velocityY, orientation, shape
 
 		boolean test;	// Test if 0 is properly compared with a double in java.
 		if (0.1 > 0) test = true;
 		else test = false;
+		System.out.format("(0.1 > 0) == ");
 		System.out.println(test);
 		
 		Ship ship1 = new Ship(0, 0, 100, 100, 0, 20, 10);	// Test if maps work as expected
@@ -33,6 +49,7 @@ public class ManualTests {
 		System.out.println(entities.toString());
 		entities.put("HELLO", ship2);
 		System.out.println(entities.toString());
+		System.out.format("This Ship should be the second Ship: ");
 		System.out.println(entities.get("HELLO"));
 		if (debug) summary((Ship)entities.get("HELLO"), false);
 		
@@ -41,6 +58,10 @@ public class ManualTests {
 	}
 	
 	
+	/**
+	 * Handler that prints out the very first tests that were written in this project.
+	 * These tests are now included in the Test Suite for Ship.
+	 */
 	public static void runOriginalTestHandler() {
 		System.out.println("Ship 1:");
 		Ship ship1 = new Ship(0, 0, 100, 100, 0, 20, 1);
@@ -64,17 +85,34 @@ public class ManualTests {
 		Ship ship5 = new Ship(0, 0, 100, 100, 0, 10, 1);
 		runTestSingle(ship5, debug);
 		System.out.println("Ship 6:");
-		Ship ship6 = new Ship(100, -100, 50, 50, pi, 10, 1);
+		Ship ship6 = new Ship(100, -100, 50, 50, Math.PI, 10, 1);
 		runTestSingle(ship6, debug);
 		System.out.println("");
 		System.out.println("");
 	}
 	
+	/**
+	 * Runs a single test.
+	 * Helper Method for runOriginalTestHandler().
+	 * 
+	 * @param	ship
+	 * 			The ship to be used.
+	 * @param	debug
+	 * 			Is debug mode active or not.
+	 */
 	public static void runTestSingle(Ship ship, boolean debug) {
 		summary(ship, debug);
 	}
 	
 		
+	/**
+	 * Prints out a few properties of a given ship.
+	 * 
+	 * @param	ship
+	 * 			The ship to be used.
+	 * @param	debug
+	 * 			Is debug mode active or not.
+	 */
 	public static void summary(Ship ship, boolean debug) {
 		System.out.println("Basic:");
 		System.out.format("PositionX = %f%n", ship.getPosition().getPositionX());

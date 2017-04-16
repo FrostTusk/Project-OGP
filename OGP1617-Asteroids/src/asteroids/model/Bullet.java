@@ -26,20 +26,12 @@ import be.kuleuven.cs.som.annotate.*;
 /**
  * A class of bullets.
  * 
- * @invar  	The position of each bullet must be a valid position for any
- *         	bullet.
- *       	| this.getPosition().isValidPosition(this.position.getPositionX(), this.position.getPositionY())
- * @invar  	The speed of each bullet must be a valid speed for any
- *         	bullet.
- *       	| this.isValidSpeed(getVelocityX(), getVelocityY())
- * @invar  	Each bullet can have its radius as radius.
- *       	| this.canHaveAsRadius(this.getRadius())
- * @invar  	Each bullet must have a valid mass.
- *       	| this.canHaveAsMass(this.getMass())
- * @invar	Each bullet can have its world as world.
- * 			| this.canHaveAsWorld(this.getWorld())
- * @invar	Each bullet can have its ship as ship.
- * 			| this.canHaveAsShip(this.getShip())
+ * @invar	| this.getPosition().isValidPosition(this.position.getPositionX(), this.position.getPositionY())
+ * @invar   | this.isValidSpeed(getVelocityX(), getVelocityY())
+ * @invar   | this.canHaveAsRadius(this.getRadius())
+ * @invar   | this.canHaveAsMass(this.getMass())
+ * @invar	| this.canHaveAsWorld(this.getWorld())
+ * @invar	| this.canHaveAsShip(this.getShip())
  *       
  * @author	Mathijs Hubrechtsen, Ruben Dhuyvetter
  */

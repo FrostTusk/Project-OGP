@@ -8,5 +8,9 @@ package asteroids.junk;
  * @author Mathijs Hubrechtsen
  */
 public class TestException extends RuntimeException {
+	
+	/**
+	 * Variable registering the version of this exception.
+	 */
 	 private static final long serialVersionUID = 1L;
 }
