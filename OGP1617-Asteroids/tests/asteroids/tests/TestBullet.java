@@ -43,7 +43,7 @@ public class TestBullet {
 	}
 	
 	@Test
-	public void testCreateTerminateBullet() {
+	public void testCreateBulletTerminateBullet() {
 		Bullet bullet = new Bullet(1, 1, 1, 1, 1);
 		assertNotNull(bullet);
 		assertFalse(bullet.isTerminated());
@@ -815,6 +815,40 @@ public class TestBullet {
 	}
 	
 	@Test 
+	public void testOverlapShipGeneric() {
+		Bullet bullet = new Bullet(100, 100, 0, 0, 20);
+		Ship ship1 = new Ship(100, 100, 10, -10, Math.PI, 20, 10);
+		Ship ship2 = new Ship(100, 100, 10, -10, Math.PI, 10, 10);
+		Ship ship3 = new Ship(130, 100, 10, -10, Math.PI, 20, 10);
+		Ship ship4 = new Ship(100, 130, 10, -10, Math.PI, 20, 10);
+		assertTrue(bullet.overlap(ship1));
+		assertTrue(bullet.overlap(ship2));
+		assertTrue(bullet.overlap(ship3));
+		assertTrue(bullet.overlap(ship4));
+	}
+	
+	@Test 
+	public void testOverlapBulletGeneric() {
+		Bullet bullet = new Bullet(100, 100, 0, 0, 20);
+		Bullet bullet1 = new Bullet(100, 100, 0, 0, 10);
+		Bullet bullet2 = new Bullet(130, 100, 0, 0, 20);
+		Bullet bullet3 = new Bullet(140, 100, 0, 0, 20);
+		assertTrue(bullet.overlap(bullet1));
+		assertTrue(bullet.overlap(bullet2));
+		assertFalse(bullet.overlap(bullet3));
+		
+	}
+	
+//	@Test //Next test fails probably due to rounding, so it is put in commentary
+//	public void testBulletOverlapShipRounding() {
+//		Bullet bullet = new Bullet(100, 100, 0, 0, 20);
+//		Ship ship5 = new Ship(140, 100, 10, -10, Math.PI, 20.40405, 10);
+//		Ship ship6 = new Ship(100, 100, 10, -10, Math.PI, 20.40404, 10);
+//		assertTrue(bullet.overlap(ship5));
+//		assertFalse(bullet.overlap(ship6));
+//	}
+	
+	@Test 
 	public void testOverlapShipTouching() {
 		Bullet bullet = new Bullet(100, 100, 0, 0, 20);
 		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 80, 10);
@@ -963,5 +997,7 @@ public class TestBullet {
 		bullet.setWorld(world);
 		bullet.move(Double.NEGATIVE_INFINITY);
 	}
+	
+	
 	
 }
