@@ -1,4 +1,4 @@
-private Map<Entity[], Double> timeMap = new HashMap<Entity[], Double>();	// TODO Maybe get rid of this?
+private Map<Entity[], Double> timeMap = new HashMap<Entity[], Double>();
 private boolean compareIfLastTimeSame(Entity[] entity, double time) {
   double lastTime;
   try {

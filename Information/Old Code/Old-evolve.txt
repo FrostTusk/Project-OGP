@@ -1,0 +1,29 @@
+public void evolve(double time) throws IllegalArgumentException {
+	if (time < 0) throw new IllegalArgumentException();
+	destroyOverlaps();	// Destroy all the entities that are currently invalid (overlap something).
+	updateMap();	// We need to update the map because it is possible that the positions of the entities have been changed.
+	if (getAllEntities().size() == 0) resolveEvolve(-1, null, time);
+	Entity[] collisionEntitiesMin = getFirstCollisionEntities();
+	if (collisionEntitiesMin == null) resolveEvolve(-1, collisionEntitiesMin, time);	// There are no entities in this World.
+	else {
+		double collisionTimeMin = -1;
+		for (int i = 0; i < 2; i ++) {	// This for loop is necessary to make sure that we can resolve collisions at time zero.
+			if (collisionEntitiesMin == null) collisionEntitiesMin = getFirstCollisionEntities(0);	// If not break at end.
+			if ( (collisionEntitiesMin == null) && (getAllEntities().size() != 0)) {	// These if statements ensure that the next collision is correct.
+				handleSalamander(time);
+				return;
+			}
+
+			collisionTimeMin = getTimeToCollisionEntitities(collisionEntitiesMin);
+			if ( (collisionTimeMin == 0) && helper.isInList(collisionEntitiesMin, updatedEntities)
+					&& (!compareIfLastTimeSame(collisionEntitiesMin, 0)) && (compareIfLastSameBoundary(collisionEntitiesMin))) // If this collision has already
+				collisionEntitiesMin = findCollisionAtZero();	// been found and the time is zero, find another collision. TODO Problem!
+			else break;	// If in normal case, break.
+		}
+
+		try {	// This is the only possible exception that is thrown in this method (outside of the one for the parameter);
+			resolveEvolve(collisionTimeMin, collisionEntitiesMin, time); // All other exceptions will never occur in the execution of this method
+		}																 // "All other" = the ones in the method calls of this method.
+			catch (IllegalArgumentException exc) {// This exception is throw if the new position of an entity is invalid
+			throw new IllegalArgumentException(exc);	// or if time is < 0.
+		}

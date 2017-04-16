@@ -1,8 +1,7 @@
 package asteroids.model;
 
 import java.util.*;
-import asteroids.helper.Entity;
-import asteroids.helper.Thruster;
+import asteroids.helper.*;
 import be.kuleuven.cs.som.annotate.*;
 
 

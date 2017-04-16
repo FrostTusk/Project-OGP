@@ -1080,7 +1080,7 @@ public class TestShip {
 		ship1.getTimeToCollision(ship2);
 	}
 	
-//	
+	
 //	@Test(expected = NullPointerException.class)
 //	public void testCollisionDetectionPositionShip1IsNull2() {
 //		Ship ship1 = null;

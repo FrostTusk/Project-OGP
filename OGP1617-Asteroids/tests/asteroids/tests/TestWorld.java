@@ -884,8 +884,7 @@ public class TestWorld {
 		Ship ship2 = new Ship(100, 100, 100, 50, 0, 10, 10);
 		world1.addEntity(ship1);
 		world2.addEntity(ship2);
-		for (int i = 0; i < 10; i++) {
-			;	// TODO debug here.
+		for (int i = 0; i < 100; i++) {
 			world1.evolve(10);
 			if (ship1.isTerminated()) {
 				for (int j = 0; j < (i - 1); j++) {

@@ -890,6 +890,9 @@ public abstract class Entity {
 	public abstract String getType();
 
 	
+	// TODO Fix the following methods/Documentation:
+	
+	
 	public double[] getBoundaryCollision(World world) {
 		double[] collisionBoundaries = this.getDistanceBetween(world);
 		int minimumBoundary = 0;
@@ -935,7 +938,6 @@ public abstract class Entity {
 		}
 		
 		int result = otherSmallest;
-		
 		if (array[otherSmallest] == 0) {
 			for (int k = 0; k < array.length; k++) {
 				if (k == smallest) continue;

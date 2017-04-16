@@ -65,7 +65,7 @@ public class World {
 	 * @param	height
 	 * 			The height for this new world.
 	 * 
-	 * @see	implementation	// TODO Is this ok for cconstructors?
+	 * @see	implementation
 	 */
 	public World(double width, double height) {
 		double[] temp = {width, height};
@@ -228,7 +228,6 @@ public class World {
 	/**
 	 * Map holding all entities of this world.
 	 */
-//	private Map<Position, Entity> entities = new HashMap<Position, Entity>();
 	private Map<String, Entity> entities = new HashMap<String, Entity>();	// TODO Use this implementation!
 	
 	/**
@@ -243,9 +242,7 @@ public class World {
 	@Raw
 	public boolean canHaveAsEntity(Entity entity) {
 		if (entity == null) return false;
-//		if (helper.operlapsWithOtherEntities(entity, helper.convertCollectionToList(entities.values()))) 
-		if (helper.operlapsWithOtherEntities(entity, helper.convertCollectionToList(entities.values()))) 
-			return false;
+		if (helper.operlapsWithOtherEntities(entity, getAllEntitiesList())) return false;
 		return (entity != null) && (!entity.isTerminated()) && (!containsEntity(entity)) && (entity.isInWorld(this));
 	}	
 	
@@ -261,7 +258,6 @@ public class World {
 	@Raw
 	public boolean containsEntity(Entity entity) {
         try {
-//           return entities.get(entity.getPosition()) == entity;
             return entities.get(helper.convertPositionToString(entity.getPosition())) == entity;
         }
         catch (NullPointerException exc) {
@@ -283,7 +279,6 @@ public class World {
 	public void addEntity(Entity entity) throws IllegalArgumentException, NullPointerException {
 		if (entity == null) throw new NullPointerException();
 		if (! canHaveAsEntity(entity)) throw new IllegalArgumentException();
-//		entities.put(entity.getPosition(), entity);
 		entities.put(helper.convertPositionToString(entity.getPosition()), entity);
 		try {
 			entity.setWorld(this);
@@ -319,7 +314,7 @@ public class World {
 	 * @see implementation
 	 */
 	@Raw
-	private void updateMap() {
+	private void updateMap() {	// TODO Write commentary.
 		List<Entity> entitiesList = new ArrayList<Entity>();
 		List<String> iterator = helper.convertCollectionToList(entities.keySet());
 			
@@ -366,8 +361,7 @@ public class World {
 		double collisionTimeMin = -1;
 		Entity[] collisionEntitiesMin = new Entity[2];
 		
-//		for (Entity entity1: entities.values()) {
-		for (Entity entity1: entities.values()) {
+		for (Entity entity1: getAllEntitiesList()) {
 			collisionTimeMin = iterateEntities(collisionTimeMin, collisionEntitiesMin, entity1, -1);
 			collisionTimeMin = iterateBoundaries(collisionTimeMin, collisionEntitiesMin, entity1, -1);
 		}
@@ -390,8 +384,7 @@ public class World {
 		double collisionTimeMin = -1;
 		Entity[] collisionEntitiesMin = new Entity[2];
 		
-//		for (Entity entity1: entities.values()) {
-		for (Entity entity1: entities.values()) {
+		for (Entity entity1: getAllEntitiesList()) {
 			collisionTimeMin = iterateEntities(collisionTimeMin, collisionEntitiesMin, entity1, time);
 			collisionTimeMin = iterateBoundaries(collisionTimeMin, collisionEntitiesMin, entity1, time);
 		}
@@ -416,10 +409,8 @@ public class World {
 	public double getTimeToFirstCollision() throws IllegalArgumentException {
 		double collisionTimeTemp;
 		double collisionTimeMin = -1;
-//		for (Entity entity1: entities.values()) {
-		for (Entity entity1: entities.values()) {
-//			for (Entity entity2: entities.values()) {
-			for (Entity entity2: entities.values()) {
+		for (Entity entity1: getAllEntitiesList()) {
+			for (Entity entity2: getAllEntitiesList()) {
 				if (entity1 == entity2) continue;
 				try {
 					collisionTimeTemp = entity1.getTimeToCollision(entity2);
@@ -718,7 +709,7 @@ public class World {
 	 * 			The time over which the world will evolve.
 	 */
 	private void handleSalamander(double time) {
-		double collisionTimeMin = -1;	// TODO This shit is weird.
+		double collisionTimeMin = -1;	// TODO Write commentary
 		Entity[] collisionEntitiesMin = new Entity[2];
 		for (Entity entity: getAllEntities()) {
 			double collisionTimeTemp =  entity.getTimeToCollision(this);

@@ -1,5 +1,5 @@
 How to reproduce:	
-Attempts:	randomly
+Rarity:		randomly
 Technique:	place breakpoint at world.java => #Bug-1#,
 		debug part2, let ship collide with boundaries until
 		breakpoint is triggered.
@@ -10,11 +10,14 @@ entity = the entity that's f-ed up.
 this = the world the entity is in
 	1. entity.isInWorld(this) => false
 	2. entity is in getAllEntitiesList()
-	3. entity is not in updatedEntities
-	4. updatedEntities is empty => last call was update?
-	5. the velocity where he collides is not changed.	
+	3. entity is not in collisionTracker
+	4. collisionTracker is empty => last call was update?
+	5. The velocity where the entity collides is not changed.	
+	   The boundary isn't "recognized"?
 
 
 Possible Theories:
-1. Problem with rounding: due to the randomness of the bug, this seems somewhat likely.
+1. Problem with rounding.
+	Due to the randomness of the bug, this seems somewhat likely.
 2. getFirstCollision() did not predict correctly. Or the getFirstCollisionTime() is incorrect.	
+	This is somewhat unlikely due to the collision pointer showing the correct collision.

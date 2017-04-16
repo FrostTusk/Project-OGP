@@ -1,15 +1,2 @@
 1. Deadlines:
 	1. Final = (17/04/2017) - (11:59 PM)
-	2. Classes Finished = (10/04/2017) - (11:59 PM)
-	3. Test Suites = (14/04/2017) - (11:59 PM)
-
-2. Consultancy:
-	1. Session 1:
-		1. (11/04/2017) - (Morning + Afternoon)
-		2. (12/04/2017) - (Morning + Afternoon)
-	2. Session 2:
-		1. (13/04/2017) - (Morning + Afternoon)
-		2. (14/04/2017) - (Morning + Afternoon)
-
-3. Meet-Up:
-	1. (11/04/2017)	
