@@ -1,0 +1,12 @@
+private Map<Entity[], Double> timeMap = new HashMap<Entity[], Double>();	// TODO Maybe get rid of this?
+private boolean compareIfLastTimeSame(Entity[] entity, double time) {
+  double lastTime;
+  try {
+    lastTime = timeMap.get(entity);
+  }
+  catch (NullPointerException exc) {
+    return false;
+  }
+  if (lastTime == time) return true;
+  return false;
+}
