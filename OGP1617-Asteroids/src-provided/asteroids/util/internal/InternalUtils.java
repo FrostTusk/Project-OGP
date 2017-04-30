@@ -17,6 +17,7 @@ public class InternalUtils {
 		while (baseAngle + delta < 0) {
 			delta += 2 * Math.PI;
 		}
+		assert 0 <= baseAngle+delta && baseAngle+delta < 2*Math.PI;
 		return delta;
 	}
 }

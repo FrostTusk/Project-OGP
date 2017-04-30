@@ -1,0 +1,44 @@
+ A program factory is used by the parser ({@link ProgramParser}) to construct
+ an in-memory representation of your program. For example, when reading the
+ program source code
+
+ <pre>
+ print getx self
+ </pre>
+
+ the parser will create a Program object by (conceptually) executing the
+ following code:
+
+ <pre>
+ factory.createProgram(Collections.emptyList(),
+ 		factory.createPrintStatement(factory.createGetXExpression(factory.createSelfExpression())));
+ </pre>
+
+ on the returned factory object.
+
+ <p>
+ For testing, you may use the methods from {@link ProgramParser} yourself, as
+ demonstrated in the test file {@link Part3TestFull}.
+
+ <p>
+ You should declare your class as follows:<code><pre>
+ public class ProgramFactory implements IProgramFactory&lt;MyExpression, MyStatement, MyFunction, Program&gt;
+ </pre></code> where MyExpression, MyStatement and MyFunction are your classes
+ for representing expressions, statements and function definitions,
+ respectively.
+
+ <p>
+ The SourceLocation object in the methods defined by this factory refers to
+ the location (line and column) in the text file where the statement or
+ expression begins.
+
+<ul>
+ <li>@param <!--<E>-->
+            Your class for representing an expression.</li>
+ <li>@param <!--<S>-->
+            Your class for representing a statement.</li>
+ <li>@param <!--<F>-->
+            Your class representing function definitions.</li>
+ <li>@param <!--<P>-->
+            Your class for representing a program (should be Program).</li>
+</ul>
