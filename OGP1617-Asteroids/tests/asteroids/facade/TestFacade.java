@@ -1391,7 +1391,7 @@ public class TestFacade {
 	@Test
 	public void testWorldEvolveNoEntities() throws ModelException {
 		World world = facade.createWorld(1000, 1000);
-		world.evolve(2);
+		world.evolve(2, null);
 	}
 	
 	@Test
@@ -1403,15 +1403,15 @@ public class TestFacade {
 		assertEquals(0, counter, EPSILON);
 		assertEquals(90, facade.getBulletVelocity(bullet)[0], EPSILON);
 		assertEquals(0, facade.getBulletVelocity(bullet)[1], EPSILON);
-		world.evolve(10);
+		world.evolve(10, null);
 		assertEquals(-90, facade.getBulletVelocity(bullet)[0], EPSILON);
 		assertEquals(0, facade.getBulletVelocity(bullet)[1], EPSILON);
 		assertEquals(1, bullet.getBoundaryCollisionCounter(), EPSILON);
-		world.evolve(10);
+		world.evolve(10, null);
 		assertEquals(90, facade.getBulletVelocity(bullet)[0], EPSILON);
 		assertEquals(0, facade.getBulletVelocity(bullet)[1], EPSILON);
 		assertEquals(2, bullet.getBoundaryCollisionCounter(), EPSILON);
-		world.evolve(10);
+		world.evolve(10, null);
 		assertTrue(facade.isTerminatedBullet(bullet));
 	}
 	
@@ -1422,10 +1422,10 @@ public class TestFacade {
 		facade.addBulletToWorld(world, bullet);
 		double counter = bullet.getBoundaryCollisionCounter();
 		assertEquals(0, counter, EPSILON);
-		world.evolve(7);
+		world.evolve(7, null);
 		assertEquals(10, facade.getBulletVelocity(bullet)[0], EPSILON);
 		assertEquals(1, facade.getBulletVelocity(bullet)[1], EPSILON);
-		world.evolve(10);
+		world.evolve(10, null);
 		assertEquals(-10, facade.getBulletVelocity(bullet)[0], EPSILON);
 		assertEquals(1, facade.getBulletVelocity(bullet)[1], EPSILON);
 		assertEquals(1, bullet.getBoundaryCollisionCounter(), EPSILON);
@@ -1442,7 +1442,7 @@ public class TestFacade {
 		facade.addBulletToWorld(world, bullet2);
 		facade.addBulletToWorld(world, bullet3);
 		facade.addBulletToWorld(world, bullet4);
-		world.evolve(2);
+		world.evolve(2, null);
 		assertTrue(facade.isTerminatedBullet(bullet1));
 		assertTrue(facade.isTerminatedBullet(bullet2));
 		assertTrue(facade.isTerminatedBullet(bullet3));

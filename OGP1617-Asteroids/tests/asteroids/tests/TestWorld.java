@@ -565,7 +565,7 @@ public class TestWorld {
 		world.addEntity(ship2);
 		world.addEntity(bullet1);
 		world.addEntity(bullet2);
-		world.evolve(2);
+		world.evolve(2, null);
 		assertEquals(150, bullet1.getPosition().getPositionX(), EPSILON);
 		assertEquals(150, bullet1.getPosition().getPositionY(), EPSILON);
 		assertEquals(250, bullet2.getPosition().getPositionX(), EPSILON);
@@ -579,7 +579,7 @@ public class TestWorld {
 	@Test
 	public void testWorldEvolveNoEntities() {
 		World world = new World(1000, 1000);
-		world.evolve(2);
+		world.evolve(2, null);
 	}
 	
 	@Test
@@ -592,7 +592,7 @@ public class TestWorld {
 		world.addEntity(ship2);
 		world.addEntity(bullet);
 		bullet.setSource(ship1);
-		world.evolve(2);
+		world.evolve(2, null);
 		assertTrue(ship2.isTerminated());
 		assertTrue(bullet.isTerminated());
 	}
@@ -606,7 +606,7 @@ public class TestWorld {
 		ship.setWorld(world);
 		world.addEntity(bullet);
 		bullet.setWorld(world);
-		world.evolve(2);
+		world.evolve(2, null);
 		assertEquals(120, ship.getPosition().getPositionX(), EPSILON);
 		assertEquals(80, ship.getPosition().getPositionY(), EPSILON);
 		assertEquals(22, bullet.getPosition().getPositionX(), EPSILON);
@@ -625,12 +625,12 @@ public class TestWorld {
 		ship2.setWorld(world);
 		world.addEntity(bullet);
 		bullet.setWorld(world);
-		world.evolve(20);
+		world.evolve(20, null);
 		assertEquals(10, ship1.getVelocityX(), EPSILON);
 		assertEquals(0, ship1.getVelocityY(), EPSILON);
 		assertEquals(0, ship2.getVelocityX(), EPSILON);
 		assertEquals(0, ship2.getVelocityY(), EPSILON);
-		world.evolve(30);
+		world.evolve(30, null);
 		assertEquals(0, ship1.getVelocityY(), EPSILON);
 		assertEquals(0, ship2.getVelocityY(), EPSILON);
 		assertEquals(0, ship1.getVelocityX(), EPSILON);
@@ -651,10 +651,10 @@ public class TestWorld {
 		bullet.setWorld(world);
 		double counter = bullet.getBoundaryCollisionCounter();
 		assertEquals(0, counter, EPSILON);
-		world.evolve(3);
+		world.evolve(3, null);
 		assertEquals(-1, bullet.getVelocityX(), EPSILON);
 		assertEquals(10, bullet.getVelocityY(), EPSILON);
-		world.evolve(3);
+		world.evolve(3, null);
 		assertEquals(1, bullet.getVelocityX(), EPSILON);
 		assertEquals(10, bullet.getVelocityY(), EPSILON);
 		assertEquals(1, bullet.getBoundaryCollisionCounter(), EPSILON);
@@ -670,15 +670,15 @@ public class TestWorld {
 		assertEquals(0, counter, EPSILON);
 		assertEquals(90, bullet.getVelocityX(), EPSILON);
 		assertEquals(0, bullet.getVelocityY(), EPSILON);
-		world.evolve(10);
+		world.evolve(10, null);
 		assertEquals(-90, bullet.getVelocityX(), EPSILON);
 		assertEquals(0, bullet.getVelocityY(), EPSILON);
 		assertEquals(1, bullet.getBoundaryCollisionCounter(), EPSILON);
-		world.evolve(10);
+		world.evolve(10, null);
 		assertEquals(90, bullet.getVelocityX(), EPSILON);
 		assertEquals(0, bullet.getVelocityY(), EPSILON);
 		assertEquals(2, bullet.getBoundaryCollisionCounter(), EPSILON);
-		world.evolve(10);
+		world.evolve(10, null);
 		assertTrue(bullet.isTerminated());
 	}
 	
@@ -696,10 +696,10 @@ public class TestWorld {
 		bullet.setWorld(world);
 		double counter = bullet.getBoundaryCollisionCounter();
 		assertEquals(0, counter, EPSILON);
-		world.evolve(3);
+		world.evolve(3, null);
 		assertEquals(10, bullet.getVelocityX(), EPSILON);
 		assertEquals(-1, bullet.getVelocityY(), EPSILON);
-		world.evolve(3);
+		world.evolve(3, null);
 		assertEquals(10, bullet.getVelocityX(), EPSILON);
 		assertEquals(1, bullet.getVelocityY(), EPSILON);
 		assertEquals(1, bullet.getBoundaryCollisionCounter(), EPSILON);
@@ -713,10 +713,10 @@ public class TestWorld {
 		bullet.setWorld(world);
 		double counter = bullet.getBoundaryCollisionCounter();
 		assertEquals(0, counter, EPSILON);
-		world.evolve(7);
+		world.evolve(7, null);
 		assertEquals(10, bullet.getVelocityX(), EPSILON);
 		assertEquals(1, bullet.getVelocityY(), EPSILON);
-		world.evolve(10);
+		world.evolve(10, null);
 		assertEquals(-10, bullet.getVelocityX(), EPSILON);
 		assertEquals(1, bullet.getVelocityY(), EPSILON);
 		assertEquals(1, bullet.getBoundaryCollisionCounter(), EPSILON);
@@ -736,10 +736,10 @@ public class TestWorld {
 		bullet.setWorld(world);
 		double counter = bullet.getBoundaryCollisionCounter();
 		assertEquals(0, counter, EPSILON);
-		world.evolve(3);
+		world.evolve(3, null);
 		assertEquals(-1, bullet.getVelocityX(), EPSILON);
 		assertEquals(10, bullet.getVelocityY(), EPSILON);
-		world.evolve(3);
+		world.evolve(3, null);
 		assertEquals(1, bullet.getVelocityX(), EPSILON);
 		assertEquals(10, bullet.getVelocityY(), EPSILON);
 		assertEquals(1, bullet.getBoundaryCollisionCounter(), EPSILON);
@@ -751,13 +751,13 @@ public class TestWorld {
 		Ship ship = new Ship(500, 900, 1, 10, Math.PI, 20, 10);
 		world.addEntity(ship);
 		ship.setWorld(world);
-		world.evolve(4);
+		world.evolve(4, null);
 		assertEquals(1, ship.getVelocityX(), EPSILON);
 		assertEquals(10, ship.getVelocityY(), EPSILON);
-		world.evolve(3);
+		world.evolve(3, null);
 		assertEquals(1, ship.getVelocityX(), EPSILON);
 		assertEquals(10, ship.getVelocityY(), EPSILON);
-		world.evolve(2);
+		world.evolve(2, null);
 		assertEquals(1, ship.getVelocityX(), EPSILON);
 		assertEquals(-10, ship.getVelocityY(), EPSILON);
 	}
@@ -770,7 +770,7 @@ public class TestWorld {
 		ship.setWorld(world);
 		assertEquals(0, ship.getVelocityX(), EPSILON);
 		assertEquals(-10, ship.getVelocityY(), EPSILON);
-		world.evolve(1);
+		world.evolve(1, null);
 		assertEquals(0, ship.getVelocityX(), EPSILON);
 		assertEquals(-10, ship.getVelocityY(), EPSILON);
 	}
@@ -788,7 +788,7 @@ public class TestWorld {
 		assertEquals(0, bullet.getVelocityY(), EPSILON);
 		ship.setPosition(800, 500);
 		assertEquals(0, ship.getBulletsCount(), EPSILON);
-		world.evolve(2);
+		world.evolve(2, null);
 		assertEquals(1, ship.getBulletsCount(), EPSILON);
 		assertTrue(bullet.getShip() == ship);
 	}
@@ -807,7 +807,7 @@ public class TestWorld {
 		ship2.loadBullet(bullet2);
 		ship2.fireBullet(bullet2);
 		ship1.setPosition(700, 700);
-		world.evolve(2);
+		world.evolve(2, null);
 		assertTrue(bullet1.isTerminated());
 		assertTrue(bullet2.isTerminated());
 		assertTrue(ship1.isTerminated());
@@ -825,7 +825,7 @@ public class TestWorld {
 		world.addEntity(bullet2);
 		world.addEntity(bullet3);
 		world.addEntity(bullet4);
-		world.evolve(2);
+		world.evolve(2, null);
 		assertTrue(bullet1.isTerminated());
 		assertTrue(bullet2.isTerminated());
 		assertTrue(bullet3.isTerminated());
@@ -841,7 +841,7 @@ public class TestWorld {
 		world.addEntity(bullet2);
 		assertEquals(0, bullet1.getBoundaryCollisionCounter(), EPSILON);
 		assertEquals(0, bullet2.getBoundaryCollisionCounter(), EPSILON);
-		world.evolve(2);
+		world.evolve(2, null);
 		assertEquals(1, bullet1.getBoundaryCollisionCounter(), EPSILON);
 		assertEquals(1, bullet2.getBoundaryCollisionCounter(), EPSILON);}
 	
@@ -852,7 +852,7 @@ public class TestWorld {
 		Ship ship2 = new Ship(950, 400, 20, 0, 0, 20, 10);
 		world.addEntity(ship1);	
 		world.addEntity(ship2);
-		world.evolve(2);
+		world.evolve(2, null);
 		assertEquals(-20, ship1.getVelocityX(), EPSILON);
 		assertEquals(-20, ship2.getVelocityX(), EPSILON);
 	}
@@ -862,8 +862,8 @@ public class TestWorld {
 		World world = new World(1000, 1000);
 		Ship ship = new Ship(950, 500, 30, 10, 0, 20, 10);
 		world.addEntity(ship);	
-		world.evolve(1);
-		world.evolve(1);
+		world.evolve(1, null);
+		world.evolve(1, null);
 		assertEquals(-30, ship.getVelocityX(), EPSILON);
 		assertEquals(10, ship.getVelocityY(), EPSILON);
 	}
@@ -877,13 +877,13 @@ public class TestWorld {
 		world1.addEntity(ship1);
 		world2.addEntity(ship2);
 		for (int i = 0; i < 100; i++) {
-			world1.evolve(10);
+			world1.evolve(10, null);
 			if (ship1.isTerminated()) {
 				for (int j = 0; j < (i - 1); j++) {
 					;	// debug here for salamander => fixed
-					world2.evolve(10);
+					world2.evolve(10, null);
 				}
-				world2.evolve(10);
+				world2.evolve(10, null);
 			}
 		}
 		assertFalse(ship1.isTerminated());

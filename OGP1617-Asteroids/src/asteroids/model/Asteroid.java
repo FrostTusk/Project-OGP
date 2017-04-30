@@ -1,5 +1,7 @@
 package asteroids.model;
 
-public class Asteroid {
+import asteroids.helper.MinorPlanet;
+
+public class Asteroid extends MinorPlanet {
 
 }

@@ -618,7 +618,7 @@ public class TestShip {
 		assertTrue(ship.getAllBullets().contains(bullet));
 		ship.fireBullet(bullet);
 		assertFalse(ship.getAllBullets().contains(bullet));
-		world.evolve(2);
+		world.evolve(2, null);
 		assertEquals(1, bullet.getBoundaryCollisionCounter(), EPSILON);
 		assertTrue(ship.getAllBullets().contains(bullet));
 	}

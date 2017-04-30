@@ -300,20 +300,20 @@ public class Ship extends Entity {
 	
 
 	
-	/**
-	* Check whether this ship can have the given world as world. 
-	*  
-	* @param  	world
-	*         	The world to check.
-	*         
-	* @return	Returns whether or not this ship can have the given world as world.
-	* 			true if it can, false if not.
-	*/
-	@Override @Raw
-	public boolean canHaveAsWorld(World world) {
-		if (world == null) return true;
-		return ( (getWorld() == null) || (getWorld() == world) ) && (isInWorld(world)) && !(world.isTerminated());
-	}
+//	/** // TODO Is this unnecessary
+//	* Check whether this ship can have the given world as world. 
+//	*  
+//	* @param  	world
+//	*         	The world to check.
+//	*         
+//	* @return	Returns whether or not this ship can have the given world as world.
+//	* 			true if it can, false if not.
+//	*/
+//	@Override @Raw
+//	public boolean canHaveAsWorld(World world) {
+//		if (world == null) return true;
+//		return ( (getWorld() == null) || (getWorld() == world) ) && (isInWorld(world)) && !(world.isTerminated());
+//	}
 	
 
 	
@@ -728,47 +728,47 @@ public class Ship extends Entity {
 
 	
 	
-	/**
-	 * Resolves the collision between this ship and a given world.
-	 * 
-	 * @param 	world
-	 * 			The world to be used.
-	 * 
-	 * @see implementation
-	 * // TODO Problems with rounding? 
-	 */
-	@Override
-	public void resolveCollision(World world) throws NullPointerException {
-		if (world == null) throw new NullPointerException();
-		double[] position = getCollisionPosition(world);
-		if (position[0] == Double.POSITIVE_INFINITY && position[1] == Double.POSITIVE_INFINITY) return;	
-		// There is no collision so the collision does not need to be resolved.
-		if (position[0] == this.world.getWidth() || position[0] == 0) 
-			setVelocity(-getVelocityX(), getVelocityY());
-		if ( (position[1] == this.world.getHeight() || position[1] == 0) ||
-			 (position[3] == this.world.getHeight() || position[3] == 0) )
-			setVelocity(getVelocityX(), -getVelocityY()); 
-	}
+//	/** // TODO Is this ok?
+//	 * Resolves the collision between this ship and a given world.
+//	 * 
+//	 * @param 	world
+//	 * 			The world to be used.
+//	 * 
+//	 * @see implementation
+//	 * // TODO Problems with rounding? 
+//	 */
+//	@Override
+//	public void resolveCollision(World world) throws NullPointerException {
+//		if (world == null) throw new NullPointerException();
+//		double[] position = getCollisionPosition(world);
+//		if (position[0] == Double.POSITIVE_INFINITY && position[1] == Double.POSITIVE_INFINITY) return;	
+//		// There is no collision so the collision does not need to be resolved.
+//		if (position[0] == this.world.getWidth() || position[0] == 0) 
+//			setVelocity(-getVelocityX(), getVelocityY());
+//		if ( (position[1] == this.world.getHeight() || position[1] == 0) ||
+//			 (position[3] == this.world.getHeight() || position[3] == 0) )
+//			setVelocity(getVelocityX(), -getVelocityY()); 
+//	}
 	
-	/**
-	 * Resolves the collision between this ship and a given entity.
-	 * 
-	 * @param 	entity
-	 * 			The entity to be used.
-	 * 
-	 * @see implementation
-	 */
-	@Override
-	public void resolveCollision(Entity entity) throws IllegalArgumentException, NullPointerException {
-		if (entity == null) throw new NullPointerException();
-		try {
-			if (entity.getType() == "Ship") resolveCollisionShip((Ship)entity);
-			else if (entity.getType() == "Bullet") resolveCollisionBullet((Bullet)entity);
-		}
-		catch (IllegalArgumentException exc) {
-			throw new IllegalArgumentException(exc);
-		}
-	}
+//	/** //TODO is this ok?
+//	 * Resolves the collision between this ship and a given entity.
+//	 * 
+//	 * @param 	entity
+//	 * 			The entity to be used.
+//	 * 
+//	 * @see implementation
+//	 */
+//	@Override
+//	public void resolveCollision(Entity entity) throws IllegalArgumentException, NullPointerException {
+//		if (entity == null) throw new NullPointerException();
+//		try {
+//			if (entity.getType() == EntityType.SHIP) resolveCollisionShip((Ship)entity);
+//			else if (entity.getType() == EntityType.BULLET) resolveCollisionBullet((Bullet)entity);
+//		}
+//		catch (IllegalArgumentException exc) {
+//			throw new IllegalArgumentException(exc);
+//		}
+//	}
 
 
 	/**
@@ -843,8 +843,8 @@ public class Ship extends Entity {
 	 * Returns the type of this Ship Class in string format.
 	 */
 	@Basic @Override @Raw
-	public String getType() {
-		return "Ship";
+	public EntityType getType() {
+		return EntityType.SHIP;
 	}
 	
 }

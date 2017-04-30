@@ -453,7 +453,11 @@ public abstract class Entity {
 	*         
 	* @see implementation
 	*/
-	public abstract boolean canHaveAsWorld(World world);
+//	public abstract boolean canHaveAsWorld(World world);
+	public boolean canHaveAsWorld(World world) {
+		if (world == null) return true;
+		return ( (getWorld() == null) || (getWorld() == world) ) && (isInWorld(world)) && !(world.isTerminated());
+	}
 	
 	
 	/**
@@ -912,7 +916,19 @@ public abstract class Entity {
 	 * 
 	 * @see implementation
 	 */
-	public abstract void resolveCollision(World world);
+//	public abstract void resolveCollision(World world);
+	public void resolveCollision(World world) {
+		if (world == null) throw new NullPointerException();
+		double[] position = getCollisionPosition(world);
+		if (position[0] == Double.POSITIVE_INFINITY && position[1] == Double.POSITIVE_INFINITY) return;	
+		// There is no collision so the collision does not need to be resolved.
+		if (position[0] == this.world.getWidth() || position[0] == 0) 
+			setVelocity(-getVelocityX(), getVelocityY());
+		if ( (position[1] == this.world.getHeight() || position[1] == 0) ||
+			 (position[3] == this.world.getHeight() || position[3] == 0) )
+			setVelocity(getVelocityX(), -getVelocityY()); 
+	}
+	
 	
 	/**
 	 * Resolves the collision between this entity and a given entity.
@@ -922,7 +938,18 @@ public abstract class Entity {
 	 * 
 	 * @see implementation
 	 */
-	public abstract void resolveCollision(Entity entity);
+//	public abstract void resolveCollision(Entity entity);
+	public void resolveCollision(Entity entity) {
+		if (entity == null) throw new NullPointerException();
+		try {
+			if (entity.getType() == EntityType.SHIP) resolveCollisionShip((Ship)entity);
+			else if (entity.getType() == EntityType.BULLET) resolveCollisionBullet((Bullet)entity);
+		}
+		catch (IllegalArgumentException exc) {
+			throw new IllegalArgumentException(exc);
+		}
+	}
+	
 	
 	/**
 	 * Resolves the collision between this entity and a given ship.
@@ -942,7 +969,11 @@ public abstract class Entity {
 	 * 
 	 * @see implementation
 	 */
-	public abstract void resolveCollisionBullet(Bullet bullet);
+//	public abstract void resolveCollisionBullet(Bullet bullet);
+	public void resolveCollisionBullet(Bullet bullet) {
+		this.terminate();
+		bullet.terminate();	
+	}
 
 	
 	
@@ -1012,6 +1043,12 @@ public abstract class Entity {
 	 * @see implementation
 	 */
 	@Raw
-	public abstract String getType();
+	public abstract EntityType getType();
+
+
+	public void resolveCollisionMinorPlanet(MinorPlanet minorPlanet) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

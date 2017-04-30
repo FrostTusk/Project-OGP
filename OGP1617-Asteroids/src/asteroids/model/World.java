@@ -2,6 +2,7 @@ package asteroids.model;
 
 import java.util.*;
 import asteroids.helper.*;
+import asteroids.part2.CollisionListener;
 import be.kuleuven.cs.som.annotate.*;
 
 /* Constants:
@@ -581,8 +582,9 @@ public class World {
 	 * 
 	 * @param	time
 	 * 			The time over which the world will evolve.
+	 * @param 	collisionListener TODO
 	 */
-	public void evolve(double time) throws IllegalArgumentException {
+	public void evolve(double time, CollisionListener collisionListener) throws IllegalArgumentException {
 		if (time < 0) throw new IllegalArgumentException();
 		destroyOverlaps();	// Destroy all the entities that are currently invalid (overlap something).
 		updateMap();	// We need to update the map because it is possible that the positions of the entities have been changed.
@@ -676,7 +678,7 @@ public class World {
 					collisionEntitiesMin[0].resolveCollision(collisionEntitiesMin[1]);
 				
 				collisionTracker.add(collisionEntitiesMin);	// This entity is added to the collision tracker.
-				evolve(time - collisionTimeMin);	// Continue with evolve.
+				evolve(time - collisionTimeMin, null);	// Continue with evolve.
 		 }
 		else { 	// CollisionTimeMin is too large/doesn't occur. Update the world freely.
 			try {
@@ -720,7 +722,8 @@ public class World {
 			catch (IllegalArgumentException exc) {	// This exception is throw if the new position of this entity is invalid
 				throw new IllegalArgumentException(exc);	
 			}
-			if ( (entity.getType() == "Ship") && ((Ship)entity).getThrustStatus()) ((Ship)entity).thrust(((Ship)entity).getAcceleration(), time);
+			if ( (entity.getType() == EntityType.SHIP) && ((Ship)entity).getThrustStatus()) 
+				((Ship)entity).thrust(((Ship)entity).getAcceleration(), time);
 		}
 		updateMap();	// Positions were changed, the map needs to be updated.
 	}
@@ -876,18 +879,26 @@ public class World {
 		return entitiesResult;
 	}
 		
+	public Set<?> getAllEntitiesSpecific(EntityType type) {
+		Set<Entity> entitiesResult = getAllEntities();
+		Set<Object> result = new HashSet<Object>();
+		for (Entity entity: entitiesResult) 
+			if (entity.getType() == type) result.add(entity);
+		return result;
+	}
+	
 	/**
 	 * Returns all ships registered in this world.
 	 * 
 	 * @return	Returns all ships registered in this world.
 	 * 			| ship.getWorld() == this
 	 */
-	@Raw
+	@Raw @Deprecated
 	public Set<Ship> getAllShips() {
 		Set<Entity> entitiesResult = getAllEntities();
 		Set<Ship> shipsResult = new HashSet<Ship>();
 		for (Entity entity: entitiesResult) 
-			if (entity.getType() == "Ship") shipsResult.add((Ship)entity);
+			if (entity.getType() == EntityType.SHIP) shipsResult.add((Ship)entity);
 		return shipsResult;
 	}
 	
@@ -897,12 +908,12 @@ public class World {
 	 * @return 	Returns all bullets registered in this world.
 	 * 			| bullet.getWorld() == this
 	 */
-	@Raw
+	@Raw @Deprecated
 	public Set<Bullet> getAllBullets() {
 		Set<Entity> entitiesResult = getAllEntities();
 		Set<Bullet> bulletsResult = new HashSet<Bullet>();
 		for (Entity entity: entitiesResult)
-			if (entity.getType() == "Bullet") bulletsResult.add((Bullet)entity);
+			if (entity.getType() == EntityType.BULLET) bulletsResult.add((Bullet)entity);
 		return bulletsResult;
 	}
 

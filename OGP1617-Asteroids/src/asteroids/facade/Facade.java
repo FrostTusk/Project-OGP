@@ -415,7 +415,7 @@ public class Facade implements IFacade {
 	@Override
 	public Set<? extends Ship> getWorldShips(World world) throws ModelException {
 		try {
-			return world.getAllShips();
+			return (Set<Ship>)world.getAllEntitiesSpecific(EntityType.SHIP);
 		}
 		catch (NullPointerException exc) {
 			throw new ModelException(exc);
@@ -425,7 +425,7 @@ public class Facade implements IFacade {
 	@Override
 	public Set<? extends Bullet> getWorldBullets(World world) throws ModelException {
 		try {
-			return world.getAllBullets();
+			return (Set<Bullet>)world.getAllEntitiesSpecific(EntityType.BULLET);
 		}
 		catch (NullPointerException exc) {
 			throw new ModelException(exc);
@@ -628,7 +628,7 @@ public class Facade implements IFacade {
 	@Override
 	public void evolve(World world, double dt, CollisionListener collisionListener) throws ModelException {
 		try {
-			world.evolve(dt);
+			world.evolve(dt, null);
 		}
 		catch (IllegalArgumentException exc) {
 			throw new ModelException(exc);

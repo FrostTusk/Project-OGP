@@ -5,6 +5,7 @@ import java.util.List;
 import asteroids.part3.programs.IProgramFactory;
 import asteroids.part3.programs.SourceLocation;
 
+@SuppressWarnings("rawtypes")
 public class ProgramFactory implements IProgramFactory {
 
 	@Override

@@ -404,27 +404,27 @@ public class Bullet extends Entity {
 	}
 	
 	
-	/**
-	 * Resolves the collision between this ship and a given entity.
-	 * 
-	 * @param 	entity
-	 * 			The entity to be used.
-	 * 
-	 * @see implementation
-	 */
-	@Override
-	public void resolveCollision(Entity entity) throws IllegalArgumentException, NullPointerException {
-		if (entity == null) throw new NullPointerException();
-		try {
-			if (entity.getType() == "Ship") 
-				resolveCollisionShip((Ship)entity);
-			else if (entity.getType() == "Bullet") 
-				resolveCollisionBullet((Bullet)entity);
-		}
-		catch (IllegalArgumentException exc) {
-			throw new IllegalArgumentException(exc);
-		}
-	}
+//	/** // TODO Is this ok?
+//	 * Resolves the collision between this ship and a given entity.
+//	 * 
+//	 * @param 	entity
+//	 * 			The entity to be used.
+//	 * 
+//	 * @see implementation
+//	 */
+//	@Override
+//	public void resolveCollision(Entity entity) throws IllegalArgumentException, NullPointerException {
+//		if (entity == null) throw new NullPointerException();
+//		try {
+//			if (entity.getType() == EntityType.SHIP) 
+//				resolveCollisionShip((Ship)entity);
+//			else if (entity.getType() == EntityType.BULLET) 
+//				resolveCollisionBullet((Bullet)entity);
+//		}
+//		catch (IllegalArgumentException exc) {
+//			throw new IllegalArgumentException(exc);
+//		}
+//	}
 	
 	
 	/**
@@ -488,8 +488,8 @@ public class Bullet extends Entity {
 	 * Returns the type of this Ship Class in string format.
 	 */
 	@Basic @Override @Raw
-	public String getType() {
-		return "Bullet";
+	public EntityType getType() {
+		return EntityType.BULLET;
 	}
 	
 }
