@@ -943,7 +943,7 @@ public class World {
 	public void destroyOverlaps() {
 		for (Entity entity1: getAllEntitiesList()) {	// getAllEntitiesList(), returns a new list, iterating is possible.
 			if (!entity1.isInWorld(this)) {
-				;	// This is to be able to debug at terminate. #Bug-1-Salamander#
+				;	// This line is to be able to debug at terminate. #Bug-1-Salamander#
 				entity1.terminate();	// If the entity "overlaps" the world, terminate it.
 			}
 			if (entity1.isTerminated()) continue;	// If it has been terminated, stop checking for it.
