@@ -71,7 +71,8 @@ public class World {
 	 */
 	public World(double width, double height) {
 		double[] temp = {width, height};
-		if (! isValidSize(width, height)) temp = calculateDefaultSize(width, height);
+		if (! isValidSize(width, height)) 
+			temp = calculateDefaultSize(width, height);
 		this.width = temp[0];	// The size is hard coded because the width and height
 		this.height = temp[1];	// cannot change after construction.
 	}
@@ -201,10 +202,14 @@ public class World {
 	 */
 	public double[] calculateDefaultSize(double width, double height) {
 		double[] result = {width, height};
-		if ( (width < 0) || (java.lang.Double.isNaN(width)) ) result[0] = 0;
-		else if (width > getUpperBound()) result[0] = getUpperBound();
-		if ( (height < 0) || (java.lang.Double.isNaN(width)) ) result[1] = 0;
-		else if (height > getUpperBound()) result[1] = getUpperBound();
+		if ( (width < 0) || (java.lang.Double.isNaN(width)) ) 
+			result[0] = 0;
+		else if (width > getUpperBound()) 
+			result[0] = getUpperBound();
+		if ( (height < 0) || (java.lang.Double.isNaN(width)) ) 
+			result[1] = 0;
+		else if (height > getUpperBound()) 
+			result[1] = getUpperBound();
 		return result;
 	}
 	
@@ -240,8 +245,10 @@ public class World {
 	 */
 	@Raw
 	public boolean canHaveAsEntity(Entity entity) {
-		if (entity == null) return false;
-		if (helper.operlapsWithOtherEntities(entity, getAllEntitiesList())) return false;
+		if (entity == null) 
+			return false;
+		if (helper.operlapsWithOtherEntities(entity, getAllEntitiesList())) 
+			return false;
 		return (entity != null) && (!entity.isTerminated()) && (!containsEntity(entity)) && (entity.isInWorld(this));
 	}	
 	
@@ -275,8 +282,10 @@ public class World {
 	 */
 	@Raw
 	public void addEntity(Entity entity) throws IllegalArgumentException, NullPointerException {
-		if (entity == null) throw new NullPointerException();
-		if (! canHaveAsEntity(entity)) throw new IllegalArgumentException();
+		if (entity == null) 
+			throw new NullPointerException();
+		if (! canHaveAsEntity(entity)) 
+			throw new IllegalArgumentException();
 		entities.put(helper.convertPositionToString(entity.getPosition()), entity);
 		try {
 			entity.setWorld(this);
@@ -298,8 +307,10 @@ public class World {
 	@Raw
 	public void removeEntity(Entity entity) throws IllegalArgumentException, NullPointerException {
 		updateMap();
-		if (entity == null) throw new NullPointerException();
-		if (!containsEntity(entity)) throw new IllegalArgumentException();
+		if (entity == null) 
+			throw new NullPointerException();
+		if (!containsEntity(entity)) 
+			throw new IllegalArgumentException();
 		entities.remove(helper.convertPositionToString(entity.getPosition()));
 		entity.setWorld(null);
 	}
@@ -317,7 +328,8 @@ public class World {
 		List<String> iterator = helper.convertCollectionToList(entities.keySet());	// Creates a position iterator.
 			
 		for (String position: iterator) {	// Iterate over all the positions
-			if (position == null) entities.remove(position);	// If a position is null, remove it.
+			if (position == null) 
+				entities.remove(position);	// If a position is null, remove it.
 			else if (!helper.convertPositionToString(entities.get(position).getPosition()).equals(position)) {
 				Entity entity = entities.get(position);	// If the position was changed, remove the position
 		  		entities.remove(position);	// from the map and add it to the buffer list.
@@ -426,10 +438,12 @@ public class World {
 				catch (IllegalArgumentException exc) {	// The First collision is already happening,
 					throw new IllegalArgumentException(exc);	// there is an overlap. Overlap is not legal for this method.
 				}
-				if ( (collisionTimeTemp < collisionTimeMin) || (collisionTimeMin == -1 ) ) collisionTimeMin = collisionTimeTemp;
+				if ( (collisionTimeTemp < collisionTimeMin) || (collisionTimeMin == -1 ) ) 
+					collisionTimeMin = collisionTimeTemp;
 			}
 			collisionTimeTemp = entity1.getTimeToCollision(this);
-			if ( (collisionTimeTemp < collisionTimeMin) || (collisionTimeMin == -1 ) ) collisionTimeMin = collisionTimeTemp;
+			if ( (collisionTimeTemp < collisionTimeMin) || (collisionTimeMin == -1 ) ) 
+				collisionTimeMin = collisionTimeTemp;
 		}
 		return collisionTimeMin;
 	}
@@ -540,7 +554,8 @@ public class World {
 			throw new IllegalArgumentException(exc);	// there is an overlap. Overlap is not legal for this method.
 		}
 		
-		if ( !((collisionTimeTemp < collisionTimeMin) || (collisionTimeMin == -1 )) || (collisionTimeTemp <= time) ) return collisionTimeMin;
+		if ( !((collisionTimeTemp < collisionTimeMin) || (collisionTimeMin == -1 )) || (collisionTimeTemp <= time) ) 
+			return collisionTimeMin;
 		collisionTimeMin = collisionTimeTemp;
 		collisionEntitiesMin[0] = entity1;
 		collisionEntitiesMin[1] = entity1;
@@ -585,7 +600,8 @@ public class World {
 	 * @param 	collisionListener TODO
 	 */
 	public void evolve(double time, CollisionListener collisionListener) throws IllegalArgumentException {
-		if (time < 0) throw new IllegalArgumentException();
+		if (time < 0) 
+			throw new IllegalArgumentException();
 		destroyOverlaps();	// Destroy all the entities that are currently invalid (overlap something).
 		updateMap();	// We need to update the map because it is possible that the positions of the entities have been changed.
 		
@@ -599,7 +615,8 @@ public class World {
 		if ( (collisionTimeMin == 0) && helper.isInList(collisionEntitiesMin, collisionTracker) // If there is a collision at zero,
 				 && (collidesWithTrackedBoundary(collisionEntitiesMin))) // that has already occurred, 
 			handleAbNormalCase(collisionEntitiesMin, time);	
-		else handleNormalCase(collisionEntitiesMin, collisionTimeMin, time);
+		else 
+			handleNormalCase(collisionEntitiesMin, collisionTimeMin, time);
 		
 	}
 	
@@ -632,7 +649,8 @@ public class World {
 	 */
 	private void handleAbNormalCase(Entity[] collisionEntitiesMin, double time) {
 		collisionEntitiesMin = getUntrackedEntititiesCollideAtZero();
-		if (collisionEntitiesMin == null) collisionEntitiesMin = getFirstCollisionEntities(0);	// There is no collision at zero. Exclude zero.
+		if (collisionEntitiesMin == null) 
+			collisionEntitiesMin = getFirstCollisionEntities(0);	// There is no collision at zero. Exclude zero.
 		if (collisionEntitiesMin == null) {	// If there is no other collision in the world (=Salamander bug).
 			handleSalamander(time);
 			return;	// Shortcut back to evolve.
@@ -781,10 +799,8 @@ public class World {
 		catch (NullPointerException exc) {
 			return false;
 		}
-		if ( (lastBoundaries[0] == currentBoundaries[0]) || (lastBoundaries[0] == currentBoundaries[1]) ||
-				(lastBoundaries[1] == currentBoundaries[0]) || (lastBoundaries[1] == currentBoundaries[1]) )
-			return true;
-		return false;
+		return (lastBoundaries[0] == currentBoundaries[0]) || (lastBoundaries[0] == currentBoundaries[1]) ||
+			   (lastBoundaries[1] == currentBoundaries[0]) || (lastBoundaries[1] == currentBoundaries[1]);
 	}
 	
 	
@@ -875,7 +891,8 @@ public class World {
 	@Raw
 	public Set<Entity> getAllEntities() {
 		Set<Entity> entitiesResult = new HashSet<Entity>();
-		for (Entity entity: entities.values()) entitiesResult.add(entity);
+		for (Entity entity: entities.values()) 
+			entitiesResult.add(entity);
 		return entitiesResult;
 	}
 		
@@ -883,7 +900,8 @@ public class World {
 		Set<Entity> entitiesResult = getAllEntities();
 		Set<Object> result = new HashSet<Object>();
 		for (Entity entity: entitiesResult) 
-			if (entity.getType() == type) result.add(entity);
+			if (entity.getType() == type) 
+				result.add(entity);
 		return result;
 	}
 	
@@ -898,7 +916,8 @@ public class World {
 		Set<Entity> entitiesResult = getAllEntities();
 		Set<Ship> shipsResult = new HashSet<Ship>();
 		for (Entity entity: entitiesResult) 
-			if (entity.getType() == EntityType.SHIP) shipsResult.add((Ship)entity);
+			if (entity.getType() == EntityType.SHIP) 
+				shipsResult.add((Ship)entity);
 		return shipsResult;
 	}
 	
@@ -913,7 +932,8 @@ public class World {
 		Set<Entity> entitiesResult = getAllEntities();
 		Set<Bullet> bulletsResult = new HashSet<Bullet>();
 		for (Entity entity: entitiesResult)
-			if (entity.getType() == EntityType.BULLET) bulletsResult.add((Bullet)entity);
+			if (entity.getType() == EntityType.BULLET) 
+				bulletsResult.add((Bullet)entity);
 		return bulletsResult;
 	}
 

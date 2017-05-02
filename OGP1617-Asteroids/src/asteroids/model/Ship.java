@@ -115,7 +115,7 @@ public class Ship extends Entity {
 		throws IllegalArgumentException {
 		this.minRadius = 10;	// First the constants are set.
 		setDensity(1.42 * Math.pow(10, 12));
-		setForce(1.1 * Math.pow(10, 21));
+		setForce(1.1 * Math.pow(10, 18));
 		
 		try {	// Check if the position can be set.
 			setPosition(positionX, positionY);
@@ -125,13 +125,9 @@ public class Ship extends Entity {
 		}
 
 		setVelocity(velocityX, velocityY);	// Set the velocity.
-		
 		assert isValidOrientation(orientation);	// Check if the orientation can be set.
 		setOrientation(orientation);
-		
-		if (! canHaveAsRadius(radius)) throw new IllegalArgumentException();	// Check if the radius can be set.
-		this.radius = radius;
-		
+		setRadius(radius);	// Set the radius.
 		setMass(mass);	// Set the mass.
 	}
 	
@@ -198,9 +194,7 @@ public class Ship extends Entity {
 	*/
 	@Raw
 	public boolean isValidOrientation(double orientation) {
-		if ( (orientation <= 2*Math.PI) && (orientation >= 0) )
-			return true;
-		return false;
+		return (orientation <= 2*Math.PI) && (orientation >= 0);
 	}
 	
 	
@@ -241,7 +235,8 @@ public class Ship extends Entity {
 	@Raw
 	public double getTotalMass() {
 		double totalMass = getMass();
-		for (Bullet bullet : this.bullets) totalMass += bullet.getMass();
+		for (Bullet bullet : this.bullets) 
+			totalMass += bullet.getMass();
 		return totalMass;
 	}
 	
@@ -257,7 +252,8 @@ public class Ship extends Entity {
 	 */
 	@Raw
 	public boolean isValidMass(double mass) {
-		if (Double.isNaN(mass)) return false;
+		if (Double.isNaN(mass)) 
+			return false;
 		return mass > (4/3) * Math.PI * Math.pow(getRadius(), 3) * getDensity();
 	}
 	
@@ -279,8 +275,10 @@ public class Ship extends Entity {
 	 */
 	@Raw
 	public void setMass(double mass) { 
-		if (isValidMass(mass)) this.mass = mass;
-		else this.mass = (4/3) * Math.PI * Math.pow(getRadius(), 3) * getDensity();
+		if (isValidMass(mass)) 
+			this.mass = mass;
+		else 
+			this.mass = (4/3) * Math.PI * Math.pow(getRadius(), 3) * getDensity();
 	}
 	
 	
@@ -359,8 +357,8 @@ public class Ship extends Entity {
 	 */
 	@Raw
 	public boolean canHaveAsBullet(Bullet bullet) {
-		return (bullet != null) && (!bullet.isTerminated()) && (!this.bullets.contains(bullet)) &&
-				(helper.apparentlyWithinBoundaries(bullet, this));
+		return (bullet != null) && (!bullet.isTerminated()) && 
+			   (!this.bullets.contains(bullet)) && (helper.apparentlyWithinBoundaries(bullet, this));
 	}
 	
 	
@@ -388,7 +386,8 @@ public class Ship extends Entity {
 	 */
 	@Raw
 	public void removeBullet(Bullet bullet) throws IllegalArgumentException {
-		if (!this.bullets.contains(bullet)) throw new IllegalArgumentException();
+		if (!this.bullets.contains(bullet)) 
+			throw new IllegalArgumentException();
 		this.bullets.remove(bullet);
 	}
 	
@@ -403,8 +402,11 @@ public class Ship extends Entity {
 	 * @see implementation
 	 */
 	public void loadBullet(Bullet bullet) throws IllegalArgumentException, NullPointerException {
-		if (bullet == null)	throw new NullPointerException();
-		if ( (!bullet.canHaveAsShip(this)) || (!this.canHaveAsBullet(bullet)) ) throw new IllegalArgumentException();
+		if (bullet == null)	
+			throw new NullPointerException();
+		if ( (!bullet.canHaveAsShip(this)) || (!this.canHaveAsBullet(bullet)) ) 
+			throw new IllegalArgumentException();
+		
 		addBullet(bullet);
 		try {
 			bullet.setShip(this);
@@ -425,7 +427,8 @@ public class Ship extends Entity {
 	 */
 	public void loadBullets(Collection<Bullet> bullets) throws IllegalArgumentException, NullPointerException {
 		try {
-			for (Bullet bullet: bullets) loadBullet(bullet);
+			for (Bullet bullet: bullets) 
+				loadBullet(bullet);
 		}
 		catch (IllegalArgumentException exc) {
 			throw new IllegalArgumentException();
@@ -445,7 +448,8 @@ public class Ship extends Entity {
 	 */
 	public void reloadBullet(Bullet bullet) throws IllegalArgumentException, NullPointerException {
 		try {
-			if (bullet.getWorld() != null) bullet.getWorld().removeEntity(bullet);
+			if (bullet.getWorld() != null) 
+				bullet.getWorld().removeEntity(bullet);
 			bullet.setPosition(getPosition().getPositionX(), getPosition().getPositionY());
 			bullet.resetSource(this);
 			bullet.setWorld(null);
@@ -484,8 +488,10 @@ public class Ship extends Entity {
 	 */
 	public void fireBullet(Bullet bullet) {
 		if ( (this.getWorld() == null) || (bullet == null) ) return;
-		if (!bullets.contains(bullet)) fireBullet();
-		else fireBulletProcedure(bullet);
+		if (!bullets.contains(bullet)) 
+			fireBullet();
+		else 
+			fireBulletProcedure(bullet);
 	}
 
 	/**
@@ -508,7 +514,9 @@ public class Ship extends Entity {
 						    	(getRadius() + bullet.getRadius() + 1) );	// +1 otherwise bullet is reloaded immediately.
 
 		// Next all the collisions with entities are resolved.
-		for (Entity entity : world.getAllEntities()) if (bullet.getDistanceBetween(entity) <= 0) bullet.resolveCollision(entity);
+		for (Entity entity : world.getAllEntities()) 
+			if (bullet.getDistanceBetween(entity) <= 0) 
+				bullet.resolveCollision(entity);
 			
 		try {
 			world.addEntity(bullet);	// Add the bullet to the collection of the world.
@@ -594,7 +602,8 @@ public class Ship extends Entity {
 	 */
 	@Raw
 	public void thrust(double acceleration) {
-		if (acceleration < 0) acceleration = 0;
+		if (acceleration < 0) 
+			acceleration = 0;
 		double newVelocityX = getVelocityX() + acceleration * Math.cos(getOrientation());
 		double newVelocityY = getVelocityY() + acceleration * Math.sin(getOrientation());
 		setVelocity(newVelocityX, newVelocityY);
@@ -623,8 +632,10 @@ public class Ship extends Entity {
 	 */
 	@Raw
 	public void thrust(double acceleration, double time) {
-		if (acceleration < 0) acceleration = 0;
-		if (time < 0) time = 0;
+		if (acceleration < 0) 
+			acceleration = 0;
+		if (time < 0) 
+			time = 0;
 		double newVelocityX = getVelocityX() + acceleration * Math.cos(getOrientation()) * time;
 		double newVelocityY = getVelocityY() + acceleration * Math.sin(getOrientation()) * time;
 		setVelocity(newVelocityX, newVelocityY);
@@ -672,7 +683,8 @@ public class Ship extends Entity {
 	 */
 	@Basic @Raw
 	public double getAcceleration() {
-		if (!getThrustStatus()) return 0;
+		if (!getThrustStatus()) 
+			return 0;
 		return getForce() / getTotalMass();
 	}
 	
@@ -781,7 +793,8 @@ public class Ship extends Entity {
 	 */
 	@Override
 	public void resolveCollisionShip(Ship ship) throws NullPointerException {
-		if (ship == null) throw new NullPointerException();	// This method is pretty much a copy of the formula in the assignment.
+		if (ship == null) 
+			throw new NullPointerException();	// This method is pretty much a copy of the formula in the assignment.
 		double[] deltaV = {ship.getVelocityX() - getVelocityX(), ship.getVelocityY() - getVelocityY()};
 		double[] deltaR = {ship.getPosition().getPositionX() - getPosition().getPositionX(), 
 						   ship.getPosition().getPositionY() - getPosition().getPositionY()};
@@ -807,7 +820,8 @@ public class Ship extends Entity {
 	 */
 	@Override
 	public void resolveCollisionBullet(Bullet bullet) throws IllegalArgumentException, NullPointerException {
-		if (bullet == null) throw new NullPointerException();
+		if (bullet == null) 
+			throw new NullPointerException();
 		if (bullet.getSource() == this) {	// Reload if this bullet hits it's source.
 			try {
 				reloadBullet(bullet);

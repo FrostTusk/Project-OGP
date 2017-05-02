@@ -251,8 +251,10 @@ public abstract class Entity {
 	*/
 	@Raw
 	public boolean isValidSpeed(double velocityX, double velocityY) {
-		if ( (java.lang.Double.isNaN(velocityX)) || (java.lang.Double.isNaN(velocityY)) ) return false;
-		if (Math.sqrt((velocityX * velocityX) + (velocityY * velocityY)) > getMaxSpeed()) return false;
+		if ( (java.lang.Double.isNaN(velocityX)) || (java.lang.Double.isNaN(velocityY)) ) 
+			return false;
+		if (Math.sqrt((velocityX * velocityX) + (velocityY * velocityY)) > getMaxSpeed()) 
+			return false;
 		return true;
 	}
 	
@@ -321,7 +323,7 @@ public abstract class Entity {
 	/**
 	* Variable registering the radius of this entity.
 	*/
-	protected double radius;	
+	private double radius;	
 	/**
 	* Variable registering the minimum radius of this entity.
 	* This minimum radius is hard coded into the sub classes of Entity so that it
@@ -363,6 +365,15 @@ public abstract class Entity {
 	}
 	
 	
+	// TODO Documentation
+	public void setRadius(double radius) throws IllegalArgumentException {
+		if (!canHaveAsRadius(radius)) 
+			throw new IllegalArgumentException();
+		this.radius = radius;
+	}
+	
+	
+	
 	
 			/*
 			 * |----------------------------------------------------|
@@ -376,7 +387,7 @@ public abstract class Entity {
 	 * Variable registering the density of this entity.
 	 * The density is always set by the sub classes of Entity. 
 	 */
-	protected double density;	// #Constant-3#
+	private double density;	// #Constant-3#
 	/**
 	* Variable registering the mass of this ship.
 	*/
@@ -455,7 +466,8 @@ public abstract class Entity {
 	*/
 //	public abstract boolean canHaveAsWorld(World world);
 	public boolean canHaveAsWorld(World world) {
-		if (world == null) return true;
+		if (world == null) 
+			return true;
 		return ( (getWorld() == null) || (getWorld() == world) ) && (isInWorld(world)) && !(world.isTerminated());
 	}
 	
@@ -486,7 +498,8 @@ public abstract class Entity {
 	*/
 	@Raw
 	public void setWorld(World world) throws IllegalArgumentException {
-		if (!canHaveAsWorld(world)) throw new IllegalArgumentException();
+		if (!canHaveAsWorld(world)) 
+			throw new IllegalArgumentException();
 		this.world = world;
 	}
 	
@@ -530,7 +543,8 @@ public abstract class Entity {
 	 */
 	@Raw
 	public void move(double time) throws IllegalArgumentException {
-		if (time < 0) throw new IllegalArgumentException();
+		if (time < 0) 
+			throw new IllegalArgumentException();
 			
 		double newPositionX = helper.calculatePosition(this, time)[0];
 		double newPositionY = helper.calculatePosition(this, time)[1];
@@ -539,7 +553,7 @@ public abstract class Entity {
 			setPosition(newPositionX, newPositionY);
 		}
 		catch (IllegalArgumentException exc) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException(exc);
 		}
 	}
 	
@@ -569,7 +583,8 @@ public abstract class Entity {
 	 */
 	@Raw
 	public double getDistanceBetween(Entity entity) throws NullPointerException {
-		if (entity == null) throw new NullPointerException();		
+		if (entity == null) 
+			throw new NullPointerException();		
 		
 		double distanceX = Math.sqrt(Math.pow(this.getPosition().getPositionX() - entity.getPosition().getPositionX(), 2));
 		double distanceY = Math.sqrt(Math.pow(this.getPosition().getPositionY() - entity.getPosition().getPositionY(), 2));
@@ -579,7 +594,8 @@ public abstract class Entity {
 		
 		// This clause is necessary because otherwise a negative value is returned when this method
 		// is called by an entity on itself. However this value should be 0.
-		if (this == entity) return 0;
+		if (this == entity) 
+			return 0;
 			
 		// Use the radius' of the ships to calculate distance between the edges.
 		return distance - this.getRadius() - entity.getRadius();
@@ -603,7 +619,8 @@ public abstract class Entity {
 	public double[] getDistanceBetween(World world) {
 		double[] distance = {Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, 
 							 Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY};
-		if (getWorld() != world) return distance;
+		if (getWorld() != world) 
+			return distance;
 		
 		distance[0] = getPosition().getPositionX() - getRadius();
 		distance[1] = world.getWidth() - (getPosition().getPositionX() + getRadius());
@@ -630,8 +647,10 @@ public abstract class Entity {
 	*/
 	@Raw
 	public boolean overlap(Entity entity) throws NullPointerException {
-		if (entity == null) throw new NullPointerException();
-		if (entity == this) return true;
+		if (entity == null) 
+			throw new NullPointerException();
+		if (entity == this) 
+			return true;
 		return helper.significantOverlap(this, entity, this.getDistanceBetween(entity) + this.getRadius() + entity.getRadius());
 	}
 	
@@ -725,17 +744,22 @@ public abstract class Entity {
 			return 0;
 		
 		double time1; // The shortest time to collision between this entity and the x boundaries of the given world.
-		if (getVelocityX() == 0) time1 = Double.POSITIVE_INFINITY;
-		else if (getVelocityX() < 0) time1 = distance[0] / -getVelocityX();
-		else time1 = distance[1] / getVelocityX();
+		if (getVelocityX() == 0) 
+			time1 = Double.POSITIVE_INFINITY;
+		else if (getVelocityX() < 0) 
+			time1 = distance[0] / -getVelocityX();
+		else 
+			time1 = distance[1] / getVelocityX();
 		
 		double time2; // The shortest time to collision between this entity and the y boundaries of the given world.
-		if (getVelocityY() == 0) time2 = Double.POSITIVE_INFINITY;
-		else if (getVelocityY() < 0) time2 = distance[2] / -getVelocityY();
-		else time2 = distance[3] / getVelocityY();
+		if (getVelocityY() == 0) 
+			time2 = Double.POSITIVE_INFINITY;
+		else if (getVelocityY() < 0) 
+			time2 = distance[2] / -getVelocityY();
+		else 
+			time2 = distance[3] / getVelocityY();
 		
-		if (time1 < time2) return time1;		
-		return time2;
+		return (time1 < time2) ? time1: time2;
 	}
 	
 	/**
@@ -763,14 +787,15 @@ public abstract class Entity {
 		double[] deltaR = {this.getPosition().getPositionX() - collisionPosition[0], 
 						   this.getPosition().getPositionY() - collisionPosition[1]};
 		
-		if (helper.evaluateScalar(deltaR, deltaV) >= 0)	return Double.POSITIVE_INFINITY;;
+		if (helper.evaluateScalar(deltaR, deltaV) >= 0)	
+			return Double.POSITIVE_INFINITY;;
 		double d = Math.pow(helper.evaluateScalar(deltaV, deltaR), 2) -
 					(helper.evaluateScalar(deltaV)*(helper.evaluateScalar(deltaR) - Math.pow(this.getRadius(), 2)));
-		if (d <= 0) return Double.POSITIVE_INFINITY;
+		if (d <= 0) 
+			return Double.POSITIVE_INFINITY;
 		
 		double result =  -( (helper.evaluateScalar(deltaV, deltaR) + Math.sqrt(d)) / helper.evaluateScalar(deltaV) );
-		if (result < 0 ) return 0;	// Fail-Safe
-		return result;
+		return (result < 0) ? 0: result;
 	}
 	
 	/**
@@ -793,25 +818,29 @@ public abstract class Entity {
 	*/
 	@Raw
 	public double getTimeToCollision(Entity entity) throws IllegalArgumentException, NullPointerException {
-		if (entity == null) throw new NullPointerException(); 
-		if (this.overlap(entity)) throw new IllegalArgumentException();
-		if ( (this.getWorld() != entity.getWorld()) || (this.getWorld() == null) ) return Double.POSITIVE_INFINITY;
+		if (entity == null) 
+			throw new NullPointerException(); 
+		if (this.overlap(entity)) 
+			throw new IllegalArgumentException();
+		if ( (this.getWorld() != entity.getWorld()) || (this.getWorld() == null) ) 
+			return Double.POSITIVE_INFINITY;
 		
 		double[] deltaR = {entity.getPosition().getPositionX() - this.getPosition().getPositionX(), 
 					   	   entity.getPosition().getPositionY() - this.getPosition().getPositionY()};
 		double[] deltaV = {entity.getVelocityX() - this.getVelocityX(), 
 					   	   entity.getVelocityY() - this.getVelocityY()};
 		
-		if (helper.evaluateScalar(deltaR, deltaV) >= 0) return Double.POSITIVE_INFINITY;
+		if (helper.evaluateScalar(deltaR, deltaV) >= 0) 
+			return Double.POSITIVE_INFINITY;
 		double omega = this.getRadius() + entity.getRadius();
 		
 		double d = ( Math.pow(helper.evaluateScalar(deltaV, deltaR), 2)
 					- helper.evaluateScalar(deltaV) * (helper.evaluateScalar(deltaR) - Math.pow(omega, 2)) );
-		if (d <= 0) return Double.POSITIVE_INFINITY;
+		if (d <= 0) 
+			return Double.POSITIVE_INFINITY;
 		
 		double result = -( (helper.evaluateScalar(deltaV, deltaR) + Math.sqrt(d)) / helper.evaluateScalar(deltaV) );
-		if (result < 0 ) return 0;	// Fail-Safe
-		return result;
+		return (result < 0) ? 0: result;
 	}
 	
 	
@@ -830,18 +859,25 @@ public abstract class Entity {
 	public double[] getCollisionPosition(World world) {	
 		double[] vector = {Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY};
 		double time = getTimeToCollisionNoThrust(world);
-		if (time == Double.POSITIVE_INFINITY) return vector; // TODO Is this right? Not null?
+		if (time == Double.POSITIVE_INFINITY) 
+			return vector; // TODO Is this right? Not null?
 		
 		vector = createDefaultVector(time);	// First create a default vector.
-		if (vector[0] + this.getRadius() == world.getWidth()) vector[0] += this.getRadius();	// Get the first collision position.
-		else if (vector[0] - this.getRadius() == 0) vector[0] = 0;
-		else if (vector[1] + this.getRadius() == world.getHeight()) vector[1] += this.getRadius();
-		else if (vector[1] - this.getRadius() == 0) vector[1] = 0;
+		if (vector[0] + this.getRadius() == world.getWidth()) 
+			vector[0] += this.getRadius();	// Get the first collision position.
+		else if (vector[0] - this.getRadius() == 0) 
+			vector[0] = 0;
+		else if (vector[1] + this.getRadius() == world.getHeight()) 
+			vector[1] += this.getRadius();
+		else if (vector[1] - this.getRadius() == 0) 
+			vector[1] = 0;
 		
 		if ( (vector[0] != vector[2]) && ( (vector[3] + this.getRadius() == world.getHeight()) || // To cover corners:
 			 (vector[3] - this.getRadius() == 0)) ) { // If there is a collision with the x boundary, we still have to check 
-			if (vector[3] + this.getRadius() == world.getHeight()) vector[3] += this.getRadius();	// if there is a collision with the y boundary.
-			else if (vector[3] - this.getRadius() == 0) vector[3] = 0;								
+			if (vector[3] + this.getRadius() == world.getHeight()) 
+				vector[3] += this.getRadius();	// if there is a collision with the y boundary.
+			else if (vector[3] - this.getRadius() == 0) 
+				vector[3] = 0;								
 		}
 		else {
 			vector[2] = Double.POSITIVE_INFINITY;
@@ -870,7 +906,8 @@ public abstract class Entity {
 	*/
 	@Raw
 	public double[] getCollisionPosition(Entity entity) throws IllegalArgumentException, NullPointerException {
-		if (entity == null) throw new NullPointerException();
+		if (entity == null) 
+			throw new NullPointerException();
 		double time;
 		try {
 			time = getTimeToCollision(entity);
@@ -918,7 +955,8 @@ public abstract class Entity {
 	 */
 //	public abstract void resolveCollision(World world);
 	public void resolveCollision(World world) {
-		if (world == null) throw new NullPointerException();
+		if (world == null) 
+			throw new NullPointerException();
 		double[] position = getCollisionPosition(world);
 		if (position[0] == Double.POSITIVE_INFINITY && position[1] == Double.POSITIVE_INFINITY) return;	
 		// There is no collision so the collision does not need to be resolved.
@@ -940,10 +978,13 @@ public abstract class Entity {
 	 */
 //	public abstract void resolveCollision(Entity entity);
 	public void resolveCollision(Entity entity) {
-		if (entity == null) throw new NullPointerException();
+		if (entity == null) 
+			throw new NullPointerException();
 		try {
-			if (entity.getType() == EntityType.SHIP) resolveCollisionShip((Ship)entity);
-			else if (entity.getType() == EntityType.BULLET) resolveCollisionBullet((Bullet)entity);
+			if (entity.getType() == EntityType.SHIP) 
+				resolveCollisionShip((Ship)entity);
+			else if (entity.getType() == EntityType.BULLET) 
+				resolveCollisionBullet((Bullet)entity);
 		}
 		catch (IllegalArgumentException exc) {
 			throw new IllegalArgumentException(exc);

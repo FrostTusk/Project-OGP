@@ -1,6 +1,7 @@
 package asteroids.helper;
 
 import asteroids.model.Ship;
+import be.kuleuven.cs.som.annotate.Raw;
 
 public class MinorPlanet extends Entity {
 
@@ -22,6 +23,19 @@ public class MinorPlanet extends Entity {
 	}
 
 
+	/**
+	 * Set the mass of this bullet to the given mass.
+	 * 
+	 * @param  	mass
+	 * 			the new mass for this bullet
+	 *         
+	 * @see implementation
+	 */
+	@Raw
+	public void setMass() {
+		this.mass = (4/3) * Math.PI * Math.pow(getRadius(), 3) * getDensity();
+	}
+	
 	@Override
 	public void resolveCollisionShip(Ship ship) {
 		// TODO Auto-generated method stub
@@ -30,7 +44,8 @@ public class MinorPlanet extends Entity {
 	
 	@Override
 	public void resolveCollisionMinorPlanet(MinorPlanet minorPlanet) {
-		if (minorPlanet == null) throw new NullPointerException();	// This method is pretty much a copy of the formula in the assignment.
+		if (minorPlanet == null) 
+			throw new NullPointerException();	// This method is pretty much a copy of the formula in the assignment.
 		double[] deltaV = {minorPlanet.getVelocityX() - getVelocityX(), minorPlanet.getVelocityY() - getVelocityY()};
 		double[] deltaR = {minorPlanet.getPosition().getPositionX() - getPosition().getPositionX(), 
 						   minorPlanet.getPosition().getPositionY() - getPosition().getPositionY()};
