@@ -85,11 +85,7 @@ public class Bullet extends Entity {
 		}
 
 		setVelocity(velocityX, velocityY);
-		
-		if (! canHaveAsRadius(radius))
-			throw new IllegalArgumentException();
-		this.radius = radius;
-		
+		setRadius(radius);
 		setMass();
 	}
 	
@@ -138,7 +134,7 @@ public class Bullet extends Entity {
 	 */
 	@Raw
 	public void setMass() {
-		this.mass = (4/3) * Math.PI * Math.pow(getRadius(), 3) * (density);
+		this.mass = (4/3) * Math.PI * Math.pow(getRadius(), 3) * getDensity();
 	}
 	
 
@@ -168,8 +164,10 @@ public class Bullet extends Entity {
 	 */
 	@Override @Raw
 	public boolean canHaveAsWorld(World world) {
-		if (world == null) return true;
-		return (!world.isTerminated()) && (getShip() == null) && ( (getWorld() == null) || (getWorld() == world) ) && (isInWorld(world));
+		if (world == null) 
+			return true;
+		return (!world.isTerminated()) && (getShip() == null) 
+			   && ( (getWorld() == null) || (getWorld() == world) ) && (isInWorld(world));
 	}
 	
 	
@@ -244,7 +242,8 @@ public class Bullet extends Entity {
      */
 	@Raw
 	public boolean canHaveAsShip(Ship ship) {
-		if (ship == null) return true;
+		if (ship == null) 
+			return true;
 		return (!ship.isTerminated()) && (getWorld() == null) && ((getShip() == null) || (getShip() == ship)) 
 				/*&& (helper.apparentlyWithinBoundaries(this, ship))*/;
 	}
@@ -277,8 +276,10 @@ public class Bullet extends Entity {
 	 */
 	@Raw
 	public void resetSource(Ship ship) throws IllegalArgumentException, NullPointerException {
-		if (ship == null) throw new NullPointerException();
-		if ( (getDistanceBetween(ship) > 0) || (getSource() != ship) ) throw new IllegalArgumentException();	// Since this 
+		if (ship == null) 
+			throw new NullPointerException();
+		if ( (getDistanceBetween(ship) > 0) || (getSource() != ship) ) 
+			throw new IllegalArgumentException();	// Since this 
 		this.hasBeenFired = false;			// method may only be called during reload, these checks are necessary.
 		this.source = null;
 	}
@@ -293,7 +294,8 @@ public class Bullet extends Entity {
 	 */
 	@Raw
 	public void setShip(Ship ship) throws IllegalArgumentException {
-		if (!canHaveAsShip(ship)) throw new IllegalArgumentException();
+		if (!canHaveAsShip(ship)) 
+			throw new IllegalArgumentException();
 		this.ship = ship;
 	}
 	
@@ -388,7 +390,8 @@ public class Bullet extends Entity {
 	 */
 	@Override
 	public void resolveCollision(World world) throws NullPointerException {
-		if (world == null) throw new NullPointerException();
+		if (world == null) 
+			throw new NullPointerException();
 		setBoundaryCollisionCounter(getBoundaryCollisionCounter() + 1);
 		if (getBoundaryCollisionCounter() < getBoundaryCollisionMax()) {
 			double[] position = getCollisionPosition(world);
@@ -437,7 +440,8 @@ public class Bullet extends Entity {
 	 */
 	@Override
 	public void resolveCollisionShip(Ship ship) throws IllegalArgumentException, NullPointerException {
-		if (ship == null) throw new NullPointerException();
+		if (ship == null) 
+			throw new NullPointerException();
 		if (this.getSource() == ship) {	// Reload if this bullet hits it's source.
 			try {
 				ship.reloadBullet(this);
@@ -462,7 +466,8 @@ public class Bullet extends Entity {
 	 */
 	@Override
 	public void resolveCollisionBullet(Bullet bullet) throws NullPointerException {
-		if (bullet == null) throw new NullPointerException();
+		if (bullet == null) 
+			throw new NullPointerException();
 		this.terminate();
 		bullet.terminate();
 	}

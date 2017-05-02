@@ -7,6 +7,8 @@ public class Planetoid extends MinorPlanet {
 	public Planetoid() {
 		initialRadius = getRadius();
 		distanceTravelled = 0;
+		setDensity(0.917 * Math.pow(10, 12));
+		setMass();
 	}
 	
 	
@@ -51,7 +53,7 @@ public class Planetoid extends MinorPlanet {
 	}
 	
 	private void updateRadius() {
-		this.radius = getInitialRadius() - 0.000001*getDistanceTravelled();
+		setRadius(getInitialRadius() - 0.000001*getDistanceTravelled());
 	}
 	
 }

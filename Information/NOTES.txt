@@ -3,17 +3,17 @@
 		1. Declarative
 			1. Am I doing it right?
 	2. What to do with Position Class?
-		1. What changes in terms of documentation with Ship?
-		2. Exception thrown at creation of Position? Should Ship cover it?
+		1. Exception thrown at creation of Position? Should Ship cover it?
 		   Can it keep "floating"?
 	3. Salamander Bug
-	4. Collision points showing glitch
 
 
 2. TODO:
-	1. Proofread
-	2. DOCUMENTATIE, VEEL DOCUMENTATIE
-	3. PlayTest
+	1. Programs
+	2. Tests
+	3. Minor Planets
+	4. Improve velocity method
+
 
 
 
