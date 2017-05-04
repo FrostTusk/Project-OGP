@@ -1131,7 +1131,7 @@ public class Part3TestFull {
     facade.addAsteroidToWorld(world, asteroid);
     Bullet bullet = facade.createBullet(80, 130, 10, 0, 20);
     facade.addBulletToWorld(world, bullet);
-    // collision after 83 seconds
+    // collision after 83 seconds <= wrong
     facade.evolve(world, 84, null);
     assertEquals(0, facade.getWorldBullets(world).size());
     assertEquals(0, facade.getWorldAsteroids(world).size());

@@ -113,7 +113,7 @@ public class Ship extends Entity {
 	 */
 	public Ship(double positionX, double positionY, double velocityX, double velocityY, double orientation, double radius, double mass)
 		throws IllegalArgumentException {
-		this.minRadius = 10;	// First the constants are set.
+		setMinRadius(10);	// First the constants are set.
 		setDensity(1.42 * Math.pow(10, 12));
 		setForce(1.1 * Math.pow(10, 18));
 		
@@ -254,7 +254,7 @@ public class Ship extends Entity {
 	public boolean isValidMass(double mass) {
 		if (Double.isNaN(mass)) 
 			return false;
-		return mass > (4/3) * Math.PI * Math.pow(getRadius(), 3) * getDensity();
+		return mass > ((double)4/(double)3) * Math.PI * Math.pow(getRadius(), 3) * getDensity();
 	}
 	
 	
@@ -278,7 +278,7 @@ public class Ship extends Entity {
 		if (isValidMass(mass)) 
 			this.mass = mass;
 		else 
-			this.mass = (4/3) * Math.PI * Math.pow(getRadius(), 3) * getDensity();
+			this.mass = ((double)4/(double)3) * Math.PI * Math.pow(getRadius(), 3) * getDensity();
 	}
 	
 	

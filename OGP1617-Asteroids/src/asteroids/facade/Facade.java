@@ -665,142 +665,258 @@ public class Facade implements IFacade {
 
 	@Override
 	public Set<? extends Asteroid> getWorldAsteroids(World world) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return (Set<Asteroid>)world.getAllEntitiesSpecific(EntityType.ASTEROID);
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
 	public void addAsteroidToWorld(World world, Asteroid asteroid) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		try {
+			world.addEntity(asteroid);
+		}
+		catch (IllegalArgumentException exc) {
+			throw new ModelException(exc);
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}	
 	}
 
 	@Override
 	public void removeAsteroidFromWorld(World world, Asteroid asteroid) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		try {
+			world.removeEntity(asteroid);
+		}
+		catch (IllegalArgumentException exc) {
+			throw new ModelException(exc);
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}		
 	}
 
 	@Override
 	public Set<? extends Planetoid> getWorldPlanetoids(World world) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return (Set<Planetoid>)world.getAllEntitiesSpecific(EntityType.ASTEROID);
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
 	public void addPlanetoidToWorld(World world, Planetoid planetoid) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		try {
+			world.addEntity(planetoid);
+		}
+		catch (IllegalArgumentException exc) {
+			throw new ModelException(exc);
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}	
 	}
 
 	@Override
 	public void removePlanetoidFromWorld(World world, Planetoid planetoid) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		try {
+			world.removeEntity(planetoid);
+		}
+		catch (IllegalArgumentException exc) {
+			throw new ModelException(exc);
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}	
 	}
 
 	@Override
 	public Asteroid createAsteroid(double x, double y, double xVelocity, double yVelocity, double radius)
 			throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return new Asteroid(x, y, xVelocity, yVelocity, radius);
+		}
+		catch (IllegalArgumentException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
 	public void terminateAsteroid(Asteroid asteroid) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		try {
+			asteroid.terminate();
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}		
 	}
 
 	@Override
 	public boolean isTerminatedAsteroid(Asteroid asteroid) throws ModelException {
-		// TODO Auto-generated method stub
-		return false;
+		try {
+			return asteroid.isTerminated();
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
 	public double[] getAsteroidPosition(Asteroid asteroid) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			double positionX = asteroid.getPosition().getPositionX();
+			double positionY = asteroid.getPosition().getPositionY();
+			double[] position = {positionX, positionY};
+			return position;
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
 	public double[] getAsteroidVelocity(Asteroid asteroid) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			double velocityX = asteroid.getVelocityX();
+			double velocityY = asteroid.getVelocityY();
+			double[] velocity = {velocityX, velocityY};
+			return velocity;
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
 	public double getAsteroidRadius(Asteroid asteroid) throws ModelException {
-		// TODO Auto-generated method stub
-		return 0;
+		try {
+			return asteroid.getRadius();
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
 	public double getAsteroidMass(Asteroid asteroid) throws ModelException {
-		// TODO Auto-generated method stub
-		return 0;
+		try {
+			return asteroid.getMass();
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
 	public World getAsteroidWorld(Asteroid asteroid) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return asteroid.getWorld();
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
 	public Planetoid createPlanetoid(double x, double y, double xVelocity, double yVelocity, double radius,
 			double totalTraveledDistance) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return new Planetoid(x, y, xVelocity, yVelocity, radius, totalTraveledDistance);
+		}
+		catch (IllegalArgumentException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
 	public void terminatePlanetoid(Planetoid planetoid) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		try {
+			planetoid.terminate();
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}	
 	}
 
 	@Override
 	public boolean isTerminatedPlanetoid(Planetoid planetoid) throws ModelException {
-		// TODO Auto-generated method stub
-		return false;
+		try {
+			return planetoid.isTerminated();
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
 	public double[] getPlanetoidPosition(Planetoid planetoid) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			double positionX = planetoid.getPosition().getPositionX();
+			double positionY = planetoid.getPosition().getPositionY();
+			double[] position = {positionX, positionY};
+			return position;
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
 	public double[] getPlanetoidVelocity(Planetoid planetoid) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			double velocityX = planetoid.getVelocityX();
+			double velocityY = planetoid.getVelocityY();
+			double[] velocity = {velocityX, velocityY};
+			return velocity;
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
 	public double getPlanetoidRadius(Planetoid planetoid) throws ModelException {
-		// TODO Auto-generated method stub
-		return 0;
+		try {
+			return planetoid.getRadius();
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
 	public double getPlanetoidMass(Planetoid planetoid) throws ModelException {
-		// TODO Auto-generated method stub
-		return 0;
+		try {
+			return planetoid.getMass();
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
 	public double getPlanetoidTotalTraveledDistance(Planetoid planetoid) throws ModelException {
-		// TODO Auto-generated method stub
-		return 0;
+		try {
+			return planetoid.getDistanceTravelled();
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
 	public World getPlanetoidWorld(Planetoid planetoid) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return planetoid.getWorld();
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override

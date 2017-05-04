@@ -60,7 +60,7 @@ public class ManualTests {
 		Entity entity = new Ship(10, 10, 10, 10, 0, 10, 10);
 		sysOut.format("Max Speed = %f%n", entity.getMaxSpeed());
 		
-		Planetoid planetoid = new Planetoid();
+		Planetoid planetoid = new Planetoid(10, 10, 10, 10, 10, 10);
 		sysOut.format("Max Speed = %f%n", planetoid.getMaxSpeed());
 		sysOut.format("Min Radius = %f%n", planetoid.getMinRadius());
 		

@@ -72,10 +72,10 @@ public class Bullet extends Entity {
 	 */
 	public Bullet(double positionX, double positionY, double velocityX, double velocityY, double radius)
 		throws IllegalArgumentException {
-		this.minRadius = 1;
+		setMinRadius(1);
 		setDensity(7.8 * Math.pow(10, 12));
-		this.boundaryCollisionCounter = 0;
 		setBoundaryCollisionMax(3);
+		setBoundaryCollisionCounter(0);
 		
 		try {
 			setPosition(positionX, positionY);
@@ -134,7 +134,7 @@ public class Bullet extends Entity {
 	 */
 	@Raw
 	public void setMass() {
-		this.mass = (4/3) * Math.PI * Math.pow(getRadius(), 3) * getDensity();
+		this.mass = ((double)4/(double)3) * Math.PI * Math.pow(getRadius(), 3) * getDensity();
 	}
 	
 

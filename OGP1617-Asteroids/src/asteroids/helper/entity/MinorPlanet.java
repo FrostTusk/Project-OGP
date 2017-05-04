@@ -6,7 +6,7 @@ import be.kuleuven.cs.som.annotate.Raw;
 public abstract class MinorPlanet extends Entity {
 
 	public MinorPlanet() {
-		this.minRadius = 5;
+		setMinRadius(5);
 	}
 	
 	@Override
@@ -33,7 +33,7 @@ public abstract class MinorPlanet extends Entity {
 	 */
 	@Raw
 	public void setMass() {
-		this.mass = (4/3) * Math.PI * Math.pow(getRadius(), 3) * getDensity();
+		this.mass = ((double)4/(double)3) * Math.PI * Math.pow(getRadius(), 3) * getDensity();
 	}
 	
 	@Override

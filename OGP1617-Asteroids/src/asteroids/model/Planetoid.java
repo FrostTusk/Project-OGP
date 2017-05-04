@@ -9,10 +9,22 @@ import asteroids.helper.entity.Position;
 
 public class Planetoid extends MinorPlanet {
 
-	public Planetoid() {
+	public Planetoid(double positionX, double positionY, double velocityX, double velocityY, double radius, double distanceTravelled)
+			throws IllegalArgumentException {
 		initialRadius = getRadius();
-		distanceTravelled = 0;
+		setDistanceTravelled(distanceTravelled);
 		setDensity(0.917 * Math.pow(10, 12));
+		
+		try {	// Check if the position can be set.
+			setPosition(positionX, positionY);
+		}
+		catch (IllegalArgumentException exc) {
+			throw new IllegalArgumentException();
+		}
+		
+		setPosition(positionX, positionY);
+		setVelocity(velocityX, velocityY);
+		setRadius(radius);
 		setMass();
 	}
 	
@@ -30,8 +42,9 @@ public class Planetoid extends MinorPlanet {
 	}
 	
 	
-	public void addDistance(double distance) {
-		distanceTravelled = getDistanceTravelled() + distance;
+	public void setDistanceTravelled(double distanceTravelled) {
+		this.distanceTravelled = distanceTravelled;
+		updateRadius();
 	}
 	
 
@@ -44,8 +57,8 @@ public class Planetoid extends MinorPlanet {
 		double oldPositionX = getPosition().getPositionX();
 		double oldPositionY = getPosition().getPositionY();
 		
-		addDistance(Math.pow(Math.abs(newPositionX - oldPositionX), 2) 
-				+ Math.pow(Math.abs(newPositionY - oldPositionY), 2));
+		setDistanceTravelled(getDistanceTravelled() + Math.pow(Math.abs(newPositionX - oldPositionX), 2) 
+							 + Math.pow(Math.abs(newPositionY - oldPositionY), 2));
 		updateRadius();
 		
 		try {

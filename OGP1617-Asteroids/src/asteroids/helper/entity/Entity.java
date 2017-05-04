@@ -330,7 +330,7 @@ public abstract class Entity {
 	* This minimum radius is hard coded into the sub classes of Entity so that it
 	* never changes during the program's execution.
 	*/
-	protected double minRadius;	// #Constant-2#
+	private double minRadius;	// #Constant-2#
 	
 	
 	/**
@@ -365,6 +365,10 @@ public abstract class Entity {
 		return (Double.POSITIVE_INFINITY > radius) && (radius >= this.getMinRadius()); 
 	}
 	
+	
+	public void setMinRadius(double minRadius) throws IllegalArgumentException {
+		this.minRadius = minRadius;
+	}
 	
 	// TODO Documentation
 	public void setRadius(double radius) throws IllegalArgumentException {
@@ -983,11 +987,22 @@ public abstract class Entity {
 		if (getWorld() != entity.getWorld())
 			throw new IllegalArgumentException();
 		
+		if (this.getType() == EntityType.SHIP) {
+			entity.resolveCollisionShip((Ship) this);
+			return;
+		}
+		if (this.getType() == EntityType.BULLET) {
+			entity.resolveCollisionBullet((Bullet) this);
+			return;
+		}
+		
 		try {
 			if (entity.getType() == EntityType.SHIP) 
 				resolveCollisionShip((Ship)entity);
 			else if (entity.getType() == EntityType.BULLET) 
 				resolveCollisionBullet((Bullet)entity);
+			else if ( (entity.getType() == EntityType.ASTEROID) || (entity.getType() == EntityType.PLANETOID) )
+				resolveCollisionMinorPlanet((MinorPlanet) entity);
 		}
 		catch (IllegalArgumentException exc) {
 			throw new IllegalArgumentException(exc);
@@ -1019,6 +1034,9 @@ public abstract class Entity {
 		bullet.terminate();	
 	}
 
+	public void resolveCollisionMinorPlanet(MinorPlanet minorPlanet) {
+		return;	// This method will only be called by another minor planet. In minor planet this method is overridden.
+	}
 	
 	
 		/*
@@ -1088,11 +1106,5 @@ public abstract class Entity {
 	 */
 	@Raw
 	public abstract EntityType getType();
-
-
-	public void resolveCollisionMinorPlanet(MinorPlanet minorPlanet) {
-		// TODO Auto-generated method stub
-		
-	}
 
 }
