@@ -95,12 +95,12 @@ public class TestShip {
 	}
 	
 	
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testCreateShipXIsPosInfinity() {
 		new Ship(Double.POSITIVE_INFINITY, 200, 10, -10, Math.PI, 20, 0);
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testCreateShipXIsNegInfinity() {
 		new Ship(Double.NEGATIVE_INFINITY, 200, 10, -10, Math.PI, 20, 0);
 	}
@@ -111,12 +111,12 @@ public class TestShip {
 	}
 	
 	
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testCreateShipYIsPosInfinity() {
 		new Ship(200, Double.POSITIVE_INFINITY, 10, -10, Math.PI, 20, 0);
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testCreateShipYIsNegInfinity() {
 		new Ship(200, Double.NEGATIVE_INFINITY, 10, -10, Math.PI, 20, 0);
 	}
@@ -127,12 +127,12 @@ public class TestShip {
 	}
 	
 	
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testCreateShipXYIsPosInfinity() {
 		new Ship(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, 10, -10, Math.PI, 20, 0);
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testCreateShipXYIsNegInfinity() {
 		new Ship(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, 10, -10, Math.PI, 20, 0);
 	}
@@ -370,13 +370,13 @@ public class TestShip {
 	@Test
 	public void testCreateShipMassUnderZero() {
 		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, -10);
-		assertEquals((4/3) * Math.PI * Math.pow(20, 3) * ship.getDensity(), ship.getMass(), EPSILON);
+		assertEquals(((double)4/(double)3) * Math.PI * Math.pow(20, 3) * ship.getDensity(), ship.getMass(), EPSILON);
 	}
 	
 	@Test
 	public void testCreateShipMassZero() {
 		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 0);
-		assertEquals((4/3) * Math.PI * Math.pow(20, 3) * ship.getDensity(), ship.getMass(), EPSILON);
+		assertEquals(((double)4/(double)3) * Math.PI * Math.pow(20, 3) * ship.getDensity(), ship.getMass(), EPSILON);
 	}
 	
 	
@@ -402,7 +402,7 @@ public class TestShip {
 	@Test
 	public void testShipSetMassGeneric() {
 		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
-		assertEquals((4/3) * Math.PI * Math.pow(ship.getRadius(), 3) * ship.getDensity(), ship.getMass(), EPSILON);
+		assertEquals(((double)4/(double)3) * Math.PI * Math.pow(ship.getRadius(), 3) * ship.getDensity(), ship.getMass(), EPSILON);
 		ship.setMass(Math.pow(10, 20));
 		assertEquals(Math.pow(10, 20), ship.getMass(), EPSILON);
 	}
@@ -411,16 +411,16 @@ public class TestShip {
 	@Test
 	public void testShipSetMassNeg() {
 		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
-		assertEquals((4/3) * Math.PI * Math.pow(ship.getRadius(), 3) * ship.getDensity(), ship.getMass(), EPSILON);
+		assertEquals(((double)4/(double)3) * Math.PI * Math.pow(ship.getRadius(), 3) * ship.getDensity(), ship.getMass(), EPSILON);
 		ship.setMass(-1);
-		assertEquals((4/3) * Math.PI * Math.pow(ship.getRadius(), 3) * ship.getDensity(), ship.getMass(), EPSILON);
+		assertEquals(((double)4/(double)3) * Math.PI * Math.pow(ship.getRadius(), 3) * ship.getDensity(), ship.getMass(), EPSILON);
 	}
 	
 	
 	@Test
 	public void testShipSetMassPosInf() {
 		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
-		assertEquals((4/3) * Math.PI * Math.pow(ship.getRadius(), 3) * ship.getDensity(), ship.getMass(), EPSILON);
+		assertEquals(((double)4/(double)3) * Math.PI * Math.pow(ship.getRadius(), 3) * ship.getDensity(), ship.getMass(), EPSILON);
 		ship.setMass(Double.POSITIVE_INFINITY);
 		assertEquals(Double.POSITIVE_INFINITY, ship.getMass(), EPSILON);
 	}
@@ -428,17 +428,17 @@ public class TestShip {
 	@Test
 	public void testShipSetMassNegInf() {
 		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
-		assertEquals((4/3) * Math.PI * Math.pow(ship.getRadius(), 3) * ship.getDensity(), ship.getMass(), EPSILON);
+		assertEquals(((double)4/(double)3) * Math.PI * Math.pow(ship.getRadius(), 3) * ship.getDensity(), ship.getMass(), EPSILON);
 		ship.setMass(Double.NEGATIVE_INFINITY);
-		assertEquals((4/3) * Math.PI * Math.pow(ship.getRadius(), 3) * ship.getDensity(), ship.getMass(), EPSILON);
+		assertEquals(((double)4/(double)3) * Math.PI * Math.pow(ship.getRadius(), 3) * ship.getDensity(), ship.getMass(), EPSILON);
 	}
 	
 	@Test
 	public void testShipSetMassNaN() {
 		Ship ship = new Ship(100, 200, 10, -10, Math.PI, 20, 1);
-		assertEquals((4/3) * Math.PI * Math.pow(ship.getRadius(), 3) * ship.getDensity(), ship.getMass(), EPSILON);
+		assertEquals(((double)4/(double)3) * Math.PI * Math.pow(ship.getRadius(), 3) * ship.getDensity(), ship.getMass(), EPSILON);
 		ship.setMass(Double.NaN);
-		assertEquals((4/3) * Math.PI * Math.pow(ship.getRadius(), 3) * ship.getDensity(), ship.getMass(), EPSILON);
+		assertEquals(((double)4/(double)3) * Math.PI * Math.pow(ship.getRadius(), 3) * ship.getDensity(), ship.getMass(), EPSILON);
 	}
 
 	
@@ -694,7 +694,7 @@ public class TestShip {
 	}
 	
 	
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testMoveTisPosInfinity() {
 		Ship ship = new Ship(100, 100, 30, -15, 0, 20, 20);
 		ship.move(Double.POSITIVE_INFINITY);

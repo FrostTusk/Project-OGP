@@ -16,7 +16,6 @@ public class Asteroid extends MinorPlanet {
 			throw new IllegalArgumentException();
 		}
 		
-		setPosition(positionX, positionY);
 		setVelocity(velocityX, velocityY);
 		setRadius(radius);
 		setMass();

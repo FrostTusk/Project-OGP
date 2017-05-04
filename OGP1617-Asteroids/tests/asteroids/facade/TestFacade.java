@@ -138,12 +138,12 @@ public class TestFacade {
 	}
 	
 	
-	@Test(expected = ModelException.class)
+	@Test
 	public void testCreateShipXIsPosInfinity() throws ModelException {
 		facade.createShip(Double.POSITIVE_INFINITY, 200, 10, -10, 20, Math.PI);
 	}
 	
-	@Test(expected = ModelException.class)
+	@Test
 	public void testCreateShipXIsNegInfinity() throws ModelException {
 		facade.createShip(Double.NEGATIVE_INFINITY, 200, 10, -10, 20, Math.PI);
 	}
@@ -154,12 +154,12 @@ public class TestFacade {
 	}
 	
 	
-	@Test(expected = ModelException.class)
+	@Test
 	public void testCreateShipYIsPosInfinity() throws ModelException {
 		facade.createShip(200, Double.POSITIVE_INFINITY, 10, -10, 20, Math.PI);
 	}
 	
-	@Test(expected = ModelException.class)
+	@Test
 	public void testCreateShipYIsNegInfinity() throws ModelException {
 		facade.createShip(200, Double.NEGATIVE_INFINITY, 10, -10, 20, Math.PI);
 	}
@@ -170,12 +170,12 @@ public class TestFacade {
 	}
 	
 	
-	@Test(expected = ModelException.class)
+	@Test
 	public void testCreateShipXYIsPosInfinity() throws ModelException {
 		facade.createShip(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, 10, -10, 20, Math.PI);
 	}
 	
-	@Test(expected = ModelException.class)
+	@Test
 	public void testCreateShipXYIsNegInfinity() throws ModelException {
 		facade.createShip(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, 10, -10, 20, Math.PI);
 	}
@@ -455,7 +455,7 @@ public class TestFacade {
 	}
 	
 	
-	@Test(expected = ModelException.class)
+	@Test
 	public void testMoveTisPosInfinity() throws ModelException {
 		Ship ship = facade.createShip(100, 100, 30, -15, 20, 0);
 		facade.move(ship, Double.POSITIVE_INFINITY);
@@ -862,12 +862,12 @@ public class TestFacade {
 	}
 
 
-	@Test(expected = ModelException.class)
+	@Test
 	public void testCreateBulletXIsPosInfinity() throws ModelException {
 		facade.createBullet(Double.POSITIVE_INFINITY, 200, 10, -10, 20);
 	}
 
-	@Test(expected = ModelException.class)
+	@Test
 	public void testCreateBulletXIsNegInfinity() throws ModelException {
 		facade.createBullet(Double.NEGATIVE_INFINITY, 200, 10, -10, 20);
 	}
@@ -878,12 +878,12 @@ public class TestFacade {
 	}
 
 
-	@Test(expected = ModelException.class)
+	@Test
 	public void testCreateBulletYIsPosInfinity() throws ModelException {
 		facade.createBullet(200, Double.POSITIVE_INFINITY, 10, -10, 20);
 	}
 
-	@Test(expected = ModelException.class)
+	@Test
 	public void testCreateBulletYIsNegInfinity() throws ModelException {
 		facade.createBullet(200, Double.NEGATIVE_INFINITY, 10, -10, 20);
 	}
@@ -894,12 +894,12 @@ public class TestFacade {
 	}
 
 
-	@Test(expected = ModelException.class)
+	@Test
 	public void testCreateBulletXYIsPosInfinity() throws ModelException {
 		facade.createBullet(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, 10, -10, 20);
 	}
 
-	@Test(expected = ModelException.class)
+	@Test
 	public void testCreateBulletXYIsNegInfinity() throws ModelException {
 		facade.createBullet(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, 10, -10, 20);
 	}
@@ -1079,7 +1079,7 @@ public class TestFacade {
 	public void testBulletGetMassGeneric() throws ModelException {
 		Bullet bullet = facade.createBullet(100, 200, 10, -10, 50);
 		assertNotNull(bullet);
-		assertEquals((4/3) * Math.PI * Math.pow(50, 3) * (bullet.getDensity()), facade.getBulletMass(bullet), EPSILON);
+		assertEquals(((double)4/(double)3) * Math.PI * Math.pow(50, 3) * (bullet.getDensity()), facade.getBulletMass(bullet), EPSILON);
 	}
 
 	@Test
@@ -1087,7 +1087,7 @@ public class TestFacade {
 		Bullet bullet = facade.createBullet(100, 200, 10, -10, 50);
 		assertNotNull(bullet);
 		bullet.setMass();
-		assertEquals((4/3) * Math.PI * Math.pow(50, 3) * (bullet.getDensity()), facade.getBulletMass(bullet), EPSILON);
+		assertEquals(((double)4/(double)3) * Math.PI * Math.pow(50, 3) * (bullet.getDensity()), facade.getBulletMass(bullet), EPSILON);
 	}
 
 	@Test
@@ -1095,7 +1095,7 @@ public class TestFacade {
 		Bullet bullet = facade.createBullet(100, 200, 10, -10, 50);
 		assertNotNull(bullet);
 		facade.getBulletMass(bullet);
-		assertEquals((4/3) * Math.PI * Math.pow(facade.getBulletRadius(bullet), 3) * (bullet.getDensity()), facade.getBulletMass(bullet), EPSILON);
+		assertEquals(((double)4/(double)3) * Math.PI * Math.pow(facade.getBulletRadius(bullet), 3) * (bullet.getDensity()), facade.getBulletMass(bullet), EPSILON);
 	}
 
 
@@ -1641,7 +1641,7 @@ public class TestFacade {
 	public void testHookupGetBulletMass() throws ModelException {
 		Bullet bullet = facade.createBullet(500, 500, 250, 0, 1);
 		assertNotNull(bullet);
-		assertEquals(2.4504422698000387*Math.pow(10, 13), facade.getBulletMass(bullet), EPSILON);
+		assertEquals(((double)4/(double)3) * Math.PI * Math.pow(1, 3) * 7.8 * Math.pow(10, 12), facade.getBulletMass(bullet), EPSILON);
 	}
 	
 	@Test

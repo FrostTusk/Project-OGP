@@ -11,8 +11,6 @@ public class Planetoid extends MinorPlanet {
 
 	public Planetoid(double positionX, double positionY, double velocityX, double velocityY, double radius, double distanceTravelled)
 			throws IllegalArgumentException {
-		initialRadius = getRadius();
-		setDistanceTravelled(distanceTravelled);
 		setDensity(0.917 * Math.pow(10, 12));
 		
 		try {	// Check if the position can be set.
@@ -22,9 +20,10 @@ public class Planetoid extends MinorPlanet {
 			throw new IllegalArgumentException();
 		}
 		
-		setPosition(positionX, positionY);
 		setVelocity(velocityX, velocityY);
 		setRadius(radius);
+		initialRadius = getRadius();
+		setDistanceTravelled(distanceTravelled);
 		setMass();
 	}
 	
@@ -57,9 +56,8 @@ public class Planetoid extends MinorPlanet {
 		double oldPositionX = getPosition().getPositionX();
 		double oldPositionY = getPosition().getPositionY();
 		
-		setDistanceTravelled(getDistanceTravelled() + Math.pow(Math.abs(newPositionX - oldPositionX), 2) 
-							 + Math.pow(Math.abs(newPositionY - oldPositionY), 2));
-		updateRadius();
+		setDistanceTravelled(getDistanceTravelled() + Math.sqrt(Math.pow(Math.abs(newPositionX - oldPositionX), 2) 
+							 + Math.pow(Math.abs(newPositionY - oldPositionY), 2)));
 		
 		try {
 			setPosition(newPositionX, newPositionY);

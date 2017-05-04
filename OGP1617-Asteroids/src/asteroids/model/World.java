@@ -863,6 +863,8 @@ public class World {
 	 */
 	@Raw
 	public Entity getEntityAtPosition(Position position) {
+		if ( (position.getPositionX() > getWidth()) || (position.getPositionY() > getHeight()) )
+			return null;
 		try {
 			return entities.get(helper.convertPositionToString(position));
 		}

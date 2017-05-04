@@ -32,11 +32,7 @@ public class Position {
 	 *       	| ! this.isValidPosition(positionX, positionY)
 	 */
 	public Position(double positionX, double positionY) throws IllegalArgumentException {
-		this.minPositionX = Double.NEGATIVE_INFINITY;
-		this.maxPositionX = Double.POSITIVE_INFINITY;
-		this.minPositionY = Double.NEGATIVE_INFINITY;
-		this.maxPositionY = Double.POSITIVE_INFINITY;
-		
+		this.boundsSet = false;
 		try {
 			this.setPosition(positionX, positionY);
 		}
@@ -76,6 +72,7 @@ public class Position {
 		this.maxPositionX = maxPositionX;
 		this.minPositionY = minPositionY;
 		this.maxPositionY = maxPositionY;
+		this.boundsSet = true;
 		
 		try {
 			this.setPosition(positionX, positionY);
@@ -86,6 +83,7 @@ public class Position {
 	}
 	
 	
+	private boolean boundsSet;
 	/**
 	 * Variable registering the X position of this position.
 	 */
@@ -93,11 +91,11 @@ public class Position {
 	/**
 	 * Variable registering the minimum X position of this position.
 	 */
-	private final double minPositionX;
+	private double minPositionX;
 	/**
 	 * Variable registering the maximum X position of this position.
 	 */
-	private final double maxPositionX;
+	private double maxPositionX;
 	/**
 	 * Variable registering the Y position of this position.
 	 */
@@ -105,11 +103,11 @@ public class Position {
 	/**
 	 * Variable registering the minimum Y position of this position.
 	 */
-	private final double minPositionY;
+	private double minPositionY;
 	/**
 	 * Variable registering the maximum Y position of this position.
 	 */
-	private final double maxPositionY;
+	private double maxPositionY;
 	
 	
 	/**
@@ -179,11 +177,11 @@ public class Position {
 		// A position has to be a number.
 		if ( (java.lang.Double.isNaN(positionX)) || (java.lang.Double.isNaN(positionY)) )
 			return false;
-		// A position cannot be smaller/bigger or equal to its lower and upper bounds.
-		if ( (getMinPositionX() < positionX) && (getMaxPositionX() > positionX) &&
-				(getMinPositionY() < positionY) && (getMaxPositionY() > positionY) )
+		if (!boundsSet) 
 			return true;
-		return false;	
+		// A position cannot be smaller/bigger or equal to its lower and upper bounds.
+		return (getMinPositionX() < positionX) && (getMaxPositionX() > positionX) &&
+				(getMinPositionY() < positionY) && (getMaxPositionY() > positionY);
 	}
 	
 	

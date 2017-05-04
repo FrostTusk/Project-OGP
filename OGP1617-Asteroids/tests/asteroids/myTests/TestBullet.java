@@ -90,12 +90,12 @@ public class TestBullet {
 	}
 	
 	
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testCreateBulletXIsPosInfinity() {
 		new Bullet(Double.POSITIVE_INFINITY, 200, 10, -10, 20);
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testCreateBulletXIsNegInfinity() {
 		new Bullet(Double.NEGATIVE_INFINITY, 200, 10, -10, 20);
 	}
@@ -106,12 +106,12 @@ public class TestBullet {
 	}
 	
 	
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testCreateBulletYIsPosInfinity() {
 		new Bullet(200, Double.POSITIVE_INFINITY, 10, -10, 20);
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testCreateBulletYIsNegInfinity() {
 		new Bullet(200, Double.NEGATIVE_INFINITY, 10, -10, 20);
 	}
@@ -122,12 +122,12 @@ public class TestBullet {
 	}
 	
 	
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testCreateBulletXYIsPosInfinity() {
 		new Bullet(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, 10, -10, 20);
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testCreateBulletXYIsNegInfinity() {
 		new Bullet(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, 10, -10, 20);
 	}
@@ -151,7 +151,7 @@ public class TestBullet {
 	}
 	
 	
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testBulletSetPosPosInf() {
 		Bullet bullet = new Bullet(100, 200, 10, -10, 20);
 		Position position = bullet.getPosition();
@@ -161,7 +161,7 @@ public class TestBullet {
 		position = bullet.getPosition();
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testBulletSetPosNegInf() {
 		Bullet bullet = new Bullet(100, 200, 10, -10, 20);
 		Position position = bullet.getPosition();
@@ -395,7 +395,7 @@ public class TestBullet {
 		Bullet bullet = new Bullet(100, 200, 10, -10, 50);
 		assertNotNull(bullet);
 		bullet.setMass();
-		assertEquals((4/3) * Math.PI * Math.pow(50, 3) * (bullet.getDensity()), bullet.getMass(), EPSILON);
+		assertEquals(((double)4/(double)3) * Math.PI * Math.pow(50, 3) * (bullet.getDensity()), bullet.getMass(), EPSILON);
 	}
 	
 	@Test
@@ -403,7 +403,7 @@ public class TestBullet {
 		Bullet bullet = new Bullet(100, 200, 10, -10, 50);
 		assertNotNull(bullet);
 		bullet.getMass();
-		assertEquals((4/3) * Math.PI * Math.pow(50, 3) * (bullet.getDensity()), bullet.getMass(), EPSILON);
+		assertEquals(((double)4/(double)3) * Math.PI * Math.pow(50, 3) * (bullet.getDensity()), bullet.getMass(), EPSILON);
 	}
 	
 
@@ -803,7 +803,7 @@ public class TestBullet {
 	}
 	
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testBulletMoveTimePosInf() {
 		World world = new World(1000, 1000);
 		Bullet bullet = new Bullet(100, 100, 10, 5, 20);
@@ -842,7 +842,7 @@ public class TestBullet {
 	
 	@Test
 	public void testCollideWithWorldBulletCanBounce() {
-		Bullet bullet = new Bullet(50, 50, 0, 0, 20);
+		Bullet bullet = new Bullet(50, 50, 0, 0, 50);
 		World world = new World(100, 100);
 		double counter = bullet.getBoundaryCollisionCounter();
 		bullet.setWorld(world);
@@ -852,7 +852,7 @@ public class TestBullet {
 	
 	@Test
 	public void testCollideWithWorldBulletCanNotBounce() {
-		Bullet bullet = new Bullet(50, 50, 0, 0, 20);
+		Bullet bullet = new Bullet(50, 50, 0, 0, 50);
 		World world = new World(100, 100);
 		double counter = bullet.getBoundaryCollisionCounter();
 		bullet.setWorld(world);
