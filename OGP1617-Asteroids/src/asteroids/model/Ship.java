@@ -1,10 +1,7 @@
 package asteroids.model;
 
 import java.util.*;
-import asteroids.helper.*;
-import asteroids.helper.entity.Entity;
-import asteroids.helper.entity.EntityType;
-import asteroids.helper.entity.Thruster;
+import asteroids.helper.entity.*;
 import be.kuleuven.cs.som.annotate.*;
 
 

@@ -7,10 +7,7 @@ import asteroids.util.ModelException;
 
 import java.util.*;
 
-import asteroids.helper.*;
-import asteroids.helper.entity.Entity;
-import asteroids.helper.entity.EntityType;
-import asteroids.helper.entity.Position;
+import asteroids.helper.entity.*;
 import asteroids.model.*;
 
 
@@ -663,8 +660,7 @@ public class Facade implements IFacade {
 
 	@Override
 	public int getNbStudentsInTeam() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 2;
 	}
 
 	@Override

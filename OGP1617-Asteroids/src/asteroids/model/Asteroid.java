@@ -1,5 +1,6 @@
 package asteroids.model;
 
+import asteroids.helper.entity.EntityType;
 import asteroids.helper.entity.MinorPlanet;
 
 public class Asteroid extends MinorPlanet {
@@ -12,6 +13,11 @@ public class Asteroid extends MinorPlanet {
 	@Override
 	public void resolveCollisionShip(Ship ship) {
 		ship.terminate();
+	}
+	
+	@Override
+	public EntityType getType() {
+		return EntityType.ASTEROID;
 	}
 	
 }

@@ -9,6 +9,7 @@ import java.util.Set;
 import org.junit.Test;
 
 import asteroids.helper.entity.Entity;
+import asteroids.helper.entity.EntityType;
 import asteroids.helper.entity.Position;
 import asteroids.model.Bullet;
 import asteroids.model.Ship;
@@ -495,7 +496,7 @@ public class TestWorld {
 		world.addEntity(ship4);
 		ship4.setWorld(world);
 		Set<Entity> entities = world.getAllEntities();
-		Set<Ship> ships = world.getAllShips();
+		Set<Ship> ships = (Set<Ship>) world.getAllEntitiesSpecific(EntityType.SHIP);
 		double counter = 0;
 		for (Ship ship : ships) for (Entity entity : entities) if (ship == entity) counter += 1;
 		if (counter != 4) fail();

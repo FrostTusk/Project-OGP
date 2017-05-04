@@ -3,6 +3,7 @@ package asteroids.model;
 import java.util.concurrent.ThreadLocalRandom;
 
 import asteroids.helper.entity.Entity;
+import asteroids.helper.entity.EntityType;
 import asteroids.helper.entity.MinorPlanet;
 import asteroids.helper.entity.Position;
 
@@ -92,6 +93,11 @@ public class Planetoid extends MinorPlanet {
 	 */
 	public double getRandomNumber(double low, double high) {
 	 	return ThreadLocalRandom.current().nextDouble(low, high);
+	}
+	
+	@Override
+	public EntityType getType() {
+		return EntityType.PLANETOID;
 	}
 	
 }
