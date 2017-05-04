@@ -46,7 +46,7 @@ import be.kuleuven.cs.som.annotate.*;
  * 			| this.canHaveAsWorld(this.getWorld())
  * 
  *   
- * @author	Mathijs Hubrechtsen
+ * @author	Mathijs Hubrechtsen, Ruben Dhuyvetter
  */
 public abstract class Entity {
 	
@@ -76,7 +76,7 @@ public abstract class Entity {
 	 * @see implementation
 	 */
 	public Entity() {
-		setMaxpeed(300000);
+		setMaxspeed(300000);
 		this.world = null;
 	}
 	
@@ -275,7 +275,7 @@ public abstract class Entity {
 	 * 			|	then new.getMaxSpeed() == this.getMaxSpeed()	
 	 */
 	@Raw
-	public void setMaxpeed(double speed) {
+	public void setMaxspeed(double speed) {
 		if (isValidMaxSpeed(speed)) this.maxSpeed = speed;
 	}
 	
