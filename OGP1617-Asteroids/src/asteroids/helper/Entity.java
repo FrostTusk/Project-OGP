@@ -371,10 +371,9 @@ public abstract class Entity {
 			throw new IllegalArgumentException();
 		this.radius = radius;
 	}
+
 	
-	
-	
-	
+
 			/*
 			 * |----------------------------------------------------|
 			 * | 5. The next methods handle the mass of the Entity.	|
@@ -444,7 +443,7 @@ public abstract class Entity {
 	/**
 	* Variable registering the world of this entity.
 	*/
-	protected World world;
+	private World world;
 	
 
 	/**
@@ -977,9 +976,12 @@ public abstract class Entity {
 	 * @see implementation
 	 */
 //	public abstract void resolveCollision(Entity entity);
-	public void resolveCollision(Entity entity) {
+	public void resolveCollision(Entity entity) throws IllegalArgumentException, NullPointerException {
 		if (entity == null) 
 			throw new NullPointerException();
+		if (getWorld() != entity.getWorld())
+			throw new IllegalArgumentException();
+		
 		try {
 			if (entity.getType() == EntityType.SHIP) 
 				resolveCollisionShip((Ship)entity);
@@ -1065,7 +1067,7 @@ public abstract class Entity {
 	 * @return 	Returns the signs to be used in the getCollisionPosition() method
 	 */
 	@Raw
-	public double[] calculateSigns(double[] position1, double[] position2) {
+	private double[] calculateSigns(double[] position1, double[] position2) {
 		double signX1 = 1;
 		if (position1[0] > position2[0])
 			signX1 = -1;

@@ -806,9 +806,9 @@ public class Part3TestFull {
   public void testFireBulletOutOfBounds() throws ModelException {
     max_score += 8;
     World world = facade.createWorld(5000, 5000);
-    Ship ship = facade.createShip(550, 500, 0, 0, 500, 3 * Math.PI / 2, 1.0E20);
+    Ship ship = facade.createShip(550, 550, 0, 0, 500, 3 * Math.PI / 2, 1.0E20);
     facade.addShipToWorld(world, ship);
-    Bullet bullet1 = facade.createBullet(520, 170, 10, 5, 10);
+    Bullet bullet1 = facade.createBullet(520, 170, 10, 5, 30);
     Bullet bullet2 = facade.createBullet(480, 300, 10, 5, 30);
     facade.loadBulletOnShip(ship, bullet1);
     facade.loadBulletOnShip(ship, bullet2);
@@ -850,14 +850,14 @@ public class Part3TestFull {
   public void testBoundaryCollision_FiniteTimeRightCollision() throws ModelException {
     max_score += 6;
     World world = facade.createWorld(5000, 5000);
-    Ship ship = facade.createShip(500, 100, 100, 0, 100, 0, 1.0E20);
+    Ship ship = facade.createShip(500, 300, 100, 0, 100, 0, 1.0E20);
     facade.addShipToWorld(world, ship);
     double timeToCollision = facade.getTimeCollisionBoundary(ship);
     double expectedTime = (5000.0 - 600.0) / 100.0;
     assertEquals(expectedTime, timeToCollision, EPSILON);
     double[] collisionPosition = facade.getPositionCollisionBoundary(ship);
     assertEquals(5000, collisionPosition[0], EPSILON);
-    assertEquals(100, collisionPosition[1], EPSILON);
+    assertEquals(300, collisionPosition[1], EPSILON);
     score += 6;
   }
 
@@ -865,10 +865,10 @@ public class Part3TestFull {
   public void testBoundaryCollision_FiniteTimeTopCollision() throws ModelException {
     max_score += 4;
     World world = facade.createWorld(5000, 5000);
-    Ship ship = facade.createShip(500, 100, 0, 100, 100, 0, 1.0E20);
+    Ship ship = facade.createShip(500, 300, 0, 100, 100, 0, 1.0E20);
     facade.addShipToWorld(world, ship);
     double timeToCollision = facade.getTimeCollisionBoundary(ship);
-    double expectedTime = (5000.0 - 200.0) / 100.0;
+    double expectedTime = (5000.0 - 300.0 - 100.0) / 100.0;
     assertEquals(expectedTime, timeToCollision, EPSILON);
     double[] collisionPosition = facade.getPositionCollisionBoundary(ship);
     assertEquals(500, collisionPosition[0], EPSILON);
@@ -880,7 +880,7 @@ public class Part3TestFull {
   public void testBoundaryCollision_NoVelocity() throws ModelException {
     max_score += 5;
     World world = facade.createWorld(5000, 5000);
-    Ship ship = facade.createShip(500, 100, 0, 0, 100, 0, 1.0E20);
+    Ship ship = facade.createShip(500, 300, 0, 0, 100, 0, 1.0E20);
     facade.addShipToWorld(world, ship);
     double timeToCollision = facade.getTimeCollisionBoundary(ship);
     assertEquals(Double.POSITIVE_INFINITY, timeToCollision, EPSILON);
@@ -1947,7 +1947,7 @@ public class Part3TestFull {
   public void testBreakStatement_InFunctionBody() throws ModelException {
     if (nbStudentsInTeam > 1) {
       max_score += 16;
-      String code = "def f { " + "  break; " + "}" + "a := 10; " + "while a < 20.5 { " + "  print a; "
+      String code = "def f { " + "  break; " + "  return 0.0;" + "}" + "a := 10; " + "while a < 20.5 { " + "  print a; "
           + "  if 14.5 < a { " + "    b := f(); " + "  }" + "  a := a + 2.0; " + "}" + "print 0.0; ";
       Program program = ProgramParser.parseProgramFromString(code, programFactory);
       facade.loadProgramOnShip(ship1, program);
@@ -2484,7 +2484,7 @@ public class Part3TestFull {
   public void testFunctionCall_IllegalActualArgument() throws ModelException {
     try {
       max_score += 5;
-      String code = "def f { " + "  return $1; " + "}" + "print f(self+3.0); ";
+      String code = "def f { " + "  return $1; " + "}" + "print f(self + 3.0); ";
       Program program = ProgramParser.parseProgramFromString(code, programFactory);
       facade.loadProgramOnShip(ship1, program);
       facade.executeProgram(ship1, 0.3);

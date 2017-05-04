@@ -3,7 +3,7 @@ package asteroids.helper;
 import asteroids.model.Ship;
 import be.kuleuven.cs.som.annotate.Raw;
 
-public class MinorPlanet extends Entity {
+public abstract class MinorPlanet extends Entity {
 
 	public MinorPlanet() {
 		this.minRadius = 5;
@@ -39,7 +39,6 @@ public class MinorPlanet extends Entity {
 	@Override
 	public void resolveCollisionShip(Ship ship) {
 		// TODO Auto-generated method stub
-		
 	}
 	
 	@Override

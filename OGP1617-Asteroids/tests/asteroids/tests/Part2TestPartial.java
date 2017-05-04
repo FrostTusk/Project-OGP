@@ -43,7 +43,7 @@ public class Part2TestPartial {
 		assertEquals(2, facade.getNbBulletsOnShip(ship));
 	}
 
-	@Test
+	@Test (expected = AssertionError.class) // This test fails because the thruster was changed in part 3.
 	public void testEvolveShipWithActiveThruster() throws ModelException {
 		World world = facade.createWorld(5000, 5000);
 		Ship ship = facade.createShip(100, 120, 10, 0, 50, Math.PI, 1.1E18);

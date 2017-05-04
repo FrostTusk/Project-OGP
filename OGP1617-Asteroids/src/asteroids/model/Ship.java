@@ -514,12 +514,13 @@ public class Ship extends Entity {
 						    	(getRadius() + bullet.getRadius() + 1) );	// +1 otherwise bullet is reloaded immediately.
 
 		// Next all the collisions with entities are resolved.
-		for (Entity entity : world.getAllEntities()) 
-			if (bullet.getDistanceBetween(entity) <= 0) 
+		for (Entity entity : getWorld().getAllEntities()) 
+			//if (bullet.getDistanceBetween(entity) <= 0)
+			if (bullet.overlap(entity))
 				bullet.resolveCollision(entity);
 			
 		try {
-			world.addEntity(bullet);	// Add the bullet to the collection of the world.
+			getWorld().addEntity(bullet);	// Add the bullet to the collection of the world.
 			bullet.setWorld(this.getWorld());	// set the world of the bullet to the world of this ship.
 		}
 		catch (IllegalArgumentException exc) {	// If the bullet cannot exist in this world, an exception is thrown.

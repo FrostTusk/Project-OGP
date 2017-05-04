@@ -397,10 +397,10 @@ public class Bullet extends Entity {
 			double[] position = getCollisionPosition(world);
 			if (position[0] == Double.POSITIVE_INFINITY && position[1] == Double.POSITIVE_INFINITY) return;	
 			// There is no collision so the collision does not need to be resolved.
-			if (position[0] == this.world.getWidth() || position[0] == 0) // Check collision with the x boundary.
+			if (position[0] == getWorld().getWidth() || position[0] == 0) // Check collision with the x boundary.
 				setVelocity(-getVelocityX(), getVelocityY());
-			if ( (position[1] == this.world.getHeight() || position[1] == 0) ||	// Check collision with y boundary
-			     (position[3] == this.world.getHeight() || position[3] == 0) ) 	// or with corner.
+			if ( (position[1] == getWorld().getHeight() || position[1] == 0) ||	// Check collision with y boundary
+			     (position[3] == getWorld().getHeight() || position[3] == 0) ) 	// or with corner.
 				setVelocity(getVelocityX(), -getVelocityY());
 		}
 		else this.terminate();	// Terminate the bullet if it has exceeded the max amount of bounces.

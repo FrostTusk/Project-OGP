@@ -8,4 +8,10 @@ public class Asteroid extends MinorPlanet {
 		setDensity(2.65 * Math.pow(10, 12));
 		setMass();
 	}
+	
+	@Override
+	public void resolveCollisionShip(Ship ship) {
+		ship.terminate();
+	}
+	
 }
