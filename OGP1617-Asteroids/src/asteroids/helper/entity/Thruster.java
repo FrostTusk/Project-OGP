@@ -1,4 +1,4 @@
-package asteroids.helper;
+package asteroids.helper.entity;
 
 import be.kuleuven.cs.som.annotate.*;
 

@@ -1,6 +1,9 @@
 package asteroids.helper;
 
 import java.util.*;
+
+import asteroids.helper.entity.Entity;
+import asteroids.helper.entity.Position;
 import asteroids.model.World;
 
 /*

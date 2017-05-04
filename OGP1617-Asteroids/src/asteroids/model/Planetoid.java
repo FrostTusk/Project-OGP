@@ -2,9 +2,9 @@ package asteroids.model;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import asteroids.helper.Entity;
-import asteroids.helper.MinorPlanet;
-import asteroids.helper.Position;
+import asteroids.helper.entity.Entity;
+import asteroids.helper.entity.MinorPlanet;
+import asteroids.helper.entity.Position;
 
 public class Planetoid extends MinorPlanet {
 

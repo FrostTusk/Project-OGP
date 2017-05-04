@@ -8,6 +8,9 @@ import asteroids.util.ModelException;
 import java.util.*;
 
 import asteroids.helper.*;
+import asteroids.helper.entity.Entity;
+import asteroids.helper.entity.EntityType;
+import asteroids.helper.entity.Position;
 import asteroids.model.*;
 
 

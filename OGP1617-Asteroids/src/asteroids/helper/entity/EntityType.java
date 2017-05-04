@@ -1,4 +1,4 @@
-package asteroids.helper;
+package asteroids.helper.entity;
 
 public enum EntityType {
     SHIP,

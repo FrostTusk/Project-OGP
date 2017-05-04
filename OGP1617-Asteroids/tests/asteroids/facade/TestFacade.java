@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import asteroids.facade.Facade;
-import asteroids.helper.Entity;
+import asteroids.helper.entity.Entity;
 import asteroids.model.Bullet;
 import asteroids.model.Ship;
 import asteroids.model.World;

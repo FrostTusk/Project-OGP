@@ -7,10 +7,10 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import asteroids.helper.entity.Position;
 import asteroids.model.Bullet;
 import asteroids.model.Ship;
 import asteroids.model.World;
-import asteroids.helper.Position;
 
 /* 
  * Tests Index:

@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import asteroids.helper.Position;
+import asteroids.helper.entity.Position;
 import asteroids.model.Bullet;
 import asteroids.model.Ship;
 import asteroids.model.World;

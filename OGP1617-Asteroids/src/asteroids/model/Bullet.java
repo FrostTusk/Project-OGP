@@ -1,6 +1,8 @@
 package asteroids.model;
 
 import asteroids.helper.*;
+import asteroids.helper.entity.Entity;
+import asteroids.helper.entity.EntityType;
 import be.kuleuven.cs.som.annotate.*;
 
 /* Constants:

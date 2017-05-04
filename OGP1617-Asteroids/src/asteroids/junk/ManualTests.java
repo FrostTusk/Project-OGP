@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.*;
 import asteroids.helper.*;
+import asteroids.helper.entity.Entity;
 import asteroids.model.*;
 
 /**

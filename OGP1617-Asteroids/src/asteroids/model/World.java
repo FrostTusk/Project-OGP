@@ -2,6 +2,9 @@ package asteroids.model;
 
 import java.util.*;
 import asteroids.helper.*;
+import asteroids.helper.entity.Entity;
+import asteroids.helper.entity.EntityType;
+import asteroids.helper.entity.Position;
 import asteroids.part2.CollisionListener;
 import be.kuleuven.cs.som.annotate.*;
 
