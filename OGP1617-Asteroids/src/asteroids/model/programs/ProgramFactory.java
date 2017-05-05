@@ -4,6 +4,12 @@ import java.util.List;
 
 import asteroids.model.Program;
 import asteroids.model.programs.statements.AssignmentStatement;
+import asteroids.model.programs.statements.BreakStatement;
+import asteroids.model.programs.statements.IfStatement;
+import asteroids.model.programs.statements.PrintStatement;
+import asteroids.model.programs.statements.ReturnStatement;
+import asteroids.model.programs.statements.SequenceStatement;
+import asteroids.model.programs.statements.WhileStatement;
 import asteroids.part3.programs.IProgramFactory;
 import asteroids.part3.programs.SourceLocation;
 
@@ -11,8 +17,7 @@ public class ProgramFactory implements IProgramFactory<MyExpression, MyStatement
 
 	@Override
 	public Program createProgram(List<MyFunction> functions, MyStatement main) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Program(functions, main);
 	}
 
 	@Override
@@ -29,39 +34,33 @@ public class ProgramFactory implements IProgramFactory<MyExpression, MyStatement
 
 	@Override
 	public MyStatement createWhileStatement(MyExpression condition, MyStatement body, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new WhileStatement(condition, body, sourceLocation);
 	}
 
 	@Override
 	public MyStatement createBreakStatement(SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new BreakStatement(sourceLocation);
 	}
 
 	@Override
 	public MyStatement createReturnStatement(MyExpression value, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new ReturnStatement(value, sourceLocation);
 	}
 
 	@Override
 	public MyStatement createIfStatement(MyExpression condition, MyStatement ifBody, MyStatement elseBody,
 			SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new IfStatement(condition, ifBody, elseBody, sourceLocation);
 	}
 
 	@Override
 	public MyStatement createPrintStatement(MyExpression value, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new PrintStatement(value, sourceLocation);
 	}
 
 	@Override
 	public MyStatement createSequenceStatement(List<MyStatement> statements, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new SequenceStatement(statements, sourceLocation);
 	}
 
 	@Override

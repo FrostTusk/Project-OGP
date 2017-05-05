@@ -5,9 +5,8 @@ public enum StatementType {
 	WHILE,
 	BREAK,
 	RETURN,
-	IFTHENELSE,
-	IFNOELSE,
+	IF,
 	PRINT,
-	BLOCK,
+	SEQUENCE,
 	ACTION,
 }
