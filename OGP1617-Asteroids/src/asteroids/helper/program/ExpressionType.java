@@ -1,0 +1,22 @@
+package asteroids.helper.program;
+
+public enum ExpressionType {
+	VARIABLE,
+	PARAMETER,
+	CONSTANT,
+	ENTITY,
+	ENCLOSED,
+	SIGNCHANGE,
+	ADDITION,
+	MULTIPLICATION,
+	INVOCATION,
+	NEGATION,
+	SQRT,
+	GETX,
+	GETY,
+	GETVX,
+	GETVY,
+	GETRADIUS,
+	GETDIR,
+	COMPARISON,
+}

@@ -3,6 +3,7 @@ package asteroids.model.programs;
 import java.util.List;
 
 import asteroids.model.Program;
+import asteroids.model.programs.statements.AssignmentStatement;
 import asteroids.part3.programs.IProgramFactory;
 import asteroids.part3.programs.SourceLocation;
 
@@ -23,8 +24,7 @@ public class ProgramFactory implements IProgramFactory<MyExpression, MyStatement
 	@Override
 	public MyStatement createAssignmentStatement(String variableName, MyExpression value,
 			SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new AssignmentStatement(variableName, value, sourceLocation);
 	}
 
 	@Override
