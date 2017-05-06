@@ -5,12 +5,12 @@ import asteroids.part3.programs.SourceLocation;
 
 public abstract class MyStatement {
 	
-	private SourceLocation sourceLocation;
+	private SourceLocation location;
 	private StatementType type;
 	
 
-	protected void setSourceLocation(SourceLocation sourceLocation) {
-		this.sourceLocation = sourceLocation;
+	protected void setLocation(SourceLocation location) {
+		this.location = location;
 	}
 	
 	protected void setType(StatementType type) {
@@ -18,8 +18,8 @@ public abstract class MyStatement {
 	}
 	
 	
-	public SourceLocation getSourceLocation(SourceLocation sourceLocation) {
-		return this.sourceLocation;
+	public SourceLocation getLocation(SourceLocation location) {
+		return this.location;
 	}
 	
 	public StatementType getType() {

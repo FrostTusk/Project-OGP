@@ -6,8 +6,8 @@ import asteroids.part3.programs.SourceLocation;
 
 public class ChangeSignExpression extends MyExpression {
 
-	public ChangeSignExpression(MyExpression expression, SourceLocation sourceLocation) {
-		setSourceLocation(sourceLocation);
+	public ChangeSignExpression(MyExpression expression, SourceLocation location) {
+		setLocation(location);
 		setType(ExpressionType.CHANGESIGN);
 		setExpression(expression);
 	}

@@ -6,8 +6,8 @@ import asteroids.part3.programs.SourceLocation;
 
 public class ParameterExpression extends MyExpression {
 	
-	public ParameterExpression(String parameterName, SourceLocation sourceLocation) {
-		setSourceLocation(sourceLocation);
+	public ParameterExpression(String parameterName, SourceLocation location) {
+		setLocation(location);
 		setType(ExpressionType.PARAMETER);
 		setParameterName(parameterName);
 	}

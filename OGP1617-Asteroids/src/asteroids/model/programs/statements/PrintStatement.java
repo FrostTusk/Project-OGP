@@ -7,8 +7,8 @@ import asteroids.part3.programs.SourceLocation;
 
 public class PrintStatement extends MyStatement {
 
-	public PrintStatement(MyExpression value, SourceLocation sourceLocation) {
-		setSourceLocation(sourceLocation);
+	public PrintStatement(MyExpression value, SourceLocation location) {
+		setLocation(location);
 		setType(StatementType.PRINT);
 		setValue(value);
 	}

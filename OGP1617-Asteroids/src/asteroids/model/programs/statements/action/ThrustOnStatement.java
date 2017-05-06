@@ -7,7 +7,7 @@ import asteroids.part3.programs.SourceLocation;
 public class ThrustOnStatement extends ActionStatement {
 
 	public ThrustOnStatement(SourceLocation location) {
-		setSourceLocation(location);
+		setLocation(location);
 		setActionType(ActionType.THRUSTON);
 	}
 

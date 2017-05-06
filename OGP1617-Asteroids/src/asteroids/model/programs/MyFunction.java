@@ -3,16 +3,16 @@ package asteroids.model.programs;
 import asteroids.part3.programs.SourceLocation;
 
 public class MyFunction {
-	public MyFunction(String functionName, MyStatement body, SourceLocation sourceLocation) {
+	public MyFunction(String functionName, MyStatement body, SourceLocation location) {
 		this.functionName = functionName;
 		this.body = body;
-		this.sourceLocation = sourceLocation;
+		this.location = location;
 		
 	}
 	
 	private MyStatement body;
 	private String functionName;
-	private SourceLocation sourceLocation;
+	private SourceLocation location;
 	
 	public MyStatement getBody() {
 		return this.body;
@@ -22,8 +22,8 @@ public class MyFunction {
 		return this.functionName;
 	}
 	
-	public SourceLocation getSourceLocation() {
-		return this.sourceLocation;
+	public SourceLocation getLocation() {
+		return this.location;
 	}
 	
 }

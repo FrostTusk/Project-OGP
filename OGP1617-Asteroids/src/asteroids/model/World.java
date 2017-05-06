@@ -901,9 +901,9 @@ public class World {
 		return entitiesResult;
 	}
 		
-	public Set<?> getAllEntitiesSpecific(EntityType type) {
+	public Set<? extends Entity> getAllEntitiesSpecific(EntityType type) {
 		Set<Entity> entitiesResult = getAllEntities();
-		Set<Object> result = new HashSet<Object>();
+		Set<Entity> result = new HashSet<Entity>();
 		for (Entity entity: entitiesResult) 
 			if (entity.getType() == type) 
 				result.add(entity);

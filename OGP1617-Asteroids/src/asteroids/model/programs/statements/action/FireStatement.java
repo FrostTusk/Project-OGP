@@ -7,7 +7,7 @@ import asteroids.part3.programs.SourceLocation;
 public class FireStatement extends ActionStatement {
 
 	public FireStatement(SourceLocation location) {
-		setSourceLocation(location);
+		setLocation(location);
 		setActionType(ActionType.THRUSTON);
 	}
 	

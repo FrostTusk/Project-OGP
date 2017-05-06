@@ -8,8 +8,8 @@ import asteroids.part3.programs.SourceLocation;
 
 public class SequenceStatement extends MyStatement {
 
-	public SequenceStatement(List<MyStatement> statements, SourceLocation sourceLocation) {
-		setSourceLocation(sourceLocation);
+	public SequenceStatement(List<MyStatement> statements, SourceLocation location) {
+		setLocation(location);
 		setType(StatementType.SEQUENCE);
 		setStatements(statements);
 	}

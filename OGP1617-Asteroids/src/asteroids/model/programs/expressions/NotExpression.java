@@ -6,8 +6,8 @@ import asteroids.part3.programs.SourceLocation;
 
 public class NotExpression extends MyExpression {
 
-	public NotExpression(MyExpression expression, SourceLocation sourceLocation) {
-		setSourceLocation(sourceLocation);
+	public NotExpression(MyExpression expression, SourceLocation location) {
+		setLocation(location);
 		setType(ExpressionType.NOT);
 		setExpression(expression);
 	}

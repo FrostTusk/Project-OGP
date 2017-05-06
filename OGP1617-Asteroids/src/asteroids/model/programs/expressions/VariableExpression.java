@@ -6,8 +6,8 @@ import asteroids.part3.programs.SourceLocation;
 
 public class VariableExpression extends MyExpression {
 	
-	public VariableExpression(String variableName, SourceLocation sourceLocation) {
-		setSourceLocation(sourceLocation);
+	public VariableExpression(String variableName, SourceLocation location) {
+		setLocation(location);
 		setType(ExpressionType.VARIABLE);
 		setVariableName(variableName);
 	}

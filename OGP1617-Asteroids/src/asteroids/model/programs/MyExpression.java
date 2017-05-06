@@ -5,12 +5,12 @@ import asteroids.part3.programs.SourceLocation;
 
 public abstract class MyExpression {
 	
-	private SourceLocation sourceLocation;
+	private SourceLocation location;
 	private ExpressionType type;
 	
 
-	protected void setSourceLocation(SourceLocation sourceLocation) {
-		this.sourceLocation = sourceLocation;
+	protected void setLocation(SourceLocation location) {
+		this.location = location;
 	}
 	
 	protected void setType(ExpressionType type) {
@@ -18,8 +18,8 @@ public abstract class MyExpression {
 	}
 	
 	
-	public SourceLocation getSourceLocation(SourceLocation sourceLocation) {
-		return this.sourceLocation;
+	public SourceLocation getLocation() {
+		return this.location;
 	}
 	
 	public ExpressionType getType() {

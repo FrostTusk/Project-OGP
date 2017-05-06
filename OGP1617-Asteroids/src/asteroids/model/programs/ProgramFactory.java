@@ -4,9 +4,12 @@ import java.util.List;
 
 import asteroids.model.Program;
 import asteroids.model.programs.expressions.ChangeSignExpression;
+import asteroids.model.programs.expressions.DoubleLiteralExpression;
 import asteroids.model.programs.expressions.FunctionCallExpression;
 import asteroids.model.programs.expressions.NotExpression;
+import asteroids.model.programs.expressions.NullExpression;
 import asteroids.model.programs.expressions.ParameterExpression;
+import asteroids.model.programs.expressions.SelfExpression;
 import asteroids.model.programs.expressions.VariableExpression;
 import asteroids.model.programs.statements.AssignmentStatement;
 import asteroids.model.programs.statements.BreakStatement;
@@ -101,20 +104,17 @@ public class ProgramFactory implements IProgramFactory<MyExpression, MyStatement
 
 	@Override
 	public MyExpression createDoubleLiteralExpression(double value, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new DoubleLiteralExpression(value, location);
 	}
 
 	@Override
 	public MyExpression createNullExpression(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new NullExpression(location);
 	}
 
 	@Override
 	public MyExpression createSelfExpression(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new SelfExpression(location);
 	}
 
 	@Override

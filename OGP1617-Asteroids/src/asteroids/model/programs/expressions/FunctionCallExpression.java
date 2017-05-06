@@ -9,8 +9,8 @@ import asteroids.part3.programs.SourceLocation;
 public class FunctionCallExpression extends MyExpression {
 	
 	public FunctionCallExpression(String functionName, List<MyExpression> actualArgs,
-			SourceLocation sourceLocation) {
-		setSourceLocation(sourceLocation);
+			SourceLocation location) {
+		setLocation(location);
 		setType(ExpressionType.FUNCTIONCALL);
 		setFunctionName(functionName);
 		setActualArgs(actualArgs);

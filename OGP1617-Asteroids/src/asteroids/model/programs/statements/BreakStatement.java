@@ -6,8 +6,8 @@ import asteroids.part3.programs.SourceLocation;
 
 public class BreakStatement extends MyStatement {
 
-	public BreakStatement(SourceLocation sourceLocation) {
-		setSourceLocation(sourceLocation);
+	public BreakStatement(SourceLocation location) {
+		setLocation(location);
 		setType(StatementType.BREAK);
 	}
 	

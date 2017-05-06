@@ -7,8 +7,8 @@ import asteroids.part3.programs.SourceLocation;
 
 public class WhileStatement extends MyStatement {
 
-	public WhileStatement(MyExpression condition, MyStatement body, SourceLocation sourceLocation) {
-		setSourceLocation(sourceLocation);
+	public WhileStatement(MyExpression condition, MyStatement body, SourceLocation location) {
+		setLocation(location);
 		setType(StatementType.WHILE);
 		setCondition(condition);
 		setBody(body);

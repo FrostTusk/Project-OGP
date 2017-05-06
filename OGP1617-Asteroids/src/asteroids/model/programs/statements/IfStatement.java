@@ -8,8 +8,8 @@ import asteroids.part3.programs.SourceLocation;
 public class IfStatement extends MyStatement {
 
 	public IfStatement(MyExpression condition, MyStatement ifBody, MyStatement elseBody,
-			SourceLocation sourceLocation) {
-		setSourceLocation(sourceLocation);
+			SourceLocation location) {
+		setLocation(location);
 		setType(StatementType.IF);
 		setCondition(condition);
 		setIfBody(ifBody);
