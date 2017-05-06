@@ -1,16 +1,29 @@
 package asteroids.model.programs;
 
 import asteroids.helper.program.ExpressionType;
+import asteroids.part3.programs.SourceLocation;
 
 public class MyExpression {
+	
+	private SourceLocation sourceLocation;
+	private ExpressionType type;
+	
 
-	public MyExpression(ExpressionType type) {
+	protected void setSourceLocation(SourceLocation sourceLocation) {
+		this.sourceLocation = sourceLocation;
+	}
+	
+	protected void setType(ExpressionType type) {
 		this.type = type;
 	}
 	
-	private ExpressionType type;
-
-	public ExpressionType getType() {
-		return type;
+	
+	public SourceLocation getSourceLocation(SourceLocation sourceLocation) {
+		return this.sourceLocation;
 	}
+	
+	public ExpressionType getType() {
+		return this.type;
+	}
+	
 }

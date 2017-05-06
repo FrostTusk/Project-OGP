@@ -3,6 +3,7 @@ package asteroids.model.programs;
 import java.util.List;
 
 import asteroids.model.Program;
+import asteroids.model.programs.expressions.VariableExpression;
 import asteroids.model.programs.statements.AssignmentStatement;
 import asteroids.model.programs.statements.BreakStatement;
 import asteroids.model.programs.statements.IfStatement;
@@ -10,6 +11,11 @@ import asteroids.model.programs.statements.PrintStatement;
 import asteroids.model.programs.statements.ReturnStatement;
 import asteroids.model.programs.statements.SequenceStatement;
 import asteroids.model.programs.statements.WhileStatement;
+import asteroids.model.programs.statements.action.FireStatement;
+import asteroids.model.programs.statements.action.SkipStatement;
+import asteroids.model.programs.statements.action.ThrustOffStatement;
+import asteroids.model.programs.statements.action.ThrustOnStatement;
+import asteroids.model.programs.statements.action.TurnStatement;
 import asteroids.part3.programs.IProgramFactory;
 import asteroids.part3.programs.SourceLocation;
 
@@ -65,8 +71,7 @@ public class ProgramFactory implements IProgramFactory<MyExpression, MyStatement
 
 	@Override
 	public MyExpression createReadVariableExpression(String variableName, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new VariableExpression(variableName, sourceLocation);
 	}
 
 	@Override
@@ -216,32 +221,27 @@ public class ProgramFactory implements IProgramFactory<MyExpression, MyStatement
 
 	@Override
 	public MyStatement createThrustOnStatement(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new ThrustOnStatement(location);
 	}
 
 	@Override
 	public MyStatement createThrustOffStatement(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new ThrustOffStatement(location);
 	}
 
 	@Override
 	public MyStatement createFireStatement(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new FireStatement(location);
 	}
 
 	@Override
 	public MyStatement createTurnStatement(MyExpression angle, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new TurnStatement(angle, location);
 	}
 
 	@Override
 	public MyStatement createSkipStatement(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new SkipStatement(location);
 	}
 	
 }
