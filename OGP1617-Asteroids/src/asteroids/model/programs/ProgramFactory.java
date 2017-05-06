@@ -2,10 +2,14 @@ package asteroids.model.programs;
 
 import java.util.List;
 
+import asteroids.helper.entity.EntityType;
+import asteroids.helper.program.GetterType;
 import asteroids.model.Program;
 import asteroids.model.programs.expressions.ChangeSignExpression;
 import asteroids.model.programs.expressions.DoubleLiteralExpression;
+import asteroids.model.programs.expressions.EntityExpression;
 import asteroids.model.programs.expressions.FunctionCallExpression;
+import asteroids.model.programs.expressions.GetterExpression;
 import asteroids.model.programs.expressions.NotExpression;
 import asteroids.model.programs.expressions.NullExpression;
 import asteroids.model.programs.expressions.ParameterExpression;
@@ -119,32 +123,27 @@ public class ProgramFactory implements IProgramFactory<MyExpression, MyStatement
 
 	@Override
 	public MyExpression createShipExpression(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new EntityExpression(EntityType.SHIP, location);
 	}
 
 	@Override
 	public MyExpression createAsteroidExpression(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new EntityExpression(EntityType.ASTEROID, location);
 	}
 
 	@Override
 	public MyExpression createPlanetoidExpression(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new EntityExpression(EntityType.PLANETOID, location);
 	}
 
 	@Override
 	public MyExpression createBulletExpression(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new EntityExpression(EntityType.BULLET, location);
 	}
 
 	@Override
 	public MyExpression createPlanetExpression(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new EntityExpression(EntityType.MINORPLANET, location);
 	}
 
 	@Override
@@ -155,32 +154,27 @@ public class ProgramFactory implements IProgramFactory<MyExpression, MyStatement
 
 	@Override
 	public MyExpression createGetXExpression(MyExpression e, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new GetterExpression(e, GetterType.GETX, location);
 	}
 
 	@Override
 	public MyExpression createGetYExpression(MyExpression e, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new GetterExpression(e, GetterType.GETY, location);
 	}
 
 	@Override
 	public MyExpression createGetVXExpression(MyExpression e, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new GetterExpression(e, GetterType.GETVX, location);
 	}
 
 	@Override
 	public MyExpression createGetVYExpression(MyExpression e, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new GetterExpression(e, GetterType.GETVY, location);
 	}
 
 	@Override
 	public MyExpression createGetRadiusExpression(MyExpression e, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new GetterExpression(e, GetterType.GETRADIUS, location);
 	}
 
 	@Override
@@ -215,8 +209,7 @@ public class ProgramFactory implements IProgramFactory<MyExpression, MyStatement
 
 	@Override
 	public MyExpression createGetDirectionExpression(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new GetterExpression(GetterType.GETDIR, location);
 	}
 
 	@Override
