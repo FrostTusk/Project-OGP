@@ -43,8 +43,7 @@ public class ProgramFactory implements IProgramFactory<MyExpression, MyStatement
 
 	@Override
 	public MyFunction createFunctionDefinition(String functionName, MyStatement body, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new MyFunction(functionName, body, sourceLocation);
 	}
 
 	@Override
