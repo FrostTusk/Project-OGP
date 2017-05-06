@@ -496,7 +496,7 @@ public class TestWorld {
 		world.addEntity(ship4);
 		ship4.setWorld(world);
 		Set<Entity> entities = world.getAllEntities();
-		Set<Ship> ships = (Set<Ship>) world.getAllEntitiesSpecific(EntityType.SHIP);
+		Set<Ship> ships = ((Set<Ship>) world.getAllEntitiesSpecific(EntityType.SHIP));
 		double counter = 0;
 		for (Ship ship : ships) for (Entity entity : entities) if (ship == entity) counter += 1;
 		if (counter != 4) fail();

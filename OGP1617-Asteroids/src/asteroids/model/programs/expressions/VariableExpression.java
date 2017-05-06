@@ -21,7 +21,7 @@ public class VariableExpression extends MyExpression {
 	}
 	
 	
-	public void setVariableName(String variableName) {
+	private void setVariableName(String variableName) {
 		this.variableName = variableName;
 	}
 	

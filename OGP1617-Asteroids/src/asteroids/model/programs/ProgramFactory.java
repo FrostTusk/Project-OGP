@@ -3,6 +3,10 @@ package asteroids.model.programs;
 import java.util.List;
 
 import asteroids.model.Program;
+import asteroids.model.programs.expressions.ChangeSignExpression;
+import asteroids.model.programs.expressions.FunctionCallExpression;
+import asteroids.model.programs.expressions.NotExpression;
+import asteroids.model.programs.expressions.ParameterExpression;
 import asteroids.model.programs.expressions.VariableExpression;
 import asteroids.model.programs.statements.AssignmentStatement;
 import asteroids.model.programs.statements.BreakStatement;
@@ -76,27 +80,23 @@ public class ProgramFactory implements IProgramFactory<MyExpression, MyStatement
 
 	@Override
 	public MyExpression createReadParameterExpression(String parameterName, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new ParameterExpression(parameterName, sourceLocation);
 	}
 
 	@Override
 	public MyExpression createFunctionCallExpression(String functionName, List<MyExpression> actualArgs,
 			SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new FunctionCallExpression(functionName, actualArgs, sourceLocation);
 	}
 
 	@Override
 	public MyExpression createChangeSignExpression(MyExpression expression, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new ChangeSignExpression(expression, sourceLocation);
 	}
 
 	@Override
 	public MyExpression createNotExpression(MyExpression expression, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new NotExpression(expression, sourceLocation);
 	}
 
 	@Override

@@ -3,7 +3,7 @@ package asteroids.model.programs;
 import asteroids.helper.program.ExpressionType;
 import asteroids.part3.programs.SourceLocation;
 
-public class MyExpression {
+public abstract class MyExpression {
 	
 	private SourceLocation sourceLocation;
 	private ExpressionType type;
