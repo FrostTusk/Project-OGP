@@ -4,7 +4,9 @@ import java.util.List;
 
 import asteroids.helper.entity.EntityType;
 import asteroids.helper.program.GetterType;
+import asteroids.helper.program.OperatorType;
 import asteroids.model.Program;
+import asteroids.model.programs.expressions.AnyExpression;
 import asteroids.model.programs.expressions.ChangeSignExpression;
 import asteroids.model.programs.expressions.DoubleLiteralExpression;
 import asteroids.model.programs.expressions.EntityExpression;
@@ -12,8 +14,10 @@ import asteroids.model.programs.expressions.FunctionCallExpression;
 import asteroids.model.programs.expressions.GetterExpression;
 import asteroids.model.programs.expressions.NotExpression;
 import asteroids.model.programs.expressions.NullExpression;
+import asteroids.model.programs.expressions.OperatorExpression;
 import asteroids.model.programs.expressions.ParameterExpression;
 import asteroids.model.programs.expressions.SelfExpression;
+import asteroids.model.programs.expressions.SqrtExpression;
 import asteroids.model.programs.expressions.VariableExpression;
 import asteroids.model.programs.statements.AssignmentStatement;
 import asteroids.model.programs.statements.BreakStatement;
@@ -148,8 +152,7 @@ public class ProgramFactory implements IProgramFactory<MyExpression, MyStatement
 
 	@Override
 	public MyExpression createAnyExpression(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new AnyExpression(location);
 	}
 
 	@Override
@@ -179,32 +182,27 @@ public class ProgramFactory implements IProgramFactory<MyExpression, MyStatement
 
 	@Override
 	public MyExpression createLessThanExpression(MyExpression e1, MyExpression e2, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new OperatorExpression(e1, e2, OperatorType.LESSTHAN, location);
 	}
 
 	@Override
 	public MyExpression createEqualityExpression(MyExpression e1, MyExpression e2, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new OperatorExpression(e1, e2, OperatorType.EQUALITY, location);
 	}
 
 	@Override
 	public MyExpression createAdditionExpression(MyExpression e1, MyExpression e2, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new OperatorExpression(e1, e2, OperatorType.ADDITION, location);
 	}
 
 	@Override
 	public MyExpression createMultiplicationExpression(MyExpression e1, MyExpression e2, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new OperatorExpression(e1, e2, OperatorType.MULTIPLICATION, location);
 	}
 
 	@Override
 	public MyExpression createSqrtExpression(MyExpression e, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new SqrtExpression(e, location);
 	}
 
 	@Override

@@ -11,12 +11,7 @@ public enum ExpressionType {
 	SELF,
 	ENTITY,
 	GETTER,
-	
-	ENCLOSED,
-	ADDITION,
-	MULTIPLICATION,
-	INVOCATION,
+	OPERATOR,
+	ANY,
 	SQRT,
-
-	COMPARISON,
 }

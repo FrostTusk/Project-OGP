@@ -7,7 +7,7 @@ import asteroids.part3.programs.SourceLocation;
 
 public class GetterExpression extends MyExpression {
 
-	public GetterExpression( GetterType getterType, SourceLocation location) {
+	public GetterExpression(GetterType getterType, SourceLocation location) {
 		setLocation(location);
 		setType(ExpressionType.GETTER);
 		setExpression(null);
@@ -39,7 +39,7 @@ public class GetterExpression extends MyExpression {
 		this.expression = expression;
 	}
 
-	protected void setGetterType(GetterType getterType) {
+	private void setGetterType(GetterType getterType) {
 		this.getterType = getterType;
 	}
 	
