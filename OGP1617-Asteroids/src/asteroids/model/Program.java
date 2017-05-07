@@ -1,7 +1,6 @@
 package asteroids.model;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 import asteroids.model.programs.MyFunction;
 import asteroids.model.programs.MyStatement;
@@ -9,19 +8,29 @@ import asteroids.model.programs.MyStatement;
 public class Program {
 	
 	public Program(List<MyFunction> functions, MyStatement main) {
-//		Stream<MyFunction> functionsStream = functions.stream().
-//				filter(x -> canHaveAsFunction(x));
+		setFunctions(functions);
+		setMain(main);
 	}
 	
-	public void addFunction(MyFunction function) {
-		
+	
+	private List<MyFunction> functions;
+	private MyStatement main;
+	
+	public List<MyFunction> getFunctions() {
+		return this.functions;
 	}
 	
-	public boolean canHaveAsFunction(MyFunction function) {
-		return false;
+	public MyStatement getMain() {
+		return this.main;
 	}
 	
-	public Stream<MyFunction> getFunctions() {
-		return null;
+	
+	private void setFunctions(List<MyFunction> functions) {
+		this.functions = functions;
 	}
+	
+	private void setMain(MyStatement main) {
+		this.main = main;
+	}
+	
 }

@@ -2,7 +2,6 @@ package asteroids.model;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import asteroids.helper.*;
 import asteroids.helper.entity.Entity;
@@ -912,6 +911,7 @@ public class World {
 //				result.add(entity);
 //		return result;
 		
+		// TODO Rewrite with generic classes!
 		Set<Entity> results = getAllEntities().stream().
 				filter(x -> x.getType() == type).
 				collect(Collectors.toSet());
@@ -919,6 +919,20 @@ public class World {
 //		Stream<Entity> functionsStream = getAllEntities().stream().
 //				filter(x -> x.getType() == type);
 	}
+	
+	
+	public Class<? extends Entity> chooseClass(EntityType type) {
+		if (type == EntityType.SHIP)
+			return Ship.class;
+		if (type == EntityType.BULLET)
+			return Bullet.class;
+		if (type == EntityType.ASTEROID)
+			return Asteroid.class;
+		if (type == EntityType.PLANETOID)
+			return Planetoid.class;
+		return null;
+	}
+	
 	
 	/**
 	 * Returns all ships registered in this world.
