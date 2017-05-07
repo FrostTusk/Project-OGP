@@ -9,6 +9,7 @@ import java.util.*;
 
 import asteroids.helper.entity.*;
 import asteroids.model.*;
+import asteroids.model.programs.ProgramFactory;
 
 
 public class Facade implements IFacade {
@@ -921,14 +922,22 @@ public class Facade implements IFacade {
 
 	@Override
 	public Program getShipProgram(Ship ship) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return ship.getProgram();
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
 	public void loadProgramOnShip(Ship ship, Program program) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		try {
+			ship.setProgram(program);
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
@@ -939,8 +948,7 @@ public class Facade implements IFacade {
 
 	@Override
 	public IProgramFactory<?, ?, ?, ? extends Program> createProgramFactory() throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		return new ProgramFactory();
 	}
 
 }

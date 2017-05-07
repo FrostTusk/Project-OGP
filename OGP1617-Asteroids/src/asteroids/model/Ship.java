@@ -846,6 +846,21 @@ public class Ship extends Entity {
 	     */
 	
 	
+	
+	private Program program;
+	
+	
+	public Program getProgram() {
+		return this.program;
+	}
+	
+	
+	public void setProgram(Program program) {
+		this.program = program;
+	}
+	
+	
+	
 			/*
 		     * |--------------------------------------------|
 		     * | 9. The next methods are Helper Methods.	|

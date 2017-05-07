@@ -1,6 +1,9 @@
 package asteroids.model;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import asteroids.helper.*;
 import asteroids.helper.entity.Entity;
 import asteroids.helper.entity.EntityType;
@@ -603,7 +606,7 @@ public class World {
 	 * @param 	collisionListener TODO
 	 */
 	public void evolve(double time, CollisionListener collisionListener) throws IllegalArgumentException {
-		if (time < 0) 
+		if ( (time < 0) || (Double.isNaN(time)) )
 			throw new IllegalArgumentException();
 		destroyOverlaps();	// Destroy all the entities that are currently invalid (overlap something).
 		updateMap();	// We need to update the map because it is possible that the positions of the entities have been changed.
@@ -902,12 +905,19 @@ public class World {
 	}
 		
 	public Set<? extends Entity> getAllEntitiesSpecific(EntityType type) {
-		Set<Entity> entitiesResult = getAllEntities();
-		Set<Entity> result = new HashSet<Entity>();
-		for (Entity entity: entitiesResult) 
-			if (entity.getType() == type) 
-				result.add(entity);
-		return result;
+//		Set<Entity> entitiesResult = getAllEntities();
+//		Set<Entity> result = new HashSet<Entity>();
+//		for (Entity entity: entitiesResult) 
+//			if (entity.getType() == type) 
+//				result.add(entity);
+//		return result;
+		
+		Set<Entity> results = getAllEntities().stream().
+				filter(x -> x.getType() == type).
+				collect(Collectors.toSet());
+		return results;
+//		Stream<Entity> functionsStream = getAllEntities().stream().
+//				filter(x -> x.getType() == type);
 	}
 	
 	/**
