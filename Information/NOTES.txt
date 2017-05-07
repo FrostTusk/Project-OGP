@@ -5,7 +5,10 @@
 	2. What to do with Position Class?
 		1. Exception thrown at creation of Position? Should Ship cover it?
 		   Can it keep "floating"?
-	3. Salamander Bug
+	3. Salamander Bug. <= Not neccessary.
+	4. Where to use Interface.
+	5. Where to use generic classes.
+	6. Type Safety, how to improve.
 
 
 2. TODO:

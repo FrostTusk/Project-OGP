@@ -1,11 +1,9 @@
 package asteroids.model.programs;
 
-import java.util.Set;
-
-import asteroids.helper.program.StatementType;
-import asteroids.junk.TestException;
+import java.util.*;
+import asteroids.helper.program.*;
 import asteroids.model.*;
-import asteroids.model.programs.statements.AssignmentStatement;
+import asteroids.model.programs.statements.*;
 
 public class ProgramExecuter {
 	
@@ -49,33 +47,86 @@ public class ProgramExecuter {
 
 	
 	
-	private Set<String> globalVariables;
+	private Map<String, MyExpression> globalVariableMap;
 	
-	private void executeProgram() {
-		statementHandler(getProgram().getMain());
+	
+	public MyExpression getGlobalVariableExpression(String variable) {
+		try {
+			return globalVariableMap.get(variable);
+		}
+		catch (NullPointerException exc) {
+			return null;
+		}
+	}
+	
+
+	public boolean variableCanHaveAsValue(MyExpression oldValue, MyExpression newValue) {
+		return (oldValue.getType() == newValue.getType()) ? true:false;
+	}
+	
+	public boolean containsGlobalVariable(String variable) {
+		try {
+			globalVariableMap.get(variable);
+		}
+		catch (NullPointerException exc) {
+			return false;
+		}
+		return true;
+	}
+
+	
+	public void addGlobalVariable(String variable, MyExpression expression) {
+		globalVariableMap.put(variable, expression);
 	}
 	
 	
-	private void statementHandler(MyStatement statement) {
+	
+	
+	private void executeProgram() {
+		statementHandler(getProgram().getMain());
+	}	
+	
+	private boolean statementHandler(MyStatement statement) {
 		StatementType type = statement.getType();
 		switch (type) {
         	case ACTION: break;
         	case ASSIGNMENT: runAssignment((AssignmentStatement) statement);;
-        	case BREAK: break;
+        	case BREAK: runBreak((BreakStatement) statement);
         	case IF: break;
-        	case PRINT: break;
+        	case PRINT: runPrint((PrintStatement) statement);
         	case RETURN: break;
-        	case SEQUENCE: break;
+        	case SEQUENCE: runSequence((SequenceStatement) statement);;
         	case WHILE: break;
         	default: break;
 		}
+		return true;
 	}
 	
-	private void runAssignment(AssignmentStatement statement) {
-		String name = statement.getVariableName();
-		if (globalVariables.contains(name))
-			throw new TestException();
-		statement.getValue();
+	private void runActionStatement(MyStatement statement) {
+		
+	}
+	
+	
+	private void runAssignment(AssignmentStatement statement) throws IllegalArgumentException {
+		String variable = statement.getVariableName();
+		if ( containsGlobalVariable(variable) && 
+				(!variableCanHaveAsValue(getGlobalVariableExpression(variable), statement.getValue())) )
+			throw new IllegalArgumentException();
+		
+		addGlobalVariable(variable, statement.getValue());
+	}
+	
+	private void runBreak(BreakStatement statement) {
+		
+	}
+	
+	private void runPrint(PrintStatement statement) {
+		System.out.println(statement.getValue().toString());
+	}
+	
+	private void runSequence(SequenceStatement statement) {
+		for(MyStatement subStatement: statement.getStatements())
+			statementHandler(statement);
 	}
 	
 }
