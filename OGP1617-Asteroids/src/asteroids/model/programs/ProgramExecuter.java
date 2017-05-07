@@ -1,8 +1,11 @@
 package asteroids.model.programs;
 
 import java.util.*;
+
+import asteroids.helper.entity.Entity;
 import asteroids.helper.program.*;
 import asteroids.model.*;
+import asteroids.model.programs.expressions.*;
 import asteroids.model.programs.statements.*;
 
 public class ProgramExecuter {
@@ -64,6 +67,7 @@ public class ProgramExecuter {
 		return (oldValue.getType() == newValue.getType()) ? true:false;
 	}
 	
+	
 	public boolean containsGlobalVariable(String variable) {
 		try {
 			globalVariableMap.get(variable);
@@ -86,6 +90,7 @@ public class ProgramExecuter {
 		Stack<Object> stack = new Stack<Object>();
 		statementHandler(getProgram().getMain(), null, null, stack);
 	}	
+	
 	
 	private boolean statementHandler(MyStatement statement, MyStatement enclosingStatement, 
 			MyFunction enclosingFunction, Stack<Object> stack) {
@@ -155,25 +160,38 @@ public class ProgramExecuter {
 	
 	
 	
-	private void expressionHandler(MyExpression expression) {
+	private Object expressionHandler(MyExpression expression) {
 		ExpressionType type = expression.getType();
 		switch (type) {
 			case CHANGESIGN:;
-			case DOUBLELITERAL:;
-			case ENTITY:;
+			case DOUBLELITERAL:
+				return extractDoubleLiteral((DoubleLiteralExpression) expression);
+			case ENTITY:
+				extractEntity((EntityExpression) expression);
 			case FUNCTIONCALL:;
 			case GETTER:;
-			case NOT:;
+			case NOT:
+				return extractNot((NotExpression) expression);
 			case OPERATOR:;
 			case PARAMETER:;
 			case SQRT:;
 			case VARIABLE:;
 		}
+		return null;
 	}
 	
 	
-	private void extractValue(MyExpression expression) {
-		
+	private Entity extractEntity(EntityExpression expression) {
+		return null;
+	}
+	
+	private Boolean extractNot(NotExpression expression) {
+		Boolean value = ((Boolean) expressionHandler(expression.getExpression()));
+		return (value) ? Boolean.FALSE:Boolean.TRUE;
+	}
+	
+	private Double extractDoubleLiteral(DoubleLiteralExpression expression) {
+		return expression.getValue();
 	}
 	
 }
