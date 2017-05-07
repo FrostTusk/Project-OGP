@@ -6,17 +6,14 @@ import asteroids.helper.entity.EntityType;
 import asteroids.helper.program.GetterType;
 import asteroids.helper.program.OperatorType;
 import asteroids.model.Program;
-import asteroids.model.programs.expressions.AnyExpression;
 import asteroids.model.programs.expressions.ChangeSignExpression;
 import asteroids.model.programs.expressions.DoubleLiteralExpression;
 import asteroids.model.programs.expressions.EntityExpression;
 import asteroids.model.programs.expressions.FunctionCallExpression;
 import asteroids.model.programs.expressions.GetterExpression;
 import asteroids.model.programs.expressions.NotExpression;
-import asteroids.model.programs.expressions.NullExpression;
 import asteroids.model.programs.expressions.OperatorExpression;
 import asteroids.model.programs.expressions.ParameterExpression;
-import asteroids.model.programs.expressions.SelfExpression;
 import asteroids.model.programs.expressions.SqrtExpression;
 import asteroids.model.programs.expressions.VariableExpression;
 import asteroids.model.programs.statements.AssignmentStatement;
@@ -116,12 +113,12 @@ public class ProgramFactory implements IProgramFactory<MyExpression, MyStatement
 
 	@Override
 	public MyExpression createNullExpression(SourceLocation location) {
-		return new NullExpression(location);
+		return new EntityExpression(EntityType.NULL, location);
 	}
 
 	@Override
 	public MyExpression createSelfExpression(SourceLocation location) {
-		return new SelfExpression(location);
+		return new EntityExpression(EntityType.SELF, location);
 	}
 
 	@Override
@@ -151,7 +148,7 @@ public class ProgramFactory implements IProgramFactory<MyExpression, MyStatement
 
 	@Override
 	public MyExpression createAnyExpression(SourceLocation location) {
-		return new AnyExpression(location);
+		return new EntityExpression(EntityType.ANY, location);
 	}
 
 	@Override

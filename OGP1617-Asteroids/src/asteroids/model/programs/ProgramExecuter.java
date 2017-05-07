@@ -83,50 +83,97 @@ public class ProgramExecuter {
 	
 	
 	private void executeProgram() {
-		statementHandler(getProgram().getMain());
+		Stack<Object> stack = new Stack<Object>();
+		statementHandler(getProgram().getMain(), null, null, stack);
 	}	
 	
-	private boolean statementHandler(MyStatement statement) {
+	private boolean statementHandler(MyStatement statement, MyStatement enclosingStatement, 
+			MyFunction enclosingFunction, Stack<Object> stack) {
 		StatementType type = statement.getType();
+		boolean getNext = true;
 		switch (type) {
-        	case ACTION: break;
-        	case ASSIGNMENT: runAssignment((AssignmentStatement) statement);;
-        	case BREAK: runBreak((BreakStatement) statement);
+        	case ACTION: 
+        		getNext = runActionStatement(statement);
+        	case ASSIGNMENT: 
+        		getNext = runAssignment((AssignmentStatement) statement);;
+        	case BREAK: 
+        		getNext = runBreak((BreakStatement) statement);
         	case IF: break;
-        	case PRINT: runPrint((PrintStatement) statement);
-        	case RETURN: break;
-        	case SEQUENCE: runSequence((SequenceStatement) statement);;
+        	case PRINT: 
+        		getNext = runPrint((PrintStatement) statement);
+        	case RETURN: 
+        		getNext = runReturn((ReturnStatement) statement, stack);
+        	case SEQUENCE: 
+        		getNext = runSequence((SequenceStatement) statement, enclosingStatement, enclosingFunction, stack);
         	case WHILE: break;
         	default: break;
 		}
+		return getNext;
+	}
+	
+	
+	private boolean runActionStatement(MyStatement statement) {
 		return true;
 	}
 	
-	private void runActionStatement(MyStatement statement) {
-		
-	}
 	
-	
-	private void runAssignment(AssignmentStatement statement) throws IllegalArgumentException {
+	private boolean runAssignment(AssignmentStatement statement) throws IllegalArgumentException {
 		String variable = statement.getVariableName();
 		if ( containsGlobalVariable(variable) && 
 				(!variableCanHaveAsValue(getGlobalVariableExpression(variable), statement.getValue())) )
 			throw new IllegalArgumentException();
 		
 		addGlobalVariable(variable, statement.getValue());
+		return true;
 	}
 	
-	private void runBreak(BreakStatement statement) {
-		
+	
+	private boolean runBreak(BreakStatement statement) {
+		return false;
 	}
 	
-	private void runPrint(PrintStatement statement) {
+	
+	private boolean runPrint(PrintStatement statement) {
 		System.out.println(statement.getValue().toString());
+		return true;
 	}
 	
-	private void runSequence(SequenceStatement statement) {
+	
+	private boolean runReturn(ReturnStatement statement, Stack<Object> stack) {
+		stack.add(statement.getValue());
+		return false;
+	}
+	
+	
+	private boolean runSequence(SequenceStatement statement, MyStatement enclosingStatement, 
+			MyFunction enclosingFunction, Stack<Object> stack) {
 		for(MyStatement subStatement: statement.getStatements())
-			statementHandler(statement);
+			if (!statementHandler(subStatement, enclosingStatement, enclosingFunction, stack))
+				return false;
+		return true;
+	}
+	
+	
+	
+	private void expressionHandler(MyExpression expression) {
+		ExpressionType type = expression.getType();
+		switch (type) {
+			case CHANGESIGN:;
+			case DOUBLELITERAL:;
+			case ENTITY:;
+			case FUNCTIONCALL:;
+			case GETTER:;
+			case NOT:;
+			case OPERATOR:;
+			case PARAMETER:;
+			case SQRT:;
+			case VARIABLE:;
+		}
+	}
+	
+	
+	private void extractValue(MyExpression expression) {
+		
 	}
 	
 }

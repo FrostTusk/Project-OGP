@@ -7,11 +7,8 @@ public enum ExpressionType {
 	CHANGESIGN,
 	NOT,
 	DOUBLELITERAL,
-	NULL,
-	SELF,
 	ENTITY,
 	GETTER,
 	OPERATOR,
-	ANY,
 	SQRT,
 }

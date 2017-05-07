@@ -6,4 +6,7 @@ public enum EntityType {
     MINORPLANET,
     ASTEROID,
     PLANETOID,
+    ANY,
+    NULL,
+    SELF,
 }
