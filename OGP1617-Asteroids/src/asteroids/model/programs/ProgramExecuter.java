@@ -2,7 +2,6 @@ package asteroids.model.programs;
 
 import java.util.*;
 
-import asteroids.helper.entity.Entity;
 import asteroids.helper.program.*;
 import asteroids.model.*;
 import asteroids.model.programs.expressions.*;
@@ -160,10 +159,11 @@ public class ProgramExecuter {
 	
 	
 	
-	private Object expressionHandler(MyExpression expression) {
+	private SimpleClass expressionHandler(MyExpression expression) {
 		ExpressionType type = expression.getType();
 		switch (type) {
-			case CHANGESIGN:;
+			case CHANGESIGN:
+				return extractChangeSign((ChangeSignExpression) expression);
 			case DOUBLELITERAL:
 				return extractDoubleLiteral((DoubleLiteralExpression) expression);
 			case ENTITY:
@@ -181,17 +181,21 @@ public class ProgramExecuter {
 	}
 	
 	
-	private Entity extractEntity(EntityExpression expression) {
+	private SimpleDouble extractChangeSign(ChangeSignExpression expression) {
 		return null;
 	}
 	
-	private Boolean extractNot(NotExpression expression) {
-		Boolean value = ((Boolean) expressionHandler(expression.getExpression()));
-		return (value) ? Boolean.FALSE:Boolean.TRUE;
+	private SimpleEntity extractEntity(EntityExpression expression) {
+		return null;
 	}
 	
-	private Double extractDoubleLiteral(DoubleLiteralExpression expression) {
-		return expression.getValue();
+	private SimpleBoolean extractNot(NotExpression expression) {
+		Boolean value = ((Boolean) expressionHandler(expression.getExpression()).getValue());
+		return (value) ? new SimpleBoolean(Boolean.FALSE):new SimpleBoolean(Boolean.TRUE);
+	}
+	
+	private SimpleDouble extractDoubleLiteral(DoubleLiteralExpression expression) {
+		return null;
 	}
 	
 }
