@@ -167,12 +167,14 @@ public class ProgramExecuter {
 			case DOUBLELITERAL:
 				return extractDoubleLiteral((DoubleLiteralExpression) expression);
 			case ENTITY:
-				extractEntity((EntityExpression) expression);
-			case FUNCTIONCALL:;
+				return extractEntity((EntityExpression) expression);
+			case FUNCTIONCALL:
+				return extractFunctionCall((FunctionCallExpression) expression);
 			case GETTER:;
 			case NOT:
 				return extractNot((NotExpression) expression);
-			case OPERATOR:;
+			case OPERATOR:
+				return extractOperator((OperatorExpression) expression);
 			case PARAMETER:;
 			case SQRT:;
 			case VARIABLE:;
@@ -182,11 +184,12 @@ public class ProgramExecuter {
 	
 	
 	private SimpleDouble extractChangeSign(ChangeSignExpression expression) {
-		return null;
+		Double value = -((Double) expressionHandler(expression.getExpression()).getValue());
+		return new SimpleDouble(value);
 	}
 	
 	private SimpleEntity extractEntity(EntityExpression expression) {
-		return null;
+		return new SimpleEntity(expression.getEntityType());
 	}
 	
 	private SimpleBoolean extractNot(NotExpression expression) {
@@ -195,6 +198,29 @@ public class ProgramExecuter {
 	}
 	
 	private SimpleDouble extractDoubleLiteral(DoubleLiteralExpression expression) {
+		return new SimpleDouble(expression.getValue());
+	}
+	
+	private SimpleClass extractOperator(OperatorExpression expression) {
+		OperatorType type = expression.getOperatorType();
+		switch(type) {
+			case ADDITION:
+				return new SimpleDouble( ((Double) expressionHandler(expression.getExpression1()).getValue()) + 
+						((Double) expressionHandler(expression.getExpression2()).getValue()) );
+			case EQUALITY:
+				return new SimpleBoolean( ((Double) expressionHandler(expression.getExpression1()).getValue()) ==
+						((Double) expressionHandler(expression.getExpression2()).getValue()) );
+			case LESSTHAN:
+				return new SimpleBoolean( ((Double) expressionHandler(expression.getExpression1()).getValue()) <
+					((Double) expressionHandler(expression.getExpression2()).getValue()) );
+			case MULTIPLICATION:
+				return new SimpleDouble( ((Double) expressionHandler(expression.getExpression1()).getValue()) * 
+						((Double) expressionHandler(expression.getExpression2()).getValue()) );
+		}
+		return null;
+	}
+	
+	private SimpleClass extractFunctionCall(FunctionCallExpression expression) {
 		return null;
 	}
 	

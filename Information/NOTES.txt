@@ -6,9 +6,11 @@
 		1. Exception thrown at creation of Position? Should Ship cover it?
 		   Can it keep "floating"?
 	3. Salamander Bug. <= Not neccessary.
-	4. Where to use Interface.
-	5. Where to use generic classes.
-	6. Type Safety, how to improve.
+	4. Where should interfaces be used?
+	5. Where should generic classes be used?
+	6. How to remove Unchecked casts. => See warnings.
+	7. How can lamda expressions be used with entities?
+	8. How do entities work in programs?
 
 
 2. TODO:
