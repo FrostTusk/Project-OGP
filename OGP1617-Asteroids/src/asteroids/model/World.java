@@ -903,35 +903,42 @@ public class World {
 		return entitiesResult;
 	}
 		
-	public Set<? extends Entity> getAllEntitiesSpecific(EntityType type) {
-//		Set<Entity> entitiesResult = getAllEntities();
-//		Set<Entity> result = new HashSet<Entity>();
-//		for (Entity entity: entitiesResult) 
-//			if (entity.getType() == type) 
-//				result.add(entity);
-//		return result;
-		
-		// TODO Rewrite with generic classes!
-		Set<Entity> results = getAllEntities().stream().
-				filter(x -> x.getType() == type).
-				collect(Collectors.toSet());
-		return results;
-//		Stream<Entity> functionsStream = getAllEntities().stream().
-//				filter(x -> x.getType() == type);
+//	public Set<? extends Entity> getAllEntitiesSpecific(EntityType type) {
+////		Set<Entity> entitiesResult = getAllEntities();
+////		Set<Entity> result = new HashSet<Entity>();
+////		for (Entity entity: entitiesResult) 
+////			if (entity.getType() == type) 
+////				result.add(entity);
+////		return result;
+//		
+//		// TODO Rewrite with generic classes!
+//		Set<Entity> results = getAllEntities().stream().
+//				filter(x -> x.getType() == type).
+//				collect(Collectors.toSet());
+//		return results;
+////		Stream<Entity> functionsStream = getAllEntities().stream().
+////				filter(x -> x.getType() == type);
+//	}
+	
+	@SuppressWarnings("unchecked")
+	public <T extends Entity> Set<T> getAllEntitiesSpecific(Class<T> entityClass) {
+		return ((Set<T>) getAllEntities().stream().
+				filter(x -> x.getClass().toString() != entityClass.toString()).
+				collect(Collectors.toSet()));
 	}
 	
 	
-	public Class<? extends Entity> chooseClass(EntityType type) {
-		if (type == EntityType.SHIP)
-			return Ship.class;
-		if (type == EntityType.BULLET)
-			return Bullet.class;
-		if (type == EntityType.ASTEROID)
-			return Asteroid.class;
-		if (type == EntityType.PLANETOID)
-			return Planetoid.class;
-		return null;
-	}
+//	public Class<? extends Entity> chooseClass(EntityType type) {
+//		if (type == EntityType.SHIP)
+//			return Ship.class;
+//		if (type == EntityType.BULLET)
+//			return Bullet.class;
+//		if (type == EntityType.ASTEROID)
+//			return Asteroid.class;
+//		if (type == EntityType.PLANETOID)
+//			return Planetoid.class;
+//		return null;
+//	}
 	
 	
 	/**
