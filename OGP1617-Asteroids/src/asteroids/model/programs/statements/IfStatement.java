@@ -1,16 +1,14 @@
 package asteroids.model.programs.statements;
 
-import asteroids.helper.program.StatementType;
 import asteroids.model.programs.MyExpression;
 import asteroids.model.programs.MyStatement;
 import asteroids.part3.programs.SourceLocation;
 
-public class IfStatement extends MyStatement {
+public class IfStatement implements MyStatement {
 
 	public IfStatement(MyExpression condition, MyStatement ifBody, MyStatement elseBody,
 			SourceLocation location) {
 		setLocation(location);
-		setType(StatementType.IF);
 		setCondition(condition);
 		setIfBody(ifBody);
 		setElseBody(elseBody);
@@ -20,6 +18,7 @@ public class IfStatement extends MyStatement {
 	private MyExpression condition;
 	private MyStatement ifBody;
 	private MyStatement elseBody;
+	private SourceLocation location;
 	
 	
 	public MyExpression getCondition() {
@@ -34,6 +33,11 @@ public class IfStatement extends MyStatement {
 		return this.elseBody;
 	}
 	
+	@Override
+	public SourceLocation getLocation() {
+		return this.location;
+	}
+	
 	
 	private void setCondition(MyExpression condition) {
 		this.condition = condition;
@@ -45,6 +49,17 @@ public class IfStatement extends MyStatement {
 	
 	private void setElseBody(MyStatement elseBody) {
 		this.elseBody = elseBody;
+	}
+	
+	private void setLocation(SourceLocation location) {
+		this.location = location;
+	}
+
+
+	@Override
+	public MyExpression execute() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

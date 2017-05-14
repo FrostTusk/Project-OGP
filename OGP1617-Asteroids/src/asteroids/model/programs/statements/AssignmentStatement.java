@@ -1,15 +1,13 @@
 package asteroids.model.programs.statements;
 
-import asteroids.helper.program.StatementType;
 import asteroids.model.programs.MyExpression;
 import asteroids.model.programs.MyStatement;
 import asteroids.part3.programs.SourceLocation;
 
-public class AssignmentStatement extends MyStatement {
+public class AssignmentStatement implements MyStatement {
 
 	public AssignmentStatement(String variableName, MyExpression value, SourceLocation location) {
 		setLocation(location);
-		setType(StatementType.ASSIGNMENT);
 		setVariableName(variableName);
 		setCondition(value);
 	}
@@ -17,6 +15,7 @@ public class AssignmentStatement extends MyStatement {
 	
 	private String variableName;
 	private MyExpression value;
+	private SourceLocation location;
 	
 	
 	public String getVariableName() {
@@ -27,6 +26,11 @@ public class AssignmentStatement extends MyStatement {
 		return this.value;
 	}
 
+	@Override
+	public SourceLocation getLocation() {
+		return this.location;
+	}
+	
 	
 	private void setVariableName(String variableName) {
 		this.variableName = variableName;
@@ -34,6 +38,17 @@ public class AssignmentStatement extends MyStatement {
 	
 	private void setCondition(MyExpression value) {
 		this.value = value;
+	}
+
+	private void setLocation(SourceLocation location) {
+		this.location = location;
+	}
+
+	
+	@Override
+	public MyExpression execute() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

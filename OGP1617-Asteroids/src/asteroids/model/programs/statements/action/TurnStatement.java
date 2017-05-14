@@ -15,15 +15,32 @@ public class TurnStatement extends ActionStatement {
 	
 	
 	private MyExpression angle;
+	private SourceLocation location;
 	
 	
 	public MyExpression getAngle() {
 		return this.angle;
 	}
 	
+	@Override
+	public SourceLocation getLocation() {
+		return this.location;
+	}
+	
 	
 	private void setAngle(MyExpression angle) {
 		this.angle = angle;
+	}
+
+	private void setLocation(SourceLocation location) {
+		this.location = location;
+	}
+
+
+	@Override
+	public MyExpression execute() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

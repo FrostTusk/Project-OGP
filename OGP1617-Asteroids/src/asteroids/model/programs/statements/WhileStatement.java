@@ -1,15 +1,13 @@
 package asteroids.model.programs.statements;
 
-import asteroids.helper.program.StatementType;
 import asteroids.model.programs.MyExpression;
 import asteroids.model.programs.MyStatement;
 import asteroids.part3.programs.SourceLocation;
 
-public class WhileStatement extends MyStatement {
+public class WhileStatement implements MyStatement {
 
 	public WhileStatement(MyExpression condition, MyStatement body, SourceLocation location) {
 		setLocation(location);
-		setType(StatementType.WHILE);
 		setCondition(condition);
 		setBody(body);
 	}
@@ -17,6 +15,7 @@ public class WhileStatement extends MyStatement {
 
 	private MyExpression condition;
 	private MyStatement body;
+	private SourceLocation location;
 	
 	
 	public MyExpression getCondition() {
@@ -27,6 +26,11 @@ public class WhileStatement extends MyStatement {
 		return this.body;
 	}
 
+	@Override
+	public SourceLocation getLocation() {
+		return this.location;
+	}
+	
 	
 	private void setCondition(MyExpression condition) {
 		this.condition = condition;
@@ -35,5 +39,17 @@ public class WhileStatement extends MyStatement {
 	private void setBody(MyStatement body) {
 		this.body = body;
 	}
+
+	private void setLocation(SourceLocation location) {
+		this.location = location;
+	}
+	
+
+	@Override
+	public MyExpression execute() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	
 }

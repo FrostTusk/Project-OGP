@@ -93,7 +93,7 @@ public class ProgramExecuter {
 	
 	private boolean statementHandler(MyStatement statement, MyStatement enclosingStatement, 
 			MyFunction enclosingFunction, Stack<Object> stack) {
-		StatementType type = statement.getType();
+		StatementType type = StatementType.ACTION;//statement.getType();
 		boolean getNext = true;
 		switch (type) {
         	case ACTION: 
