@@ -2,16 +2,14 @@ package asteroids.model.programs.expressions;
 
 import java.util.List;
 
-import asteroids.helper.program.ExpressionType;
 import asteroids.model.programs.MyExpression;
 import asteroids.part3.programs.SourceLocation;
 
-public class FunctionCallExpression extends MyExpression {
+public class FunctionCallExpression implements MyExpression {
 	
 	public FunctionCallExpression(String functionName, List<MyExpression> actualArgs,
 			SourceLocation location) {
 		setLocation(location);
-		setType(ExpressionType.FUNCTIONCALL);
 		setFunctionName(functionName);
 		setActualArgs(actualArgs);
 	}
@@ -19,6 +17,7 @@ public class FunctionCallExpression extends MyExpression {
 	
 	private String functionName;
 	private List<MyExpression> actualArgs;
+	private SourceLocation location;
 	
 	
 	public String getFunctionName() {
@@ -29,6 +28,11 @@ public class FunctionCallExpression extends MyExpression {
 		return this.actualArgs;
 	}
 	
+	@Override
+	public SourceLocation getLocation() {
+		return this.location;
+	}
+	
 	
 	private void setFunctionName(String functionName) {
 		this.functionName = functionName;
@@ -36,6 +40,17 @@ public class FunctionCallExpression extends MyExpression {
 	
 	private void setActualArgs(List<MyExpression> actualArgs) {
 		this.actualArgs = actualArgs;
+	}
+	
+	private void setLocation(SourceLocation location) {
+		this.location = location;
+	}
+	
+	
+	@Override
+	public MyExpression execute() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

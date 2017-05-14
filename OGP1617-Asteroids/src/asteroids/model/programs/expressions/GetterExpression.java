@@ -1,22 +1,19 @@
 package asteroids.model.programs.expressions;
 
-import asteroids.helper.program.ExpressionType;
 import asteroids.helper.program.GetterType;
 import asteroids.model.programs.MyExpression;
 import asteroids.part3.programs.SourceLocation;
 
-public class GetterExpression extends MyExpression {
+public class GetterExpression implements MyExpression {
 
 	public GetterExpression(GetterType getterType, SourceLocation location) {
 		setLocation(location);
-		setType(ExpressionType.GETTER);
 		setExpression(null);
 		setGetterType(getterType);
 	}
 	
 	public GetterExpression(MyExpression expression, GetterType getterType, SourceLocation location) {
 		setLocation(location);
-		setType(ExpressionType.GETTER);
 		setExpression(expression);
 		setGetterType(getterType);
 	}
@@ -24,6 +21,7 @@ public class GetterExpression extends MyExpression {
 	
 	private GetterType getterType;
 	private MyExpression expression;
+	private SourceLocation location;
 	
 	
 	public MyExpression getExpression() {
@@ -34,6 +32,11 @@ public class GetterExpression extends MyExpression {
 		return this.getterType;
 	}
 	
+	@Override
+	public SourceLocation getLocation() {
+		return this.location;
+	}
+	
 	
 	private void setExpression(MyExpression expression) {
 		this.expression = expression;
@@ -41,6 +44,17 @@ public class GetterExpression extends MyExpression {
 
 	private void setGetterType(GetterType getterType) {
 		this.getterType = getterType;
+	}
+	
+	private void setLocation(SourceLocation location) {
+		this.location = location;
+	}
+
+
+	@Override
+	public MyExpression execute() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

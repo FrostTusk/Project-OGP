@@ -1,28 +1,43 @@
 package asteroids.model.programs.expressions;
 
-import asteroids.helper.program.ExpressionType;
 import asteroids.model.programs.MyExpression;
 import asteroids.part3.programs.SourceLocation;
 
-public class DoubleLiteralExpression extends MyExpression {
+public class DoubleLiteralExpression implements MyExpression {
 
 	public DoubleLiteralExpression(double value, SourceLocation location) {
 		setLocation(location);
-		setType(ExpressionType.DOUBLELITERAL);
 		setValue(value);
 	}
 	
 	
 	private double value;
+	private SourceLocation location;
 	
 	
 	public double getValue() {
 		return this.value;
 	}
 	
+	@Override
+	public SourceLocation getLocation() {
+		return this.location;
+	}
+	
 	
 	private void setValue(double value) {
 		this.value = value;
+	}
+	
+	private void setLocation(SourceLocation location) {
+		this.location = location;
+	}
+
+
+	@Override
+	public MyExpression execute() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

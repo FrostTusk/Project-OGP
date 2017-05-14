@@ -62,9 +62,9 @@ public class ProgramExecuter {
 	}
 	
 
-	public boolean variableCanHaveAsValue(MyExpression oldValue, MyExpression newValue) {
-		return (oldValue.getType() == newValue.getType()) ? true:false;
-	}
+//	public boolean variableCanHaveAsValue(MyExpression oldValue, MyExpression newValue) {
+//		return (oldValue.getType() == newValue.getType()) ? true:false;
+//	}
 	
 	
 	public boolean containsGlobalVariable(String variable) {
@@ -123,9 +123,9 @@ public class ProgramExecuter {
 	
 	private boolean runAssignment(AssignmentStatement statement) throws IllegalArgumentException {
 		String variable = statement.getVariableName();
-		if ( containsGlobalVariable(variable) && 
-				(!variableCanHaveAsValue(getGlobalVariableExpression(variable), statement.getValue())) )
-			throw new IllegalArgumentException();
+//		if ( containsGlobalVariable(variable) && 
+//				(!variableCanHaveAsValue(getGlobalVariableExpression(variable), statement.getValue())) )
+//			throw new IllegalArgumentException();
 		
 		addGlobalVariable(variable, statement.getValue());
 		return true;
@@ -160,7 +160,7 @@ public class ProgramExecuter {
 	
 	
 	private SimpleClass expressionHandler(MyExpression expression) {
-		ExpressionType type = expression.getType();
+		ExpressionType type = ExpressionType.CHANGESIGN;//expression.getType();
 		switch (type) {
 			case CHANGESIGN:
 				return extractChangeSign((ChangeSignExpression) expression);

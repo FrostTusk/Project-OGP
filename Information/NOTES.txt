@@ -1,16 +1,10 @@
 1. Questions:
-	1. Documentation
-		1. Declarative
-			1. Am I doing it right?
-	2. What to do with Position Class?
-		1. Exception thrown at creation of Position? Should Ship cover it?
-		   Can it keep "floating"?
-	3. Salamander Bug. <= Not neccessary.
-	4. Where should interfaces be used?
-	5. Where should generic classes be used?
-	6. How to remove Unchecked casts. => See warnings.
-	7. How can lamda expressions be used with entities?
-	8. How do entities work in programs?
+	1. Salamander Bug. <= Not neccessary.
+	2. Interfaces. <= Is our idea right in myExpressions.
+	3. Generic Classes, where?
+	4. How can lamda expressions be used with entities?
+	5. How do entities work in programs, how do we know what
+		entity is being used?
 
 
 2. TODO:
