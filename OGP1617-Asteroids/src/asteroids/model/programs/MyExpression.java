@@ -26,6 +26,6 @@ public interface MyExpression {
 //	}
 	
 	public SourceLocation getLocation();
-	public MyExpression execute();
+	public MyExpression evaluate();
 	
 }

@@ -5,6 +5,9 @@
 	4. How can lamda expressions be used with entities?
 	5. How do entities work in programs, how do we know what
 		entity is being used?
+	6. How to know previous statements?
+		Program class?
+	7. What is a double literal in programs?
 
 
 2. TODO:

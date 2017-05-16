@@ -35,7 +35,7 @@ public class DoubleLiteralExpression implements MyExpression {
 
 
 	@Override
-	public MyExpression execute() {
+	public MyExpression evaluate() {
 		// TODO Auto-generated method stub
 		return null;
 	}

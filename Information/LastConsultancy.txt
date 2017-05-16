@@ -1,0 +1,14 @@
+1. How would for example a while statement work?
+	1. How to "execute" the statement?
+	2. How to know if a statement is in the while statement?
+		1. How to break?
+
+2. How would for example ChangeSignExpression work?
+	1. How to get the double literal?
+		1. How to check if it's the right type.
+	2. Should the return type be MyExpression or something else?
+
+3. How would for example EntityExpression work?
+	1. How to know what a specific entity is.
+		1. nearestAsteroid?
+
