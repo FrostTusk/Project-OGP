@@ -64,6 +64,13 @@ public class ManualTests {
 		sysOut.format("Max Speed = %f%n", planetoid.getMaxSpeed());
 		sysOut.format("Min Radius = %f%n", planetoid.getMinRadius());
 		
+		Entity entity1 = new Ship(10, 10, 10, 10, 0, 10, 10);
+		sysOut.println("New Ship entity to string = " + entity1.getClass().toString());
+		sysOut.println("Ship class to string = " + Ship.class.toString());
+		if (entity1.getClass().toString() == Ship.class.toString())
+			sysOut.println("Strings are equal");
+		else
+			sysOut.println("Strings are NOT equal");
 		// Original Tests that were written at the very start of the project:
 		if (showOriginalTests) runOriginalTestHandler();	
 	}
