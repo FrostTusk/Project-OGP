@@ -1,9 +1,10 @@
 package asteroids.model.programs.expressions;
 
+import asteroids.helper.entity.Entity;
 import asteroids.model.programs.MyExpression;
 import asteroids.part3.programs.SourceLocation;
 
-public class NotExpression implements MyExpression {
+public class NotExpression implements MyExpression<Boolean> {
 
 	public NotExpression(MyExpression expression, SourceLocation location) {
 		setLocation(location);
@@ -11,11 +12,11 @@ public class NotExpression implements MyExpression {
 	}
 	
 	
-	private MyExpression expression;
+	private MyExpression<Boolean> expression;
 	private SourceLocation location;
 	
 	
-	public MyExpression getExpression() {
+	public MyExpression<Boolean> getExpression() {
 		return this.expression;
 	}
 	
@@ -25,7 +26,7 @@ public class NotExpression implements MyExpression {
 	}
 	
 	
-	private void setExpression(MyExpression expression) {
+	private void setExpression(MyExpression<Boolean> expression) {
 		this.expression = expression;
 	}
 
@@ -35,7 +36,7 @@ public class NotExpression implements MyExpression {
 
 
 	@Override
-	public MyExpression evaluate() {
+	public Boolean evaluate() {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -1,10 +1,11 @@
 package asteroids.model.programs.expressions;
 
+import asteroids.helper.entity.Entity;
 import asteroids.helper.program.GetterType;
 import asteroids.model.programs.MyExpression;
 import asteroids.part3.programs.SourceLocation;
 
-public class GetterExpression implements MyExpression {
+public class GetterExpression implements MyExpression<Entity> {
 
 	public GetterExpression(GetterType getterType, SourceLocation location) {
 		setLocation(location);
@@ -12,7 +13,7 @@ public class GetterExpression implements MyExpression {
 		setGetterType(getterType);
 	}
 	
-	public GetterExpression(MyExpression expression, GetterType getterType, SourceLocation location) {
+	public GetterExpression(MyExpression<Entity> expression, GetterType getterType, SourceLocation location) {
 		setLocation(location);
 		setExpression(expression);
 		setGetterType(getterType);
@@ -20,11 +21,11 @@ public class GetterExpression implements MyExpression {
 	
 	
 	private GetterType getterType;
-	private MyExpression expression;
+	private MyExpression<Entity> expression;
 	private SourceLocation location;
 	
 	
-	public MyExpression getExpression() {
+	public MyExpression<Entity> getExpression() {
 		return this.expression;
 	}
 	
@@ -38,7 +39,7 @@ public class GetterExpression implements MyExpression {
 	}
 	
 	
-	private void setExpression(MyExpression expression) {
+	private void setExpression(MyExpression<Entity> expression) {
 		this.expression = expression;
 	}
 
@@ -52,7 +53,7 @@ public class GetterExpression implements MyExpression {
 
 
 	@Override
-	public MyExpression evaluate() {
+	public MyExpression<Entity> evaluate() {
 		// TODO Auto-generated method stub
 		return null;
 	}

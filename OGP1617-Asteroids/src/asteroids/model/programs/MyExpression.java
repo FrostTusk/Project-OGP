@@ -2,7 +2,7 @@ package asteroids.model.programs;
 
 import asteroids.part3.programs.SourceLocation;
 
-public interface MyExpression /*<T>*/{
+public interface MyExpression <T>{
 	
 //	private SourceLocation location;
 //	private ExpressionType type;
@@ -26,6 +26,6 @@ public interface MyExpression /*<T>*/{
 //	}
 	
 	public SourceLocation getLocation();
-	public MyExpression evaluate();
+	public T evaluate();
 	
 }

@@ -3,19 +3,19 @@ package asteroids.model.programs.expressions;
 import asteroids.model.programs.MyExpression;
 import asteroids.part3.programs.SourceLocation;
 
-public class SqrtExpression implements MyExpression {
+public class SqrtExpression implements MyExpression<Double> {
 
-	public SqrtExpression(MyExpression expression, SourceLocation location) {
+	public SqrtExpression(MyExpression<Double> expression, SourceLocation location) {
 		setLocation(location);
 		setExpression(expression);
 	}
 	
 	
-	private MyExpression expression;
+	private MyExpression<Double> expression;
 	private SourceLocation location;
 	
 	
-	public MyExpression getExpression() {
+	public MyExpression<Double> getExpression() {
 		return this.expression;
 	}
 	
@@ -25,7 +25,7 @@ public class SqrtExpression implements MyExpression {
 	}
 	
 	
-	private void setExpression(MyExpression expression) {
+	private void setExpression(MyExpression<Double> expression) {
 		this.expression = expression;
 	}
 
@@ -35,7 +35,7 @@ public class SqrtExpression implements MyExpression {
 
 
 	@Override
-	public MyExpression evaluate() {
+	public Double evaluate() {
 		// TODO Auto-generated method stub
 		return null;
 	}

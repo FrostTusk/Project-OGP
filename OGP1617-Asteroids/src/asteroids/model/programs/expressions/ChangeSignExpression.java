@@ -3,19 +3,19 @@ package asteroids.model.programs.expressions;
 import asteroids.model.programs.MyExpression;
 import asteroids.part3.programs.SourceLocation;
 
-public class ChangeSignExpression implements MyExpression {
+public class ChangeSignExpression implements MyExpression<Double> {
 
-	public ChangeSignExpression(MyExpression expression, SourceLocation location) {
+	public ChangeSignExpression(MyExpression<Double> expression, SourceLocation location) {
 		setExpression(expression);
 		setLocation(location);
 	}
 	
 	
-	private MyExpression expression;
+	private MyExpression<Double> expression;
 	private SourceLocation location;
 	
 	
-	public MyExpression getExpression() {
+	public MyExpression<Double> getExpression() {
 		return this.expression;
 	}
 	
@@ -25,7 +25,7 @@ public class ChangeSignExpression implements MyExpression {
 	}
 	
 	
-	private void setExpression(MyExpression expression) {
+	private void setExpression(MyExpression<Double> expression) {
 		this.expression = expression;
 	}
 
@@ -35,8 +35,7 @@ public class ChangeSignExpression implements MyExpression {
 
 	
 	@Override
-	public MyExpression evaluate() {
-		// TODO Auto-generated method stub
+	public Double evaluate() {
 		return null;
 	}
 	

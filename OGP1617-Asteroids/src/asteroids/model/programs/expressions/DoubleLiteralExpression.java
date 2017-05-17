@@ -3,7 +3,7 @@ package asteroids.model.programs.expressions;
 import asteroids.model.programs.MyExpression;
 import asteroids.part3.programs.SourceLocation;
 
-public class DoubleLiteralExpression implements MyExpression {
+public class DoubleLiteralExpression implements MyExpression<Double> {
 
 	public DoubleLiteralExpression(double value, SourceLocation location) {
 		setLocation(location);
@@ -35,7 +35,7 @@ public class DoubleLiteralExpression implements MyExpression {
 
 
 	@Override
-	public MyExpression evaluate() {
+	public Double evaluate() {
 		// TODO Auto-generated method stub
 		return null;
 	}

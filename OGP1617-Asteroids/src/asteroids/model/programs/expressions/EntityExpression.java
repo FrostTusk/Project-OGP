@@ -1,10 +1,11 @@
 package asteroids.model.programs.expressions;
 
+import asteroids.helper.entity.Entity;
 import asteroids.helper.entity.EntityType;
 import asteroids.model.programs.MyExpression;
 import asteroids.part3.programs.SourceLocation;
 
-public class EntityExpression implements MyExpression {
+public class EntityExpression implements MyExpression<Entity> {
 	
 	public EntityExpression(EntityType entityType, SourceLocation location) {
 		setLocation(location);
@@ -36,7 +37,7 @@ public class EntityExpression implements MyExpression {
 
 
 	@Override
-	public MyExpression evaluate() {
+	public MyExpression<Entity> evaluate() {
 		// TODO Auto-generated method stub
 		return null;
 	}
