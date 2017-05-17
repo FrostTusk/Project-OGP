@@ -9,7 +9,8 @@ import asteroids.part3.programs.SourceLocation;
 public class ThrustOffStatement extends ActionStatement {
 
 	public ThrustOffStatement(SourceLocation location) {
-		setLocation(location);
+		super(location, ActionType.SHOOT);
+//		setLocation(location);
 		setActionType(ActionType.THRUSTON);
 	}
 
@@ -22,7 +23,7 @@ public class ThrustOffStatement extends ActionStatement {
 		return this.location;
 	}
 
-	
+	@SuppressWarnings("unused")
 	private void setLocation(SourceLocation location) {
 		this.location = location;
 	}

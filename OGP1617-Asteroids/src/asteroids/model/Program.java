@@ -74,4 +74,13 @@ public class Program {
 		lineTracker[location.getLine()] = true;
 	}
 	
+	
+	private double time;
+	public double getTime() {
+		return time;
+	}
+	
+	public void setTime(double time) {
+		this.time = time;
+	}
 }

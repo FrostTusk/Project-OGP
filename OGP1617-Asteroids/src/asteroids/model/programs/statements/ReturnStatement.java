@@ -40,29 +40,29 @@ public class ReturnStatement implements MyStatement{
 	public void execute() {
 		// TODO Auto-generated method stub
 	}
+	
 
+	private Program program;
+	private MyStatement superStatement;
+	
 	@Override
 	public Program getProgram() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.program;
 	}
 
 	@Override
 	public void setProgram(Program program) {
-		// TODO Auto-generated method stub
-		
+		this.program = program;
 	}
 
 	@Override
 	public MyStatement getSuperStatement() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.superStatement;
 	}
 
 	@Override
 	public void setSuperStatement(MyStatement statement) {
-		// TODO Auto-generated method stub
-		
+		this.superStatement = statement;
 	}
 	
 }

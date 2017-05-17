@@ -16,14 +16,16 @@ public class IfStatement implements MyStatement {
 	}
 	
 	
-	private MyExpression condition;
+	@SuppressWarnings("unused")
+	private MyExpression condition; // FIXME
 	private MyStatement ifBody;
 	private MyStatement elseBody;
 	private SourceLocation location;
 	
 	
-	public MyExpression getCondition() {
-		return this.condition;
+	public Boolean getCondition() {
+//		return this.condition;	// FIXME
+		return false;
 	}
 	
 	public MyStatement getIfBody() {
@@ -59,31 +61,36 @@ public class IfStatement implements MyStatement {
 
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
+		if (getCondition())
+			getIfBody().execute();
+		else if (getElseBody() != null)
+			getElseBody().execute();
+		getProgram().flagLine(getLocation());
 	}
 
+	
+	
+	private Program program;
+	private MyStatement superStatement;
+	
 	@Override
 	public Program getProgram() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.program;
 	}
 
 	@Override
 	public void setProgram(Program program) {
-		// TODO Auto-generated method stub
-		
+		this.program = program;
 	}
 
 	@Override
 	public MyStatement getSuperStatement() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.superStatement;
 	}
 
 	@Override
 	public void setSuperStatement(MyStatement statement) {
-		// TODO Auto-generated method stub
-		
+		this.superStatement = statement;
 	}
 	
 }

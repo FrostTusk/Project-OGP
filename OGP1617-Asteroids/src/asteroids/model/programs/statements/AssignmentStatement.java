@@ -52,6 +52,7 @@ public class AssignmentStatement implements MyStatement {
 			getProgram().addGlobalVar(getVariableName(), getValue());
 		else
 			getProgram().addLocalVar(getVariableName(), getValue());
+		getProgram().flagLine(getLocation());
 	}
 
 	

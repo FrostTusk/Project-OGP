@@ -10,7 +10,8 @@ import asteroids.part3.programs.SourceLocation;
 public class TurnStatement extends ActionStatement {
 
 	public TurnStatement(MyExpression angle, SourceLocation location) {
-		setLocation(location);
+		super(location, ActionType.SHOOT);
+//		setLocation(location);
 		setActionType(ActionType.THRUSTON);
 		setAngle(angle);
 	}
@@ -34,6 +35,7 @@ public class TurnStatement extends ActionStatement {
 		this.angle = angle;
 	}
 
+	@SuppressWarnings("unused")
 	private void setLocation(SourceLocation location) {
 		this.location = location;
 	}
