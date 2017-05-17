@@ -1,12 +1,11 @@
 package asteroids.model.programs.expressions;
 
-import asteroids.helper.entity.Entity;
 import asteroids.model.programs.MyExpression;
 import asteroids.part3.programs.SourceLocation;
 
 public class NotExpression implements MyExpression<Boolean> {
 
-	public NotExpression(MyExpression expression, SourceLocation location) {
+	public NotExpression(MyExpression<Boolean> expression, SourceLocation location) {
 		setLocation(location);
 		setExpression(expression);
 	}

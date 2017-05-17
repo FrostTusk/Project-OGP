@@ -52,7 +52,7 @@ public class ProgramExecuter {
 	private Map<String, MyExpression> globalVariableMap;
 	
 	
-	public MyExpression getGlobalVariableExpression(String variable) {
+	public MyExpression<?> getGlobalVariableExpression(String variable) {
 		try {
 			return globalVariableMap.get(variable);
 		}
@@ -78,7 +78,7 @@ public class ProgramExecuter {
 	}
 
 	
-	public void addGlobalVariable(String variable, MyExpression expression) {
+	public void addGlobalVariable(String variable, MyExpression<?> expression) {
 		globalVariableMap.put(variable, expression);
 	}
 	
@@ -159,7 +159,7 @@ public class ProgramExecuter {
 	
 	
 	
-	private SimpleClass expressionHandler(MyExpression expression) {
+	private SimpleClass expressionHandler(MyExpression<?> expression) {
 		ExpressionType type = ExpressionType.CHANGESIGN;//expression.getType();
 		switch (type) {
 			case CHANGESIGN:

@@ -7,15 +7,15 @@ import asteroids.part3.programs.SourceLocation;
 
 public class AssignmentStatement implements MyStatement {
 
-	public AssignmentStatement(String variableName, MyExpression value, SourceLocation location) {
+	public AssignmentStatement(String variableName, MyExpression<Double> value, SourceLocation location) {
 		setLocation(location);
 		setVariableName(variableName);
-		setCondition(value);
+		setValue(value);
 	}
 	
 	
 	private String variableName;
-	private MyExpression value;
+	private MyExpression<Double> value;
 	private SourceLocation location;
 	
 	
@@ -23,7 +23,7 @@ public class AssignmentStatement implements MyStatement {
 		return this.variableName;
 	}
 	
-	public MyExpression getValue() {
+	public MyExpression<Double> getValue() {
 		return this.value;
 	}
 
@@ -42,7 +42,7 @@ public class AssignmentStatement implements MyStatement {
 		this.variableName = variableName;
 	}
 	
-	private void setCondition(MyExpression value) {
+	private void setValue(MyExpression<Double> value) {
 		this.value = value;
 	}
 

@@ -9,7 +9,7 @@ import asteroids.part3.programs.SourceLocation;
 
 public class IfStatement implements MyStatement {
 
-	public IfStatement(MyExpression condition, MyStatement ifBody, MyStatement elseBody,
+	public IfStatement(MyExpression<Boolean> condition, MyStatement ifBody, MyStatement elseBody,
 			SourceLocation location) {
 		setLocation(location);
 		setCondition(condition);
@@ -19,7 +19,7 @@ public class IfStatement implements MyStatement {
 	
 	
 	@SuppressWarnings("unused")
-	private MyExpression condition; // FIXME
+	private MyExpression<Boolean> condition; // FIXME
 	private MyStatement ifBody;
 	private MyStatement elseBody;
 	private SourceLocation location;
@@ -49,7 +49,7 @@ public class IfStatement implements MyStatement {
 	}
 	
 
-	private void setCondition(MyExpression condition) {
+	private void setCondition(MyExpression<Boolean> condition) {
 		this.condition = condition;
 	}
 	

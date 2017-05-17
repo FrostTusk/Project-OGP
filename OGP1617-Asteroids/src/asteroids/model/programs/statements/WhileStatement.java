@@ -9,7 +9,7 @@ import asteroids.part3.programs.SourceLocation;
 
 public class WhileStatement implements MyStatement {
 
-	public WhileStatement(MyExpression condition, MyStatement body, SourceLocation location) {
+	public WhileStatement(MyExpression<Boolean> condition, MyStatement body, SourceLocation location) {
 		setLocation(location);
 		setCondition(condition);
 		setBody(body);
@@ -17,7 +17,7 @@ public class WhileStatement implements MyStatement {
 	
 
 	@SuppressWarnings("unused") // FIXME
-	private MyExpression condition;
+	private MyExpression<Boolean> condition;
 	private MyStatement body;
 	private SourceLocation location;
 	
@@ -42,7 +42,7 @@ public class WhileStatement implements MyStatement {
 	}
 	
 
-	private void setCondition(MyExpression condition) {
+	private void setCondition(MyExpression<Boolean> condition) {
 		this.condition = condition;
 	}
 	

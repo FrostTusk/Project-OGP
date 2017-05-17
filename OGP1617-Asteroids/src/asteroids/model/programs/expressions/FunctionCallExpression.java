@@ -5,7 +5,7 @@ import java.util.List;
 import asteroids.model.programs.MyExpression;
 import asteroids.part3.programs.SourceLocation;
 
-public class FunctionCallExpression implements MyExpression {
+public class FunctionCallExpression implements MyExpression<Object> {
 	
 	public FunctionCallExpression(String functionName, List<MyExpression> actualArgs,
 			SourceLocation location) {
@@ -48,7 +48,7 @@ public class FunctionCallExpression implements MyExpression {
 	
 	
 	@Override
-	public MyExpression evaluate() {
+	public MyExpression<?> evaluate() {
 		// TODO Auto-generated method stub
 		return null;
 	}

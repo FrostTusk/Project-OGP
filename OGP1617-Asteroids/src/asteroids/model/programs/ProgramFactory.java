@@ -29,6 +29,7 @@ import asteroids.model.programs.statements.action.TurnStatement;
 import asteroids.part3.programs.IProgramFactory;
 import asteroids.part3.programs.SourceLocation;
 
+@SuppressWarnings("all") // FIXME
 public class ProgramFactory implements IProgramFactory<MyExpression, MyStatement, MyFunction, Program> {
 
 	@Override

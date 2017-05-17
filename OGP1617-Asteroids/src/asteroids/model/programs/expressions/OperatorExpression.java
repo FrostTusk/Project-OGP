@@ -4,7 +4,7 @@ import asteroids.helper.program.OperatorType;
 import asteroids.model.programs.MyExpression;
 import asteroids.part3.programs.SourceLocation;
 
-public class OperatorExpression implements MyExpression {
+public class OperatorExpression implements MyExpression<Object> {
 	
 	public OperatorExpression(MyExpression<Boolean> expression1, MyExpression<Boolean> expression2, OperatorType operatorType, SourceLocation location) {
 		setLocation(location);

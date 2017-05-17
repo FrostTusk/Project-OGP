@@ -7,6 +7,7 @@ import asteroids.model.programs.MyStatement;
 import asteroids.model.programs.statements.ActionStatement;
 import asteroids.part3.programs.SourceLocation;
 
+@SuppressWarnings("all")
 public class TurnStatement extends ActionStatement {
 
 	public TurnStatement(MyExpression angle, SourceLocation location) {

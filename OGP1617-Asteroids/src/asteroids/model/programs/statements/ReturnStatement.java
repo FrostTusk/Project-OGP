@@ -7,17 +7,17 @@ import asteroids.part3.programs.SourceLocation;
 
 public class ReturnStatement implements MyStatement{
 	
-	public ReturnStatement(MyExpression value, SourceLocation location) {
+	public ReturnStatement(MyExpression<?> value, SourceLocation location) {
 		setLocation(location);
 		setValue(value);
 	}
 	
 	
-	private MyExpression value;
+	private MyExpression<?> value;
 	private SourceLocation location;
 	
 	
-	public MyExpression getValue() {
+	public MyExpression<?> getValue() {
 		return this.value;
 	}
 	
@@ -27,7 +27,7 @@ public class ReturnStatement implements MyStatement{
 	}
 	
 	
-	private void setValue(MyExpression value) {
+	private void setValue(MyExpression<?> value) {
 		this.value = value;
 	}
 	
