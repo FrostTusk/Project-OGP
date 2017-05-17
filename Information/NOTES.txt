@@ -1,19 +1,13 @@
 1. Questions:
-	2. Interfaces. <= Is our idea right in myExpressions.
-	3. Generic Classes, where?
-	4. How can lamda expressions be used with entities?
-	5. How do entities work in programs, how do we know what
-		entity is being used?
-	6. How to know previous statements?
-		Program class?
-	7. What is a double literal in programs?
+	1. Interfaces. <= Is our idea right in myExpressions.
+	2. Generic Classes, where?
+	3. How can lamda expressions be used with entities?
+	4. What is a double literal in programs?
 
 
 2. TODO:
 	1. Programs
-	2. Tests
-	3. Minor Planets
-	4. Improve velocity method
+	2. Small TODOs
 
 
 
