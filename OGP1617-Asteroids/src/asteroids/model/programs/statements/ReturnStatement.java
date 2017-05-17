@@ -5,19 +5,19 @@ import asteroids.model.programs.MyExpression;
 import asteroids.model.programs.MyStatement;
 import asteroids.part3.programs.SourceLocation;
 
-public class ReturnStatement implements MyStatement{
+public class ReturnStatement <T> implements MyStatement{
 	
-	public ReturnStatement(MyExpression<?> value, SourceLocation location) {
+	public ReturnStatement(MyExpression<T> value, SourceLocation location) {
 		setLocation(location);
 		setValue(value);
 	}
 	
 	
-	private MyExpression<?> value;
+	private MyExpression<T> value;
 	private SourceLocation location;
 	
 	
-	public MyExpression<?> getValue() {
+	public MyExpression<T> getValue() {
 		return this.value;
 	}
 	
@@ -27,7 +27,7 @@ public class ReturnStatement implements MyStatement{
 	}
 	
 	
-	private void setValue(MyExpression<?> value) {
+	private void setValue(MyExpression<T> value) {
 		this.value = value;
 	}
 	
@@ -71,7 +71,8 @@ public class ReturnStatement implements MyStatement{
 	
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
+		if (getProgram().getFlag(getLocation())) return;
+		getProgram().flagLine(getLocation()); // TODO Return a value.
 	}
 	
 }

@@ -1,7 +1,5 @@
 package asteroids.model.programs.statements;
 
-import java.util.concurrent.TimeoutException;
-
 import asteroids.helper.program.ActionType;
 import asteroids.model.Program;
 import asteroids.model.programs.MyStatement;
@@ -34,36 +32,35 @@ public class ActionStatement implements MyStatement {
 			throw new IllegalArgumentException();
 		setLocation(location);
 		setActionType(type);
+		this.angle = angle;
 	}
 	
 	
 	private SourceLocation location;
-
-	
-	private void setLocation(SourceLocation location) {
-		this.location = location;
-	}
-	
 	private ActionType actionType;
 	
 	
-	protected void setActionType(ActionType actionType) {
-		this.actionType = actionType;
-	}
-	
-	
-	public ActionType getActionType() {
-		return this.actionType;
-	}
-
 	@Override
 	public SourceLocation getLocation() {
 		return this.location;
 	}
 
+	public ActionType getActionType() {
+		return this.actionType;
+	}
+
 	@Override
 	public int getSize() {
 		return 1;
+	}
+
+
+	private void setLocation(SourceLocation location) {
+		this.location = location;
+	}
+
+	protected void setActionType(ActionType actionType) {
+		this.actionType = actionType;
 	}
 
 
@@ -94,11 +91,12 @@ public class ActionStatement implements MyStatement {
 	}
 	
 	
+	private double angle;
 
 	@Override
-	public void execute() throws TimeoutException {
+	public void execute() throws IllegalStateException {
 		if (getProgram().getTime() < 0.2)
-			throw new TimeoutException(); // FIXME
+			throw new IllegalStateException();
 		switch (getActionType()) {
 			case SHOOT:
 				getProgram().getOwner().fireBullet();
@@ -108,7 +106,7 @@ public class ActionStatement implements MyStatement {
 			case THRUSTON:
 				getProgram().getOwner().thrustOn();
 			case TURN:
-				
+				getProgram().getOwner().turn(angle);
 		}
 		getProgram().setTime(getProgram().getTime() - 0.2);
 		getProgram().flagLine(getLocation());

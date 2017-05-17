@@ -1,7 +1,5 @@
 package asteroids.model.programs;
 
-import java.util.concurrent.TimeoutException;
-
 import asteroids.model.Program;
 import asteroids.part3.programs.SourceLocation;
 
@@ -34,5 +32,5 @@ public interface MyStatement {
 	public int getSize();
 	public void setProgram(Program program);
 	public void setSuperStatement(MyStatement statement);
-	public void execute() throws TimeoutException;
+	public void execute() throws IllegalStateException, IllegalArgumentException;
 }

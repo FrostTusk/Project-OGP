@@ -5,9 +5,9 @@ import asteroids.model.programs.MyExpression;
 import asteroids.model.programs.MyStatement;
 import asteroids.part3.programs.SourceLocation;
 
-public class AssignmentStatement implements MyStatement {
+public class AssignmentStatement <T> implements MyStatement {
 
-	public AssignmentStatement(String variableName, MyExpression<Double> value, SourceLocation location) {
+	public AssignmentStatement(String variableName, MyExpression<T> value, SourceLocation location) {
 		setLocation(location);
 		setVariableName(variableName);
 		setValue(value);
@@ -15,7 +15,7 @@ public class AssignmentStatement implements MyStatement {
 	
 	
 	private String variableName;
-	private MyExpression<Double> value;
+	private MyExpression<T> value;
 	private SourceLocation location;
 	
 	
@@ -23,8 +23,8 @@ public class AssignmentStatement implements MyStatement {
 		return this.variableName;
 	}
 	
-	public MyExpression<Double> getValue() {
-		return this.value;
+	public T getValue() {
+		return this.value.evaluate();
 	}
 
 	@Override
@@ -42,7 +42,7 @@ public class AssignmentStatement implements MyStatement {
 		this.variableName = variableName;
 	}
 	
-	private void setValue(MyExpression<Double> value) {
+	private void setValue(MyExpression<T> value) {
 		this.value = value;
 	}
 

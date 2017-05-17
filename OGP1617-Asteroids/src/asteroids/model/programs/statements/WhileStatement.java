@@ -1,7 +1,5 @@
 package asteroids.model.programs.statements;
 
-import java.util.concurrent.TimeoutException;
-
 import asteroids.model.Program;
 import asteroids.model.programs.MyExpression;
 import asteroids.model.programs.MyStatement;
@@ -82,7 +80,7 @@ public class WhileStatement implements MyStatement {
 	
 	
 	@Override
-	public void execute() throws TimeoutException {
+	public void execute() throws IllegalStateException {
 		if (getProgram().getFlag(getLocation())) return;
 		while (getCondition())
 			body.execute();

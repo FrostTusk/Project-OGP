@@ -100,14 +100,14 @@ public class ProgramExecuter {
         	case ACTION: 
         		getNext = runActionStatement(statement);
         	case ASSIGNMENT: 
-        		getNext = runAssignment((AssignmentStatement) statement);;
+        		getNext = runAssignment((AssignmentStatement<?>) statement);;
         	case BREAK: 
         		getNext = runBreak((BreakStatement) statement);
         	case IF: break;
         	case PRINT: 
-        		getNext = runPrint((PrintStatement) statement);
+        		getNext = runPrint((PrintStatement<?>) statement);
         	case RETURN: 
-        		getNext = runReturn((ReturnStatement) statement, stack);
+        		getNext = runReturn((ReturnStatement<?>) statement, stack);
         	case SEQUENCE: 
         		getNext = runSequence((SequenceStatement) statement, enclosingStatement, enclosingFunction, stack);
         	case WHILE: break;
@@ -122,13 +122,13 @@ public class ProgramExecuter {
 	}
 	
 	
-	private boolean runAssignment(AssignmentStatement statement) throws IllegalArgumentException {
-		String variable = statement.getVariableName();
+	private boolean runAssignment(AssignmentStatement<?> statement) throws IllegalArgumentException {
+//		String variable = statement.getVariableName();
 //		if ( containsGlobalVariable(variable) && 
 //				(!variableCanHaveAsValue(getGlobalVariableExpression(variable), statement.getValue())) )
 //			throw new IllegalArgumentException();
 		
-		addGlobalVariable(variable, statement.getValue());
+//		addGlobalVariable(variable, statement.getValue());
 		return true;
 	}
 	
@@ -138,13 +138,13 @@ public class ProgramExecuter {
 	}
 	
 	
-	private boolean runPrint(PrintStatement statement) {
+	private boolean runPrint(PrintStatement<?> statement) {
 		System.out.println(statement.getValue().toString());
 		return true;
 	}
 	
 	
-	private boolean runReturn(ReturnStatement statement, Stack<Object> stack) {
+	private boolean runReturn(ReturnStatement<?> statement, Stack<Object> stack) {
 		stack.add(statement.getValue());
 		return false;
 	}

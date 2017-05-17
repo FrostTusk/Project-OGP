@@ -1,7 +1,5 @@
 package asteroids.model.programs.statements;
 
-import java.util.concurrent.TimeoutException;
-
 import asteroids.model.Program;
 import asteroids.model.programs.MyExpression;
 import asteroids.model.programs.MyStatement;
@@ -18,16 +16,14 @@ public class IfStatement implements MyStatement {
 	}
 	
 	
-	@SuppressWarnings("unused")
-	private MyExpression<Boolean> condition; // FIXME
+	private MyExpression<Boolean> condition;
 	private MyStatement ifBody;
 	private MyStatement elseBody;
 	private SourceLocation location;
 	
 	
 	public Boolean getCondition() {
-//		return this.condition;	// FIXME
-		return false;
+		return condition.evaluate();
 	}
 	
 	public MyStatement getIfBody() {
@@ -45,7 +41,7 @@ public class IfStatement implements MyStatement {
 	
 	@Override
 	public int getSize() {
-		return 0;
+		return ifBody.getSize() + elseBody.getSize() + 1;
 	}
 	
 
@@ -95,9 +91,10 @@ public class IfStatement implements MyStatement {
 	
 
 	@Override
-	public void execute() throws TimeoutException {
+	public void execute() throws IllegalStateException {
+		if (getProgram().getFlag(getLocation())) return;
 		if (getCondition()) {
-			getIfBody().execute();
+			getIfBody().execute();	// FIXME how to flag else body.
 		}
 		else if (getElseBody() != null) {
 			getElseBody().execute();

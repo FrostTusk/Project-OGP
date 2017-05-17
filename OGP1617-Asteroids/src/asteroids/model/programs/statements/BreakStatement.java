@@ -1,6 +1,5 @@
 package asteroids.model.programs.statements;
 
-import asteroids.junk.TestException;
 import asteroids.model.Program;
 import asteroids.model.programs.MyStatement;
 import asteroids.part3.programs.SourceLocation;
@@ -20,7 +19,12 @@ public class BreakStatement implements MyStatement {
 		return this.location;
 	}
 	
-	
+	@Override
+	public int getSize() {
+		return 1;
+	}
+
+
 	private void setLocation(SourceLocation location) {
 		this.location = location;
 	}
@@ -58,15 +62,8 @@ public class BreakStatement implements MyStatement {
 	@Override
 	public void execute() {
 		if (getSuperStatement().getClass() != WhileStatement.class)
-			throw new TestException(); // FIXME: Better exception
+			throw new IllegalArgumentException(); // FIXME: Better exception
 		// FIXME: InnerClass.
-	}
-
-
-	@Override
-	public int getSize() {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 	
 }

@@ -5,19 +5,19 @@ import asteroids.model.programs.MyExpression;
 import asteroids.model.programs.MyStatement;
 import asteroids.part3.programs.SourceLocation;
 
-public class PrintStatement implements MyStatement {
+public class PrintStatement <T> implements MyStatement {
 
-	public PrintStatement(MyExpression<?> value, SourceLocation location) {
+	public PrintStatement(MyExpression<T> value, SourceLocation location) {
 		setLocation(location);
 		setValue(value);
 	}
 	
 	
-	private MyExpression<?> value;
+	private MyExpression<T> value;
 	private SourceLocation location;
 	
 
-	public MyExpression<?> getValue() {
+	public MyExpression<T> getValue() {
 		return this.value;
 	}
 	
@@ -26,8 +26,13 @@ public class PrintStatement implements MyStatement {
 		return this.location;
 	}
 	
+	@Override
+	public int getSize() {
+		return 1;
+	}
 	
-	private void setValue(MyExpression<?> value) {
+	
+	private void setValue(MyExpression<T> value) {
 		this.value = value;
 	}
 
@@ -66,14 +71,8 @@ public class PrintStatement implements MyStatement {
 
 	@Override
 	public void execute() {
-		System.out.println(value);
+		System.out.println(value.evaluate());
 		getProgram().flagLine(getLocation());
-	}
-
-	@Override
-	public int getSize() {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 }
