@@ -49,6 +49,7 @@ public class ProgramExecuter {
 
 	
 	
+	@SuppressWarnings("rawtypes")
 	private Map<String, MyExpression> globalVariableMap;
 	
 	

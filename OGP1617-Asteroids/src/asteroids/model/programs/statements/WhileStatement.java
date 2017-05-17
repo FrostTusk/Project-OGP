@@ -16,15 +16,13 @@ public class WhileStatement implements MyStatement {
 	}
 	
 
-	@SuppressWarnings("unused") // FIXME
 	private MyExpression<Boolean> condition;
 	private MyStatement body;
 	private SourceLocation location;
 	
 	
 	public Boolean getCondition() {
-//		return this.condition;
-		return false;	// FIXME: obviously wrong.
+		return condition.evaluate();
 	}
 	
 	public MyStatement getBody() {
