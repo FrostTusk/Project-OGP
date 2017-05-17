@@ -1,5 +1,7 @@
 package asteroids.model.programs;
 
+import java.util.concurrent.TimeoutException;
+
 import asteroids.model.Program;
 import asteroids.part3.programs.SourceLocation;
 
@@ -27,10 +29,10 @@ public interface MyStatement {
 //	}
 	
 	public SourceLocation getLocation();
-	public void execute();
 	public Program getProgram();
 	public MyStatement getSuperStatement();
+	public int getSize();
 	public void setProgram(Program program);
 	public void setSuperStatement(MyStatement statement);
-	
+	public void execute() throws TimeoutException;
 }

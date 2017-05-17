@@ -61,5 +61,12 @@ public class BreakStatement implements MyStatement {
 			throw new TestException(); // FIXME: Better exception
 		// FIXME: InnerClass.
 	}
+
+
+	@Override
+	public int getSize() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 }

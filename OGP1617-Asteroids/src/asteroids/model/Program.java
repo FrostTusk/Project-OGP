@@ -10,18 +10,18 @@ import asteroids.part3.programs.SourceLocation;
 public class Program {
 	
 	public Program(List<MyFunction> functions, MyStatement main) {
-		main.setProgram(this);
 		setFunctions(functions);
 		setMain(main);
+		main.setProgram(this);
+		
+		setTime(0);
+		lineTracker = new boolean[main.getSize()];
 	}
 	
 	
 	private List<MyFunction> functions;
 	private MyStatement main;
-	private boolean[] lineTracker;
-	private Map<String, Object> localVars;
-	private Map<String, Object> globalVars;
-	
+
 	
 	public List<MyFunction> getFunctions() {
 		return this.functions;
@@ -42,6 +42,31 @@ public class Program {
 	
 	
 	
+	private double time;
+	private Ship owner;
+	
+	public double getTime() {
+		return time;
+	}
+	
+	public Ship getOwner() {
+		return this.owner;
+	}
+	
+	
+	public void setTime(double time) {
+		this.time = time;
+	}
+	
+	public void setOwner(Ship owner) {
+		this.owner = owner;
+	}
+	
+	private boolean[] lineTracker;
+	private Map<String, Object> localVars;
+	private Map<String, Object> globalVars;
+	
+	
 	public Object getLocalVar(String name) {
 		try {
 			return localVars.get(name);
@@ -60,6 +85,10 @@ public class Program {
 		}
 	}
 	
+	public boolean getFlag(SourceLocation location) {
+		return lineTracker[location.getLine()];
+	}
+	
 	
 	public void addLocalVar(String name, Object variable) {
 		localVars.put(name, variable);
@@ -69,18 +98,14 @@ public class Program {
 		globalVars.put(name, variable);
 	}
 	
-	
 	public void flagLine(SourceLocation location) {
 		lineTracker[location.getLine()] = true;
 	}
+
 	
 	
-	private double time;
-	public double getTime() {
-		return time;
+	public void execute(double time) {
+		setTime(getTime() + time);
 	}
 	
-	public void setTime(double time) {
-		this.time = time;
-	}
 }

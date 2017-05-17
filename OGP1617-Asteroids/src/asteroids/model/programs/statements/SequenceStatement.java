@@ -1,6 +1,7 @@
 package asteroids.model.programs.statements;
 
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 import asteroids.model.Program;
 import asteroids.model.programs.MyStatement;
@@ -24,6 +25,11 @@ public class SequenceStatement implements MyStatement {
 	@Override
 	public SourceLocation getLocation() {
 		return this.location;
+	}
+	
+	@Override
+	public int getSize() {
+		return statements.size();
 	}
 	
 	
@@ -67,7 +73,8 @@ public class SequenceStatement implements MyStatement {
 	
 
 	@Override
-	public void execute() {
+	public void execute() throws TimeoutException {
+		if (getProgram().getFlag(getLocation())) return;
 		for (MyStatement subStatement: getStatements())
 			subStatement.execute();
 		getProgram().flagLine(getLocation());

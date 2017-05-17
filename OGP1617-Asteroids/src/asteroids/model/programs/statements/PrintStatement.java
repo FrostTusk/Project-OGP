@@ -70,4 +70,10 @@ public class PrintStatement implements MyStatement {
 		getProgram().flagLine(getLocation());
 	}
 
+	@Override
+	public int getSize() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

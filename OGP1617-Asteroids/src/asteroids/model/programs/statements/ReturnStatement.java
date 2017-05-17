@@ -51,6 +51,11 @@ public class ReturnStatement implements MyStatement{
 		return this.superStatement;
 	}
 
+	@Override
+	public int getSize() {
+		return 1;
+	}
+	
 	
 	@Override
 	public void setProgram(Program program) {

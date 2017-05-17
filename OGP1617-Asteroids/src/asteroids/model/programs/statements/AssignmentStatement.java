@@ -32,6 +32,11 @@ public class AssignmentStatement implements MyStatement {
 		return this.location;
 	}
 	
+	@Override
+	public int getSize() {
+		return 1;
+	}
+	
 	
 	private void setVariableName(String variableName) {
 		this.variableName = variableName;
@@ -76,11 +81,12 @@ public class AssignmentStatement implements MyStatement {
 	
 	@Override
 	public void execute() {
+		if (getProgram().getFlag(getLocation())) return;
 		if (getSuperStatement() == null)
 			getProgram().addGlobalVar(getVariableName(), getValue());
 		else
 			getProgram().addLocalVar(getVariableName(), getValue());
 		getProgram().flagLine(getLocation());
 	}
-	
+
 }

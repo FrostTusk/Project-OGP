@@ -1,5 +1,7 @@
 package asteroids.model.programs.statements;
 
+import java.util.concurrent.TimeoutException;
+
 import asteroids.model.Program;
 import asteroids.model.programs.MyExpression;
 import asteroids.model.programs.MyStatement;
@@ -34,7 +36,12 @@ public class WhileStatement implements MyStatement {
 		return this.location;
 	}
 	
+	@Override
+	public int getSize() {
+		return body.getSize() + 1;
+	}
 	
+
 	private void setCondition(MyExpression condition) {
 		this.condition = condition;
 	}
@@ -77,11 +84,11 @@ public class WhileStatement implements MyStatement {
 	
 	
 	@Override
-	public void execute() {
-		while (getCondition()) {
+	public void execute() throws TimeoutException {
+		if (getProgram().getFlag(getLocation())) return;
+		while (getCondition())
 			body.execute();
-		}
-		// Flag all the lines.
+		getProgram().flagLine(getLocation());
 	}
 	
 }
