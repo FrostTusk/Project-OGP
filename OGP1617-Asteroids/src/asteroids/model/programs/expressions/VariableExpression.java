@@ -36,7 +36,6 @@ public class VariableExpression implements MyExpression<Object> {
 	
 	@Override
 	public MyExpression<?> evaluate() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	

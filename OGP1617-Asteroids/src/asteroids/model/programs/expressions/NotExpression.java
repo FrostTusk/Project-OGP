@@ -36,7 +36,6 @@ public class NotExpression implements MyExpression<Boolean> {
 
 	@Override
 	public Boolean evaluate() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	

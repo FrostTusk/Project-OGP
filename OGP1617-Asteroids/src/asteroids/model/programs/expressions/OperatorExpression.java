@@ -11,6 +11,7 @@ public class OperatorExpression implements MyExpression<Object> {
 		setExpression1(expression1);
 		setExpression2(expression2);
 		setOperatorType(operatorType);
+		if (expression1.getClass() != expression2.getClass()) throw new RuntimeException();
 	}
 	
 	
@@ -57,7 +58,6 @@ public class OperatorExpression implements MyExpression<Object> {
 
 	@Override
 	public MyExpression<Boolean> evaluate() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	

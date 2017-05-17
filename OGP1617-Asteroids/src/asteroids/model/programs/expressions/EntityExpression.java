@@ -38,7 +38,6 @@ public class EntityExpression implements MyExpression<Entity> {
 
 	@Override
 	public Entity evaluate() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
