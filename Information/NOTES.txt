@@ -1,5 +1,4 @@
 1. Questions:
-	1. Salamander Bug. <= Not neccessary.
 	2. Interfaces. <= Is our idea right in myExpressions.
 	3. Generic Classes, where?
 	4. How can lamda expressions be used with entities?
