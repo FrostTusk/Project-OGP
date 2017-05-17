@@ -1,7 +1,8 @@
 package asteroids.model.programs.statements.action;
 
 import asteroids.helper.program.ActionType;
-import asteroids.model.programs.MyExpression;
+import asteroids.model.Program;
+import asteroids.model.programs.MyStatement;
 import asteroids.model.programs.statements.ActionStatement;
 import asteroids.part3.programs.SourceLocation;
 
@@ -28,9 +29,36 @@ public class FireStatement extends ActionStatement {
 	
 	
 	@Override
-	public MyExpression execute() {
+	public void execute() {
+		// TODO Auto-generated method stub
+	}
+
+
+	@Override
+	public Program getProgram() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+
+	@Override
+	public void setProgram(Program program) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public MyStatement getSuperStatement() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public void setSuperStatement(MyStatement statement) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

@@ -1,5 +1,6 @@
 package asteroids.model.programs;
 
+import asteroids.model.Program;
 import asteroids.part3.programs.SourceLocation;
 
 public interface MyStatement {
@@ -26,6 +27,10 @@ public interface MyStatement {
 //	}
 	
 	public SourceLocation getLocation();
-	public MyExpression execute();
+	public void execute();
+	public Program getProgram();
+	public void setProgram(Program program);
+	public MyStatement getSuperStatement();
+	public void setSuperStatement(MyStatement statement);
 	
 }
