@@ -26,16 +26,10 @@ public class BreakStatement implements MyStatement {
 	}
 	
 	
-	@Override
-	public void execute() {
-		if (getSuperStatement().getClass() != WhileStatement.class)
-			throw new TestException(); // FIXME: Better exception
-		// FIXME: InnerClass.
-	}
-
-
+	
 	private Program program;
 	private MyStatement superStatement;
+	
 	
 	@Override
 	public Program getProgram() {
@@ -43,18 +37,29 @@ public class BreakStatement implements MyStatement {
 	}
 
 	@Override
+	public MyStatement getSuperStatement() {
+		return this.superStatement;
+	}
+	
+
+	@Override
 	public void setProgram(Program program) {
 		this.program = program;
 	}
 
-	@Override
-	public MyStatement getSuperStatement() {
-		return this.superStatement;
-	}
 
 	@Override
 	public void setSuperStatement(MyStatement statement) {
 		this.superStatement = statement;
+	}
+
+	
+
+	@Override
+	public void execute() {
+		if (getSuperStatement().getClass() != WhileStatement.class)
+			throw new TestException(); // FIXME: Better exception
+		// FIXME: InnerClass.
 	}
 	
 }

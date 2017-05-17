@@ -35,15 +35,11 @@ public class ReturnStatement implements MyStatement{
 		this.location = location;
 	}
 
-
-	@Override
-	public void execute() {
-		// TODO Auto-generated method stub
-	}
 	
 
 	private Program program;
 	private MyStatement superStatement;
+	
 	
 	@Override
 	public Program getProgram() {
@@ -51,18 +47,26 @@ public class ReturnStatement implements MyStatement{
 	}
 
 	@Override
+	public MyStatement getSuperStatement() {
+		return this.superStatement;
+	}
+
+	
+	@Override
 	public void setProgram(Program program) {
 		this.program = program;
 	}
 
 	@Override
-	public MyStatement getSuperStatement() {
-		return this.superStatement;
-	}
-
-	@Override
 	public void setSuperStatement(MyStatement statement) {
 		this.superStatement = statement;
+	}
+
+	
+	
+	@Override
+	public void execute() {
+		// TODO Auto-generated method stub
 	}
 	
 }

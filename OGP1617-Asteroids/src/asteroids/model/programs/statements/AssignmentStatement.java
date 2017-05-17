@@ -46,24 +46,21 @@ public class AssignmentStatement implements MyStatement {
 	}
 
 	
-	@Override
-	public void execute() {
-		if (getSuperStatement() == null)
-			getProgram().addGlobalVar(getVariableName(), getValue());
-		else
-			getProgram().addLocalVar(getVariableName(), getValue());
-		getProgram().flagLine(getLocation());
-	}
-
-	
 	
 	private Program program;
 	private MyStatement superStatement;
-	
+
+
 	@Override
 	public Program getProgram() {
 		return this.program;
 	}
+
+	@Override
+	public MyStatement getSuperStatement() {
+		return this.superStatement;
+	}
+	
 
 	@Override
 	public void setProgram(Program program) {
@@ -71,13 +68,19 @@ public class AssignmentStatement implements MyStatement {
 	}
 
 	@Override
-	public MyStatement getSuperStatement() {
-		return this.superStatement;
-	}
-
-	@Override
 	public void setSuperStatement(MyStatement statement) {
 		this.superStatement = statement;
+	}
+	
+	
+	
+	@Override
+	public void execute() {
+		if (getSuperStatement() == null)
+			getProgram().addGlobalVar(getVariableName(), getValue());
+		else
+			getProgram().addLocalVar(getVariableName(), getValue());
+		getProgram().flagLine(getLocation());
 	}
 	
 }

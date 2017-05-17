@@ -59,19 +59,10 @@ public class IfStatement implements MyStatement {
 	}
 
 
-	@Override
-	public void execute() {
-		if (getCondition())
-			getIfBody().execute();
-		else if (getElseBody() != null)
-			getElseBody().execute();
-		getProgram().flagLine(getLocation());
-	}
-
-	
 	
 	private Program program;
 	private MyStatement superStatement;
+	
 	
 	@Override
 	public Program getProgram() {
@@ -79,18 +70,30 @@ public class IfStatement implements MyStatement {
 	}
 
 	@Override
+	public MyStatement getSuperStatement() {
+		return this.superStatement;
+	}
+	
+
+	@Override
 	public void setProgram(Program program) {
 		this.program = program;
 	}
 
 	@Override
-	public MyStatement getSuperStatement() {
-		return this.superStatement;
-	}
-
-	@Override
 	public void setSuperStatement(MyStatement statement) {
 		this.superStatement = statement;
+	}
+	
+	
+
+	@Override
+	public void execute() {
+		if (getCondition())
+			getIfBody().execute();
+		else if (getElseBody() != null)
+			getElseBody().execute();
+		getProgram().flagLine(getLocation());
 	}
 	
 }

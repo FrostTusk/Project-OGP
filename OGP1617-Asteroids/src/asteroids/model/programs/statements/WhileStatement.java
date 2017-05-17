@@ -47,18 +47,11 @@ public class WhileStatement implements MyStatement {
 		this.location = location;
 	}
 	
-
-	@Override
-	public void execute() {
-		while (getCondition()) {
-			body.execute();
-		}
-		// Flag all the lines.
-	}
-
 	
+
 	private Program program;
 	private MyStatement superStatement;
+	
 	
 	@Override
 	public Program getProgram() {
@@ -66,19 +59,29 @@ public class WhileStatement implements MyStatement {
 	}
 
 	@Override
-	public void setProgram(Program program) {
-		this.program = program;
-	}
-
-	@Override
 	public MyStatement getSuperStatement() {
 		return this.superStatement;
+	}
+
+	
+	@Override
+	public void setProgram(Program program) {
+		this.program = program;
 	}
 
 	@Override
 	public void setSuperStatement(MyStatement statement) {
 		this.superStatement = statement;
 	}
+
 	
+	
+	@Override
+	public void execute() {
+		while (getCondition()) {
+			body.execute();
+		}
+		// Flag all the lines.
+	}
 	
 }

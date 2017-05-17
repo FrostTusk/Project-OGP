@@ -35,17 +35,11 @@ public class SequenceStatement implements MyStatement {
 		this.location = location;
 	}
 
-
-	@Override
-	public void execute() {
-		for (MyStatement subStatement: getStatements())
-			subStatement.execute();
-		getProgram().flagLine(getLocation());
-	}
 	
 
 	private Program program;
 	private MyStatement superStatement;
+	
 	
 	@Override
 	public Program getProgram() {
@@ -53,13 +47,14 @@ public class SequenceStatement implements MyStatement {
 	}
 
 	@Override
-	public void setProgram(Program program) {
-		this.program = program;
-	}
-
-	@Override
 	public MyStatement getSuperStatement() {
 		return this.superStatement;
+	}
+	
+
+	@Override
+	public void setProgram(Program program) {
+		this.program = program;
 	}
 
 	@Override
@@ -67,6 +62,15 @@ public class SequenceStatement implements MyStatement {
 		for (MyStatement subStatement: getStatements())
 			subStatement.setSuperStatement(statement);
 		this.superStatement = statement;
+	}
+	
+	
+
+	@Override
+	public void execute() {
+		for (MyStatement subStatement: getStatements())
+			subStatement.execute();
+		getProgram().flagLine(getLocation());
 	}
 	
 }

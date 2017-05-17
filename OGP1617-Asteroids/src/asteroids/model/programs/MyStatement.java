@@ -29,8 +29,8 @@ public interface MyStatement {
 	public SourceLocation getLocation();
 	public void execute();
 	public Program getProgram();
-	public void setProgram(Program program);
 	public MyStatement getSuperStatement();
+	public void setProgram(Program program);
 	public void setSuperStatement(MyStatement statement);
 	
 }
