@@ -18,6 +18,7 @@ public class ActionStatement implements MyStatement {
 	public ActionStatement(ActionType type, MyExpression<Double> angle, SourceLocation location) {
 		if (type != ActionType.TURN)
 			throw new IllegalArgumentException();
+		angle.setStatement(this);
 		setLocation(location);
 		setActionType(type);
 		this.angle = angle.evaluate();
@@ -89,13 +90,20 @@ public class ActionStatement implements MyStatement {
 		switch (getActionType()) {
 			case SHOOT:
 				getProgram().getOwner().fireBullet();
-			case SKIP: /* Do Nothing */ ;
+				break;
+			case SKIP:
+				break;
 			case THRUSTOFF:
 				getProgram().getOwner().thrustOff();
+				break;
 			case THRUSTON:
 				getProgram().getOwner().thrustOn();
+				break;
 			case TURN:
 				getProgram().getOwner().turn(angle);
+				break;
+			default:
+				throw new IllegalArgumentException();
 		}
 		getProgram().setTime(getProgram().getTime() - 0.2);
 		getProgram().flagLine(getLocation());

@@ -8,6 +8,7 @@ import asteroids.part3.programs.SourceLocation;
 public class AssignmentStatement <T> implements MyStatement {
 
 	public AssignmentStatement(String variableName, MyExpression<T> value, SourceLocation location) {
+		value.setStatement(this);
 		setLocation(location);
 		setVariableName(variableName);
 		setValue(value);

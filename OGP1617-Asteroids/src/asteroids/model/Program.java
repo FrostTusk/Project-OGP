@@ -23,8 +23,15 @@ public class Program {
 	private MyStatement main;
 
 	
-	public List<MyFunction> getFunctions() {
+	public List<MyFunction> getAllFunctions() {
 		return this.functions;
+	}
+	
+	public MyFunction getFunction(String name) {
+		for (MyFunction function: getAllFunctions())
+			if (function.getFunctionName().equals(name))
+				return function;
+		throw new IllegalArgumentException();
 	}
 	
 	public MyStatement getMain() {
@@ -62,10 +69,21 @@ public class Program {
 		this.owner = owner;
 	}
 	
+	
+	
 	private boolean[] lineTracker;
+	private List<Object> printTracker;
 	private Map<String, Object> localVars;
 	private Map<String, Object> globalVars;
+
 	
+	public boolean getFlag(SourceLocation location) {
+		return lineTracker[location.getLine()];
+	}
+	
+	public List<Object> getPrintTracker() {
+		return this.printTracker;
+	}
 	
 	public Object getLocalVar(String name) {
 		try {
@@ -85,10 +103,14 @@ public class Program {
 		}
 	}
 	
-	public boolean getFlag(SourceLocation location) {
-		return lineTracker[location.getLine()];
+
+	public void flagLine(SourceLocation location) {
+		lineTracker[location.getLine()] = true;
 	}
 	
+	public void addPrintValue(Object value) {
+		this.printTracker.add(value);
+	}
 	
 	public void addLocalVar(String name, Object variable) {
 		localVars.put(name, variable);
@@ -98,9 +120,7 @@ public class Program {
 		globalVars.put(name, variable);
 	}
 	
-	public void flagLine(SourceLocation location) {
-		lineTracker[location.getLine()] = true;
-	}
+
 
 	
 	

@@ -859,8 +859,9 @@ public class Ship extends Entity {
 		this.program = program;
 	}
 	
-	public void executeProgram(double time) {
+	public List<Object> executeProgram(double time) {
 		program.execute(time);
+		return program.getPrintTracker();
 	}
 	
 	

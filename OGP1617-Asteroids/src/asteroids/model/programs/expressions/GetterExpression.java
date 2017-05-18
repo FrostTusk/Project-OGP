@@ -78,8 +78,9 @@ public class GetterExpression implements MyExpression<Double> {
 			return getExpression().evaluate().getPosition().getPositionX();
 		case GETY:
 			return getExpression().evaluate().getPosition().getPositionY();		
+		default:
+			return null;
 		}
-		return null;
 	}
 
 }

@@ -9,6 +9,7 @@ public class IfStatement implements MyStatement {
 
 	public IfStatement(MyExpression<Boolean> condition, MyStatement ifBody, MyStatement elseBody,
 			SourceLocation location) {
+		condition.setStatement(this);
 		setLocation(location);
 		setCondition(condition);
 		setIfBody(ifBody);

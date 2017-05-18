@@ -1,9 +1,7 @@
 package asteroids.model.programs.expressions;
 
 import java.util.List;
-
-import asteroids.model.programs.MyExpression;
-import asteroids.model.programs.MyStatement;
+import asteroids.model.programs.*;
 import asteroids.part3.programs.SourceLocation;
 
 @SuppressWarnings("rawtypes")
@@ -67,7 +65,7 @@ public class FunctionCallExpression implements MyExpression<Object> {
 	
 	@Override
 	public Object evaluate() {
-		return null;
+		return getStatement().getProgram().getFunction(getFunctionName()).execute(getActualArgs());
 	}
 
 }

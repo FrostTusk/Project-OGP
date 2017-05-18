@@ -1,7 +1,9 @@
 package asteroids.model.programs;
 
+import java.util.List;
 import asteroids.part3.programs.SourceLocation;
 
+@SuppressWarnings("rawtypes")
 public class MyFunction {
 	
 	public MyFunction(String functionName, MyStatement body, SourceLocation location) {
@@ -39,6 +41,12 @@ public class MyFunction {
 	
 	private void setLocation(SourceLocation location) {
 		this.location = location;
+	}
+	
+	
+	
+	public Object execute(List<MyExpression> list) {
+		return null;
 	}
 	
 }
