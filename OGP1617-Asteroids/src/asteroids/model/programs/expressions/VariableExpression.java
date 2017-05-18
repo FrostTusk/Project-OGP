@@ -1,9 +1,10 @@
 package asteroids.model.programs.expressions;
 
 import asteroids.model.programs.MyExpression;
+import asteroids.model.programs.MyStatement;
 import asteroids.part3.programs.SourceLocation;
 
-public class VariableExpression implements MyExpression<Object> {
+public class VariableExpression implements MyExpression<String> {
 	
 	public VariableExpression(String variableName, SourceLocation location) {
 		setLocation(location);
@@ -35,7 +36,14 @@ public class VariableExpression implements MyExpression<Object> {
 
 	
 	@Override
-	public MyExpression<?> evaluate() {
+	public String evaluate() {
+		return getVariableName();
+	}
+
+
+	@Override
+	public MyStatement getStatement() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 	

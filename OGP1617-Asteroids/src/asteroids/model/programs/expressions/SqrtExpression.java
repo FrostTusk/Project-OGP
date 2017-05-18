@@ -1,6 +1,7 @@
 package asteroids.model.programs.expressions;
 
 import asteroids.model.programs.MyExpression;
+import asteroids.model.programs.MyStatement;
 import asteroids.part3.programs.SourceLocation;
 
 public class SqrtExpression implements MyExpression<Double> {
@@ -36,6 +37,12 @@ public class SqrtExpression implements MyExpression<Double> {
 
 	@Override
 	public Double evaluate() {
+		return Math.sqrt(expression.evaluate());
+	}
+
+	@Override
+	public MyStatement getStatement() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 	

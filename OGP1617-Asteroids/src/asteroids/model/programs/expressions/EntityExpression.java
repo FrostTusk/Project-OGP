@@ -3,6 +3,7 @@ package asteroids.model.programs.expressions;
 import asteroids.helper.entity.Entity;
 import asteroids.helper.entity.EntityType;
 import asteroids.model.programs.MyExpression;
+import asteroids.model.programs.MyStatement;
 import asteroids.part3.programs.SourceLocation;
 
 public class EntityExpression implements MyExpression<Entity> {
@@ -38,6 +39,12 @@ public class EntityExpression implements MyExpression<Entity> {
 
 	@Override
 	public Entity evaluate() {
+		return null;
+	}
+
+	@Override
+	public MyStatement getStatement() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 	

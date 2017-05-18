@@ -1,6 +1,7 @@
 package asteroids.model.programs.expressions;
 
 import asteroids.model.programs.MyExpression;
+import asteroids.model.programs.MyStatement;
 import asteroids.part3.programs.SourceLocation;
 
 public class NotExpression implements MyExpression<Boolean> {
@@ -37,6 +38,13 @@ public class NotExpression implements MyExpression<Boolean> {
 	@Override
 	public Boolean evaluate() {
 		return (getExpression().evaluate() == true) ? false:true;
+	}
+
+
+	@Override
+	public MyStatement getStatement() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

@@ -1,6 +1,7 @@
 package asteroids.model.programs.expressions;
 
 import asteroids.model.programs.MyExpression;
+import asteroids.model.programs.MyStatement;
 import asteroids.part3.programs.SourceLocation;
 
 public class ChangeSignExpression implements MyExpression<Double> {
@@ -37,6 +38,12 @@ public class ChangeSignExpression implements MyExpression<Double> {
 	@Override
 	public Double evaluate() {
 		return -1 * getExpression().evaluate();
+	}
+
+	@Override
+	public MyStatement getStatement() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

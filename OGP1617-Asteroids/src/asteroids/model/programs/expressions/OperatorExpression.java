@@ -2,6 +2,7 @@ package asteroids.model.programs.expressions;
 
 import asteroids.helper.program.OperatorType;
 import asteroids.model.programs.MyExpression;
+import asteroids.model.programs.MyStatement;
 import asteroids.part3.programs.SourceLocation;
 
 public class OperatorExpression implements MyExpression<Object> {
@@ -59,11 +60,24 @@ public class OperatorExpression implements MyExpression<Object> {
 	@Override
 	public Object evaluate() {
 		switch (getOperatorType()) {
-		default:
+		case ADDITION:
 			break;
-			
+		case EQUALITY:
+			break;
+		case LESSTHAN:
+			break;
+		case MULTIPLICATION:
+			break;
+		default:
+			break;			
 		}
 		return true;
+	}
+
+	@Override
+	public MyStatement getStatement() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

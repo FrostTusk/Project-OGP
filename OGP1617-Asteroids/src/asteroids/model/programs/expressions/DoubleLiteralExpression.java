@@ -1,6 +1,7 @@
 package asteroids.model.programs.expressions;
 
 import asteroids.model.programs.MyExpression;
+import asteroids.model.programs.MyStatement;
 import asteroids.part3.programs.SourceLocation;
 
 public class DoubleLiteralExpression implements MyExpression<Double> {
@@ -37,6 +38,12 @@ public class DoubleLiteralExpression implements MyExpression<Double> {
 	@Override
 	public Double evaluate() {
 		return getValue();
+	}
+
+	@Override
+	public MyStatement getStatement() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

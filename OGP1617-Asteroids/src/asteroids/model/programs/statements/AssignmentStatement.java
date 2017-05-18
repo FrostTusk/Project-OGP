@@ -82,10 +82,18 @@ public class AssignmentStatement <T> implements MyStatement {
 	@Override
 	public void execute() {
 		if (getProgram().getFlag(getLocation())) return;
+		Object value = getValue();
+		if (value.getClass().toString() == String.class.toString()) {
+			value = getProgram().getLocalVar((String) getValue());
+			if (value == null)
+				value = getProgram().getGlobalVar((String) getValue());
+			if (value == null)
+				throw new IllegalArgumentException();
+		}
 		if (getSuperStatement() == null)
-			getProgram().addGlobalVar(getVariableName(), getValue());
+			getProgram().addGlobalVar(getVariableName(), value);
 		else
-			getProgram().addLocalVar(getVariableName(), getValue());
+			getProgram().addLocalVar(getVariableName(), value);
 		getProgram().flagLine(getLocation());
 	}
 
