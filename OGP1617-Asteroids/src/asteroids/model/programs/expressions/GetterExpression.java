@@ -7,12 +7,6 @@ import asteroids.model.programs.MyStatement;
 import asteroids.part3.programs.SourceLocation;
 
 public class GetterExpression implements MyExpression<Double> {
-
-	public GetterExpression(GetterType getterType, SourceLocation location) {
-		setLocation(location);
-		setExpression(null);
-		setGetterType(getterType);
-	}
 	
 	public GetterExpression(MyExpression<Entity> expression, GetterType getterType, SourceLocation location) {
 		setLocation(location);

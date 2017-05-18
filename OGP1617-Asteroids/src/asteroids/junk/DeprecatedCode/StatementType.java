@@ -1,4 +1,4 @@
-package asteroids.helper.program;
+package asteroids.junk.DeprecatedCode;
 
 public enum StatementType {
 	ASSIGNMENT,

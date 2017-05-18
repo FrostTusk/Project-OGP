@@ -44,6 +44,7 @@ public class AssignmentStatement <T> implements MyStatement {
 	
 	private void setValue(MyExpression<T> value) {
 		this.value = value;
+		value.setStatement(this);
 	}
 
 	private void setLocation(SourceLocation location) {

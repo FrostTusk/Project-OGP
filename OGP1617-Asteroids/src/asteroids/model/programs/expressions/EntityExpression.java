@@ -1,20 +1,12 @@
 package asteroids.model.programs.expressions;
 
 import asteroids.helper.entity.Entity;
-import asteroids.model.Ship;
-import asteroids.model.programs.MyExpression;
-import asteroids.model.programs.MyStatement;
+import asteroids.model.programs.*;
 import asteroids.part3.programs.SourceLocation;
 
-public class EntityExpression implements MyExpression<Entity> {
+public abstract class EntityExpression implements MyExpression<Entity> {
 	
-	public EntityExpression(SourceLocation location, Entity specific) {
-		setLocation(location);
-		
-	}
-	
-	
-	public EntityExpression(Class<? extends Entity> entityType, SourceLocation location) {
+	public EntityExpression(SourceLocation location) {
 		setLocation(location);
 	}
 	
@@ -33,7 +25,9 @@ public class EntityExpression implements MyExpression<Entity> {
 	}
 	
 	
-	protected void setEntity(Entity entity) {
+	public abstract void setEntity();
+	
+	public void setEntity(Entity entity) {
 		this.entity = entity;
 	}
 
@@ -54,25 +48,13 @@ public class EntityExpression implements MyExpression<Entity> {
 	
 	public void setStatement(MyStatement statement) {
 		this.statement = statement;
-	}
+		setEntity();
+	}	
 	
 	
-
 	@Override
 	public Entity evaluate() {
-		return null;
+		return getEntity();
 	}
-	
-	
-	
-	public void setEntity(Class<? extends Entity> entityType) {
-		this.entity = getClosestEntity(entityType);
-	}
-	
-	private Entity getClosestEntity(Class<? extends Entity> entityType) {
-		getStatement().getProgram().getOwner().getWorld().getAllEntitiesSpecific(Ship.class);
-		return null;
-	}
-	
 	
 }

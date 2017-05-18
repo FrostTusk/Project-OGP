@@ -2,38 +2,13 @@ package asteroids.model.programs;
 
 import java.util.List;
 
-import asteroids.helper.entity.Entity;
-import asteroids.helper.entity.EntityType;
-import asteroids.helper.entity.MinorPlanet;
-import asteroids.helper.program.ActionType;
-import asteroids.helper.program.GetterType;
-import asteroids.helper.program.OperatorType;
-import asteroids.model.Asteroid;
-import asteroids.model.Bullet;
-import asteroids.model.Planetoid;
-import asteroids.model.Program;
-import asteroids.model.Ship;
-import asteroids.model.programs.expressions.ChangeSignExpression;
-import asteroids.model.programs.expressions.DoubleLiteralExpression;
-import asteroids.model.programs.expressions.EntityExpression;
-import asteroids.model.programs.expressions.FunctionCallExpression;
-import asteroids.model.programs.expressions.GetterExpression;
-import asteroids.model.programs.expressions.NotExpression;
-import asteroids.model.programs.expressions.OperatorExpression;
-import asteroids.model.programs.expressions.ParameterExpression;
-import asteroids.model.programs.expressions.SqrtExpression;
-import asteroids.model.programs.expressions.VariableExpression;
-import asteroids.model.programs.statements.ActionStatement;
-import asteroids.model.programs.statements.AssignmentStatement;
-import asteroids.model.programs.statements.BreakStatement;
-import asteroids.model.programs.statements.IfStatement;
-import asteroids.model.programs.statements.PrintStatement;
-import asteroids.model.programs.statements.ReturnStatement;
-import asteroids.model.programs.statements.SequenceStatement;
-import asteroids.model.programs.statements.WhileStatement;
-import asteroids.model.programs.statements.action.TurnStatement;
-import asteroids.part3.programs.IProgramFactory;
-import asteroids.part3.programs.SourceLocation;
+import asteroids.helper.entity.*;
+import asteroids.helper.program.*;
+import asteroids.model.*;
+import asteroids.model.programs.expressions.*;
+import asteroids.model.programs.expressions.entity.*;
+import asteroids.model.programs.statements.*;
+import asteroids.part3.programs.*;
 
 @SuppressWarnings("all") // FIXME
 public class ProgramFactory implements IProgramFactory<MyExpression, MyStatement, MyFunction, Program> {
@@ -118,42 +93,42 @@ public class ProgramFactory implements IProgramFactory<MyExpression, MyStatement
 
 	@Override
 	public MyExpression createNullExpression(SourceLocation location) {
-		return new EntityExpression(location, null);
+		return new NullEntityExpression(location);
 	}
 
 	@Override
 	public MyExpression createSelfExpression(SourceLocation location) {
-		return new EntityExpression(location, null); // FIXME
+		return new SelfEntityExpression(location);
 	}
 
 	@Override
 	public MyExpression createShipExpression(SourceLocation location) {
-		return new EntityExpression(Ship.class, location);
+		return new SpecificEntityExpression(Ship.class, location);
 	}
 
 	@Override
 	public MyExpression createAsteroidExpression(SourceLocation location) {
-		return new EntityExpression(Asteroid.class, location);
+		return new SpecificEntityExpression(Asteroid.class, location);
 	}
 
 	@Override
 	public MyExpression createPlanetoidExpression(SourceLocation location) {
-		return new EntityExpression(Planetoid.class, location);
+		return new SpecificEntityExpression(Planetoid.class, location);
 	}
 
 	@Override
 	public MyExpression createBulletExpression(SourceLocation location) {
-		return new EntityExpression(Bullet.class, location);
+		return new SpecificEntityExpression(Bullet.class, location);
 	}
 
 	@Override
 	public MyExpression createPlanetExpression(SourceLocation location) {
-		return new EntityExpression(MinorPlanet.class, location);
+		return new SpecificEntityExpression(MinorPlanet.class, location);
 	}
 
 	@Override
 	public MyExpression createAnyExpression(SourceLocation location) {
-		return new EntityExpression(Entity.class, location);
+		return new SpecificEntityExpression(Entity.class, location);
 	}
 
 	@Override
@@ -208,7 +183,7 @@ public class ProgramFactory implements IProgramFactory<MyExpression, MyStatement
 
 	@Override
 	public MyExpression createGetDirectionExpression(SourceLocation location) {
-		return new GetterExpression(GetterType.GETDIR, location);
+		return new GetterExpression(null, GetterType.GETDIR, location);
 	}
 
 	@Override

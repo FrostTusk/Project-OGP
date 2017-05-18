@@ -1,4 +1,4 @@
-package asteroids.model.programs.statements.action;
+package asteroids.junk.DeprecatedCode;
 
 import asteroids.helper.program.ActionType;
 import asteroids.model.Program;
@@ -6,10 +6,10 @@ import asteroids.model.programs.MyStatement;
 import asteroids.model.programs.statements.ActionStatement;
 import asteroids.part3.programs.SourceLocation;
 
-public class ThrustOffStatement extends ActionStatement {
+public class SkipStatement extends ActionStatement {
 
-	public ThrustOffStatement(SourceLocation location) {
-		super(location, ActionType.SHOOT);
+	public SkipStatement(SourceLocation location) {
+		super(location, ActionType.THRUSTON);
 //		setLocation(location);
 		setActionType(ActionType.THRUSTON);
 	}
@@ -23,6 +23,7 @@ public class ThrustOffStatement extends ActionStatement {
 		return this.location;
 	}
 
+	
 	@SuppressWarnings("unused")
 	private void setLocation(SourceLocation location) {
 		this.location = location;

@@ -1,4 +1,4 @@
-package asteroids.model.programs.statements.action;
+package asteroids.junk.DeprecatedCode;
 
 import asteroids.helper.program.ActionType;
 import asteroids.model.Program;
@@ -6,30 +6,29 @@ import asteroids.model.programs.MyStatement;
 import asteroids.model.programs.statements.ActionStatement;
 import asteroids.part3.programs.SourceLocation;
 
-public class FireStatement extends ActionStatement {
+public class ThrustOnStatement extends ActionStatement {
 
-	public FireStatement(SourceLocation location) {
+	public ThrustOnStatement(SourceLocation location) {
 		super(location, ActionType.SHOOT);
 //		setLocation(location);
 		setActionType(ActionType.THRUSTON);
 	}
-
+	
 	
 	private SourceLocation location;
 	
-	
+
 	@Override
 	public SourceLocation getLocation() {
 		return this.location;
 	}
-
 	
 	@SuppressWarnings("unused")
 	private void setLocation(SourceLocation location) {
 		this.location = location;
 	}
 	
-	
+
 	@Override
 	public void execute() {
 		// TODO Auto-generated method stub
@@ -62,5 +61,5 @@ public class FireStatement extends ActionStatement {
 		// TODO Auto-generated method stub
 		
 	}
-	
+
 }

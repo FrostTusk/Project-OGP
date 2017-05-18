@@ -1,9 +1,12 @@
-package asteroids.model.programs;
+package asteroids.junk.DeprecatedCode;
 
 import java.util.*;
 
 import asteroids.helper.program.*;
 import asteroids.model.*;
+import asteroids.model.programs.MyExpression;
+import asteroids.model.programs.MyFunction;
+import asteroids.model.programs.MyStatement;
 import asteroids.model.programs.expressions.*;
 import asteroids.model.programs.statements.*;
 
