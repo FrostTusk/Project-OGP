@@ -63,7 +63,7 @@ public class BreakStatement implements MyStatement {
 	public void execute() {
 		if (getProgram().getFlag(getLocation())) return;
 		if (getSuperStatement().getClass() != WhileStatement.class)
-			throw new IllegalArgumentException(); // FIXME: Better exception
+			throw new RuntimeException(); 
 		// TODO: InnerClass.
 	}
 	
