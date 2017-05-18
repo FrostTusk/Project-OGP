@@ -9,7 +9,7 @@ import asteroids.part3.programs.SourceLocation;
 public class SkipStatement extends ActionStatement {
 
 	public SkipStatement(SourceLocation location) {
-		super(location, ActionType.THRUSTON);
+		super(ActionType.THRUSTON, location);
 //		setLocation(location);
 		setActionType(ActionType.THRUSTON);
 	}

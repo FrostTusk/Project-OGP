@@ -12,7 +12,12 @@ public class SelfEntityExpression extends EntityExpression {
 	
 	@Override
 	public void setEntity() {
-		setEntity(getStatement().getProgram().getOwner());
+		try {
+			setEntity(getStatement().getProgram().getOwner());
+		}
+		catch (NullPointerException exc) {
+			setEntity(null);
+		}
 	}
 
 }

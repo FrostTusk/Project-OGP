@@ -5,28 +5,28 @@ import asteroids.model.programs.MyExpression;
 import asteroids.model.programs.MyStatement;
 import asteroids.part3.programs.SourceLocation;
 
-public class OperatorExpression implements MyExpression<Object> {
+public class OperatorExpression <T> implements MyExpression<T> {
 	
-	public OperatorExpression(MyExpression<Object> expression1, MyExpression<Object> expression2, OperatorType operatorType, SourceLocation location) {
+	public OperatorExpression(MyExpression<T> expression1, MyExpression<T> expression2, OperatorType operatorType, SourceLocation location) {
 		setLocation(location);
 		setExpression1(expression1);
 		setExpression2(expression2);
 		setOperatorType(operatorType);
-		if (expression1.getClass() != expression2.getClass()) throw new RuntimeException();
+//		if (!expression1.getClass().equals(expression2.getClass())) throw new RuntimeException();
 	}
 	
 	
 	private OperatorType operatorType;
-	private MyExpression<Object> expression1;
-	private MyExpression<Object> expression2;
+	private MyExpression<T> expression1;
+	private MyExpression<T> expression2;
 	private SourceLocation location;
 	
 	
-	public MyExpression<Object> getExpression1() {
+	public MyExpression<T> getExpression1() {
 		return this.expression1;
 	}
 	
-	public MyExpression<Object> getExpression2() {
+	public MyExpression<T> getExpression2() {
 		return this.expression2;
 	}
 	
@@ -40,11 +40,11 @@ public class OperatorExpression implements MyExpression<Object> {
 	}
 	
 	
-	private void setExpression1(MyExpression<Object> expression) {
+	private void setExpression1(MyExpression<T> expression) {
 		this.expression1 = expression;
 	}
 
-	private void setExpression2(MyExpression<Object> expression) {
+	private void setExpression2(MyExpression<T> expression) {
 		this.expression2 = expression;
 	}
 	
@@ -58,20 +58,13 @@ public class OperatorExpression implements MyExpression<Object> {
 
 
 	@Override
-	public Object evaluate() {
+	public T evaluate() {
 		switch (getOperatorType()) {
-		case ADDITION:
-			break;
 		case EQUALITY:
 			break;
-		case LESSTHAN:
-			break;
-		case MULTIPLICATION:
-			break;
-		default:
-			break;			
+		default:;
 		}
-		return true;
+		return null;
 	}
 
 	@Override

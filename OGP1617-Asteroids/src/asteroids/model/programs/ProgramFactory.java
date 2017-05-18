@@ -188,27 +188,27 @@ public class ProgramFactory implements IProgramFactory<MyExpression, MyStatement
 
 	@Override
 	public MyStatement createThrustOnStatement(SourceLocation location) {
-		return new ActionStatement(location, ActionType.THRUSTON);
+		return new ActionStatement(ActionType.THRUSTON, location);
 	}
 
 	@Override
 	public MyStatement createThrustOffStatement(SourceLocation location) {
-		return new ActionStatement(location, ActionType.THRUSTOFF);
+		return new ActionStatement(ActionType.THRUSTOFF, location);
 	}
 
 	@Override
 	public MyStatement createFireStatement(SourceLocation location) {
-		return new ActionStatement(location, ActionType.SHOOT);
+		return new ActionStatement(ActionType.SHOOT, location);
 	}
 
 	@Override
 	public MyStatement createTurnStatement(MyExpression angle, SourceLocation location) {
-		return new ActionStatement(location, angle, ActionType.TURN);
+		return new ActionStatement(ActionType.TURN, angle, location);
 	}
 
 	@Override
 	public MyStatement createSkipStatement(SourceLocation location) {
-		return new ActionStatement(location, ActionType.SKIP);
+		return new ActionStatement(ActionType.SKIP, location);
 	}
 	
 }

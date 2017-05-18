@@ -4,7 +4,7 @@ import asteroids.model.programs.MyExpression;
 import asteroids.model.programs.MyStatement;
 import asteroids.part3.programs.SourceLocation;
 
-public class VariableExpression implements MyExpression<String> {
+public class VariableExpression implements MyExpression<Object> {
 	
 	public VariableExpression(String variableName, SourceLocation location) {
 		setLocation(location);
@@ -35,22 +35,29 @@ public class VariableExpression implements MyExpression<String> {
 	}
 
 	
-	@Override
-	public String evaluate() {
-		return getVariableName();
-	}
-
-
+	
+	private MyStatement statement;
+	
+	
 	@Override
 	public MyStatement getStatement() {
-		// TODO Auto-generated method stub
-		return null;
+		return statement;
 	}
 
 	@Override
 	public void setStatement(MyStatement statement) {
-		// TODO Auto-generated method stub
-		
+		this.statement = statement;
+	}
+
+	
+	
+	@Override
+	public Object evaluate() {
+		Object local = getStatement().getProgram().getLocalVar(getVariableName());
+		Object global = getStatement().getProgram().getGlobalVar(getVariableName());
+		if ( (local == null) && (global == null) )
+			throw new IllegalArgumentException();
+		return (local == null) ? global: local;
 	}
 	
 }

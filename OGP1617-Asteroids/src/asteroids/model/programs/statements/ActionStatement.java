@@ -8,14 +8,14 @@ import asteroids.part3.programs.SourceLocation;
 
 public class ActionStatement implements MyStatement {
 	
-	public ActionStatement(SourceLocation location, ActionType type) {
+	public ActionStatement(ActionType type, SourceLocation location) {
 		if (type == ActionType.TURN)
 			throw new IllegalArgumentException();
 		setLocation(location);
 		setActionType(type);
 	}
 	
-	public ActionStatement(SourceLocation location, MyExpression<Double> angle, ActionType type) {
+	public ActionStatement(ActionType type, MyExpression<Double> angle, SourceLocation location) {
 		if (type != ActionType.TURN)
 			throw new IllegalArgumentException();
 		setLocation(location);
@@ -23,28 +23,20 @@ public class ActionStatement implements MyStatement {
 		this.angle = angle.evaluate();
 	}
 	
-	
-	private SourceLocation location;
-	private ActionType actionType;
-	
-	
-	@Override
-	public SourceLocation getLocation() {
-		return this.location;
-	}
 
+	private ActionType actionType;
+	private double angle;
+	private SourceLocation location;
+	
+	
 	public ActionType getActionType() {
 		return this.actionType;
 	}
+	
 
 	@Override
-	public int getSize() {
-		return 1;
-	}
-
-
-	private void setLocation(SourceLocation location) {
-		this.location = location;
+	public SourceLocation getLocation() {
+		return this.location;
 	}
 
 	protected void setActionType(ActionType actionType) {
@@ -53,10 +45,20 @@ public class ActionStatement implements MyStatement {
 
 
 	
+	private void setLocation(SourceLocation location) {
+		this.location = location;
+	}
+
+
 	private Program program;
 	private MyStatement superStatement;
 	
 	
+	@Override
+	public int getSize() {
+		return 1;
+	}
+
 	@Override
 	public Program getProgram() {
 		return this.program;
@@ -78,9 +80,6 @@ public class ActionStatement implements MyStatement {
 		this.superStatement = statement;
 	}
 	
-	
-	
-	private double angle;
 	
 
 	@Override
