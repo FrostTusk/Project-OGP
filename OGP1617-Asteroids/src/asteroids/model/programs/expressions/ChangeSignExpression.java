@@ -36,7 +36,7 @@ public class ChangeSignExpression implements MyExpression<Double> {
 	
 	@Override
 	public Double evaluate() {
-		return null;
+		return -1 * getExpression().evaluate();
 	}
 	
 }

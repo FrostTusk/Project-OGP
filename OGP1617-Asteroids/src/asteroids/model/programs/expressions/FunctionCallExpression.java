@@ -49,7 +49,7 @@ public class FunctionCallExpression implements MyExpression<Object> {
 	
 	
 	@Override
-	public MyExpression<?> evaluate() {
+	public Object evaluate() {
 		return null;
 	}
 	

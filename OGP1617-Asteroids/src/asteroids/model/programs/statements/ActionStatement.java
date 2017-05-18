@@ -2,37 +2,25 @@ package asteroids.model.programs.statements;
 
 import asteroids.helper.program.ActionType;
 import asteroids.model.Program;
+import asteroids.model.programs.MyExpression;
 import asteroids.model.programs.MyStatement;
 import asteroids.part3.programs.SourceLocation;
 
-//public abstract class ActionStatement implements MyStatement {
-//		
-//		private ActionType actionType;
-//		
-//		
-//		protected void setActionType(ActionType actionType) {
-//			this.actionType = actionType;
-//		}
-//		
-//		
-//		public ActionType getActionType() {
-//			return this.actionType;
-//		}
-//	
-//}
 public class ActionStatement implements MyStatement {
 	
 	public ActionStatement(SourceLocation location, ActionType type) {
+		if (type == ActionType.TURN)
+			throw new IllegalArgumentException();
 		setLocation(location);
 		setActionType(type);
 	}
 	
-	public ActionStatement(SourceLocation location, double angle, ActionType type) {
+	public ActionStatement(SourceLocation location, MyExpression<Double> angle, ActionType type) {
 		if (type != ActionType.TURN)
 			throw new IllegalArgumentException();
 		setLocation(location);
 		setActionType(type);
-		this.angle = angle;
+		this.angle = angle.evaluate();
 	}
 	
 	
@@ -91,7 +79,9 @@ public class ActionStatement implements MyStatement {
 	}
 	
 	
+	
 	private double angle;
+	
 
 	@Override
 	public void execute() throws IllegalStateException {

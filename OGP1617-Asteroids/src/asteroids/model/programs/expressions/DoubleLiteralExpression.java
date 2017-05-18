@@ -36,7 +36,7 @@ public class DoubleLiteralExpression implements MyExpression<Double> {
 
 	@Override
 	public Double evaluate() {
-		return null;
+		return getValue();
 	}
 	
 }

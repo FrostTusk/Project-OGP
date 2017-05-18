@@ -6,7 +6,7 @@ import asteroids.part3.programs.SourceLocation;
 
 public class OperatorExpression implements MyExpression<Object> {
 	
-	public OperatorExpression(MyExpression<Boolean> expression1, MyExpression<Boolean> expression2, OperatorType operatorType, SourceLocation location) {
+	public OperatorExpression(MyExpression<Object> expression1, MyExpression<Object> expression2, OperatorType operatorType, SourceLocation location) {
 		setLocation(location);
 		setExpression1(expression1);
 		setExpression2(expression2);
@@ -16,16 +16,16 @@ public class OperatorExpression implements MyExpression<Object> {
 	
 	
 	private OperatorType operatorType;
-	private MyExpression<Boolean> expression1;
-	private MyExpression<Boolean> expression2;
+	private MyExpression<Object> expression1;
+	private MyExpression<Object> expression2;
 	private SourceLocation location;
 	
 	
-	public MyExpression<Boolean> getExpression1() {
+	public MyExpression<Object> getExpression1() {
 		return this.expression1;
 	}
 	
-	public MyExpression<Boolean> getExpression2() {
+	public MyExpression<Object> getExpression2() {
 		return this.expression2;
 	}
 	
@@ -39,11 +39,11 @@ public class OperatorExpression implements MyExpression<Object> {
 	}
 	
 	
-	private void setExpression1(MyExpression<Boolean> expression) {
+	private void setExpression1(MyExpression<Object> expression) {
 		this.expression1 = expression;
 	}
 
-	private void setExpression2(MyExpression<Boolean> expression) {
+	private void setExpression2(MyExpression<Object> expression) {
 		this.expression2 = expression;
 	}
 	
@@ -57,8 +57,13 @@ public class OperatorExpression implements MyExpression<Object> {
 
 
 	@Override
-	public MyExpression<Boolean> evaluate() {
-		return null;
+	public Object evaluate() {
+		switch (getOperatorType()) {
+		default:
+			break;
+			
+		}
+		return true;
 	}
 	
 }

@@ -222,7 +222,7 @@ public class ProgramFactory implements IProgramFactory<MyExpression, MyStatement
 
 	@Override
 	public MyStatement createTurnStatement(MyExpression angle, SourceLocation location) {
-		return new TurnStatement(angle, location);
+		return new ActionStatement(location, angle, ActionType.TURN);
 	}
 
 	@Override

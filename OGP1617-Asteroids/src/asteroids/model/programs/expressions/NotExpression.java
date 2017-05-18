@@ -36,7 +36,7 @@ public class NotExpression implements MyExpression<Boolean> {
 
 	@Override
 	public Boolean evaluate() {
-		return null;
+		return (getExpression().evaluate() == true) ? false:true;
 	}
 	
 }
