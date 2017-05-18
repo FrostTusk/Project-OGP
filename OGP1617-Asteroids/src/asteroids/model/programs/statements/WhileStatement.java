@@ -15,13 +15,16 @@ public class WhileStatement implements MyStatement {
 	
 
 	private MyExpression<Boolean> condition;
-	private MyStatement body;
 	private SourceLocation location;
+	private Program program;
+	private MyStatement superStatement;
+	private MyStatement body;
 	
 	
 	public Boolean getCondition() {
 		return condition.evaluate();
 	}
+
 	
 	public MyStatement getBody() {
 		return this.body;
@@ -46,14 +49,10 @@ public class WhileStatement implements MyStatement {
 		this.body = body;
 	}
 
+
 	private void setLocation(SourceLocation location) {
 		this.location = location;
 	}
-	
-	
-
-	private Program program;
-	private MyStatement superStatement;
 	
 	
 	@Override
@@ -95,7 +94,14 @@ public class WhileStatement implements MyStatement {
 		}
 
 		
+		public WhileStatement getWhile() {
+		    return WhileStatement.this;
+		}
+		
+		
 		private SourceLocation location;
+		private Program program;
+		private MyStatement superStatement;
 		
 		
 		@Override
@@ -113,12 +119,7 @@ public class WhileStatement implements MyStatement {
 			this.location = location;
 		}
 		
-		
-		
-		private Program program;
-		private MyStatement superStatement;
-		
-		
+
 		@Override
 		public Program getProgram() {
 			return this.program;
@@ -141,7 +142,6 @@ public class WhileStatement implements MyStatement {
 			this.superStatement = statement;
 		}
 
-		
 
 		@Override
 		public void execute() {
@@ -149,9 +149,10 @@ public class WhileStatement implements MyStatement {
 			if (getSuperStatement().getClass() != WhileStatement.class)
 				throw new RuntimeException(); 
 			
-			MyStatement superSuper = this.getSuperStatement().getSuperStatement(); 
+			SourceLocation returnLocation = getWhile().getLocation();
+			getProgram().flagLine(returnLocation);
 			
-			superSuper.getProgram().flagLine(superStatement.getLocation());
+			
 		}
 		
 	}
