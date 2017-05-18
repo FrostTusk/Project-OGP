@@ -46,5 +46,11 @@ public class NotExpression implements MyExpression<Boolean> {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public void setStatement(MyStatement statement) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

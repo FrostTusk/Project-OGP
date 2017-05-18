@@ -2,11 +2,17 @@ package asteroids.model.programs;
 
 import java.util.List;
 
+import asteroids.helper.entity.Entity;
 import asteroids.helper.entity.EntityType;
+import asteroids.helper.entity.MinorPlanet;
 import asteroids.helper.program.ActionType;
 import asteroids.helper.program.GetterType;
 import asteroids.helper.program.OperatorType;
+import asteroids.model.Asteroid;
+import asteroids.model.Bullet;
+import asteroids.model.Planetoid;
 import asteroids.model.Program;
+import asteroids.model.Ship;
 import asteroids.model.programs.expressions.ChangeSignExpression;
 import asteroids.model.programs.expressions.DoubleLiteralExpression;
 import asteroids.model.programs.expressions.EntityExpression;
@@ -112,42 +118,42 @@ public class ProgramFactory implements IProgramFactory<MyExpression, MyStatement
 
 	@Override
 	public MyExpression createNullExpression(SourceLocation location) {
-		return new EntityExpression(EntityType.NULL, location);
+		return new EntityExpression(location, null);
 	}
 
 	@Override
 	public MyExpression createSelfExpression(SourceLocation location) {
-		return new EntityExpression(EntityType.SELF, location);
+		return new EntityExpression(location, null); // FIXME
 	}
 
 	@Override
 	public MyExpression createShipExpression(SourceLocation location) {
-		return new EntityExpression(EntityType.SHIP, location);
+		return new EntityExpression(Ship.class, location);
 	}
 
 	@Override
 	public MyExpression createAsteroidExpression(SourceLocation location) {
-		return new EntityExpression(EntityType.ASTEROID, location);
+		return new EntityExpression(Asteroid.class, location);
 	}
 
 	@Override
 	public MyExpression createPlanetoidExpression(SourceLocation location) {
-		return new EntityExpression(EntityType.PLANETOID, location);
+		return new EntityExpression(Planetoid.class, location);
 	}
 
 	@Override
 	public MyExpression createBulletExpression(SourceLocation location) {
-		return new EntityExpression(EntityType.BULLET, location);
+		return new EntityExpression(Bullet.class, location);
 	}
 
 	@Override
 	public MyExpression createPlanetExpression(SourceLocation location) {
-		return new EntityExpression(EntityType.MINORPLANET, location);
+		return new EntityExpression(MinorPlanet.class, location);
 	}
 
 	@Override
 	public MyExpression createAnyExpression(SourceLocation location) {
-		return new EntityExpression(EntityType.ANY, location);
+		return new EntityExpression(Entity.class, location);
 	}
 
 	@Override

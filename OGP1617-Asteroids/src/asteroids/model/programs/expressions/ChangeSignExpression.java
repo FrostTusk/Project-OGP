@@ -35,15 +35,25 @@ public class ChangeSignExpression implements MyExpression<Double> {
 	}
 
 	
+	
+	private MyStatement statement;
+
+	
+	@Override
+	public MyStatement getStatement() {
+		return this.statement;
+	}
+	
+	
+	public void setStatement(MyStatement statement) {
+		this.statement = statement;
+	}
+
+	
+	
 	@Override
 	public Double evaluate() {
 		return -1 * getExpression().evaluate();
-	}
-
-	@Override
-	public MyStatement getStatement() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 	
 }

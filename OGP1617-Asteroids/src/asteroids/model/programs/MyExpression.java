@@ -27,6 +27,7 @@ public interface MyExpression <T> {
 	
 	public SourceLocation getLocation();
 	public MyStatement getStatement();
+	public void setStatement(MyStatement statement);
 	public T evaluate();
 	
 }

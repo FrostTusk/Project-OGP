@@ -47,6 +47,22 @@ public class FunctionCallExpression implements MyExpression<Object> {
 	private void setLocation(SourceLocation location) {
 		this.location = location;
 	}
+
+	
+	
+	private MyStatement statement;
+
+	
+	@Override
+	public MyStatement getStatement() {
+		return this.statement;
+	}
+	
+	
+	public void setStatement(MyStatement statement) {
+		this.statement = statement;
+	}
+	
 	
 	
 	@Override
@@ -54,10 +70,4 @@ public class FunctionCallExpression implements MyExpression<Object> {
 		return null;
 	}
 
-	@Override
-	public MyStatement getStatement() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 }

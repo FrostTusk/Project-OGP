@@ -190,7 +190,8 @@ public class ProgramExecuter {
 	}
 	
 	private SimpleEntity extractEntity(EntityExpression expression) {
-		return new SimpleEntity(expression.getEntityType());
+//		return new SimpleEntity(expression.getEntity());
+		return null;
 	}
 	
 	private SimpleBoolean extractNot(NotExpression expression) {

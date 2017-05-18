@@ -41,6 +41,8 @@ public class IfStatement implements MyStatement {
 	
 	@Override
 	public int getSize() {
+		if (getElseBody() == null)
+			return getIfBody().getSize() + 1;
 		return ifBody.getSize() + elseBody.getSize() + 1;
 	}
 	

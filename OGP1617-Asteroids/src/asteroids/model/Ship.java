@@ -2,7 +2,6 @@ package asteroids.model;
 
 import java.util.*;
 import asteroids.helper.entity.*;
-import asteroids.model.programs.ProgramExecuter;
 import be.kuleuven.cs.som.annotate.*;
 
 
@@ -861,7 +860,7 @@ public class Ship extends Entity {
 	}
 	
 	public void executeProgram(double time) {
-		new ProgramExecuter(this, getProgram(), time);
+		program.execute(time);
 	}
 	
 	

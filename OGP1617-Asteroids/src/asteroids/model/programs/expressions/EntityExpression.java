@@ -1,25 +1,30 @@
 package asteroids.model.programs.expressions;
 
 import asteroids.helper.entity.Entity;
-import asteroids.helper.entity.EntityType;
+import asteroids.model.Ship;
 import asteroids.model.programs.MyExpression;
 import asteroids.model.programs.MyStatement;
 import asteroids.part3.programs.SourceLocation;
 
 public class EntityExpression implements MyExpression<Entity> {
 	
-	public EntityExpression(EntityType entityType, SourceLocation location) {
+	public EntityExpression(SourceLocation location, Entity specific) {
 		setLocation(location);
-		setEntityType(entityType);
+		
 	}
 	
 	
-	private EntityType entityType;
+	public EntityExpression(Class<? extends Entity> entityType, SourceLocation location) {
+		setLocation(location);
+	}
+	
+	
+	private Entity entity;
 	private SourceLocation location;
 	
 	
-	public EntityType getEntityType() {
-		return this.entityType;
+	public Entity getEntity() {
+		return this.entity;
 	}
 	
 	@Override
@@ -28,24 +33,46 @@ public class EntityExpression implements MyExpression<Entity> {
 	}
 	
 	
-	protected void setEntityType(EntityType entityType) {
-		this.entityType = entityType;
+	protected void setEntity(Entity entity) {
+		this.entity = entity;
 	}
 
 	private void setLocation(SourceLocation location) {
 		this.location = location;
 	}
 
+	
+	
+	private MyStatement statement;
+
+	
+	@Override
+	public MyStatement getStatement() {
+		return this.statement;
+	}
+	
+	
+	public void setStatement(MyStatement statement) {
+		this.statement = statement;
+	}
+	
+	
 
 	@Override
 	public Entity evaluate() {
 		return null;
 	}
-
-	@Override
-	public MyStatement getStatement() {
-		// TODO Auto-generated method stub
+	
+	
+	
+	public void setEntity(Class<? extends Entity> entityType) {
+		this.entity = getClosestEntity(entityType);
+	}
+	
+	private Entity getClosestEntity(Class<? extends Entity> entityType) {
+		getStatement().getProgram().getOwner().getWorld().getAllEntitiesSpecific(Ship.class);
 		return null;
 	}
+	
 	
 }

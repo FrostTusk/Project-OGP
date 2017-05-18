@@ -52,7 +52,23 @@ public class GetterExpression implements MyExpression<Double> {
 		this.location = location;
 	}
 
+	
+	
+	private MyStatement statement;
 
+	
+	@Override
+	public MyStatement getStatement() {
+		return this.statement;
+	}
+	
+	
+	public void setStatement(MyStatement statement) {
+		this.statement = statement;
+	}
+
+	
+	
 	@Override
 	public Double evaluate() {
 		switch(getGetterType()) {
@@ -72,10 +88,4 @@ public class GetterExpression implements MyExpression<Double> {
 		return null;
 	}
 
-	@Override
-	public MyStatement getStatement() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 }

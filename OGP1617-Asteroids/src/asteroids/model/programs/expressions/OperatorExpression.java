@@ -79,5 +79,11 @@ public class OperatorExpression implements MyExpression<Object> {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public void setStatement(MyStatement statement) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }
