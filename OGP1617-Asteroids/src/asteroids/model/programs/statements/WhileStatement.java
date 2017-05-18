@@ -147,8 +147,11 @@ public class WhileStatement implements MyStatement {
 		public void execute() {
 			if (getProgram().getFlag(getLocation())) return;
 			if (getSuperStatement().getClass() != WhileStatement.class)
-				throw new RuntimeException();
-			// TODO: InnerClass.
+				throw new RuntimeException(); 
+			
+			MyStatement superSuper = this.getSuperStatement().getSuperStatement(); 
+			
+			superSuper.getProgram().flagLine(superStatement.getLocation());
 		}
 		
 	}

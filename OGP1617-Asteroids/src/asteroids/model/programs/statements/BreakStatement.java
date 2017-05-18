@@ -64,7 +64,7 @@ public class BreakStatement implements MyStatement {
 		if (getProgram().getFlag(getLocation())) return;
 		if (getSuperStatement().getClass() != WhileStatement.class)
 			throw new RuntimeException(); 
-		// TODO: InnerClass.
+		//TODO: inner class
 	}
 	
 }
