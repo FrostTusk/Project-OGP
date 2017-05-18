@@ -21,8 +21,8 @@ public class WhileStatement implements MyStatement {
 	private MyStatement body;
 	
 	
-	public Boolean getCondition() {
-		return condition.evaluate();
+	public MyExpression<Boolean> getCondition() {
+		return this.condition;
 	}
 
 	
@@ -69,6 +69,7 @@ public class WhileStatement implements MyStatement {
 	@Override
 	public void setProgram(Program program) {
 		this.program = program;
+		getCondition().setStatement(this);
 	}
 
 	@Override
@@ -81,7 +82,7 @@ public class WhileStatement implements MyStatement {
 	@Override
 	public void execute() throws IllegalStateException {
 		if (getProgram().getFlag(getLocation())) return;
-		while (getCondition())
+		while (getCondition().evaluate())
 			body.execute();
 		getProgram().flagLine(getLocation());
 	}

@@ -18,7 +18,6 @@ public class ActionStatement implements MyStatement {
 	public ActionStatement(ActionType type, MyExpression<Double> angle, SourceLocation location) {
 		if (type != ActionType.TURN)
 			throw new IllegalArgumentException();
-		angle.setStatement(this);
 		setLocation(location);
 		setActionType(type);
 		this.angle = angle.evaluate();

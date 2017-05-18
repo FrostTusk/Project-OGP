@@ -8,7 +8,6 @@ import asteroids.part3.programs.SourceLocation;
 public class PrintStatement <T> implements MyStatement {
 
 	public PrintStatement(MyExpression<T> value, SourceLocation location) {
-		value.setStatement(this);
 		setLocation(location);
 		setValue(value);
 	}
@@ -61,6 +60,7 @@ public class PrintStatement <T> implements MyStatement {
 	@Override
 	public void setProgram(Program program) {
 		this.program = program;
+		getValue().setStatement(this);
 	}
 
 	@Override
