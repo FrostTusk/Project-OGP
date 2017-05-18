@@ -73,6 +73,7 @@ public class SequenceStatement implements MyStatement {
 	@Override
 	public void execute() throws IllegalStateException {
 		if (getProgram().getFlag(getLocation())) return;
+		setProgram(getProgram());
 		for (MyStatement subStatement: getStatements())
 			subStatement.execute();
 		getProgram().flagLine(getLocation());

@@ -72,8 +72,10 @@ public class PrintStatement <T> implements MyStatement {
 
 	@Override
 	public void execute() {
+		if (getProgram().getFlag(getLocation())) return;
+		setProgram(getProgram());
 		System.out.println(getValue().evaluate());
-		getProgram().addPrintValue(getValue());
+		getProgram().addPrintValue(getValue().evaluate());
 		getProgram().flagLine(getLocation());
 	}
 

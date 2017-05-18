@@ -1,5 +1,6 @@
 package asteroids.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +16,8 @@ public class Program {
 		main.setProgram(this);
 		
 		setTime(0);
-		lineTracker = new boolean[main.getSize()];
+		this.printTracker = new ArrayList<>();
+		this.lineTracker = new boolean[main.getSize()];
 	}
 	
 	
@@ -78,11 +80,13 @@ public class Program {
 
 	
 	public boolean getFlag(SourceLocation location) {
-		return lineTracker[location.getLine()];
+		return lineTracker[location.getLine() - 1];
 	}
 	
 	public List<Object> getPrintTracker() {
-		return this.printTracker;
+		List<Object> result = new ArrayList<Object>();
+		result.add(null);
+		return (printTracker.isEmpty()) ? result:printTracker;
 	}
 	
 	public Object getLocalVar(String name) {
@@ -105,7 +109,7 @@ public class Program {
 	
 
 	public void flagLine(SourceLocation location) {
-		lineTracker[location.getLine()] = true;
+		lineTracker[location.getLine() - 1] = true;
 	}
 	
 	public void addPrintValue(Object value) {
@@ -122,10 +126,9 @@ public class Program {
 	
 
 
-	
-	
 	public void execute(double time) {
 		setTime(getTime() + time);
+		main.execute();
 	}
 	
 }

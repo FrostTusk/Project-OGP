@@ -52,6 +52,7 @@ public class NotExpression implements MyExpression<Boolean> {
 	@Override
 	public void setStatement(MyStatement statement) {
 		this.statement = statement;
+		getExpression().setStatement(statement);
 	}
 	
 }

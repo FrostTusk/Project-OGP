@@ -61,6 +61,7 @@ public class ReturnStatement <T> implements MyStatement{
 	@Override
 	public void setProgram(Program program) {
 		this.program = program;
+		getValue().setStatement(this);
 	}
 
 	@Override
@@ -73,6 +74,7 @@ public class ReturnStatement <T> implements MyStatement{
 	@Override
 	public void execute() {
 		if (getProgram().getFlag(getLocation())) return;
+		setProgram(getProgram());
 		getProgram().flagLine(getLocation()); // TODO Return a value.
 	}
 	

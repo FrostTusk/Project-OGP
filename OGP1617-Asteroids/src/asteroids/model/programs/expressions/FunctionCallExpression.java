@@ -59,6 +59,8 @@ public class FunctionCallExpression implements MyExpression<Object> {
 	
 	public void setStatement(MyStatement statement) {
 		this.statement = statement;
+		for (MyExpression expression: getActualArgs())
+			expression.setStatement(statement);
 	}
 	
 	

@@ -8,7 +8,6 @@ import asteroids.part3.programs.SourceLocation;
 public class AssignmentStatement <T> implements MyStatement {
 
 	public AssignmentStatement(String variableName, MyExpression<T> value, SourceLocation location) {
-		value.setStatement(this);
 		setLocation(location);
 		setVariableName(variableName);
 		setValue(value);
@@ -24,8 +23,8 @@ public class AssignmentStatement <T> implements MyStatement {
 		return this.variableName;
 	}
 	
-	public T getValue() {
-		return this.value.evaluate();
+	public MyExpression<T> getValue() {
+		return this.value;
 	}
 
 	@Override
@@ -72,6 +71,7 @@ public class AssignmentStatement <T> implements MyStatement {
 	@Override
 	public void setProgram(Program program) {
 		this.program = program;
+		getValue().setStatement(this);
 	}
 
 	@Override
@@ -79,15 +79,15 @@ public class AssignmentStatement <T> implements MyStatement {
 		this.superStatement = statement;
 	}
 	
-	
+
 	
 	@Override
 	public void execute() {
 		if (getProgram().getFlag(getLocation())) return;
 		if (getSuperStatement() == null)
-			getProgram().addGlobalVar(getVariableName(), getValue());
+			getProgram().addGlobalVar(getVariableName(), getValue().evaluate());
 		else
-			getProgram().addLocalVar(getVariableName(), getValue());
+			getProgram().addLocalVar(getVariableName(), getValue().evaluate());
 		getProgram().flagLine(getLocation());
 	}
 

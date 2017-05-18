@@ -20,12 +20,13 @@ public class SpecificEntityExpression extends EntityExpression {
 	}
 	
 	public Entity getClosestEntity(Class<? extends Entity> entityType) {
-		getStatement();
-		getStatement().getProgram();
-		getStatement().getProgram().getOwner();
-		getStatement().getProgram().getOwner().getWorld();
-		getStatement().getProgram().getOwner().getWorld().getAllEntitiesSpecific(entityType);
-		Entity[] entities = new Entity[getStatement().getProgram().getOwner().getWorld().getAllEntitiesSpecific(entityType).size()];
+		Entity[] entities;
+		try {
+			entities = new Entity[getStatement().getProgram().getOwner().getWorld().getAllEntitiesSpecific(entityType).size()];
+		}
+		catch(NullPointerException exc) {
+			return null;
+		}
 		entities = getStatement().getProgram().getOwner().getWorld().getAllEntitiesSpecific(entityType).toArray(entities);
 		Entity entity = entities[0];	// Else nullpointer exception is thrown
 		if (entities.length < 2)

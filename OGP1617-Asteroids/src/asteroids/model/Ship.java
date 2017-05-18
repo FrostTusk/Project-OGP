@@ -857,6 +857,7 @@ public class Ship extends Entity {
 	
 	public void setProgram(Program program) {
 		this.program = program;
+		program.setOwner(this);
 	}
 	
 	public List<Object> executeProgram(double time) {

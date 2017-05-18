@@ -59,6 +59,7 @@ public class GetterExpression implements MyExpression<Double> {
 	
 	public void setStatement(MyStatement statement) {
 		this.statement = statement;
+		getExpression().setStatement(statement);
 	}
 
 	

@@ -9,7 +9,6 @@ public class IfStatement implements MyStatement {
 
 	public IfStatement(MyExpression<Boolean> condition, MyStatement ifBody, MyStatement elseBody,
 			SourceLocation location) {
-		condition.setStatement(this);
 		setLocation(location);
 		setCondition(condition);
 		setIfBody(ifBody);
@@ -23,8 +22,8 @@ public class IfStatement implements MyStatement {
 	private SourceLocation location;
 	
 	
-	public Boolean getCondition() {
-		return condition.evaluate();
+	public MyExpression<Boolean> getCondition() {
+		return this.condition;
 	}
 	
 	public MyStatement getIfBody() {
@@ -84,6 +83,7 @@ public class IfStatement implements MyStatement {
 	@Override
 	public void setProgram(Program program) {
 		this.program = program;
+		getCondition().setStatement(this);
 	}
 
 	@Override
@@ -96,7 +96,8 @@ public class IfStatement implements MyStatement {
 	@Override
 	public void execute() throws IllegalStateException {
 		if (getProgram().getFlag(getLocation())) return;
-		if (getCondition()) {
+		setProgram(getProgram());
+		if (getCondition().evaluate()) {
 			getIfBody().execute();	// FIXME how to flag else body.
 		}
 		else if (getElseBody() != null) {

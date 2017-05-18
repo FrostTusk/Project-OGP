@@ -84,6 +84,8 @@ public class ActionStatement implements MyStatement {
 
 	@Override
 	public void execute() throws IllegalStateException {
+		if (getProgram().getFlag(getLocation())) return;
+		setProgram(getProgram());
 		if (getProgram().getTime() < 0.2)
 			throw new IllegalStateException();
 		switch (getActionType()) {
