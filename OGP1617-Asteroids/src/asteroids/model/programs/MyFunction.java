@@ -1,6 +1,7 @@
 package asteroids.model.programs;
 
 import java.util.List;
+import java.util.Map;
 
 import asteroids.model.Program;
 import asteroids.model.Ship;
@@ -48,75 +49,91 @@ public class MyFunction implements Executable {
 	
 	
 	
-	public Object execute(List<MyExpression> list) {
-		return null;
-	}
-
+	private double time;
+	private Ship owner;
+	private Program program;
+	
+	
 	@Override
 	public double getTime() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public Object getLocalVar(String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Object getGlobalVar(String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void addPrintValue(Object value) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void execute(double time) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void flagLine(SourceLocation location) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean getFlag(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return false;
+		return time;
 	}
 
 	@Override
 	public Ship getOwner() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setTime(double time) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void addVar(String name, Object value) {
-		// TODO Auto-generated method stub
-		
+		return this.owner;
 	}
 
 	@Override
 	public Program getProgram() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.program;
+	}
+	
+	
+	@Override
+	public void setTime(double time) {
+		this.time = time;
+	}
+	
+	private void setOwner(Ship owner) {
+		this.owner = owner;
+	}
+	
+	public void setProgram(Program program) {
+		this.program = program;
+		setOwner(program.getOwner());
+		setTime(program.getTime());
+	}
+	
+	
+	
+	private boolean[] lineTracker;
+	private Map<String, Object> localVars;
+	
+	
+	@Override
+	public boolean getFlag(SourceLocation location) {
+		return this.lineTracker[location.getLine() - 1];
 	}
 
+	@Override
+	public Object getLocalVar(String name) {
+		try {
+			return localVars.get(name);
+		}
+		catch (NullPointerException exc) {
+			return null;
+		}
+	}
+
+	@Override
+	public Object getGlobalVar(String name) {
+		return getProgram().getGlobalVar(name);
+	}
+
+
+	@Override
+	public void addPrintValue(Object value) {
+		getProgram().addPrintValue(value);
+	}
+
+	@Override
+	public void flagLine(SourceLocation location) {
+		this.lineTracker[location.getLine() - 1] = true;
+	}
+
+	@Override
+	public void addVar(String name, Object value) {
+		this.localVars.put(name, value);
+	}
+
+	public Object execute(List<MyExpression> actualArgs) {
+		return null;
+	}
+	
+	
+	public Object getArgument(String name) {
+		return null;
+	}
 	
 }

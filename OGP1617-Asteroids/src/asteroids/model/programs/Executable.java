@@ -15,7 +15,7 @@ public interface Executable {
 	public void addVar(String name, Object value);
 	public void addPrintValue(Object value);
 	public void flagLine(SourceLocation location);
-	public void execute(double time);
+//	public void execute(double time);
 	public Program getProgram();
 		
 }

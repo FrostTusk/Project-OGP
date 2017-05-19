@@ -949,7 +949,21 @@ public class Facade implements IFacade {
 
 	@Override
 	public List<Object> executeProgram(Ship ship, double dt) throws ModelException {
-		return ship.executeProgram(dt);
+		try {
+			return ship.executeProgram(dt);
+		}
+		catch (IndexOutOfBoundsException exc) {
+			throw new ModelException(exc);
+		}
+		catch (IllegalStateException exc) {
+			throw new ModelException(exc);
+		}
+		catch (IllegalArgumentException exc) {
+			throw new ModelException(exc);
+		}
+		catch (NullPointerException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override

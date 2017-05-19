@@ -60,6 +60,12 @@ public class Program implements Executable {
 	}
 	
 	
+	@Override
+	public Program getProgram() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	public void setTime(double time) {
 		this.time = time;
 	}
@@ -108,11 +114,16 @@ public class Program implements Executable {
 	public void flagLine(SourceLocation location) {
 		lineTracker[location.getLine() - 1] = true;
 	}
-	
+
 	public void addPrintValue(Object value) {
 		this.printTracker.add(value);
 	}
 	
+	@Override
+	public void addVar(String name, Object value) {
+		addGlobalVar(name, value);		
+	}
+
 	public void addLocalVar(String name, Object variable) {
 		localVars.put(name, variable);
 	}
@@ -126,18 +137,6 @@ public class Program implements Executable {
 	public void execute(double time) {
 		setTime(getTime() + time);
 		main.execute();
-	}
-
-	@Override
-	public void addVar(String name, Object value) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Program getProgram() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 	
 }
