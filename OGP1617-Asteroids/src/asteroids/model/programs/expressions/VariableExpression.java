@@ -53,8 +53,8 @@ public class VariableExpression implements MyExpression<Object> {
 	
 	@Override
 	public Object evaluate() {
-		Object local = getStatement().getProgram().getLocalVar(getVariableName());
-		Object global = getStatement().getProgram().getGlobalVar(getVariableName());
+		Object local = getStatement().getExecuter().getLocalVar(getVariableName());
+		Object global = getStatement().getExecuter().getGlobalVar(getVariableName());
 		if ( (local == null) && (global == null) )
 			throw new IllegalArgumentException();
 		return (local == null) ? global: local;

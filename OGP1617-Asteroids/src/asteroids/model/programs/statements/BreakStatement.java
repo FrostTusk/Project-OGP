@@ -1,6 +1,6 @@
 package asteroids.model.programs.statements;
 
-import asteroids.model.Program;
+import asteroids.model.programs.Executable;
 import asteroids.model.programs.MyStatement;
 import asteroids.part3.programs.SourceLocation;
 
@@ -31,13 +31,13 @@ public class BreakStatement implements MyStatement {
 	
 	
 	
-	private Program program;
+	private Executable executer;
 	private MyStatement superStatement;
 	
 	
 	@Override
-	public Program getProgram() {
-		return this.program;
+	public Executable getExecuter() {
+		return this.executer;
 	}
 
 	@Override
@@ -47,8 +47,8 @@ public class BreakStatement implements MyStatement {
 	
 
 	@Override
-	public void setProgram(Program program) {
-		this.program = program;
+	public void setExecuter(Executable executer) {
+		this.executer = executer;
 	}
 
 
@@ -61,7 +61,7 @@ public class BreakStatement implements MyStatement {
 
 	@Override
 	public void execute() {
-		if (getProgram().getFlag(getLocation())) return;
+		if (getExecuter().getFlag(getLocation())) return;
 		if (getSuperStatement().getClass() != WhileStatement.class)
 			throw new RuntimeException(); 
 		//TODO: inner class

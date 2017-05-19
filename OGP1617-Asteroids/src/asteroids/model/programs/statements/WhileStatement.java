@@ -1,6 +1,6 @@
 package asteroids.model.programs.statements;
 
-import asteroids.model.Program;
+import asteroids.model.programs.Executable;
 import asteroids.model.programs.MyExpression;
 import asteroids.model.programs.MyStatement;
 import asteroids.part3.programs.SourceLocation;
@@ -17,7 +17,6 @@ public class WhileStatement implements MyStatement {
 
 	private MyExpression<Boolean> condition;
 	private SourceLocation location;
-	private Program program;
 	private MyStatement superStatement;
 	private MyStatement body;
 	private Boolean breakWhile = false;
@@ -57,9 +56,13 @@ public class WhileStatement implements MyStatement {
 	}
 	
 	
+	
+	private Executable executer;
+	
+	
 	@Override
-	public Program getProgram() {
-		return this.program;
+	public Executable getExecuter() {
+		return this.executer;
 	}
 
 	@Override
@@ -69,8 +72,8 @@ public class WhileStatement implements MyStatement {
 
 	
 	@Override
-	public void setProgram(Program program) {
-		this.program = program;
+	public void setExecuter(Executable executer) {
+		this.executer = executer;
 		getCondition().setStatement(this);
 	}
 
@@ -83,10 +86,10 @@ public class WhileStatement implements MyStatement {
 	
 	@Override
 	public void execute() throws IllegalStateException {
-		if (getProgram().getFlag(getLocation())) return;
+		if (getExecuter().getFlag(getLocation())) return;
 		while (getCondition().evaluate() && !breakWhile)
 				body.execute();
-		getProgram().flagLine(getLocation());
+		getExecuter().flagLine(getLocation());
 	}
 	
 	private void breakThisWhile() {
@@ -112,7 +115,7 @@ public class WhileStatement implements MyStatement {
 		
 		
 		private SourceLocation location;
-		private Program program;
+		private Executable executer;
 		private MyStatement superStatement;
 		
 		
@@ -133,8 +136,8 @@ public class WhileStatement implements MyStatement {
 		
 
 		@Override
-		public Program getProgram() {
-			return this.program;
+		public Executable getExecuter() {
+			return this.executer;
 		}
 
 		@Override
@@ -144,8 +147,8 @@ public class WhileStatement implements MyStatement {
 		
 
 		@Override
-		public void setProgram(Program program) {
-			this.program = program;
+		public void setExecuter(Executable executer) {
+			this.executer = executer;
 		}
 
 
@@ -157,7 +160,7 @@ public class WhileStatement implements MyStatement {
 
 		@Override
 		public void execute() {
-			if (getProgram().getFlag(getLocation())) return;
+			if (getExecuter().getFlag(getLocation())) return;
 			if (getSuperStatement().getClass() != WhileStatement.class)
 				throw new RuntimeException(); 
 			

@@ -67,7 +67,7 @@ public class FunctionCallExpression implements MyExpression<Object> {
 	
 	@Override
 	public Object evaluate() {
-		return getStatement().getProgram().getFunction(getFunctionName()).execute(getActualArgs());
+		return getStatement().getExecuter().getProgram().getFunction(getFunctionName()).execute(getActualArgs());
 	}
 
 }

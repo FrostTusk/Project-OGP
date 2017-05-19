@@ -68,7 +68,7 @@ public class GetterExpression implements MyExpression<Double> {
 	public Double evaluate() {
 		switch(getGetterType()) {
 		case GETDIR:
-			return getStatement().getProgram().getOwner().getOrientation();
+			return getStatement().getExecuter().getOwner().getOrientation();
 		case GETRADIUS:
 			return getExpression().evaluate().getRadius();
 		case GETVX:

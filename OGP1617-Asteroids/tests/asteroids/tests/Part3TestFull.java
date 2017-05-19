@@ -14,7 +14,9 @@ import java.util.Set;
 
 import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import asteroids.model.Asteroid;
 import asteroids.model.Bullet;
@@ -27,6 +29,7 @@ import asteroids.part3.programs.IProgramFactory;
 import asteroids.part3.programs.internal.ProgramParser;
 import asteroids.util.ModelException;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class Part3TestFull {
 
   private static final double EPSILON = 0.0001;

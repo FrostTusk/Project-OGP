@@ -22,18 +22,18 @@ public class SpecificEntityExpression extends EntityExpression {
 	public Entity getClosestEntity(Class<? extends Entity> entityType) {
 		Entity[] entities;
 		try {
-			entities = new Entity[getStatement().getProgram().getOwner().getWorld().getAllEntitiesSpecific(entityType).size()];
+			entities = new Entity[getStatement().getExecuter().getOwner().getWorld().getAllEntitiesSpecific(entityType).size()];
 		}
 		catch(NullPointerException exc) {
 			return null;
 		}
-		entities = getStatement().getProgram().getOwner().getWorld().getAllEntitiesSpecific(entityType).toArray(entities);
+		entities = getStatement().getExecuter().getOwner().getWorld().getAllEntitiesSpecific(entityType).toArray(entities);
 		Entity entity = entities[0];	// Else nullpointer exception is thrown
 		if (entities.length < 2)
 			return entity;	// If there is only one such entity
 		for (int i = 1; i < entities.length; i++)	// Find the closest entity
-			if (entities[i].getTimeToCollision(getStatement().getProgram().getOwner()) 
-					< entity.getTimeToCollision(getStatement().getProgram().getOwner()))
+			if (entities[i].getTimeToCollision(getStatement().getExecuter().getOwner()) 
+					< entity.getTimeToCollision(getStatement().getExecuter().getOwner()))
 				entity = entities[i];
 		return entity;
 	}

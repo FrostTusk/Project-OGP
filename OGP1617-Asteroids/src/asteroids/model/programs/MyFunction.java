@@ -1,10 +1,13 @@
 package asteroids.model.programs;
 
 import java.util.List;
+
+import asteroids.model.Program;
+import asteroids.model.Ship;
 import asteroids.part3.programs.SourceLocation;
 
 @SuppressWarnings("rawtypes")
-public class MyFunction implements Runnable {
+public class MyFunction implements Executable {
 	
 	public MyFunction(String functionName, MyStatement body, SourceLocation location) {
 		setFunctionName(functionName);
@@ -56,19 +59,19 @@ public class MyFunction implements Runnable {
 	}
 
 	@Override
-	public Object getLocalVar() {
+	public Object getLocalVar(String name) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Object getGlobalVar() {
+	public Object getGlobalVar(String name) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void addPrintValue() {
+	public void addPrintValue(Object value) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -78,5 +81,42 @@ public class MyFunction implements Runnable {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void flagLine(SourceLocation location) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean getFlag(SourceLocation location) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Ship getOwner() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setTime(double time) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addVar(String name, Object value) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Program getProgram() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	
 }

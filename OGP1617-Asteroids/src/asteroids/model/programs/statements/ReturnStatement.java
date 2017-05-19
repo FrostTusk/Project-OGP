@@ -1,6 +1,6 @@
 package asteroids.model.programs.statements;
 
-import asteroids.model.Program;
+import asteroids.model.programs.Executable;
 import asteroids.model.programs.MyExpression;
 import asteroids.model.programs.MyStatement;
 import asteroids.part3.programs.SourceLocation;
@@ -38,13 +38,13 @@ public class ReturnStatement <T> implements MyStatement{
 
 	
 
-	private Program program;
+	private Executable executer;
 	private MyStatement superStatement;
 	
 	
 	@Override
-	public Program getProgram() {
-		return this.program;
+	public Executable getExecuter() {
+		return this.executer;
 	}
 
 	@Override
@@ -59,8 +59,8 @@ public class ReturnStatement <T> implements MyStatement{
 	
 	
 	@Override
-	public void setProgram(Program program) {
-		this.program = program;
+	public void setExecuter(Executable executer) {
+		this.executer = executer;
 		getValue().setStatement(this);
 	}
 
@@ -73,9 +73,9 @@ public class ReturnStatement <T> implements MyStatement{
 	
 	@Override
 	public void execute() {
-		if (getProgram().getFlag(getLocation())) return;
-		setProgram(getProgram());
-		getProgram().flagLine(getLocation()); // TODO Return a value.
+		if (getExecuter().getFlag(getLocation())) return;
+		setExecuter(getExecuter());
+		getExecuter().flagLine(getLocation()); // TODO Return a value.
 	}
 	
 }

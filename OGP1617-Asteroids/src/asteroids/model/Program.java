@@ -1,19 +1,16 @@
 package asteroids.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import asteroids.model.programs.MyFunction;
-import asteroids.model.programs.MyStatement;
+import java.util.*;
+import asteroids.model.programs.*;
+import asteroids.model.programs.Executable;
 import asteroids.part3.programs.SourceLocation;
 
-public class Program {
+public class Program implements Executable {
 	
 	public Program(List<MyFunction> functions, MyStatement main) {
 		setFunctions(functions);
 		setMain(main);
-		main.setProgram(this);
+		main.setExecuter(this);
 		
 		setTime(0);
 		this.printTracker = new ArrayList<>();
@@ -129,6 +126,18 @@ public class Program {
 	public void execute(double time) {
 		setTime(getTime() + time);
 		main.execute();
+	}
+
+	@Override
+	public void addVar(String name, Object value) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Program getProgram() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

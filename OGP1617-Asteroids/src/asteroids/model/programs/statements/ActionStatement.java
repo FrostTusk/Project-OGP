@@ -1,9 +1,9 @@
 package asteroids.model.programs.statements;
 
 import asteroids.helper.program.ActionType;
-import asteroids.model.Program;
 import asteroids.model.programs.MyExpression;
 import asteroids.model.programs.MyStatement;
+import asteroids.model.programs.Executable;
 import asteroids.part3.programs.SourceLocation;
 
 public class ActionStatement implements MyStatement {
@@ -50,7 +50,7 @@ public class ActionStatement implements MyStatement {
 	}
 
 
-	private Program program;
+	private Executable runner;
 	private MyStatement superStatement;
 	
 	
@@ -60,8 +60,8 @@ public class ActionStatement implements MyStatement {
 	}
 
 	@Override
-	public Program getProgram() {
-		return this.program;
+	public Executable getExecuter() {
+		return this.runner;
 	}
 
 	@Override
@@ -71,8 +71,8 @@ public class ActionStatement implements MyStatement {
 	
 
 	@Override
-	public void setProgram(Program program) {
-		this.program = program;
+	public void setExecuter(Executable runner) {
+		this.runner = runner;
 	}
 
 	@Override
@@ -84,30 +84,30 @@ public class ActionStatement implements MyStatement {
 
 	@Override
 	public void execute() throws IllegalStateException {
-		if (getProgram().getFlag(getLocation())) return;
-		setProgram(getProgram());
-		if (getProgram().getTime() < 0.2)
+		if (getExecuter().getFlag(getLocation())) return;
+		setExecuter(getExecuter());
+		if (getExecuter().getTime() < 0.2)
 			throw new IllegalStateException();
 		switch (getActionType()) {
 			case SHOOT:
-				getProgram().getOwner().fireBullet();
+				getExecuter().getOwner().fireBullet();
 				break;
 			case SKIP:
 				break;
 			case THRUSTOFF:
-				getProgram().getOwner().thrustOff();
+				getExecuter().getOwner().thrustOff();
 				break;
 			case THRUSTON:
-				getProgram().getOwner().thrustOn();
+				getExecuter().getOwner().thrustOn();
 				break;
 			case TURN:
-				getProgram().getOwner().turn(angle);
+				getExecuter().getOwner().turn(angle);
 				break;
 			default:
 				throw new IllegalArgumentException();
 		}
-		getProgram().setTime(getProgram().getTime() - 0.2);
-		getProgram().flagLine(getLocation());
+		getExecuter().setTime(getExecuter().getTime() - 0.2);
+		getExecuter().flagLine(getLocation());
 	}
 
 }

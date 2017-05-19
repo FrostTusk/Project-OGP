@@ -13,7 +13,7 @@ public class SelfEntityExpression extends EntityExpression {
 	@Override
 	public void setEntity() {
 		try {
-			setEntity(getStatement().getProgram().getOwner());
+			setEntity(getStatement().getExecuter().getOwner());
 		}
 		catch (NullPointerException exc) {
 			setEntity(null);
