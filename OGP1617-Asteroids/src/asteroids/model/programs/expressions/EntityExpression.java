@@ -48,13 +48,23 @@ public abstract class EntityExpression implements MyExpression<Entity> {
 	
 	public void setStatement(MyStatement statement) {
 		this.statement = statement;
-		setEntity();
+		try {
+			setEntity();
+		}
+		catch (IndexOutOfBoundsException exc){
+			setEntity(null);
+		}
 	}	
 	
 	
 	@Override
 	public Entity evaluate() {
-		return getEntity();
+		try {
+			return getEntity();
+		}
+		catch (IndexOutOfBoundsException exc){
+			return null;
+		}
 	}
 	
 }

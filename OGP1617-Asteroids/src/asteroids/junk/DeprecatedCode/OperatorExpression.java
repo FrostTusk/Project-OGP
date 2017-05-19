@@ -62,7 +62,8 @@ public class OperatorExpression <T> implements MyExpression<T> {
 		switch (getOperatorType()) {
 		case EQUALITY:
 			break;
-		default:;
+		default:
+			throw new IllegalArgumentException();
 		}
 		return null;
 	}
