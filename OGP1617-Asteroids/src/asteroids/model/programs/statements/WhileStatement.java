@@ -11,6 +11,7 @@ public class WhileStatement implements MyStatement {
 		setLocation(location);
 		setCondition(condition);
 		setBody(body);
+		body.setSuperStatement(this);
 	}
 	
 
@@ -19,6 +20,7 @@ public class WhileStatement implements MyStatement {
 	private Program program;
 	private MyStatement superStatement;
 	private MyStatement body;
+	private Boolean breakWhile = false;
 	
 	
 	public MyExpression<Boolean> getCondition() {
@@ -82,9 +84,18 @@ public class WhileStatement implements MyStatement {
 	@Override
 	public void execute() throws IllegalStateException {
 		if (getProgram().getFlag(getLocation())) return;
-		while (getCondition().evaluate())
-			body.execute();
+		while (getCondition().evaluate() && !breakWhile)
+				body.execute();
 		getProgram().flagLine(getLocation());
+	}
+	
+	private void breakThisWhile() {
+		breakWhile = true;
+		
+//		SourceLocation returnLocation = getWhile().getLocation();
+//		getProgram().flagLine(returnLocation);
+		
+		
 	}
 	
 	
@@ -150,9 +161,8 @@ public class WhileStatement implements MyStatement {
 			if (getSuperStatement().getClass() != WhileStatement.class)
 				throw new RuntimeException(); 
 			
-			SourceLocation returnLocation = getWhile().getLocation();
-			getProgram().flagLine(returnLocation);
-			
+			WhileStatement superWhile = ((WhileStatement)this.getSuperStatement());
+			superWhile.breakThisWhile();
 			
 		}
 		
