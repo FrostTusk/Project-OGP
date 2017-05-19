@@ -3,11 +3,12 @@ package asteroids.model.programs.expressions.operator;
 import asteroids.helper.program.OperatorType;
 import asteroids.model.programs.MyExpression;
 import asteroids.model.programs.MyStatement;
+import asteroids.model.programs.expressions.OperatorExpression;
 import asteroids.part3.programs.SourceLocation;
 
-public class DoubleOperatorExpression implements MyExpression<Double> {
+public class DoubleBooleanOperatorExpression implements MyExpression<Boolean>, OperatorExpression<Double> {
 
-	public DoubleOperatorExpression(MyExpression<Double> expression1, MyExpression<Double> expression2, 
+	public DoubleBooleanOperatorExpression(MyExpression<Double> expression1, MyExpression<Double> expression2, 
 			OperatorType operatorType, SourceLocation location) {
 		setLocation(location);
 		setExpression1(expression1);
@@ -23,14 +24,17 @@ public class DoubleOperatorExpression implements MyExpression<Double> {
 	private SourceLocation location;
 	
 	
+	@Override
 	public MyExpression<Double> getExpression1() {
 		return this.expression1;
 	}
 	
+	@Override
 	public MyExpression<Double> getExpression2() {
 		return this.expression2;
 	}
 	
+	@Override
 	public OperatorType getOperatorType() {
 		return this.operatorType;
 	}
@@ -74,12 +78,10 @@ public class DoubleOperatorExpression implements MyExpression<Double> {
 	
 	
 	@Override
-	public Double evaluate() {
+	public Boolean evaluate() {
 		switch (operatorType) {
-		case ADDITION:
-			return getExpression1().evaluate() + getExpression2().evaluate();
-		case MULTIPLICATION:
-			return getExpression1().evaluate() * getExpression2().evaluate();			
+		case LESSTHAN:
+			return getExpression1().evaluate() < getExpression2().evaluate();
 		default:
 			throw new IllegalArgumentException();
 		}

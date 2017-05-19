@@ -10,6 +10,7 @@ import asteroids.model.programs.MyStatement;
 import asteroids.model.programs.expressions.*;
 import asteroids.model.programs.statements.*;
 
+@SuppressWarnings("all")
 public class ProgramExecuter {
 	
 	public ProgramExecuter(Ship ship, Program program, double time) {
@@ -162,7 +163,7 @@ public class ProgramExecuter {
 	}
 	
 	
-	
+
 	private SimpleClass expressionHandler(MyExpression<?> expression) {
 		ExpressionType type = ExpressionType.CHANGESIGN;//expression.getType();
 		switch (type) {

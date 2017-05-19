@@ -3,11 +3,13 @@ package asteroids.model.programs.expressions.operator;
 import asteroids.helper.program.OperatorType;
 import asteroids.model.programs.MyExpression;
 import asteroids.model.programs.MyStatement;
+import asteroids.model.programs.expressions.OperatorExpression;
 import asteroids.part3.programs.SourceLocation;
 
-public class BooleanOperatorExpression implements MyExpression<Boolean> {
+public class AllBooleanOperatorExpression <T> implements MyExpression<Boolean>, OperatorExpression<T> {
 
-	public BooleanOperatorExpression(MyExpression<Boolean> expression1, MyExpression<Boolean> expression2, 
+	
+	public AllBooleanOperatorExpression(MyExpression<T> expression1, MyExpression<T> expression2, 
 			OperatorType operatorType, SourceLocation location) {
 		setLocation(location);
 		setExpression1(expression1);
@@ -18,19 +20,22 @@ public class BooleanOperatorExpression implements MyExpression<Boolean> {
 	
 	
 	private OperatorType operatorType;
-	private MyExpression<Boolean> expression1;
-	private MyExpression<Boolean> expression2;
+	private MyExpression<T> expression1;
+	private MyExpression<T> expression2;
 	private SourceLocation location;
 	
 	
-	public MyExpression<Boolean> getExpression1() {
+	@Override
+	public MyExpression<T> getExpression1() {
 		return this.expression1;
 	}
-	
-	public MyExpression<Boolean> getExpression2() {
+
+	@Override
+	public MyExpression<T> getExpression2() {
 		return this.expression2;
 	}
-	
+
+	@Override
 	public OperatorType getOperatorType() {
 		return this.operatorType;
 	}
@@ -40,12 +45,12 @@ public class BooleanOperatorExpression implements MyExpression<Boolean> {
 		return this.location;
 	}
 	
-	
-	private void setExpression1(MyExpression<Boolean> expression) {
+
+	private void setExpression1(MyExpression<T> expression) {
 		this.expression1 = expression;
 	}
 
-	private void setExpression2(MyExpression<Boolean> expression) {
+	private void setExpression2(MyExpression<T> expression) {
 		this.expression2 = expression;
 	}
 	
@@ -60,10 +65,11 @@ public class BooleanOperatorExpression implements MyExpression<Boolean> {
 	
 	
 	private MyStatement statement;
-
+	
+	
 	@Override
 	public MyStatement getStatement() {
-		return statement;
+		return this.statement;
 	}
 
 	@Override

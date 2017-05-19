@@ -4,6 +4,7 @@ import java.util.List;
 
 import asteroids.helper.entity.*;
 import asteroids.helper.program.*;
+import asteroids.junk.DeprecatedCode.OperatorExpression;
 import asteroids.model.*;
 import asteroids.model.programs.expressions.*;
 import asteroids.model.programs.expressions.entity.*;

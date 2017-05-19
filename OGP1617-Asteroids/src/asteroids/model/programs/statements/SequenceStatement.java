@@ -76,7 +76,7 @@ public class SequenceStatement implements MyStatement {
 		setProgram(getProgram());
 		for (MyStatement subStatement: getStatements()) {
 			subStatement.execute();
-			if (subStatement.getClass() == BreakStatement.class) break;
+//			if (subStatement.getClass() == BreakStatement.class) break;
 		}
 		getProgram().flagLine(getLocation());
 	}
