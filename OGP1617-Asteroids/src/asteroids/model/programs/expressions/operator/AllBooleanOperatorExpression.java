@@ -15,7 +15,7 @@ public class AllBooleanOperatorExpression <T> implements MyExpression<Boolean>, 
 		setExpression1(expression1);
 		setExpression2(expression2);
 		setOperatorType(operatorType);
-		if (expression1.getClass() != expression2.getClass()) throw new RuntimeException();
+//		if (expression1.getClass() != expression2.getClass()) throw new RuntimeException();
 	}
 	
 	

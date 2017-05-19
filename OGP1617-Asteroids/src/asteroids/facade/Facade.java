@@ -964,6 +964,9 @@ public class Facade implements IFacade {
 		catch (NullPointerException exc) {
 			throw new ModelException(exc);
 		}
+		catch (ClassCastException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override

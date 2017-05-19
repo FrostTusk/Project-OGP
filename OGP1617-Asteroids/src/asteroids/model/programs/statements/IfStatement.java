@@ -49,6 +49,7 @@ public class IfStatement implements MyStatement {
 
 	private void setCondition(MyExpression<Boolean> condition) {
 		this.condition = condition;
+		condition.setStatement(this);
 	}
 	
 	private void setIfBody(MyStatement ifBody) {
@@ -84,6 +85,9 @@ public class IfStatement implements MyStatement {
 	public void setExecuter(Executable executer) {
 		this.executer = executer;
 		getCondition().setStatement(this);
+		getIfBody().setExecuter(executer);
+		if (getElseBody() != null)
+			getElseBody().setExecuter(executer);
 	}
 
 	@Override

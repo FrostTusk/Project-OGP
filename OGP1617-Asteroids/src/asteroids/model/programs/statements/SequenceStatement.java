@@ -58,6 +58,8 @@ public class SequenceStatement implements MyStatement {
 
 	@Override
 	public void setExecuter(Executable executer) {
+		for (MyStatement subStatement: getStatements())
+			subStatement.setExecuter(executer);
 		this.executer = executer;
 	}
 
@@ -72,7 +74,7 @@ public class SequenceStatement implements MyStatement {
 
 	@Override
 	public void execute() throws IllegalStateException {
-		if (getExecuter().getFlag(getLocation())) return;
+//		if (getExecuter().getFlag(getLocation())) return;
 		setExecuter(getExecuter());
 		for (MyStatement subStatement: getStatements()) {
 			subStatement.execute();
