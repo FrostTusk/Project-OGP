@@ -1,5 +1,6 @@
 package asteroids.model.programs.statements;
 
+import asteroids.junk.TestException;
 import asteroids.model.programs.Executable;
 import asteroids.model.programs.MyStatement;
 import asteroids.part3.programs.SourceLocation;
@@ -58,13 +59,23 @@ public class BreakStatement implements MyStatement {
 	}
 
 	
+	@Override
+	public void requestFlag() {
+		getExecuter().flagLine(getLocation());
+	}
 
+	@Override
+	public void requestDeFlag() {
+		getExecuter().deFlagLine(getLocation());
+	}
+	
 	@Override
 	public void execute() {
 		if (getExecuter().getFlag(getLocation())) return;
 		if (getSuperStatement().getClass() != WhileStatement.class)
-			throw new RuntimeException(); 
-		//TODO: inner class
+			throw new IllegalArgumentException(); 
+		requestFlag();
+		throw new TestException();
 	}
-	
+
 }

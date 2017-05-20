@@ -96,18 +96,33 @@ public class IfStatement implements MyStatement {
 	}
 	
 	
+	@Override
+	public void requestFlag() {
+		getExecuter().flagLine(getLocation());
+		getIfBody().requestFlag();
+		if (getElseBody() != null)
+			getElseBody().requestFlag();
+	}
 
+	@Override
+	public void requestDeFlag() {
+		getExecuter().deFlagLine(getLocation());
+		getIfBody().requestDeFlag();
+		if (getElseBody() != null)
+			getElseBody().requestDeFlag();
+	}
+	
 	@Override
 	public void execute() throws IllegalStateException {
 		if (getExecuter().getFlag(getLocation())) return;
 		setExecuter(getExecuter());
-		if (getCondition().evaluate()) {
-			getIfBody().execute();	// FIXME how to flag else body.
-		}
-		else if (getElseBody() != null) {
+		if (getCondition().evaluate())
+			getIfBody().execute();
+		else if (getElseBody() != null)
 			getElseBody().execute();
-		}
-		getExecuter().flagLine(getLocation());
+		requestFlag();
 	}
+
+
 	
 }

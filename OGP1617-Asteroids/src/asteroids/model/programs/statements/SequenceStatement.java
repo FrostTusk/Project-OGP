@@ -71,16 +71,29 @@ public class SequenceStatement implements MyStatement {
 	}
 	
 	
+	@Override
+	public void requestFlag() {
+		getExecuter().flagLine(getLocation());
+		for (MyStatement statement: getStatements())
+			statement.requestFlag();
+	}
 
 	@Override
-	public void execute() throws IllegalStateException {
-//		if (getExecuter().getFlag(getLocation())) return;
-		setExecuter(getExecuter());
-		for (MyStatement subStatement: getStatements()) {
-			subStatement.execute();
-//			if (subStatement.getClass() == BreakStatement.class) break;
-		}
-		getExecuter().flagLine(getLocation());
+	public void requestDeFlag() {
+		getExecuter().deFlagLine(getLocation());
+		for (MyStatement statement: getStatements())
+			statement.requestDeFlag();
 	}
+	
+	@Override
+	public void execute() throws IllegalStateException {
+		if (getExecuter().getFlag(getLocation())) return;
+		setExecuter(getExecuter());
+		for (MyStatement subStatement: getStatements())
+			subStatement.execute();
+		requestFlag();
+	}
+
+
 	
 }

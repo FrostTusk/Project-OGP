@@ -80,16 +80,34 @@ public class AssignmentStatement <T> implements MyStatement {
 	}
 	
 
+	@Override
+	public void requestFlag() {
+		getExecuter().flagLine(getLocation());
+	}
+
+	@Override
+	public void requestDeFlag() {
+		getExecuter().deFlagLine(getLocation());
+	}
 	
 	@Override
 	public void execute() {
 		if (getExecuter().getFlag(getLocation())) return;
+		setExecuter(getExecuter());
 //		if (getSuperStatement() == null)
 //			getExecuter().addGlobalVar(getVariableName(), getValue().evaluate());
 //		else
 //			getExecuter().addLocalVar(getVariableName(), getValue().evaluate());
+		Object localVar = getExecuter().getLocalVar(getVariableName());
+		if ( (localVar != null) 
+				&& (!localVar.getClass().isInstance(getValue().evaluate())) )
+				throw new IllegalArgumentException();
+		Object globalVar = getExecuter().getGlobalVar(getVariableName());
+		if ( (localVar == null) && (globalVar != null)
+				&& (!globalVar.getClass().isInstance(getValue().evaluate())))
+			throw new IllegalArgumentException();
 		getExecuter().addVar(getVariableName(), getValue().evaluate());
-		getExecuter().flagLine(getLocation());
+		requestFlag();
 	}
 
 }

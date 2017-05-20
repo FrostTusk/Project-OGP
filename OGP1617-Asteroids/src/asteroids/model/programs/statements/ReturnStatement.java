@@ -1,5 +1,6 @@
 package asteroids.model.programs.statements;
 
+import asteroids.junk.TestException;
 import asteroids.model.programs.Executable;
 import asteroids.model.programs.MyExpression;
 import asteroids.model.programs.MyStatement;
@@ -70,12 +71,22 @@ public class ReturnStatement <T> implements MyStatement{
 	}
 
 	
+	@Override
+	public void requestFlag() {
+		getExecuter().flagLine(getLocation());
+	}
+
+	@Override
+	public void requestDeFlag() {
+		getExecuter().deFlagLine(getLocation());
+	}
 	
 	@Override
 	public void execute() {
 		if (getExecuter().getFlag(getLocation())) return;
 		setExecuter(getExecuter());
-		getExecuter().flagLine(getLocation()); // TODO Return a value.
+		requestFlag(); // TODO Return a value.
+		throw new TestException();
 	}
 	
 }

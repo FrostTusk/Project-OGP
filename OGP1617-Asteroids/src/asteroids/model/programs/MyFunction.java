@@ -128,6 +128,11 @@ public class MyFunction implements Executable {
 	}
 
 	@Override
+	public void deFlagLine(SourceLocation location) {
+		this.lineTracker[location.getLine() - 1] = false;
+	}
+	
+	@Override
 	public void addVar(String name, Object value) {
 		this.localVars.put(name, value);
 	}
@@ -139,8 +144,5 @@ public class MyFunction implements Executable {
 	public Object execute(List<MyExpression> actualArgs) {
 		return null;
 	}
-	
-	
-
 	
 }

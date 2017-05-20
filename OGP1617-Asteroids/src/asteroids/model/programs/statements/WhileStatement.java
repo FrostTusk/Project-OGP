@@ -1,5 +1,6 @@
 package asteroids.model.programs.statements;
 
+import asteroids.junk.TestException;
 import asteroids.model.programs.Executable;
 import asteroids.model.programs.MyExpression;
 import asteroids.model.programs.MyStatement;
@@ -11,7 +12,8 @@ public class WhileStatement implements MyStatement {
 		setLocation(location);
 		setCondition(condition);
 		setBody(body);
-		body.setSuperStatement(this);
+		getCondition().setStatement(this);
+		getBody().setSuperStatement(this);
 	}
 	
 
@@ -19,7 +21,6 @@ public class WhileStatement implements MyStatement {
 	private SourceLocation location;
 	private MyStatement superStatement;
 	private MyStatement body;
-	private Boolean breakWhile = false;
 	
 	
 	public MyExpression<Boolean> getCondition() {
@@ -74,7 +75,6 @@ public class WhileStatement implements MyStatement {
 	@Override
 	public void setExecuter(Executable executer) {
 		this.executer = executer;
-		getCondition().setStatement(this);
 	}
 
 	@Override
@@ -82,16 +82,39 @@ public class WhileStatement implements MyStatement {
 		this.superStatement = statement;
 	}
 
+	@Override
+	public void requestFlag() {
+		getExecuter().flagLine(location);	
+		body.requestFlag();
+	}
+
+
+	@Override
+	public void requestDeFlag() {
+		getExecuter().deFlagLine(location);
+		body.requestDeFlag();
+	}
 	
 	
 	@Override
 	public void execute() throws IllegalStateException {
 		if (getExecuter().getFlag(getLocation())) return;
-		while (getCondition().evaluate() && !breakWhile)
+		setExecuter(getExecuter());
+		while (getCondition().evaluate()) {
+			try {
 				body.execute();
-		getExecuter().flagLine(getLocation());
+			}
+			catch (TestException exc) {
+				break;
+			}
+			body.requestDeFlag();
+		}
+		requestFlag();
+		body.requestFlag();
 	}
-	
+
+
+
 	
 //	private void breakThisWhile() {
 //		breakWhile = true;

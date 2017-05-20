@@ -147,5 +147,10 @@ public class Program implements Executable {
 		setTime(getTime() + time);
 		main.execute();
 	}
+
+	@Override
+	public void deFlagLine(SourceLocation location) {
+		lineTracker[location.getLine() - 1] = false;
+	}
 	
 }

@@ -69,14 +69,23 @@ public class PrintStatement <T> implements MyStatement {
 	}
 	
 	
+	@Override
+	public void requestFlag() {
+		getExecuter().flagLine(getLocation());
+	}
 
+	@Override
+	public void requestDeFlag() {
+		getExecuter().deFlagLine(getLocation());
+	}
+	
 	@Override
 	public void execute() {
 		if (getExecuter().getFlag(getLocation())) return;
 		setExecuter(getExecuter());
 		System.out.println(getValue().evaluate());
 		getExecuter().addPrintValue(getValue().evaluate());
-		getExecuter().flagLine(getLocation());
+		requestFlag();
 	}
 
 }

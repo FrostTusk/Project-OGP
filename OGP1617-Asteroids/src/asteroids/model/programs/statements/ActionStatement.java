@@ -81,6 +81,15 @@ public class ActionStatement implements MyStatement {
 	}
 	
 	
+	@Override
+	public void requestFlag() {
+		getExecuter().flagLine(getLocation());
+	}
+
+	@Override
+	public void requestDeFlag() {
+		getExecuter().deFlagLine(getLocation());
+	}
 
 	@Override
 	public void execute() throws IllegalStateException {
@@ -107,7 +116,7 @@ public class ActionStatement implements MyStatement {
 				throw new IllegalArgumentException();
 		}
 		getExecuter().setTime(getExecuter().getTime() - 0.2);
-		getExecuter().flagLine(getLocation());
+		requestFlag();
 	}
 
 }

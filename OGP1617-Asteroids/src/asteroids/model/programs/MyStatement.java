@@ -31,6 +31,8 @@ public interface MyStatement {
 	public int getSize();
 	public void setExecuter(Executable executer);
 	public void setSuperStatement(MyStatement statement);
+	public void requestFlag();
+	public void requestDeFlag();
 	public void execute() throws IllegalStateException, IllegalArgumentException;
 	
 }
