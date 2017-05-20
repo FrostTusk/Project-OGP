@@ -11,6 +11,7 @@ public class AssignmentStatement <T> implements MyStatement {
 		setLocation(location);
 		setVariableName(variableName);
 		setValue(value);
+		getValue().setStatement(this);
 	}
 	
 	
@@ -71,7 +72,6 @@ public class AssignmentStatement <T> implements MyStatement {
 	@Override
 	public void setExecuter(Executable executer) {
 		this.executer = executer;
-		getValue().setStatement(this);
 	}
 
 	@Override

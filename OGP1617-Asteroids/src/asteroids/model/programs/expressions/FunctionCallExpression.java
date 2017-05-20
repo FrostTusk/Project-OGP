@@ -67,7 +67,11 @@ public class FunctionCallExpression implements MyExpression<Object> {
 	
 	@Override
 	public Object evaluate() {
-		return getStatement().getExecuter().getProgram().getFunction(getFunctionName()).execute(getActualArgs());
+		MyFunction template = getStatement().getExecuter().getProgram().getFunction(getFunctionName());
+		MyFunction function = new MyFunction(template.getFunctionName(), template.getBody(), template.getLocation());
+		function.setProgram(getStatement().getExecuter().getProgram());
+		return function.execute(getActualArgs());
+//		return getStatement().getExecuter().getProgram().getFunction(getFunctionName()).execute(getActualArgs());
 	}
 
 }

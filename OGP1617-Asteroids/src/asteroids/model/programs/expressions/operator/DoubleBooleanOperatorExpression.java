@@ -72,6 +72,8 @@ public class DoubleBooleanOperatorExpression implements MyExpression<Boolean>, O
 
 	@Override
 	public void setStatement(MyStatement statement) {
+		getExpression1().setStatement(statement);
+		getExpression2().setStatement(statement);
 		this.statement = statement;
 	}
 

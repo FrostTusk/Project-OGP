@@ -68,6 +68,8 @@ public class DoubleDoubleOperatorExpression implements MyExpression<Double> {
 
 	@Override
 	public void setStatement(MyStatement statement) {
+		getExpression1().setStatement(statement);
+		getExpression2().setStatement(statement);
 		this.statement = statement;
 	}
 

@@ -72,8 +72,12 @@ public class BreakStatement implements MyStatement {
 	@Override
 	public void execute() {
 		if (getExecuter().getFlag(getLocation())) return;
-		if (getSuperStatement().getClass() != WhileStatement.class)
-			throw new IllegalArgumentException(); 
+		MyStatement superStatement = getSuperStatement();
+		while (!WhileStatement.class.isInstance(superStatement)) {
+			superStatement = superStatement.getSuperStatement();
+			if (superStatement == null)
+				throw new IllegalArgumentException();
+		}
 		requestFlag();
 		throw new TestException();
 	}

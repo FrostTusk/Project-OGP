@@ -40,16 +40,19 @@ public class SqrtExpression implements MyExpression<Double> {
 		return Math.sqrt(expression.evaluate());
 	}
 
+	
+	private MyStatement statement;
+	
+	
 	@Override
 	public MyStatement getStatement() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.statement;
 	}
 
 	@Override
 	public void setStatement(MyStatement statement) {
-		// TODO Auto-generated method stub
-		
+		getExpression().setStatement(statement);
+		this.statement = statement;
 	}
 	
 }

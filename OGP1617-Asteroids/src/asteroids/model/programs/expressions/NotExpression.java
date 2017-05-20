@@ -28,6 +28,7 @@ public class NotExpression implements MyExpression<Boolean> {
 	
 	private void setExpression(MyExpression<Boolean> expression) {
 		this.expression = expression;
+		getExpression().setStatement(statement);
 	}
 
 	private void setLocation(SourceLocation location) {

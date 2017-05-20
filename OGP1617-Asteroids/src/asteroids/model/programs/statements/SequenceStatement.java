@@ -10,6 +10,9 @@ public class SequenceStatement implements MyStatement {
 	public SequenceStatement(List<MyStatement> statements, SourceLocation location) {
 		setLocation(location);
 		setStatements(statements);
+		
+		for (MyStatement statement: getStatements())
+			statement.setSuperStatement(this);
 	}
 	
 	
@@ -87,7 +90,7 @@ public class SequenceStatement implements MyStatement {
 	
 	@Override
 	public void execute() throws IllegalStateException {
-		if (getExecuter().getFlag(getLocation())) return;
+//		if (getExecuter().getFlag(getLocation())) return;
 		setExecuter(getExecuter());
 		for (MyStatement subStatement: getStatements())
 			subStatement.execute();

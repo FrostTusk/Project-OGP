@@ -17,7 +17,7 @@ public class MyFunction implements Executable {
 		setFunctionName(functionName);
 		setBody(body);
 		setLocation(location);	
-		
+				
 		this.flagMap = new HashMap<String, Boolean>();
 		this.localVars = new HashMap<String, Object>();
 		this.args = new ArrayList<Object>();
@@ -172,6 +172,7 @@ public class MyFunction implements Executable {
 	
 	public Object execute(List<MyExpression> actualArgs) {
 		this.returnSet = false;
+		body.setExecuter(this);
 		body.requestDeFlag();
 		for (MyExpression arg: actualArgs)
 			addArg(arg.evaluate());

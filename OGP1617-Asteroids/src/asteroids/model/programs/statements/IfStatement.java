@@ -13,6 +13,10 @@ public class IfStatement implements MyStatement {
 		setCondition(condition);
 		setIfBody(ifBody);
 		setElseBody(elseBody);
+		
+		getIfBody().setSuperStatement(this);
+		if (getElseBody() != null)
+			getElseBody().setSuperStatement(this);
 	}
 	
 	

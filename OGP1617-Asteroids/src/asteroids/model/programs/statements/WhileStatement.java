@@ -12,6 +12,7 @@ public class WhileStatement implements MyStatement {
 		setLocation(location);
 		setCondition(condition);
 		setBody(body);
+		
 		getCondition().setStatement(this);
 		getBody().setSuperStatement(this);
 	}
@@ -75,6 +76,7 @@ public class WhileStatement implements MyStatement {
 	@Override
 	public void setExecuter(Executable executer) {
 		this.executer = executer;
+		getBody().setExecuter(executer);
 	}
 
 	@Override
@@ -85,14 +87,14 @@ public class WhileStatement implements MyStatement {
 	@Override
 	public void requestFlag() {
 		getExecuter().flagLine(location);	
-		body.requestFlag();
+		getBody().requestFlag();
 	}
 
 
 	@Override
 	public void requestDeFlag() {
 		getExecuter().deFlagLine(location);
-		body.requestDeFlag();
+		getBody().requestDeFlag();
 	}
 	
 	
