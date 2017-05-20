@@ -41,12 +41,13 @@ public class Program implements Executable {
 	}
 	
 
-	public void canHaveAsFunction(MyFunction function) throws IllegalArgumentException {
+	public boolean canHaveAsName(String name) {
 		if (getAllFunctions() == null)
-			return;
+			return true;
 		for (MyFunction ownedFunction: getAllFunctions())
-			if (ownedFunction.getFunctionName().equals(function.getFunctionName()))
-				throw new IllegalArgumentException();
+			if (ownedFunction.getFunctionName().equals(name))
+				return false;
+		return true;
 	}
 	
 	
@@ -54,7 +55,8 @@ public class Program implements Executable {
 		if (functions == null)
 			return;
 		for (MyFunction function: functions)
-			canHaveAsFunction(function);
+			if (!canHaveAsName(function.getFunctionName()))
+				throw new IllegalArgumentException();
 		this.functions = functions;
 	}
 	
@@ -114,6 +116,8 @@ public class Program implements Executable {
 //		return (printTracker.isEmpty()) ? result:printTracker;
 //		return this.printTracker;
 //		try {
+		if (!terminated)
+			return null;
 		return (this.printTracker.isEmpty()) ? null: this.printTracker;
 //		}
 //		catch (NullPointerException exc) {
@@ -168,10 +172,15 @@ public class Program implements Executable {
 		globalVars.put(name, variable);
 	}
 	
+	
+	
+	private boolean terminated;
 
+	
 	public void execute(double time) {
 		setTime(getTime() + time);
 		main.execute();
+		terminated = true;
 	}
 
 	

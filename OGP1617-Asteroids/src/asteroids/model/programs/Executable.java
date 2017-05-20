@@ -13,6 +13,7 @@ public interface Executable {
 	public boolean getFlag(SourceLocation location);
 	public Object getLocalVar(String name);
 	public Object getGlobalVar(String name);
+	public boolean canHaveAsName(String name);
 	public void addVar(String name, Object value);
 	public void addPrintValue(Object value);
 	public void flagLine(SourceLocation location);

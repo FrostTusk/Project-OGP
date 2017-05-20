@@ -1,5 +1,6 @@
 package asteroids.model.programs.statements;
 
+import asteroids.model.Program;
 import asteroids.model.programs.Executable;
 import asteroids.model.programs.MyExpression;
 import asteroids.model.programs.MyStatement;
@@ -94,10 +95,9 @@ public class AssignmentStatement <T> implements MyStatement {
 	public void execute() {
 		if (getExecuter().getFlag(getLocation())) return;
 		setExecuter(getExecuter());
-//		if (getSuperStatement() == null)
-//			getExecuter().addGlobalVar(getVariableName(), getValue().evaluate());
-//		else
-//			getExecuter().addLocalVar(getVariableName(), getValue().evaluate());
+		
+		if (!getExecuter().canHaveAsName(getVariableName()) && (Program.class.isInstance(getExecuter())))
+			throw new IllegalArgumentException();
 		Object localVar = getExecuter().getLocalVar(getVariableName());
 		if ( (localVar != null) 
 				&& (!localVar.getClass().isInstance(getValue().evaluate())) )
@@ -106,6 +106,7 @@ public class AssignmentStatement <T> implements MyStatement {
 		if ( (localVar == null) && (globalVar != null)
 				&& (!globalVar.getClass().isInstance(getValue().evaluate())))
 			throw new IllegalArgumentException();
+		
 		getExecuter().addVar(getVariableName(), getValue().evaluate());
 		requestFlag();
 	}

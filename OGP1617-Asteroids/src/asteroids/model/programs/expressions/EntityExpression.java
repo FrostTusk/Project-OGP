@@ -51,7 +51,7 @@ public abstract class EntityExpression implements MyExpression<Entity> {
 		try {
 			setEntity();
 		}
-		catch (IndexOutOfBoundsException exc){
+		catch (IndexOutOfBoundsException exc) {
 			setEntity(null);
 		}
 		catch (NullPointerException exc) {
