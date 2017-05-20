@@ -85,7 +85,8 @@ public class ReturnStatement <T> implements MyStatement{
 	public void execute() {
 		if (getExecuter().getFlag(getLocation())) return;
 		setExecuter(getExecuter());
-		requestFlag(); // TODO Return a value.
+		getExecuter().setReturn(getValue());
+		requestFlag(); // TODO Return a value.	
 		throw new TestException();
 	}
 	

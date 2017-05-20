@@ -2,7 +2,6 @@ package asteroids.model;
 
 import java.util.*;
 import asteroids.model.programs.*;
-import asteroids.model.programs.Executable;
 import asteroids.part3.programs.SourceLocation;
 
 public class Program implements Executable {
@@ -165,6 +164,11 @@ public class Program implements Executable {
 	
 	public String getPositionString(SourceLocation location) {
 		return Integer.toString(location.getLine()) + "," + Integer.toString(location.getColumn());
+	}
+
+	@Override
+	public void setReturn(MyExpression<?> value) {
+		throw new IllegalArgumentException();
 	}
 	
 }

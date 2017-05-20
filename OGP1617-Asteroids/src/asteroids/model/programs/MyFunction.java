@@ -1,19 +1,26 @@
 package asteroids.model.programs;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import asteroids.junk.TestException;
 import asteroids.model.Program;
 import asteroids.model.Ship;
 import asteroids.part3.programs.SourceLocation;
 
 @SuppressWarnings("rawtypes")
 public class MyFunction implements Executable {
-	
+		
 	public MyFunction(String functionName, MyStatement body, SourceLocation location) {
 		setFunctionName(functionName);
 		setBody(body);
-		setLocation(location);		
+		setLocation(location);	
+		
+		this.flagMap = new HashMap<String, Boolean>();
+		this.localVars = new HashMap<String, Object>();
+		this.args = new ArrayList<Object>();
 	}
 	
 	
@@ -87,14 +94,21 @@ public class MyFunction implements Executable {
 	
 	
 	
-	private boolean[] lineTracker;
+//	private boolean[] lineTracker;
+	private Map<String, Boolean> flagMap;
 	private Map<String, Object> localVars;
-	private Map<String, Object> args;
+	private List<Object> args;
 	
 	
 	@Override
 	public boolean getFlag(SourceLocation location) {
-		return this.lineTracker[location.getLine() - 1];
+//		return this.lineTracker[location.getLine() - 1];
+		try {
+			return flagMap.get(getPositionString(location));
+		}
+		catch (NullPointerException exc) {
+			return false;
+		}
 	}
 
 	@Override
@@ -124,12 +138,14 @@ public class MyFunction implements Executable {
 
 	@Override
 	public void flagLine(SourceLocation location) {
-		this.lineTracker[location.getLine() - 1] = true;
+//		this.lineTracker[location.getLine() - 1] = true;
+		flagMap.put(getPositionString(location), true);
 	}
 
 	@Override
 	public void deFlagLine(SourceLocation location) {
-		this.lineTracker[location.getLine() - 1] = false;
+//		this.lineTracker[location.getLine() - 1] = false;
+		flagMap.put(getPositionString(location), false);
 	}
 	
 	@Override
@@ -137,12 +153,42 @@ public class MyFunction implements Executable {
 		this.localVars.put(name, value);
 	}
 
-	public void addArg(String name, Object value) {
-		this.args.put(name, value);
+	public void addArg(Object value) {
+		this.args.add(value);
 	}
+	
+	
+	
+	private MyExpression returnValue;
+	private boolean returnSet;
+	
+	
+	@Override
+	public void setReturn(MyExpression<?> value) {
+		this.returnValue = value;
+		this.returnSet = true;
+	}
+	
 	
 	public Object execute(List<MyExpression> actualArgs) {
-		return null;
+		this.returnSet = false;
+		body.requestDeFlag();
+		for (MyExpression arg: actualArgs)
+			addArg(arg.evaluate());
+		try {
+			body.execute();
+		}
+		catch(TestException exc) {
+			if (returnSet)
+				return this.returnValue;
+		}
+		throw new IllegalArgumentException();
 	}
 	
+
+
+	public String getPositionString(SourceLocation location) {
+		return Integer.toString(location.getLine()) + "," + Integer.toString(location.getColumn());
+	}
+
 }

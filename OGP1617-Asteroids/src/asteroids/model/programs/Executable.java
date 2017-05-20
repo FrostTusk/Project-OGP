@@ -8,6 +8,7 @@ public interface Executable {
 
 	public double getTime();
 	public Ship getOwner();
+	public Program getProgram();
 	public void setTime(double time);
 	public boolean getFlag(SourceLocation location);
 	public Object getLocalVar(String name);
@@ -16,7 +17,6 @@ public interface Executable {
 	public void addPrintValue(Object value);
 	public void flagLine(SourceLocation location);
 	public void deFlagLine(SourceLocation location);
-//	public void execute(double time);
-	public Program getProgram();
+	public void setReturn(MyExpression<?> value);
 		
 }

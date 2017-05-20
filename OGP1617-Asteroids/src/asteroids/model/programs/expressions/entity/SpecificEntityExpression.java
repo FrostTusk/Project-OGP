@@ -50,8 +50,8 @@ public class SpecificEntityExpression extends EntityExpression {
 			Entity currentEntity = entitiesArray[i]; 	 // the owner or the start entity.
 			if ( (currentEntity == startEntity) || (currentEntity == getStatement().getExecuter().getOwner()) )
 					continue;
-			if (currentEntity.getTimeToCollision(getStatement().getExecuter().getOwner()) 
-					< tempEntity.getTimeToCollision(getStatement().getExecuter().getOwner()))
+			if (currentEntity.getDistanceBetween(getStatement().getExecuter().getOwner()) 
+					< tempEntity.getDistanceBetween(getStatement().getExecuter().getOwner()))
 				tempEntity = currentEntity;
 		}
 		return tempEntity;
@@ -67,7 +67,6 @@ public class SpecificEntityExpression extends EntityExpression {
 		catch(NullPointerException exc) {
 			return null; // Default value if any element is null.
 		}
-		
 		return entitiesSet.toArray(entitiesArray);
 	}
 
