@@ -15,8 +15,8 @@ import java.util.Set;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
-import org.junit.Test;
 import org.junit.runners.MethodSorters;
+import org.junit.Test;
 
 import asteroids.model.Asteroid;
 import asteroids.model.Bullet;
@@ -50,7 +50,7 @@ public class Part3TestFull {
     System.out.println("Score: " + score + "/" + max_score);
   }
 
-  @SuppressWarnings("unchecked") // FIXME: To remove all warnings.
+  @SuppressWarnings("unchecked") // FIXME: get rid of warning.
   @Before
   public void setUp() throws ModelException {
     facade = new asteroids.facade.Facade();
