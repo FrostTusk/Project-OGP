@@ -70,7 +70,7 @@ public class FunctionCallExpression implements MyExpression<Object> {
 		MyFunction template = getStatement().getExecuter().getProgram().getFunction(getFunctionName());
 		MyFunction function = new MyFunction(template.getFunctionName(), template.getBody(), template.getLocation());
 		function.setProgram(getStatement().getExecuter().getProgram());
-		return function.execute(getActualArgs());
+		return function.execute(getActualArgs()).evaluate();
 //		return getStatement().getExecuter().getProgram().getFunction(getFunctionName()).execute(getActualArgs());
 	}
 

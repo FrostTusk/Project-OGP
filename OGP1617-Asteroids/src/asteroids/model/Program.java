@@ -40,8 +40,21 @@ public class Program implements Executable {
 		return this.main;
 	}
 	
+
+	public void canHaveAsFunction(MyFunction function) throws IllegalArgumentException {
+		if (getAllFunctions() == null)
+			return;
+		for (MyFunction ownedFunction: getAllFunctions())
+			if (ownedFunction.getFunctionName().equals(function.getFunctionName()))
+				throw new IllegalArgumentException();
+	}
 	
-	private void setFunctions(List<MyFunction> functions) {
+	
+	private void setFunctions(List<MyFunction> functions) throws IllegalArgumentException {
+		if (functions == null)
+			return;
+		for (MyFunction function: functions)
+			canHaveAsFunction(function);
 		this.functions = functions;
 	}
 	

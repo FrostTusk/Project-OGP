@@ -170,7 +170,7 @@ public class MyFunction implements Executable {
 	}
 	
 	
-	public Object execute(List<MyExpression> actualArgs) {
+	public MyExpression execute(List<MyExpression> actualArgs) {
 		this.returnSet = false;
 		body.setExecuter(this);
 		body.requestDeFlag();
@@ -183,7 +183,8 @@ public class MyFunction implements Executable {
 			if (returnSet)
 				return this.returnValue;
 		}
-		throw new IllegalArgumentException();
+		return null;
+//		throw new IllegalArgumentException();
 	}
 	
 
