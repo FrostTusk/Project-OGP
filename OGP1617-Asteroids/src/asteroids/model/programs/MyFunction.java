@@ -89,7 +89,7 @@ public class MyFunction implements Executable {
 	
 	private boolean[] lineTracker;
 	private Map<String, Object> localVars;
-//	private Map<String, Object> args;
+	private Map<String, Object> args;
 	
 	
 	@Override
@@ -112,6 +112,10 @@ public class MyFunction implements Executable {
 		return getProgram().getGlobalVar(name);
 	}
 
+	public Object getArgument(String name) {
+		return null;
+	}
+	
 	
 	@Override
 	public void addPrintValue(Object value) {
@@ -128,13 +132,15 @@ public class MyFunction implements Executable {
 		this.localVars.put(name, value);
 	}
 
+	public void addArg(String name, Object value) {
+		this.args.put(name, value);
+	}
+	
 	public Object execute(List<MyExpression> actualArgs) {
 		return null;
 	}
 	
 	
-	public Object getArgument(String name) {
-		return null;
-	}
+
 	
 }
