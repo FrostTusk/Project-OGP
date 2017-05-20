@@ -14,7 +14,8 @@ public class Program implements Executable {
 		
 		setTime(0);
 		this.printTracker = new ArrayList<Object>();
-		this.lineTracker = new boolean[main.getSize()];
+//		this.lineTracker = new boolean[main.getSize()];
+		this.flagMap = new HashMap<String, Boolean>();
 		
 		this.globalVars = new HashMap<String, Object>();
 		this.localVars = new HashMap<String, Object>();
@@ -78,14 +79,21 @@ public class Program implements Executable {
 	
 	
 	
-	private boolean[] lineTracker;
+//	private boolean[] lineTracker;
+	private Map<String, Boolean> flagMap;
 	private List<Object> printTracker;
 	private Map<String, Object> localVars;
 	private Map<String, Object> globalVars;
 
 	
 	public boolean getFlag(SourceLocation location) {
-		return lineTracker[location.getLine() - 1];
+		try {
+			return flagMap.get(getPositionString(location));
+		}
+		catch (NullPointerException exc) {
+			return false;
+		}
+//		return lineTracker[location.getLine() - 1];
 	}
 	
 	public List<Object> getPrintTracker() {
@@ -121,9 +129,16 @@ public class Program implements Executable {
 	
 
 	public void flagLine(SourceLocation location) {
-		lineTracker[location.getLine() - 1] = true;
+//		lineTracker[location.getLine() - 1] = true;
+		flagMap.put(getPositionString(location), true);
 	}
 
+	@Override
+	public void deFlagLine(SourceLocation location) {
+//		lineTracker[location.getLine() - 1] = false;
+		flagMap.put(getPositionString(location), false);
+	}
+	
 	public void addPrintValue(Object value) {
 		this.printTracker.add(value);
 	}
@@ -142,15 +157,14 @@ public class Program implements Executable {
 	}
 	
 
-
 	public void execute(double time) {
 		setTime(getTime() + time);
 		main.execute();
 	}
 
-	@Override
-	public void deFlagLine(SourceLocation location) {
-		lineTracker[location.getLine() - 1] = false;
+	
+	public String getPositionString(SourceLocation location) {
+		return Integer.toString(location.getLine()) + "," + Integer.toString(location.getColumn());
 	}
 	
 }
