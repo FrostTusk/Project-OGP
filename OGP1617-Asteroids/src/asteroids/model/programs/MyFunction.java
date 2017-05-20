@@ -183,7 +183,8 @@ public class MyFunction implements Executable {
 			if (returnSet)
 				return this.returnValue;
 		}
-		throw new IllegalArgumentException();
+		return null;
+//		throw new IllegalArgumentException();
 	}
 	
 
