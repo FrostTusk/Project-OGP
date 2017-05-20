@@ -40,6 +40,11 @@ public class Program implements Executable {
 		return this.main;
 	}
 	
+
+//	public void canHaveAsFunction(MyFunction function) {
+//		if getAllFunctions().contains(o)
+//	}
+	
 	
 	private void setFunctions(List<MyFunction> functions) {
 		this.functions = functions;

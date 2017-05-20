@@ -2,6 +2,7 @@ package asteroids.model.programs.statements;
 
 import asteroids.junk.TestException;
 import asteroids.model.programs.Executable;
+import asteroids.model.programs.MyFunction;
 import asteroids.model.programs.MyStatement;
 import asteroids.part3.programs.SourceLocation;
 
@@ -75,6 +76,8 @@ public class BreakStatement implements MyStatement {
 		MyStatement superStatement = getSuperStatement();
 		while (!WhileStatement.class.isInstance(superStatement)) {
 			superStatement = superStatement.getSuperStatement();
+			if ( (superStatement == null) && (MyFunction.class.isInstance(getExecuter())) )
+				throw new TestException();
 			if (superStatement == null)
 				throw new IllegalArgumentException();
 		}
