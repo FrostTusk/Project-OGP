@@ -90,8 +90,8 @@ public class Program implements Executable {
 	}
 	
 	public List<Object> getPrintTracker() {
-		List<Object> result = new ArrayList<Object>();
-		result.add(null);
+//		List<Object> result = new ArrayList<Object>();
+//		result.add(null);
 //		return (printTracker.isEmpty()) ? result:printTracker;
 		return printTracker;
 	}

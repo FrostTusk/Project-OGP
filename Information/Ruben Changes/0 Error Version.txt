@@ -1,0 +1,95 @@
+Project changes to 0 errors:
+
+******************************
+Program.java:
+******************************
+
+public Program(List<MyFunction> functions, MyStatement main) {
+		setFunctions(functions);
+		setMain(main);
+		main.setExecuter(this);
+		
+		setTime(0);
+		this.printTracker = new ArrayList<>();
+		this.lineTracker = new boolean[main.getSize()];
+		
+		globalVars = new HashMap<String, Object>();
+		localVars = new HashMap<String, Object>();
+	}
+
+public List<Object> getPrintTracker() {
+//		List<Object> result = new ArrayList<Object>();
+//		result.add(null);
+//		return (printTracker.isEmpty()) ? result:printTracker;
+		return printTracker;
+	}
+
+
+
+******************************
+SpecificEntityExpression.java:
+******************************
+
+public Entity getClosestEntity(Class<? extends Entity> entityType) {
+		Entity[] entities;
+
+		if (entityType != Entity.class && entityType != MinorPlanet.class) {
+			try {
+				entities = new Entity[getStatement().getExecuter().getOwner().getWorld().getAllEntitiesSpecific(entityType).size()];
+			}
+			catch(NullPointerException exc) {
+				return null;
+			}
+			entities = getStatement().getExecuter().getOwner().getWorld().getAllEntitiesSpecific(entityType).toArray(entities);
+		}
+		else if (entityType == MinorPlanet.class){
+			Entity[] entities1;
+			Entity[] entities2;
+			try {
+				int size1 = getStatement().getExecuter().getOwner().getWorld().getAllEntitiesSpecific(Asteroid.class).size();
+				int size2 = getStatement().getExecuter().getOwner().getWorld().getAllEntitiesSpecific(Planetoid.class).size();
+				
+				entities1 = new Entity[size1];
+				entities2 = new Entity[size2];
+			} catch (NullPointerException exc) {
+				return null;
+			}
+			
+			entities1 = getStatement().getExecuter().getOwner().getWorld().getAllEntitiesSpecific(Asteroid.class).toArray(entities1);
+			entities2 = getStatement().getExecuter().getOwner().getWorld().getAllEntitiesSpecific(Planetoid.class).toArray(entities2);
+			
+			int size1 = entities1.length;
+			int size2 = entities2.length;
+			entities= new Entity[size1 + size2];
+			System.arraycopy(entities1, 0, entities, 0, size1);
+			System.arraycopy(entities2, 0, entities, size1, size2);
+			
+		} else {
+			try {
+				entities = new Entity[getStatement().getExecuter().getOwner().getWorld().getAllEntities().size()];
+			} catch (NullPointerException exc) {
+				return null;
+			}
+			entities = getStatement().getExecuter().getOwner().getWorld().getAllEntities().toArray(entities);
+		}
+		
+		Entity entity = entities[0];	// Else nullpointer exception is thrown
+		if (entities.length < 2)
+			return entity;	// If there is only one such entity
+		for (int i = 1; i < entities.length; i++)	// Find the closest entity
+			if (entities[i].getDistanceBetween(getStatement().getExecuter().getOwner()) 
+					< entity.getDistanceBetween(getStatement().getExecuter().getOwner()))
+				entity = entities[i];
+		return entity;
+	}
+
+******************************
+GetterExpression.java:
+******************************
+
+public void setStatement(MyStatement statement) {
+		this.statement = statement;
+		// getdir has no expression, see programfactory createGetDirectionExpression
+		if (getGetterType() == GetterType.GETDIR) return; 
+		getExpression().setStatement(statement);
+	}
