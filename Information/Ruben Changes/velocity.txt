@@ -1,0 +1,18 @@
+public void setVelocity(double velocityX, double velocityY) {
+		if (isValidSpeed(velocityX, velocityY)) {
+			this.velocityX = velocityX;
+			this.velocityY = velocityY;
+		}
+		else if (this.getType() == EntityType.SHIP && ((Ship)this).getThrustStatus()) {
+			Double prevVelocityX = this.getVelocityX();
+			Double prevVelocityY = this.getVelocityY();
+			Double orientation = Math.atan(prevVelocityX / prevVelocityY);
+			this.velocityX = 299999*Math.cos(orientation);
+			this.velocityY = 299999*Math.sin(orientation);
+		} else {
+			this.velocityX = 0;
+			this.velocityY = 0;
+		}
+				
+		
+	}

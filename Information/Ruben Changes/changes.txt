@@ -1,0 +1,66 @@
+returnStatement:
+
+@Override
+	public void execute() {
+		if (getExecuter().getFlag(getLocation())) return;
+		setExecuter(getExecuter());
+		try {
+			((MyFunction) getExecuter()).addParameter(0, value.evaluate());
+		} catch (Exception exc) {
+			; // line for debugging
+		}
+		requestFlag();
+		throw new TestException();
+	}
+
+
+
+MyFunction:
+
+
+public MyFunction(String functionName, MyStatement body, SourceLocation location) {
+		setFunctionName(functionName);
+		setBody(body);
+		setLocation(location);	
+		this.parameters = new HashMap<Integer, Object>();
+	}
+
+private Map<Integer, Object> parameters;
+
+public Object getArgument(String name) {
+		//TODO: not hardcoded
+		if (name == "$1") return getParameter(1);
+		if (name == "$2") return getParameter(2);
+		if (name == "$3") return getParameter(3);
+		return null;
+	}
+
+public Object getParameter(Integer index) {
+		try {
+			return parameters.get(index);
+		}
+		catch (NullPointerException exc) {
+			return null;
+		}
+	}
+
+	public void addParameter(Integer index, Object variable) {
+		parameters.put(index, variable);
+	}
+
+
+public Object execute(List<MyExpression> actualArgs) {
+		int i = 0;
+		for (MyExpression arg : actualArgs) {
+			addParameter(i + 1, actualArgs.get(i).evaluate());
+			i++;
+		}
+		body.execute();
+		Object returnValue = getParameter(0);
+		
+		return returnValue;
+	}
+
+
+
+

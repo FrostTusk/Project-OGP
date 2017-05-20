@@ -1,0 +1,43 @@
+in SequenceStatement:
+
+@Override
+	public void execute() throws IllegalStateException {
+		if (getProgram().getFlag(getLocation())) return;
+		setProgram(getProgram());
+		for (MyStatement subStatement: getStatements()) {
+			subStatement.execute();
+			if (subStatement.getClass() == BreakStatement.class) break;
+		}
+		getProgram().flagLine(getLocation());
+	}
+
+
+in WhileStatement:
+
+private Boolean breakWhile = false;
+
+@Override
+	public void execute() throws IllegalStateException {
+		if (getProgram().getFlag(getLocation())) return;
+		while (getCondition().evaluate() && !breakWhile)
+				body.execute();
+		getProgram().flagLine(getLocation());
+	}
+	
+	private void breakThisWhile() {
+		breakWhile = true;
+		
+	}
+
+in While.Break:		
+
+	@Override
+		public void execute() {
+			if (getProgram().getFlag(getLocation())) return;
+			if (getSuperStatement().getClass() != WhileStatement.class)
+				throw new RuntimeException(); 
+			
+			WhileStatement superWhile = ((WhileStatement)this.getSuperStatement());
+			superWhile.breakThisWhile();
+			
+		}
