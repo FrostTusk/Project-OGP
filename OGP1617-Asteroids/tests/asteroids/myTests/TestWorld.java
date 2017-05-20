@@ -2,17 +2,58 @@ package asteroids.myTests;
 
 import static org.junit.Assert.*;
 
+
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.Test;
 
 import asteroids.helper.entity.Entity;
+import asteroids.helper.entity.MinorPlanet;
 import asteroids.helper.entity.Position;
+import asteroids.model.Asteroid;
 import asteroids.model.Bullet;
+import asteroids.model.Planetoid;
+import asteroids.model.Program;
 import asteroids.model.Ship;
 import asteroids.model.World;
+import asteroids.part3.facade.IFacade;
+import asteroids.part3.programs.IProgramFactory;
+import asteroids.part3.programs.internal.ProgramParser;
+import asteroids.util.ModelException;
+
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runners.MethodSorters;
+
+import asteroids.model.Asteroid;
+import asteroids.model.Bullet;
+import asteroids.model.Planetoid;
+import asteroids.model.Ship;
+import asteroids.model.World;
+import asteroids.part3.facade.IFacade;
+import asteroids.model.Program;
+import asteroids.part3.programs.IProgramFactory;
+import asteroids.part3.programs.internal.ProgramParser;
+import asteroids.util.ModelException;
+
+
 
 /* 
  * Tests Index:
@@ -26,7 +67,8 @@ import asteroids.model.World;
 public class TestWorld {
 	
 	private static final double EPSILON = 0.0001;
-
+	IFacade facade;
+	IProgramFactory<?, ?, ?, Program> programFactory;
 	
 
 			/*
@@ -889,5 +931,54 @@ public class TestWorld {
 		}
 		assertFalse(ship1.isTerminated());
 	}
+	
+	@Test
+	  public void testGetAllEntitiesMinorPlanet() throws ModelException {
+	    
+	    World world = new World(2000, 2000);
+	    Ship ship1 = new Ship(100, 100, 0, 0, 0, 20, 1.0E20);
+	    for (int i = 1; i < 10; i++) {
+	      Bullet bulletToLoad = new Bullet(100, 100, 0, 0, 10);
+	      ship1.loadBullet(bulletToLoad);
+	    }
+	    world.addEntity(ship1);
+	    Asteroid asteroid1 = new Asteroid(200, 200, 0, 0, 20);
+	    world.addEntity(asteroid1);
+	    Planetoid planetoid1 = new Planetoid(250, 250, 0, 0, 20, 0);
+	    world.addEntity(planetoid1);
+	    
+	    Set<? extends Object> allEntities = world.getAllEntitiesSpecific(MinorPlanet.class);
+	    assertEquals(allEntities.size(), 2);
+	  }
+	
+	@Test
+	  public void testGetAllEntitiesMinorPlanetNoPlanets() throws ModelException {
+	    
+	    World world = new World(2000, 2000);
+	    Ship ship1 = new Ship(100, 100, 0, 0, 0, 20, 1.0E20);
+	    for (int i = 1; i < 10; i++) {
+	      Bullet bulletToLoad = new Bullet(100, 100, 0, 0, 10);
+	      ship1.loadBullet(bulletToLoad);
+	    }
+	    world.addEntity(ship1);
+	    Set<? extends Object> allEntities = world.getAllEntitiesSpecific(MinorPlanet.class);
+	    assertEquals(allEntities.size(), 0);
+	  }
+	
+	@Test
+	  public void testGetAllEntitiesMinorPlanetAllPlanets() throws ModelException {
+	    
+	    World world = new World(2000, 2000);
+	    Asteroid asteroid1 = new Asteroid(200, 200, 0, 0, 20);
+	    world.addEntity(asteroid1);
+	    Planetoid planetoid1 = new Planetoid(250, 250, 0, 0, 20, 0);
+	    world.addEntity(planetoid1);
+	    Planetoid planetoid2 = new Planetoid(500, 250, 0, 0, 20, 0);
+	    world.addEntity(planetoid2);
+	    Set<? extends Entity> allEntities = world.getAllEntitiesSpecific(MinorPlanet.class);
+	    assertEquals(allEntities.size(), 3);
+	    assertEquals(allEntities, world.getAllEntities());
+	  }
+	
 	
 }
