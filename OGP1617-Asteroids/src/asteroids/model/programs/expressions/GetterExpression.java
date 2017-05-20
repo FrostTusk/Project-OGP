@@ -59,7 +59,9 @@ public class GetterExpression implements MyExpression<Double> {
 	
 	public void setStatement(MyStatement statement) {
 		this.statement = statement;
-		getExpression().setStatement(statement);
+		// getdir has no expression, see programfactory createGetDirectionExpression
+		if (getGetterType() == GetterType.GETDIR) return; 
+		getExpression().setStatement(statement);		
 	}
 
 	

@@ -15,6 +15,9 @@ public class Program implements Executable {
 		setTime(0);
 		this.printTracker = new ArrayList<>();
 		this.lineTracker = new boolean[main.getSize()];
+		
+		this.globalVars = new HashMap<String, Object>();
+		this.localVars = new HashMap<String, Object>();
 	}
 	
 	
