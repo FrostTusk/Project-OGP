@@ -13,7 +13,7 @@ public class Program implements Executable {
 		main.setExecuter(this);
 		
 		setTime(0);
-		this.printTracker = new ArrayList<>();
+		this.printTracker = new ArrayList<Object>();
 		this.lineTracker = new boolean[main.getSize()];
 		
 		this.globalVars = new HashMap<String, Object>();
@@ -65,8 +65,7 @@ public class Program implements Executable {
 	
 	@Override
 	public Program getProgram() {
-		// TODO Auto-generated method stub
-		return null;
+		return this;
 	}
 
 	public void setTime(double time) {
@@ -93,7 +92,13 @@ public class Program implements Executable {
 //		List<Object> result = new ArrayList<Object>();
 //		result.add(null);
 //		return (printTracker.isEmpty()) ? result:printTracker;
-		return printTracker;
+//		return this.printTracker;
+//		try {
+		return (this.printTracker.isEmpty()) ? null: this.printTracker;
+//		}
+//		catch (NullPointerException exc) {
+//			throw new ArithmeticException();
+//		}
 	}
 	
 	public Object getLocalVar(String name) {

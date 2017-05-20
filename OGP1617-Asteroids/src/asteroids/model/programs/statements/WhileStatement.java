@@ -92,83 +92,84 @@ public class WhileStatement implements MyStatement {
 		getExecuter().flagLine(getLocation());
 	}
 	
-	private void breakThisWhile() {
-		breakWhile = true;
-		
-//		SourceLocation returnLocation = getWhile().getLocation();
-//		getProgram().flagLine(returnLocation);
-		
-		
-	}
+	
+//	private void breakThisWhile() {
+//		breakWhile = true;
+//		
+////		SourceLocation returnLocation = getWhile().getLocation();
+////		getProgram().flagLine(returnLocation);
+//		
+//		
+//	}
 	
 	
-	public class BreakStatement implements MyStatement {
-
-		public BreakStatement(SourceLocation location) {
-			setLocation(location);
-		}
-
-		
-		public WhileStatement getWhile() {
-		    return WhileStatement.this;
-		}
-		
-		
-		private SourceLocation location;
-		private Executable executer;
-		private MyStatement superStatement;
-		
-		
-		@Override
-		public SourceLocation getLocation() {
-			return this.location;
-		}
-		
-		@Override
-		public int getSize() {
-			return 1;
-		}
-
-
-		private void setLocation(SourceLocation location) {
-			this.location = location;
-		}
-		
-
-		@Override
-		public Executable getExecuter() {
-			return this.executer;
-		}
-
-		@Override
-		public MyStatement getSuperStatement() {
-			return this.superStatement;
-		}
-		
-
-		@Override
-		public void setExecuter(Executable executer) {
-			this.executer = executer;
-		}
-
-
-		@Override
-		public void setSuperStatement(MyStatement statement) {
-			this.superStatement = statement;
-		}
-
-
-		@Override
-		public void execute() {
-			if (getExecuter().getFlag(getLocation())) return;
-			if (getSuperStatement().getClass() != WhileStatement.class)
-				throw new RuntimeException(); 
-			
-			WhileStatement superWhile = ((WhileStatement)this.getSuperStatement());
-			superWhile.breakThisWhile();
-			
-		}
-		
-	}
-	
+//	public class BreakStatement implements MyStatement {
+//
+//		public BreakStatement(SourceLocation location) {
+//			setLocation(location);
+//		}
+//
+//		
+//		public WhileStatement getWhile() {
+//		    return WhileStatement.this;
+//		}
+//		
+//		
+//		private SourceLocation location;
+//		private Executable executer;
+//		private MyStatement superStatement;
+//		
+//		
+//		@Override
+//		public SourceLocation getLocation() {
+//			return this.location;
+//		}
+//		
+//		@Override
+//		public int getSize() {
+//			return 1;
+//		}
+//
+//
+//		private void setLocation(SourceLocation location) {
+//			this.location = location;
+//		}
+//		
+//
+//		@Override
+//		public Executable getExecuter() {
+//			return this.executer;
+//		}
+//
+//		@Override
+//		public MyStatement getSuperStatement() {
+//			return this.superStatement;
+//		}
+//		
+//
+//		@Override
+//		public void setExecuter(Executable executer) {
+//			this.executer = executer;
+//		}
+//
+//
+//		@Override
+//		public void setSuperStatement(MyStatement statement) {
+//			this.superStatement = statement;
+//		}
+//
+//
+//		@Override
+//		public void execute() {
+//			if (getExecuter().getFlag(getLocation())) return;
+//			if (getSuperStatement().getClass() != WhileStatement.class)
+//				throw new RuntimeException(); 
+//			
+//			WhileStatement superWhile = ((WhileStatement)this.getSuperStatement());
+//			superWhile.breakThisWhile();
+//			
+//		}
+//		
+//	}
+//	
 }

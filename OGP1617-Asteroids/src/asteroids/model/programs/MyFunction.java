@@ -89,6 +89,7 @@ public class MyFunction implements Executable {
 	
 	private boolean[] lineTracker;
 	private Map<String, Object> localVars;
+//	private Map<String, Object> args;
 	
 	
 	@Override
@@ -111,7 +112,7 @@ public class MyFunction implements Executable {
 		return getProgram().getGlobalVar(name);
 	}
 
-
+	
 	@Override
 	public void addPrintValue(Object value) {
 		getProgram().addPrintValue(value);

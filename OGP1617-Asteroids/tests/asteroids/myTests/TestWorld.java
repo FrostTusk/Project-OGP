@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.junit.Test;
@@ -21,37 +20,13 @@ import asteroids.model.Ship;
 import asteroids.model.World;
 import asteroids.part3.facade.IFacade;
 import asteroids.part3.programs.IProgramFactory;
-import asteroids.part3.programs.internal.ProgramParser;
 import asteroids.util.ModelException;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
-
-import asteroids.model.Asteroid;
-import asteroids.model.Bullet;
-import asteroids.model.Planetoid;
-import asteroids.model.Ship;
-import asteroids.model.World;
-import asteroids.part3.facade.IFacade;
-import asteroids.model.Program;
-import asteroids.part3.programs.IProgramFactory;
-import asteroids.part3.programs.internal.ProgramParser;
-import asteroids.util.ModelException;
 
 
 
