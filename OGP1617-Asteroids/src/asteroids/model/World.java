@@ -594,7 +594,45 @@ public class World {
 	 * Cleared in the update method.
 	 */
 	private Map<Entity, double[]> boundaryTracker = new HashMap<Entity, double[]>();
+	/**
+	 * Variable holding the collisionListener.
+	 */
+	private CollisionListener collisionListener;
+	/**
+	 * Variable holding the collisionPosition.
+	 */
+	private double[] collisionPosition;
 	
+	
+	/**
+	 * Set the collisionPosition, this is used by the collisionListener.
+	 * 
+	 * @param 	collisionEntitiesMin
+	 * 			The entities that will collide first of all.
+	 */
+	private void setCollisionPosition(Entity[] collisionEntitiesMin) {
+		if (collisionEntitiesMin[0] == collisionEntitiesMin[1])
+			this.collisionPosition = collisionEntitiesMin[0].getCollisionPosition(this);
+		else
+			this.collisionPosition = collisionEntitiesMin[0].getCollisionPosition(collisionEntitiesMin[1]);
+	}
+	
+	
+	/**
+	 * Handles the collisionListener visual effect.
+	 * 
+	 * @param 	collisionEntitiesMin
+	 * 			The entities that will collide first of all.
+	 */
+	private void HandleCollisionListener(Entity[] collisionEntitiesMin) {
+		if (this.collisionListener == null) return;
+		if (collisionEntitiesMin[0] == collisionEntitiesMin[1])
+			this.collisionListener.boundaryCollision(collisionEntitiesMin[0], 
+					this.collisionPosition[0], this.collisionPosition[1]);
+		else
+			this.collisionListener.objectCollision(collisionEntitiesMin[0], collisionEntitiesMin[1], 
+					this.collisionPosition[0], this.collisionPosition[1]);
+	}
 	
 	
 	/**
@@ -602,9 +640,11 @@ public class World {
 	 * 
 	 * @param	time
 	 * 			The time over which the world will evolve.
-	 * @param 	collisionListener TODO
+	 * @param 	collisionListener
+	 * 			The visual effect handler of collisions.
 	 */
 	public void evolve(double time, CollisionListener collisionListener) throws IllegalArgumentException {
+		this.collisionListener = collisionListener;
 		if ( (time < 0) || (Double.isNaN(time)) )
 			throw new IllegalArgumentException();
 		destroyOverlaps();	// Destroy all the entities that are currently invalid (overlap something).
@@ -616,6 +656,7 @@ public class World {
 			return;		
 		}
 
+		setCollisionPosition(collisionEntitiesMin); // Set the collision position.
 		double collisionTimeMin = getTimeToCollisionEntitities(collisionEntitiesMin); 
 		if ( (collisionTimeMin == 0) && helper.isInList(collisionEntitiesMin, collisionTracker) // If there is a collision at zero,
 				 && (collidesWithTrackedBoundary(collisionEntitiesMin))) // that has already occurred, 
@@ -696,10 +737,12 @@ public class World {
 				if ( collisionEntitiesMin[0] == collisionEntitiesMin[1] ) {	// If the collision is with the boundary.
 					collisionEntitiesMin[0].resolveCollision(this);	// This entity is added to the boundary tracker.
 					boundaryTracker.put(collisionEntitiesMin[0], collisionEntitiesMin[0].getCollisionBoundaries(this));
+					HandleCollisionListener(collisionEntitiesMin);
 				}
-				else	// If the collision is between 2 entities.
+				else {	// If the collision is between 2 entities.
 					collisionEntitiesMin[0].resolveCollision(collisionEntitiesMin[1]);
-				
+					HandleCollisionListener(collisionEntitiesMin);
+				}
 				collisionTracker.add(collisionEntitiesMin);	// This entity is added to the collision tracker.
 				evolve(time - collisionTimeMin, null);	// Continue with evolve.
 		 }
@@ -903,43 +946,13 @@ public class World {
 		return entitiesResult;
 	}
 		
-//	public Set<? extends Entity> getAllEntitiesSpecific(EntityType type) {
-////		Set<Entity> entitiesResult = getAllEntities();
-////		Set<Entity> result = new HashSet<Entity>();
-////		for (Entity entity: entitiesResult) 
-////			if (entity.getType() == type) 
-////				result.add(entity);
-////		return result;
-//		
-//		// TODO Rewrite with generic classes!
-//		Set<Entity> results = getAllEntities().stream().
-//				filter(x -> x.getType() == type).
-//				collect(Collectors.toSet());
-//		return results;
-////		Stream<Entity> functionsStream = getAllEntities().stream().
-////				filter(x -> x.getType() == type);
-//	}
 	
 	@SuppressWarnings("unchecked")
 	public <T extends Entity> Set<T> getAllEntitiesSpecific(Class<T> entityClass) {
 		return ((Set<T>) getAllEntities().stream().
-//				filter(x -> x.getClass().toString().equals(entityClass.toString())).
 				filter(x -> entityClass.isAssignableFrom(x.getClass())).
 				collect(Collectors.toSet()));
 	}
-	
-	
-//	public Class<? extends Entity> chooseClass(EntityType type) {
-//		if (type == EntityType.SHIP)
-//			return Ship.class;
-//		if (type == EntityType.BULLET)
-//			return Bullet.class;
-//		if (type == EntityType.ASTEROID)
-//			return Asteroid.class;
-//		if (type == EntityType.PLANETOID)
-//			return Planetoid.class;
-//		return null;
-//	}
 	
 	
 	/**

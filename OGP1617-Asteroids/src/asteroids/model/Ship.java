@@ -115,7 +115,7 @@ public class Ship extends Entity {
 		throws IllegalArgumentException {
 		setMinRadius(10);	// First the constants are set.
 		setDensity(1.42 * Math.pow(10, 12));
-		setForce(1.1 * Math.pow(10, 18));
+		setForce(1.1 * Math.pow(10, 18)); // TODO Fix this! Set it to (10,18) for assignment, (10,19) for fun.
 		
 		try {	// Check if the position can be set.
 			setPosition(positionX, positionY);

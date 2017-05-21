@@ -81,11 +81,16 @@ public class Planetoid extends MinorPlanet {
 	public void resolveCollisionShip(Ship ship) {
 		Position newPosition = getRandomPosition(ship.getWorld());
 		ship.setPosition(newPosition.getPositionX(), newPosition.getPositionY());
-		for (Entity entity : getWorld().getAllEntities()) 
+		for (Entity entity: getWorld().getAllEntities()) {
+			if (entity == ship)
+				continue;
 			if (ship.overlap(entity)) {
 				ship.terminate();
+//				System.out.println(ship);
+//				System.out.println(entity);
 				break;
 			}
+		}
 	}
 	
 	

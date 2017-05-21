@@ -122,7 +122,7 @@ public class ProgramFactory implements IProgramFactory<MyExpression, MyStatement
 
 	@Override
 	public MyExpression createBulletExpression(SourceLocation location) {
-		return new SpecificEntityExpression(Bullet.class, location);
+		return new BulletSpecificEntityExpression(Bullet.class, location);
 	}
 
 	@Override
@@ -132,7 +132,7 @@ public class ProgramFactory implements IProgramFactory<MyExpression, MyStatement
 
 	@Override
 	public MyExpression createAnyExpression(SourceLocation location) {
-		return new SpecificEntityExpression(Entity.class, location);
+		return new AnySpecificEntityExpression(Entity.class, location);
 	}
 
 	@Override

@@ -635,7 +635,7 @@ public class Facade implements IFacade {
 	@Override
 	public void evolve(World world, double dt, CollisionListener collisionListener) throws ModelException {
 		try {
-			world.evolve(dt, null);
+			world.evolve(dt, collisionListener);
 		}
 		catch (IllegalArgumentException exc) {
 			throw new ModelException(exc);
