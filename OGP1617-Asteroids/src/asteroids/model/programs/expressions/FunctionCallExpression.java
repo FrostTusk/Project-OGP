@@ -1,5 +1,6 @@
 package asteroids.model.programs.expressions;
 
+import java.util.ArrayList;
 import java.util.List;
 import asteroids.model.programs.*;
 import asteroids.part3.programs.SourceLocation;
@@ -26,6 +27,13 @@ public class FunctionCallExpression implements MyExpression<Object> {
 	
 	public List<MyExpression> getActualArgs() {
 		return this.actualArgs;
+	}
+	
+	public List<Object> getEvaluatedArgs() {
+		List<Object> result = new ArrayList<Object>();
+		for (MyExpression expression: getActualArgs())
+			result.add(expression.evaluate());
+		return result;
 	}
 	
 	@Override
@@ -70,7 +78,7 @@ public class FunctionCallExpression implements MyExpression<Object> {
 		MyFunction template = getStatement().getExecuter().getProgram().getFunction(getFunctionName());
 		MyFunction function = new MyFunction(template.getFunctionName(), template.getBody(), template.getLocation());
 		function.setProgram(getStatement().getExecuter().getProgram());
-		return function.execute(getActualArgs()).evaluate();
+		return function.execute(getEvaluatedArgs());
 	}
 
 }

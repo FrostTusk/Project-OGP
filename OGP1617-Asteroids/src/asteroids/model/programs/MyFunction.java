@@ -5,7 +5,6 @@ import asteroids.helper.ExitOutException;
 import asteroids.model.*;
 import asteroids.part3.programs.SourceLocation;
 
-@SuppressWarnings("rawtypes")
 public class MyFunction implements Executable {
 		
 	public MyFunction(String functionName, MyStatement body, SourceLocation location) {
@@ -88,13 +87,13 @@ public class MyFunction implements Executable {
 	
 	
 	
-	private Map<String, MyExpression> args;
+	private Map<String, Object> args;
 	private Map<String, Boolean> flagMap;
 	private Map<String, Object> localVars;
 	
 	
 	public Object getArgument(String name) {
-		return args.get(name).evaluate();
+		return args.get(name)/*.evaluate()*/;
 	}
 	
 	@Override
@@ -133,8 +132,8 @@ public class MyFunction implements Executable {
 	}
 	
 	
-	public void registerArguments(List<MyExpression> argFeed) {
-		this.args = new HashMap<String, MyExpression>();
+	public void registerArguments(List<Object> argFeed) {
+		this.args = new HashMap<String, Object>();
 		if (argFeed == null) return;
 			
 		for (int i = 1; i < argFeed.size() + 1; i++)
@@ -163,7 +162,7 @@ public class MyFunction implements Executable {
 
 
 	
-	private MyExpression returnValue;
+	private Object returnValue;
 	private boolean returnSet;
 	
 	
@@ -174,12 +173,13 @@ public class MyFunction implements Executable {
 	
 	@Override
 	public void setReturn(MyExpression<?> value) {
-		this.returnValue = value;
+		this.returnValue = value.evaluate();
 		this.returnSet = true;
 	}
 	
 	
-	public MyExpression execute(List<MyExpression> actualArgs) {
+	public Object execute(List<Object> actualArgs) {
+		Executable lastExecuter = getBody().getExecuter();
 		this.returnSet = false;
 		getBody().setExecuter(this);
 		getBody().requestDeFlag();
@@ -190,6 +190,7 @@ public class MyFunction implements Executable {
 			getBody().execute();
 		}
 		catch(ExitOutException exc) {
+			getBody().setExecuter(lastExecuter);
 			if (returnHasBeenSet())
 				return this.returnValue;
 			else
