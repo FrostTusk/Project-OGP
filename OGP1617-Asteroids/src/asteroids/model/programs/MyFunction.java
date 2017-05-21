@@ -1,13 +1,8 @@
 package asteroids.model.programs;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import java.util.*;
 import asteroids.helper.ExitOutException;
-import asteroids.model.Program;
-import asteroids.model.Ship;
+import asteroids.model.*;
 import asteroids.part3.programs.SourceLocation;
 
 @SuppressWarnings("rawtypes")
@@ -18,9 +13,9 @@ public class MyFunction implements Executable {
 		setBody(body);
 		setLocation(location);	
 				
+		this.args = new ArrayList<Object>();
 		this.flagMap = new HashMap<String, Boolean>();
 		this.localVars = new HashMap<String, Object>();
-		this.args = new ArrayList<Object>();
 	}
 	
 	
@@ -88,21 +83,23 @@ public class MyFunction implements Executable {
 	
 	public void setProgram(Program program) {
 		this.program = program;
-		setOwner(program.getOwner());
-		setTime(program.getTime());
+		setOwner(getProgram().getOwner());
+		setTime(getProgram().getTime());
 	}
 	
 	
 	
-//	private boolean[] lineTracker;
+	private List<Object> args;
 	private Map<String, Boolean> flagMap;
 	private Map<String, Object> localVars;
-	private List<Object> args;
 	
+	
+	public Object getArgument(String name) {
+		return null;
+	}
 	
 	@Override
 	public boolean getFlag(SourceLocation location) {
-//		return this.lineTracker[location.getLine() - 1];
 		try {
 			return flagMap.get(getPositionString(location));
 		}
@@ -126,11 +123,7 @@ public class MyFunction implements Executable {
 		return getProgram().getGlobalVar(name);
 	}
 
-	public Object getArgument(String name) {
-		return null;
-	}
-	
-	
+
 	public boolean canHaveAsName(String name) {
 		if (getProgram().getAllFunctions() == null)
 			return true;
@@ -141,6 +134,10 @@ public class MyFunction implements Executable {
 	}
 	
 	
+	public void addArg(Object value) {
+		this.args.add(value);
+	}
+	
 	@Override
 	public void addPrintValue(Object value) {
 		getProgram().addPrintValue(value);
@@ -148,13 +145,11 @@ public class MyFunction implements Executable {
 
 	@Override
 	public void flagLine(SourceLocation location) {
-//		this.lineTracker[location.getLine() - 1] = true;
 		flagMap.put(getPositionString(location), true);
 	}
 
 	@Override
 	public void deFlagLine(SourceLocation location) {
-//		this.lineTracker[location.getLine() - 1] = false;
 		flagMap.put(getPositionString(location), false);
 	}
 	
@@ -163,14 +158,15 @@ public class MyFunction implements Executable {
 		this.localVars.put(name, value);
 	}
 
-	public void addArg(Object value) {
-		this.args.add(value);
-	}
-	
-	
+
 	
 	private MyExpression returnValue;
 	private boolean returnSet;
+	
+	
+	public boolean returnHasBeenSet() {
+		return this.returnSet;
+	}
 	
 	
 	@Override
@@ -182,25 +178,26 @@ public class MyFunction implements Executable {
 	
 	public MyExpression execute(List<MyExpression> actualArgs) {
 		this.returnSet = false;
-		body.setExecuter(this);
-		body.requestDeFlag();
+		getBody().setExecuter(this);
+		getBody().requestDeFlag();
+		
 		for (MyExpression arg: actualArgs)
 			addArg(arg.evaluate());
+		
 		try {
-			body.execute();
+			getBody().execute();
 		}
 		catch(ExitOutException exc) {
-			if (returnSet)
+			if (returnHasBeenSet())
 				return this.returnValue;
 			else
 				throw new ExitOutException();
 		}
-		return null;
-//		throw new IllegalArgumentException();
+		throw new IllegalArgumentException();
 	}
 	
 
-
+	
 	public String getPositionString(SourceLocation location) {
 		return Integer.toString(location.getLine()) + "," + Integer.toString(location.getColumn());
 	}
