@@ -93,7 +93,7 @@ public class AssignmentStatement <T> implements MyStatement {
 		if (getExecuter().getFlag(getLocation())) return;
 		setExecuter(getExecuter());
 		
-		if (!getExecuter().canHaveAsName(getVariableName()) && (Program.class.isInstance(getExecuter())))
+		if (!getExecuter().canHaveAsName(getVariableName()) && (getExecuter() instanceof Program)/*(Program.class.isInstance(getExecuter()))*/)
 			throw new IllegalArgumentException();
 		Object localVar = getExecuter().getLocalVar(getVariableName());
 		if ( (localVar != null) 

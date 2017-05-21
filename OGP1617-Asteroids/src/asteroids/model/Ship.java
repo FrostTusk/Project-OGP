@@ -711,7 +711,6 @@ public class Ship extends Entity {
 	@Raw
 	public void thrustOn() {
 		this.thruster.thrustOn();
-//		thrust(getAcceleration());
 	}
 	
 	/**
@@ -737,51 +736,6 @@ public class Ship extends Entity {
 			 * | 8. The next methods handle resolving Collisions.	|
 			 * |----------------------------------------------------| 
 			 */
-
-
-	
-	
-//	/** // TODO Is this ok?
-//	 * Resolves the collision between this ship and a given world.
-//	 * 
-//	 * @param 	world
-//	 * 			The world to be used.
-//	 * 
-//	 * @see implementation
-//	 * // TODO Problems with rounding? 
-//	 */
-//	@Override
-//	public void resolveCollision(World world) throws NullPointerException {
-//		if (world == null) throw new NullPointerException();
-//		double[] position = getCollisionPosition(world);
-//		if (position[0] == Double.POSITIVE_INFINITY && position[1] == Double.POSITIVE_INFINITY) return;	
-//		// There is no collision so the collision does not need to be resolved.
-//		if (position[0] == this.world.getWidth() || position[0] == 0) 
-//			setVelocity(-getVelocityX(), getVelocityY());
-//		if ( (position[1] == this.world.getHeight() || position[1] == 0) ||
-//			 (position[3] == this.world.getHeight() || position[3] == 0) )
-//			setVelocity(getVelocityX(), -getVelocityY()); 
-//	}
-	
-//	/** //TODO is this ok?
-//	 * Resolves the collision between this ship and a given entity.
-//	 * 
-//	 * @param 	entity
-//	 * 			The entity to be used.
-//	 * 
-//	 * @see implementation
-//	 */
-//	@Override
-//	public void resolveCollision(Entity entity) throws IllegalArgumentException, NullPointerException {
-//		if (entity == null) throw new NullPointerException();
-//		try {
-//			if (entity.getType() == EntityType.SHIP) resolveCollisionShip((Ship)entity);
-//			else if (entity.getType() == EntityType.BULLET) resolveCollisionBullet((Bullet)entity);
-//		}
-//		catch (IllegalArgumentException exc) {
-//			throw new IllegalArgumentException(exc);
-//		}
-//	}
 
 
 	/**
@@ -860,13 +814,12 @@ public class Ship extends Entity {
 		program.setOwner(this);
 	}
 	
+	
 	public List<Object> executeProgram(double time) {
 		try {
 			program.execute(time);
 		}
-		catch (IllegalStateException exc) {
-			; // TimeOut.
-		}
+		catch (IllegalStateException exc) {} // Time out in the program. 
 		return program.getPrintTracker();
 	}
 	

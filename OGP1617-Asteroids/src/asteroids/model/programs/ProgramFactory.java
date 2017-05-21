@@ -8,9 +8,7 @@ import asteroids.model.*;
 import asteroids.model.programs.expressions.*;
 import asteroids.model.programs.expressions.entity.*;
 import asteroids.model.programs.expressions.getter.DirGetterExpression;
-import asteroids.model.programs.expressions.operator.AllBooleanOperatorExpression;
-import asteroids.model.programs.expressions.operator.DoubleBooleanOperatorExpression;
-import asteroids.model.programs.expressions.operator.DoubleDoubleOperatorExpression;
+import asteroids.model.programs.expressions.operator.*;
 import asteroids.model.programs.statements.*;
 import asteroids.part3.programs.*;
 

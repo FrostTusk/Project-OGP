@@ -52,7 +52,7 @@ public class ParameterExpression implements MyExpression<Object> {
 
 	@Override
 	public Object evaluate() {
-		if (!getStatement().getExecuter().getClass().equals(MyFunction.class))
+		if (!(getStatement().getExecuter() instanceof MyFunction))
 			throw new IllegalArgumentException();
 		return ((MyFunction) getStatement().getExecuter()).getArgument(getParameterName());
 	}
