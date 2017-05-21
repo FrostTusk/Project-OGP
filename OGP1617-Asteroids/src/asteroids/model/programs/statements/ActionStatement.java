@@ -2,6 +2,7 @@ package asteroids.model.programs.statements;
 
 import asteroids.helper.program.ActionType;
 import asteroids.model.programs.MyExpression;
+import asteroids.model.programs.MyFunction;
 import asteroids.model.programs.MyStatement;
 import asteroids.model.programs.Executable;
 import asteroids.part3.programs.SourceLocation;
@@ -50,7 +51,7 @@ public class ActionStatement implements MyStatement {
 	}
 
 
-	private Executable runner;
+	private Executable executer;
 	private MyStatement superStatement;
 	
 	
@@ -61,7 +62,7 @@ public class ActionStatement implements MyStatement {
 
 	@Override
 	public Executable getExecuter() {
-		return this.runner;
+		return this.executer;
 	}
 
 	@Override
@@ -72,7 +73,7 @@ public class ActionStatement implements MyStatement {
 
 	@Override
 	public void setExecuter(Executable runner) {
-		this.runner = runner;
+		this.executer = runner;
 	}
 
 	@Override
@@ -95,6 +96,8 @@ public class ActionStatement implements MyStatement {
 	public void execute() throws IllegalStateException {
 		if (getExecuter().getFlag(getLocation())) return;
 		setExecuter(getExecuter());
+		if (MyFunction.class.isInstance(getExecuter()))
+			throw new IllegalArgumentException();
 		if (getExecuter().getTime() < 0.2)
 			throw new IllegalStateException();
 		switch (getActionType()) {

@@ -131,6 +131,16 @@ public class MyFunction implements Executable {
 	}
 	
 	
+	public boolean canHaveAsName(String name) {
+		if (getProgram().getAllFunctions() == null)
+			return true;
+		for (MyFunction ownedFunction: getProgram().getAllFunctions())
+			if (ownedFunction.getFunctionName().equals(name))
+				return false;
+		return true;
+	}
+	
+	
 	@Override
 	public void addPrintValue(Object value) {
 		getProgram().addPrintValue(value);

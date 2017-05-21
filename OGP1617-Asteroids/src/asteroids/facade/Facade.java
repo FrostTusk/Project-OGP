@@ -952,10 +952,13 @@ public class Facade implements IFacade {
 		try {
 			return ship.executeProgram(dt);
 		}
-		catch (IndexOutOfBoundsException exc) {
+		catch (AssertionError exc) {
 			throw new ModelException(exc);
 		}
 		catch (IllegalStateException exc) {
+			throw new ModelException(exc);
+		}
+		catch (IndexOutOfBoundsException exc) {
 			throw new ModelException(exc);
 		}
 		catch (IllegalArgumentException exc) {
