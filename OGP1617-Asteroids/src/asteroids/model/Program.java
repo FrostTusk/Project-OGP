@@ -118,6 +118,8 @@ public class Program implements Executable {
 	}
 	
 	public boolean getFlag(SourceLocation location) {
+		if (!flagTracker.containsKey(getPositionString(location)))
+			return false;
 		try {
 			return flagTracker.get(getPositionString(location));
 		}
@@ -127,16 +129,20 @@ public class Program implements Executable {
 	}
 	
 	public Object getLocalVar(String name) {
-		return null;
+//		return null;
+		throw new NullPointerException();
 	}
 	
 	public Object getGlobalVar(String name) {
-		try {
-			return globalVars.get(name);
-		}
-		catch (NullPointerException exc) {
-			return null;
-		}
+//		try {
+//			return globalVars.get(name);
+//		}
+//		catch (NullPointerException exc) {
+//			return null;
+//		}
+		if (!globalVars.containsKey(name))
+			throw new NullPointerException();
+		return globalVars.get(name);
 	}
 	
 

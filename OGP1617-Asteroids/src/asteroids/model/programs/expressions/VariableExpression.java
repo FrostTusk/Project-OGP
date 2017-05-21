@@ -52,11 +52,17 @@ public class VariableExpression implements MyExpression<Object> {
 	
 	@Override
 	public Object evaluate() {
-		Object local = getStatement().getExecuter().getLocalVar(getVariableName());
-		Object global = getStatement().getExecuter().getGlobalVar(getVariableName());
-		if ( (local == null) && (global == null) )
-			throw new IllegalArgumentException();
-		return (local == null) ? global: local;
+//		Object local = getStatement().getExecuter().getLocalVar(getVariableName());
+//		Object global = getStatement().getExecuter().getGlobalVar(getVariableName());
+//		if ( (local == null) && (global == null) )
+//			throw new IllegalArgumentException();
+//		return (local == null) ? global: local;
+		try {
+			return getStatement().getExecuter().getLocalVar(getVariableName());
+		}
+		catch (NullPointerException exc) {
+			return getStatement().getExecuter().getGlobalVar(getVariableName());
+		}
 	}
 	
 }

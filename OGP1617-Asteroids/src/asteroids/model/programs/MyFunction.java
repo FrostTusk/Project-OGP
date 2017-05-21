@@ -12,7 +12,7 @@ public class MyFunction implements Executable {
 		setBody(body);
 		setLocation(location);	
 				
-		this.flagMap = new HashMap<String, Boolean>();
+		this.flagTracker = new HashMap<String, Boolean>();
 		this.localVars = new HashMap<String, Object>();
 	}
 	
@@ -88,7 +88,7 @@ public class MyFunction implements Executable {
 	
 	
 	private Map<String, Object> args;
-	private Map<String, Boolean> flagMap;
+	private Map<String, Boolean> flagTracker;
 	private Map<String, Object> localVars;
 	
 	
@@ -98,8 +98,10 @@ public class MyFunction implements Executable {
 	
 	@Override
 	public boolean getFlag(SourceLocation location) {
+		if (!flagTracker.containsKey(getPositionString(location)))
+			return false;
 		try {
-			return flagMap.get(getPositionString(location));
+			return flagTracker.get(getPositionString(location));
 		}
 		catch (NullPointerException exc) {
 			return false;
@@ -108,12 +110,15 @@ public class MyFunction implements Executable {
 
 	@Override
 	public Object getLocalVar(String name) {
-		try {
-			return localVars.get(name);
-		}
-		catch (NullPointerException exc) {
-			return null;
-		}
+//		try {
+//			return localVars.get(name);
+//		}
+//		catch (NullPointerException exc) {
+//			return null;
+//		}
+		if (!localVars.containsKey(name))
+			throw new NullPointerException();
+		return localVars.get(name);
 	}
 
 	@Override
@@ -147,12 +152,12 @@ public class MyFunction implements Executable {
 
 	@Override
 	public void flagLine(SourceLocation location) {
-		flagMap.put(getPositionString(location), true);
+		flagTracker.put(getPositionString(location), true);
 	}
 
 	@Override
 	public void deFlagLine(SourceLocation location) {
-		flagMap.put(getPositionString(location), false);
+		flagTracker.put(getPositionString(location), false);
 	}
 	
 	@Override
