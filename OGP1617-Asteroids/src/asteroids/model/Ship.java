@@ -334,7 +334,10 @@ public class Ship extends Entity {
 	 */
 	@Basic @Raw
 	public Set<Bullet> getAllBullets() {
-		return this.bullets;
+		Set<Bullet> result = new HashSet<Bullet>();
+		for (Bullet bullet: bullets)
+			result.add(bullet);
+		return result;
 	}
 	
 	/**
