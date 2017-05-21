@@ -13,7 +13,6 @@ public class MyFunction implements Executable {
 		setBody(body);
 		setLocation(location);	
 				
-		this.args = new ArrayList<Object>();
 		this.flagMap = new HashMap<String, Boolean>();
 		this.localVars = new HashMap<String, Object>();
 	}
@@ -89,13 +88,13 @@ public class MyFunction implements Executable {
 	
 	
 	
-	private List<Object> args;
+	private Map<String, MyExpression> args;
 	private Map<String, Boolean> flagMap;
 	private Map<String, Object> localVars;
 	
 	
 	public Object getArgument(String name) {
-		return null;
+		return args.get(name).evaluate();
 	}
 	
 	@Override
@@ -134,8 +133,12 @@ public class MyFunction implements Executable {
 	}
 	
 	
-	public void addArg(Object value) {
-		this.args.add(value);
+	public void registerArguments(List<MyExpression> argFeed) {
+		this.args = new HashMap<String, MyExpression>();
+		if (argFeed == null) return;
+			
+		for (int i = 1; i < argFeed.size() + 1; i++)
+			args.put("$" + Integer.toString(i), argFeed.get(i - 1));
 	}
 	
 	@Override
@@ -181,8 +184,7 @@ public class MyFunction implements Executable {
 		getBody().setExecuter(this);
 		getBody().requestDeFlag();
 		
-		for (MyExpression arg: actualArgs)
-			addArg(arg.evaluate());
+		registerArguments(actualArgs);
 		
 		try {
 			getBody().execute();

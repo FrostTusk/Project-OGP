@@ -115,7 +115,7 @@ public class Program implements Executable {
 	public List<Object> getPrintTracker() {
 		if (!isTerminated())
 			return null;
-		return (this.printTracker.isEmpty()) ? null: this.printTracker;
+		return this.printTracker;
 	}
 	
 	public boolean getFlag(SourceLocation location) {
