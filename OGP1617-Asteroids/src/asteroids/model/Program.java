@@ -16,7 +16,7 @@ public class Program implements Executable {
 		this.printTracker = new ArrayList<Object>();
 		this.flagTracker = new HashMap<String, Boolean>();
 		this.globalVars = new HashMap<String, Object>();
-		this.localVars = new HashMap<String, Object>();
+//		this.localVars = new HashMap<String, Object>();
 	}
 	
 	
@@ -108,7 +108,6 @@ public class Program implements Executable {
 	
 	private List<Object> printTracker;
 	private Map<String, Boolean> flagTracker;
-	private Map<String, Object> localVars;
 	private Map<String, Object> globalVars;
 
 	
@@ -128,12 +127,7 @@ public class Program implements Executable {
 	}
 	
 	public Object getLocalVar(String name) {
-		try {
-			return localVars.get(name);
-		}
-		catch (NullPointerException exc) {
-			return null;
-		}
+		return null;
 	}
 	
 	public Object getGlobalVar(String name) {
@@ -166,7 +160,6 @@ public class Program implements Executable {
 
 	public void addLocalVar(String name, Object variable) {
 		throw new IllegalArgumentException(); // Only Functions have local variables.
-//		localVars.put(name, variable);
 	}
 	
 	public void addGlobalVar(String name, Object variable) {

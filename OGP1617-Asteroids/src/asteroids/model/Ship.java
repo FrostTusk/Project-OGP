@@ -16,14 +16,14 @@ import be.kuleuven.cs.som.annotate.*;
  * 		2. Methods that handle the Orientation of the Ship
  * 		3. Methods that handle the Mass of the ship
  * #2# Association Methods
- * 		4. Methods that handle the association with Worlds
- * 		5. Methods that handle the association with Bullets
+ * 		4. Methods that handle the association with Bullets
  * #3# Advanced Methods
- * 		6. Methods that handle Turning and Accelerating
- * 		7. Methods that handle the Thruster
+ * 		5. Methods that handle Turning and Accelerating
+ * 		6. Methods that handle the Thruster
  * #4# Collision Detection Methods
- * 		8. Methods that handle Resolving Collisions
+ * 		7. Methods that handle Resolving Collisions
  * #5# Other Methods
+ * 		8. Methods that handle programs	
  *		9. Helper Methods
  */
 
@@ -115,7 +115,7 @@ public class Ship extends Entity {
 		throws IllegalArgumentException {
 		setMinRadius(10);	// First the constants are set.
 		setDensity(1.42 * Math.pow(10, 12));
-		setForce(1.1 * Math.pow(10, 18)); // TODO Fix this! Set it to (10,18) for assignment, (10,19) for fun.
+		setForce(1.1 * Math.pow(10, 18)); // FIXME Set it to (10,18) for assignment, (10,19) for demo.
 		
 		try {	// Check if the position can be set.
 			setPosition(positionX, positionY);
@@ -287,37 +287,13 @@ public class Ship extends Entity {
 	     * |------------------------------------|
 	     * | #Header-2# Association Methods.	|
 	     * |------------------------------------| 
-	     */
+	     */	
+
 	
 	
 			/*
 		     * |------------------------------------------------------------|
-		     * | 4. The next methods handle the association with worlds.	|
-		     * |------------------------------------------------------------| 
-		     */
-	
-
-	
-//	/** // TODO Is this unnecessary
-//	* Check whether this ship can have the given world as world. 
-//	*  
-//	* @param  	world
-//	*         	The world to check.
-//	*         
-//	* @return	Returns whether or not this ship can have the given world as world.
-//	* 			true if it can, false if not.
-//	*/
-//	@Override @Raw
-//	public boolean canHaveAsWorld(World world) {
-//		if (world == null) return true;
-//		return ( (getWorld() == null) || (getWorld() == world) ) && (isInWorld(world)) && !(world.isTerminated());
-//	}
-	
-
-	
-			/*
-		     * |------------------------------------------------------------|
-		     * | 5. The next methods handle the association with bullets.	|
+		     * | 4. The next methods handle the association with bullets.	|
 		     * |------------------------------------------------------------| 
 		     */
 	
@@ -412,7 +388,7 @@ public class Ship extends Entity {
 			bullet.setShip(this);
 		}
 		catch (IllegalArgumentException exc) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException(exc);
 		}
 	}
 	
@@ -431,7 +407,7 @@ public class Ship extends Entity {
 				loadBullet(bullet);
 		}
 		catch (IllegalArgumentException exc) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException(exc);
 		}
 		catch (NullPointerException exc) {
 			throw new NullPointerException();
@@ -539,7 +515,7 @@ public class Ship extends Entity {
 	
 			/*
 			 * |--------------------------------------------------------|
-			 * | 6. The next methods handle Turning and Accelerating.	|
+			 * | 5. The next methods handle Turning and Accelerating.	|
 			 * |--------------------------------------------------------| 
 			 */
 	
@@ -646,7 +622,7 @@ public class Ship extends Entity {
 	
 			/*
 			 * |--------------------------------------------|
-			 * | 7. The next methods handle the Thruster.	|
+			 * | 6. The next methods handle the Thruster.	|
 			 * |--------------------------------------------| 
 			 */
 	
@@ -733,7 +709,7 @@ public class Ship extends Entity {
 
 			/*
 			 * |----------------------------------------------------|
-			 * | 8. The next methods handle resolving Collisions.	|
+			 * | 7. The next methods handle resolving Collisions.	|
 			 * |----------------------------------------------------| 
 			 */
 
@@ -801,20 +777,47 @@ public class Ship extends Entity {
 	
 	
 	
+			/*
+			 * |----------------------------------------|
+			 * | 8. The next methods handle programs.	|
+			 * |----------------------------------------| 
+			 */
+	
+	
+	/**
+	 * Variable registering the program of this ship.
+	 */
 	private Program program;
 	
 	
+	/**
+	 * Get the program of this ship.
+	 */
+	@Basic @Raw
 	public Program getProgram() {
 		return this.program;
 	}
 	
 	
+	/**
+	 * Set the program of this ship.
+	 * 
+	 * @see implementation
+	 */
+	@Raw
 	public void setProgram(Program program) {
 		this.program = program;
-		program.setOwner(this);
+		getProgram().setOwner(this);
 	}
 	
 	
+	/**
+	 * Execute the program on this ship during the given time.
+	 * 
+	 * @param 	time
+	 * 			The time during which the program needs to be executed.
+	 * @return
+	 */
 	public List<Object> executeProgram(double time) {
 		try {
 			program.execute(time);
@@ -834,7 +837,7 @@ public class Ship extends Entity {
 
 	
 	/**
-	 * Returns the type of this Ship Class in string format.
+	 * Returns the type of this Ship Class in enumeration format.
 	 */
 	@Basic @Override @Raw
 	public EntityType getType() {

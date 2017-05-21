@@ -9,6 +9,18 @@ import asteroids.helper.entity.Position;
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
 
+/**
+ * A class of planetoids.
+ * 
+ * @invar	| this.getPosition().isValidPosition(this.position.getPositionX(), this.position.getPositionY())
+ * @invar   | this.isValidSpeed(getVelocityX(), getVelocityY())
+ * @invar   | this.canHaveAsRadius(this.getRadius())
+ * @invar   | this.canHaveAsMass(this.getMass())
+ * @invar	| this.canHaveAsWorld(this.getWorld())
+ * @invar	| this.canHaveAsShip(this.getShip())
+ *       
+ * @author	Mathijs Hubrechtsen
+ */
 public class Planetoid extends MinorPlanet {
 
 	/**
@@ -206,7 +218,7 @@ public class Planetoid extends MinorPlanet {
 	
 	
 	/**
-	 * Returns the type of the class of this planetoid in enumeration format.
+	 * Returns the type of the class of this Planetoid Class in enumeration format.
 	 * 
 	 * @see implementation
 	 */

@@ -71,6 +71,8 @@ public class ManualTests {
 			sysOut.println("Strings are equal");
 		else
 			sysOut.println("Strings are NOT equal");
+		
+		
 		// Original Tests that were written at the very start of the project:
 		if (showOriginalTests) runOriginalTestHandler();	
 	}

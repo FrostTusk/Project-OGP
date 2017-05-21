@@ -119,8 +119,8 @@ public class Helper {
 	 * @return	Return whether or not the given tuple is in the list.
 	 * 			true if it is, false if not.
 	 */
-	public <T> boolean isInList(Object[] tuple, List<T[]> updatedEntities) throws IllegalArgumentException {
-		if (tuple == null) return false;	// TODO throw NullPointerException?
+	public <T> boolean isInList(Object[] tuple, List<T[]> updatedEntities) throws IllegalArgumentException, NullPointerException {
+		if (tuple == null) throw new NullPointerException();
 		if (tuple.length != 2) throw new IllegalArgumentException();
 		for (Object[] attempt: updatedEntities)
 			if ( (attempt[0] == tuple[0]) && (attempt[1] == tuple[1]) ) return true;

@@ -366,12 +366,34 @@ public abstract class Entity {
 	}
 	
 	
-	public void setMinRadius(double minRadius) throws IllegalArgumentException {
+	/**
+	 * Set the minimum radius to the given minimum radius.
+	 * 
+	 * @param 	minRadius
+	 * 			The new minimum radius.
+	 * 
+	 * @post	The minimum radius is equal to the given minimum radius.
+	 * 			this.getMinRadius() == minRadius
+	 */
+	protected void setMinRadius(double minRadius) {
 		this.minRadius = minRadius;
 	}
 	
-	// TODO Documentation
-	public void setRadius(double radius) throws IllegalArgumentException {
+
+	/**
+	 * Set the radius to the given radius.
+	 * 
+	 * @param 	radius
+	 * 			The new radius.
+	 * 
+	 * @post	The radius is equal to the given radius.
+	 * 			| new.getRadius() == radius
+	 * 
+	 * @throws 	IllegalArgumentException
+	 * 			The given radius is not a valid radius for any entity.
+	 * 			! ! this.canHaveAsRadius(radius)
+	 */
+	protected void setRadius(double radius) throws IllegalArgumentException {
 		if (!canHaveAsRadius(radius)) 
 			throw new IllegalArgumentException();
 		this.radius = radius;
@@ -975,6 +997,14 @@ public abstract class Entity {
 		bullet.terminate();	
 	}
 
+	/**
+	 * Resolves the collision between this entity and a given MinorPlanet.
+	 * 
+	 * @param 	minorPlanet
+	 * 			The minorPlanet to be used.
+	 * 
+	 * @see implementation
+	 */
 	public void resolveCollisionMinorPlanet(MinorPlanet minorPlanet) {
 		minorPlanet.resolveCollision(this); 
 	}	// This method will only be called by another minor planet. In minor planet this method is overridden.

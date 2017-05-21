@@ -2900,4 +2900,13 @@ public class Part3TestFull {
     }
   }
 
+//  @Test
+//  public void ownTest() throws ModelException {
+//      max_score += 5;
+//      String code = "a := null;" + "print a;";
+//      Program program = ProgramParser.parseProgramFromString(code, programFactory);
+//      facade.loadProgramOnShip(ship1, program);
+//      List<Object> results = facade.executeProgram(ship1, 1.0);
+//  }
+  
 }

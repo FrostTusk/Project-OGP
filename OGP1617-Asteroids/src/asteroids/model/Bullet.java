@@ -464,7 +464,7 @@ public class Bullet extends Entity {
 	
 	
 	/**
-	 * Returns the type of this Ship Class in enumeration format.
+	 * Returns the type of this Bullet Class in enumeration format.
 	 */
 	@Basic @Override @Raw
 	public EntityType getType() {

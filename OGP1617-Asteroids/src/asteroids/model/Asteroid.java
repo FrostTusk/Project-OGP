@@ -4,6 +4,18 @@ import asteroids.helper.entity.EntityType;
 import asteroids.helper.entity.MinorPlanet;
 import be.kuleuven.cs.som.annotate.Raw;
 
+/**
+ * A class of asteroids.
+ * 
+ * @invar	| this.getPosition().isValidPosition(this.position.getPositionX(), this.position.getPositionY())
+ * @invar   | this.isValidSpeed(getVelocityX(), getVelocityY())
+ * @invar   | this.canHaveAsRadius(this.getRadius())
+ * @invar   | this.canHaveAsMass(this.getMass())
+ * @invar	| this.canHaveAsWorld(this.getWorld())
+ * @invar	| this.canHaveAsShip(this.getShip())
+ *       
+ * @author	Mathijs Hubrechtsen
+ */
 public class Asteroid extends MinorPlanet {
 
 	/**
@@ -56,7 +68,7 @@ public class Asteroid extends MinorPlanet {
 	
 	
 	/**
-	 * Returns the type of the class of this asteroid in enumeration format.
+	 * Returns the type of the class of this Asteroid in enumeration format.
 	 * 
 	 * @see implementation
 	 */

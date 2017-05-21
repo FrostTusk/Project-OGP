@@ -3,12 +3,34 @@ package asteroids.helper.entity;
 import asteroids.model.Ship;
 import be.kuleuven.cs.som.annotate.Raw;
 
+/**
+ * A class of minor planets.
+ * 
+ * @invar	| this.getPosition().isValidPosition(this.position.getPositionX(), this.position.getPositionY())
+ * @invar   | this.isValidSpeed(getVelocityX(), getVelocityY())
+ * @invar   | this.canHaveAsRadius(this.getRadius())
+ * @invar   | this.canHaveAsMass(this.getMass())
+ * @invar	| this.canHaveAsWorld(this.getWorld())
+ * @invar	| this.canHaveAsShip(this.getShip())
+ *       
+ * @author	Mathijs Hubrechtsen
+ */
 public abstract class MinorPlanet extends Entity {
 
+	/**
+	 * Default constructor for minor planet, should never be used.
+	 * @see implementation
+	 */
 	public MinorPlanet() {
 		setMinRadius(5);
 	}
 	
+	
+	/**
+	 * Terminates this minorPlanet. Breaks up any associations with entities and worlds.
+	 * Prepares this object for the garbage collector.
+	 * @see implementation
+	 */
 	@Override
 	public void terminate() {
 		if (isTerminated()) return;
@@ -23,6 +45,7 @@ public abstract class MinorPlanet extends Entity {
 	}
 
 
+	
 	/**
 	 * Set the mass of this bullet to the given mass.
 	 * 
@@ -36,11 +59,26 @@ public abstract class MinorPlanet extends Entity {
 		this.mass = ((double)4/(double)3) * Math.PI * Math.pow(getRadius(), 3) * getDensity();
 	}
 	
-	@Override
-	public void resolveCollisionShip(Ship ship) {
-		// TODO Auto-generated method stub
-	}
 	
+	/**
+	 * Resolves the collision between this entity and a given ship.
+	 * 
+	 * @param 	ship
+	 * 			The ship to be used.
+	 * 
+	 * @see implementation
+	 */
+	@Override
+	public abstract void resolveCollisionShip(Ship ship);
+	
+	/**
+	 * Resolves the collision between this entity and a given minor planet.
+	 * 
+	 * @param 	minorPlanet
+	 * 			The minorPlanet to be used.
+	 * 
+	 * @see implementation
+	 */
 	@Override
 	public void resolveCollisionMinorPlanet(MinorPlanet minorPlanet) {
 		if (minorPlanet == null) 
@@ -59,6 +97,13 @@ public abstract class MinorPlanet extends Entity {
 		minorPlanet.setVelocity(minorPlanet.getVelocityX() - Jx/minorPlanet.getMass(), minorPlanet.getVelocityY() - Jy/minorPlanet.getMass());
 	}
 
+	
+	
+	/**
+	 * Returns the type of the class of this MinorPlanet Class in enumeration format.
+	 * 
+	 * @see implementation
+	 */
 	@Override
 	public EntityType getType() {
 		return EntityType.MINORPLANET;

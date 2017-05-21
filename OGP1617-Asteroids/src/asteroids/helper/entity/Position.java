@@ -68,12 +68,12 @@ public class Position {
 	 */
 	public Position(double positionX, double positionY,
 			double minPositionX, double maxPositionX, double minPositionY, double maxPositionY) throws IllegalArgumentException {
+		this.boundsSet = true;
 		this.minPositionX = minPositionX;
 		this.maxPositionX = maxPositionX;
 		this.minPositionY = minPositionY;
 		this.maxPositionY = maxPositionY;
-		this.boundsSet = true;
-		
+			
 		try {
 			this.setPosition(positionX, positionY);
 		}
