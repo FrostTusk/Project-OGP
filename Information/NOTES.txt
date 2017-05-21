@@ -1,14 +1,8 @@
 1. Questions:
-	1. Interfaces. <= Is our idea right in myExpressions.
-	2. Generic Classes, where?
-	3. How can lamda expressions be used with entities?
-	4. What is a double literal in programs?
-
+	1. How can lamda expressions be used with entities?
 
 2. TODO:
-	1. Programs
-	2. Small TODOs
-
+	1. Small TODOs
 
 
 
