@@ -1,15 +1,15 @@
 package asteroids.model.programs.statements;
 
-import asteroids.model.programs.Executable;
-import asteroids.model.programs.MyExpression;
-import asteroids.model.programs.MyStatement;
+import asteroids.model.programs.*;
 import asteroids.part3.programs.SourceLocation;
 
 public class PrintStatement <T> implements MyStatement {
 
 	public PrintStatement(MyExpression<T> value, SourceLocation location) {
-		setLocation(location);
 		setValue(value);
+		setLocation(location);
+
+		getValue().setStatement(this);
 	}
 	
 	
@@ -24,11 +24,6 @@ public class PrintStatement <T> implements MyStatement {
 	@Override
 	public SourceLocation getLocation() {
 		return this.location;
-	}
-	
-	@Override
-	public int getSize() {
-		return 1;
 	}
 	
 	
@@ -60,13 +55,13 @@ public class PrintStatement <T> implements MyStatement {
 	@Override
 	public void setExecuter(Executable executer) {
 		this.executer = executer;
-		getValue().setStatement(this);
 	}
 
 	@Override
 	public void setSuperStatement(MyStatement statement) {
 		this.superStatement = statement;
 	}
+	
 	
 	
 	@Override

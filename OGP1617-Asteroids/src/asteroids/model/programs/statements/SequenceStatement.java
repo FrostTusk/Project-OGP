@@ -1,15 +1,14 @@
 package asteroids.model.programs.statements;
 
 import java.util.List;
-import asteroids.model.programs.Executable;
-import asteroids.model.programs.MyStatement;
+import asteroids.model.programs.*;
 import asteroids.part3.programs.SourceLocation;
 
 public class SequenceStatement implements MyStatement {
 
 	public SequenceStatement(List<MyStatement> statements, SourceLocation location) {
-		setLocation(location);
 		setStatements(statements);
+		setLocation(location);
 		
 		for (MyStatement statement: getStatements())
 			statement.setSuperStatement(this);
@@ -19,6 +18,7 @@ public class SequenceStatement implements MyStatement {
 	private List<MyStatement> statements;
 	private SourceLocation location;
 	
+	
 	public List<MyStatement> getStatements() {
 		return this.statements;
 	}
@@ -26,11 +26,6 @@ public class SequenceStatement implements MyStatement {
 	@Override
 	public SourceLocation getLocation() {
 		return this.location;
-	}
-	
-	@Override
-	public int getSize() {
-		return statements.size();
 	}
 	
 	
@@ -61,17 +56,16 @@ public class SequenceStatement implements MyStatement {
 
 	@Override
 	public void setExecuter(Executable executer) {
+		this.executer = executer;
 		for (MyStatement subStatement: getStatements())
 			subStatement.setExecuter(executer);
-		this.executer = executer;
 	}
 
 	@Override
 	public void setSuperStatement(MyStatement statement) {
-		for (MyStatement subStatement: getStatements())
-			subStatement.setSuperStatement(statement);
 		this.superStatement = statement;
 	}
+	
 	
 	
 	@Override
@@ -90,13 +84,10 @@ public class SequenceStatement implements MyStatement {
 	
 	@Override
 	public void execute() throws IllegalStateException {
-//		if (getExecuter().getFlag(getLocation())) return;
 		setExecuter(getExecuter());
 		for (MyStatement subStatement: getStatements())
 			subStatement.execute();
 		requestFlag();
 	}
-
-
 	
 }

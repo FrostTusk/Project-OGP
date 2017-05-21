@@ -9,9 +9,9 @@ public class FunctionCallExpression implements MyExpression<Object> {
 	
 	public FunctionCallExpression(String functionName, List<MyExpression> actualArgs,
 			SourceLocation location) {
-		setLocation(location);
 		setFunctionName(functionName);
 		setActualArgs(actualArgs);
+		setLocation(location);
 	}
 	
 	
@@ -71,7 +71,6 @@ public class FunctionCallExpression implements MyExpression<Object> {
 		MyFunction function = new MyFunction(template.getFunctionName(), template.getBody(), template.getLocation());
 		function.setProgram(getStatement().getExecuter().getProgram());
 		return function.execute(getActualArgs()).evaluate();
-//		return getStatement().getExecuter().getProgram().getFunction(getFunctionName()).execute(getActualArgs());
 	}
 
 }

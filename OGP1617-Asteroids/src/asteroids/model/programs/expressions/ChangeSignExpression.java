@@ -1,7 +1,6 @@
 package asteroids.model.programs.expressions;
 
-import asteroids.model.programs.MyExpression;
-import asteroids.model.programs.MyStatement;
+import asteroids.model.programs.*;
 import asteroids.part3.programs.SourceLocation;
 
 public class ChangeSignExpression implements MyExpression<Double> {

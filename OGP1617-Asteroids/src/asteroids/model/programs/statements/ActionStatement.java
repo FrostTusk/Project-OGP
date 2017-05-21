@@ -9,18 +9,21 @@ import asteroids.part3.programs.SourceLocation;
 
 public class ActionStatement implements MyStatement {
 	
-	public ActionStatement(ActionType type, SourceLocation location) {
+	public ActionStatement(ActionType type, SourceLocation location) throws IllegalArgumentException {
 		if (type == ActionType.TURN)
 			throw new IllegalArgumentException();
-		setLocation(location);
 		setActionType(type);
+		setLocation(location);
 	}
 	
-	public ActionStatement(ActionType type, MyExpression<Double> angle, SourceLocation location) {
+	public ActionStatement(ActionType type, MyExpression<Double> angle, SourceLocation location) 
+			throws IllegalArgumentException {
 		if (type != ActionType.TURN)
 			throw new IllegalArgumentException();
-		setLocation(location);
 		setActionType(type);
+		setLocation(location);
+		
+		angle.setStatement(this);
 		this.angle = angle.evaluate();
 	}
 	
@@ -34,31 +37,25 @@ public class ActionStatement implements MyStatement {
 		return this.actionType;
 	}
 	
-
 	@Override
 	public SourceLocation getLocation() {
 		return this.location;
 	}
+	
 
 	protected void setActionType(ActionType actionType) {
 		this.actionType = actionType;
 	}
 
-
-	
 	private void setLocation(SourceLocation location) {
 		this.location = location;
 	}
 
 
+	
 	private Executable executer;
 	private MyStatement superStatement;
 	
-	
-	@Override
-	public int getSize() {
-		return 1;
-	}
 
 	@Override
 	public Executable getExecuter() {
@@ -82,6 +79,7 @@ public class ActionStatement implements MyStatement {
 	}
 	
 	
+	
 	@Override
 	public void requestFlag() {
 		getExecuter().flagLine(getLocation());
@@ -92,14 +90,16 @@ public class ActionStatement implements MyStatement {
 		getExecuter().deFlagLine(getLocation());
 	}
 
+	
 	@Override
-	public void execute() throws IllegalStateException {
+	public void execute() throws IllegalArgumentException, IllegalStateException {
 		if (getExecuter().getFlag(getLocation())) return;
 		setExecuter(getExecuter());
 		if (MyFunction.class.isInstance(getExecuter()))
 			throw new IllegalArgumentException();
 		if (getExecuter().getTime() < 0.2)
 			throw new IllegalStateException();
+		
 		switch (getActionType()) {
 			case SHOOT:
 				getExecuter().getOwner().fireBullet();
@@ -118,6 +118,7 @@ public class ActionStatement implements MyStatement {
 			default:
 				throw new IllegalArgumentException();
 		}
+		
 		getExecuter().setTime(getExecuter().getTime() - 0.2);
 		requestFlag();
 	}

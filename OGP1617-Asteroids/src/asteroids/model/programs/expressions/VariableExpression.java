@@ -1,14 +1,13 @@
 package asteroids.model.programs.expressions;
 
-import asteroids.model.programs.MyExpression;
-import asteroids.model.programs.MyStatement;
+import asteroids.model.programs.*;
 import asteroids.part3.programs.SourceLocation;
 
 public class VariableExpression implements MyExpression<Object> {
 	
 	public VariableExpression(String variableName, SourceLocation location) {
-		setLocation(location);
 		setVariableName(variableName);
+		setLocation(location);
 	}
 	
 	

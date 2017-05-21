@@ -10,6 +10,7 @@ public class NullEntityExpression extends EntityExpression {
 	}
 
 	
+	
 	@Override
 	public void setEntity() {
 		setEntity(null);

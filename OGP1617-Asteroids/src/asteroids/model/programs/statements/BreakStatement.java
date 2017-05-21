@@ -1,9 +1,7 @@
 package asteroids.model.programs.statements;
 
-import asteroids.junk.TestException;
-import asteroids.model.programs.Executable;
-import asteroids.model.programs.MyFunction;
-import asteroids.model.programs.MyStatement;
+import asteroids.helper.ExitOutException;
+import asteroids.model.programs.*;
 import asteroids.part3.programs.SourceLocation;
 
 public class BreakStatement implements MyStatement {
@@ -19,11 +17,6 @@ public class BreakStatement implements MyStatement {
 	@Override
 	public SourceLocation getLocation() {
 		return this.location;
-	}
-	
-	@Override
-	public int getSize() {
-		return 1;
 	}
 
 
@@ -60,6 +53,7 @@ public class BreakStatement implements MyStatement {
 	}
 
 	
+	
 	@Override
 	public void requestFlag() {
 		getExecuter().flagLine(getLocation());
@@ -70,19 +64,20 @@ public class BreakStatement implements MyStatement {
 		getExecuter().deFlagLine(getLocation());
 	}
 	
+	
 	@Override
-	public void execute() {
+	public void execute() throws ExitOutException {
 		if (getExecuter().getFlag(getLocation())) return;
 		MyStatement superStatement = getSuperStatement();
 		while (!WhileStatement.class.isInstance(superStatement)) {
 			superStatement = superStatement.getSuperStatement();
 			if ( (superStatement == null) && (MyFunction.class.isInstance(getExecuter())) )
-				throw new TestException();
+				throw new ExitOutException();
 			if (superStatement == null)
 				throw new IllegalArgumentException();
 		}
 		requestFlag();
-		throw new TestException();
+		throw new ExitOutException();
 	}
 
 }

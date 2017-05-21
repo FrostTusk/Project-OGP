@@ -10,6 +10,7 @@ public class SelfEntityExpression extends EntityExpression {
 	}
 
 	
+	
 	@Override
 	public void setEntity() {
 		try {

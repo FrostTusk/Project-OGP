@@ -9,9 +9,10 @@ import asteroids.part3.programs.SourceLocation;
 public class AssignmentStatement <T> implements MyStatement {
 
 	public AssignmentStatement(String variableName, MyExpression<T> value, SourceLocation location) {
-		setLocation(location);
 		setVariableName(variableName);
 		setValue(value);
+		setLocation(location);
+		
 		getValue().setStatement(this);
 	}
 	
@@ -34,11 +35,6 @@ public class AssignmentStatement <T> implements MyStatement {
 		return this.location;
 	}
 	
-	@Override
-	public int getSize() {
-		return 1;
-	}
-	
 	
 	private void setVariableName(String variableName) {
 		this.variableName = variableName;
@@ -46,7 +42,6 @@ public class AssignmentStatement <T> implements MyStatement {
 	
 	private void setValue(MyExpression<T> value) {
 		this.value = value;
-		value.setStatement(this);
 	}
 
 	private void setLocation(SourceLocation location) {
@@ -81,6 +76,7 @@ public class AssignmentStatement <T> implements MyStatement {
 	}
 	
 
+	
 	@Override
 	public void requestFlag() {
 		getExecuter().flagLine(getLocation());
@@ -91,8 +87,9 @@ public class AssignmentStatement <T> implements MyStatement {
 		getExecuter().deFlagLine(getLocation());
 	}
 	
+	
 	@Override
-	public void execute() {
+	public void execute() throws IllegalArgumentException {
 		if (getExecuter().getFlag(getLocation())) return;
 		setExecuter(getExecuter());
 		
