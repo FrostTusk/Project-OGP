@@ -11,14 +11,26 @@ public class Program implements Executable {
 		setMain(main);
 		main.setExecuter(this);
 		
+		terminated = false;
 		setTime(0);
 		this.printTracker = new ArrayList<Object>();
-//		this.lineTracker = new boolean[main.getSize()];
-		this.flagMap = new HashMap<String, Boolean>();
-		
+		this.flagTracker = new HashMap<String, Boolean>();
 		this.globalVars = new HashMap<String, Object>();
 		this.localVars = new HashMap<String, Object>();
 	}
+	
+	
+	private boolean terminated;
+
+	
+	public boolean isTerminated() {
+		return this.terminated;
+	}
+	
+	public void terminate() {
+		this.terminated = true;
+	}
+	
 	
 	
 	private List<MyFunction> functions;
@@ -29,7 +41,7 @@ public class Program implements Executable {
 		return this.functions;
 	}
 	
-	public MyFunction getFunction(String name) {
+	public MyFunction getFunction(String name) throws IllegalArgumentException {
 		for (MyFunction function: getAllFunctions())
 			if (function.getFunctionName().equals(name))
 				return function;
@@ -69,6 +81,7 @@ public class Program implements Executable {
 	private double time;
 	private Ship owner;
 	
+	
 	public double getTime() {
 		return time;
 	}
@@ -77,12 +90,12 @@ public class Program implements Executable {
 		return this.owner;
 	}
 	
-	
 	@Override
 	public Program getProgram() {
 		return this;
 	}
 
+	
 	public void setTime(double time) {
 		this.time = time;
 	}
@@ -93,36 +106,25 @@ public class Program implements Executable {
 	
 	
 	
-//	private boolean[] lineTracker;
-	private Map<String, Boolean> flagMap;
 	private List<Object> printTracker;
+	private Map<String, Boolean> flagTracker;
 	private Map<String, Object> localVars;
 	private Map<String, Object> globalVars;
 
 	
+	public List<Object> getPrintTracker() {
+		if (!isTerminated())
+			return null;
+		return (this.printTracker.isEmpty()) ? null: this.printTracker;
+	}
+	
 	public boolean getFlag(SourceLocation location) {
 		try {
-			return flagMap.get(getPositionString(location));
+			return flagTracker.get(getPositionString(location));
 		}
 		catch (NullPointerException exc) {
 			return false;
 		}
-//		return lineTracker[location.getLine() - 1];
-	}
-	
-	public List<Object> getPrintTracker() {
-//		List<Object> result = new ArrayList<Object>();
-//		result.add(null);
-//		return (printTracker.isEmpty()) ? result:printTracker;
-//		return this.printTracker;
-//		try {
-		if (!terminated)
-			return null;
-		return (this.printTracker.isEmpty()) ? null: this.printTracker;
-//		}
-//		catch (NullPointerException exc) {
-//			throw new ArithmeticException();
-//		}
 	}
 	
 	public Object getLocalVar(String name) {
@@ -144,19 +146,17 @@ public class Program implements Executable {
 	}
 	
 
+	public void addPrintValue(Object value) {
+		this.printTracker.add(value);
+	}
+	
 	public void flagLine(SourceLocation location) {
-//		lineTracker[location.getLine() - 1] = true;
-		flagMap.put(getPositionString(location), true);
+		flagTracker.put(getPositionString(location), true);
 	}
 
 	@Override
 	public void deFlagLine(SourceLocation location) {
-//		lineTracker[location.getLine() - 1] = false;
-		flagMap.put(getPositionString(location), false);
-	}
-	
-	public void addPrintValue(Object value) {
-		this.printTracker.add(value);
+		flagTracker.put(getPositionString(location), false);
 	}
 	
 	@Override
@@ -165,7 +165,8 @@ public class Program implements Executable {
 	}
 
 	public void addLocalVar(String name, Object variable) {
-		localVars.put(name, variable);
+		throw new IllegalArgumentException(); // Only Functions have local variables.
+//		localVars.put(name, variable);
 	}
 	
 	public void addGlobalVar(String name, Object variable) {
@@ -174,23 +175,22 @@ public class Program implements Executable {
 	
 	
 	
-	private boolean terminated;
-
+	@Override
+	public void setReturn(MyExpression<?> value) {
+		throw new IllegalArgumentException();
+	}
+	
 	
 	public void execute(double time) {
 		setTime(getTime() + time);
 		main.execute();
-		terminated = true;
+		terminate();
 	}
 
 	
+	
 	public String getPositionString(SourceLocation location) {
 		return Integer.toString(location.getLine()) + "," + Integer.toString(location.getColumn());
-	}
-
-	@Override
-	public void setReturn(MyExpression<?> value) {
-		throw new IllegalArgumentException();
 	}
 	
 }

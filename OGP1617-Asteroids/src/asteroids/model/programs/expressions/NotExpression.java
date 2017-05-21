@@ -1,14 +1,13 @@
 package asteroids.model.programs.expressions;
 
-import asteroids.model.programs.MyExpression;
-import asteroids.model.programs.MyStatement;
+import asteroids.model.programs.*;
 import asteroids.part3.programs.SourceLocation;
 
 public class NotExpression implements MyExpression<Boolean> {
 
 	public NotExpression(MyExpression<Boolean> expression, SourceLocation location) {
-		setLocation(location);
 		setExpression(expression);
+		setLocation(location);
 	}
 	
 	
@@ -36,12 +35,7 @@ public class NotExpression implements MyExpression<Boolean> {
 	}
 
 
-	@Override
-	public Boolean evaluate() {
-		return (getExpression().evaluate() == true) ? false:true;
-	}
-
-
+	
 	private MyStatement statement;
 	
 	
@@ -54,6 +48,13 @@ public class NotExpression implements MyExpression<Boolean> {
 	public void setStatement(MyStatement statement) {
 		this.statement = statement;
 		getExpression().setStatement(statement);
+	}
+
+	
+	
+	@Override
+	public Boolean evaluate() {
+		return (getExpression().evaluate() == true) ? false: true;
 	}
 	
 }

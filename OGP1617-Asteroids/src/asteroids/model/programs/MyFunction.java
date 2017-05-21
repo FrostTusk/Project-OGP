@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import asteroids.junk.TestException;
+import asteroids.helper.ExitOutException;
 import asteroids.model.Program;
 import asteroids.model.Ship;
 import asteroids.part3.programs.SourceLocation;
@@ -189,9 +189,11 @@ public class MyFunction implements Executable {
 		try {
 			body.execute();
 		}
-		catch(TestException exc) {
+		catch(ExitOutException exc) {
 			if (returnSet)
 				return this.returnValue;
+			else
+				throw new ExitOutException();
 		}
 		return null;
 //		throw new IllegalArgumentException();

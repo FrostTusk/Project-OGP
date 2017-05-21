@@ -1,14 +1,13 @@
 package asteroids.model.programs.expressions;
 
-import asteroids.model.programs.MyExpression;
-import asteroids.model.programs.MyStatement;
+import asteroids.model.programs.*;
 import asteroids.part3.programs.SourceLocation;
 
 public class SqrtExpression implements MyExpression<Double> {
 
 	public SqrtExpression(MyExpression<Double> expression, SourceLocation location) {
-		setLocation(location);
 		setExpression(expression);
+		setLocation(location);
 	}
 	
 	
@@ -35,11 +34,6 @@ public class SqrtExpression implements MyExpression<Double> {
 	}
 
 
-	@Override
-	public Double evaluate() {
-		return Math.sqrt(expression.evaluate());
-	}
-
 	
 	private MyStatement statement;
 	
@@ -53,6 +47,13 @@ public class SqrtExpression implements MyExpression<Double> {
 	public void setStatement(MyStatement statement) {
 		getExpression().setStatement(statement);
 		this.statement = statement;
+	}
+
+	
+	
+	@Override
+	public Double evaluate() {
+		return Math.sqrt(expression.evaluate());
 	}
 	
 }

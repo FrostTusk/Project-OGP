@@ -60,6 +60,7 @@ public abstract class EntityExpression implements MyExpression<Entity> {
 	}	
 	
 	
+	
 	@Override
 	public Entity evaluate() {
 		try {
@@ -67,6 +68,9 @@ public abstract class EntityExpression implements MyExpression<Entity> {
 			return getEntity();
 		}
 		catch (IndexOutOfBoundsException exc){
+			return null;
+		}
+		catch (NullPointerException exc) {
 			return null;
 		}
 	}

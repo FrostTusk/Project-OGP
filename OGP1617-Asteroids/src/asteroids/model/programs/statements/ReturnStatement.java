@@ -1,17 +1,16 @@
 package asteroids.model.programs.statements;
 
-import asteroids.junk.TestException;
-import asteroids.model.programs.Executable;
-import asteroids.model.programs.MyExpression;
-import asteroids.model.programs.MyStatement;
+import asteroids.helper.ExitOutException;
+import asteroids.model.programs.*;
 import asteroids.part3.programs.SourceLocation;
 
 public class ReturnStatement <T> implements MyStatement{
 	
 	public ReturnStatement(MyExpression<T> value, SourceLocation location) {
-		value.setStatement(this);
-		setLocation(location);
 		setValue(value);
+		setLocation(location);
+		
+		getValue().setStatement(this);
 	}
 	
 	
@@ -53,12 +52,7 @@ public class ReturnStatement <T> implements MyStatement{
 		return this.superStatement;
 	}
 
-	@Override
-	public int getSize() {
-		return 1;
-	}
-	
-	
+		
 	@Override
 	public void setExecuter(Executable executer) {
 		this.executer = executer;
@@ -71,6 +65,7 @@ public class ReturnStatement <T> implements MyStatement{
 	}
 
 	
+	
 	@Override
 	public void requestFlag() {
 		getExecuter().flagLine(getLocation());
@@ -81,13 +76,14 @@ public class ReturnStatement <T> implements MyStatement{
 		getExecuter().deFlagLine(getLocation());
 	}
 	
+	
 	@Override
 	public void execute() {
 		if (getExecuter().getFlag(getLocation())) return;
 		setExecuter(getExecuter());
 		getExecuter().setReturn(getValue());
-		requestFlag(); // TODO Return a value.	
-		throw new TestException();
+		requestFlag();
+		throw new ExitOutException();
 	}
 	
 }

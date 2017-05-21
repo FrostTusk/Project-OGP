@@ -1,19 +1,18 @@
 package asteroids.model.programs.statements;
 
-import asteroids.model.programs.Executable;
-import asteroids.model.programs.MyExpression;
-import asteroids.model.programs.MyStatement;
+import asteroids.model.programs.*;
 import asteroids.part3.programs.SourceLocation;
 
 public class IfStatement implements MyStatement {
 
 	public IfStatement(MyExpression<Boolean> condition, MyStatement ifBody, MyStatement elseBody,
 			SourceLocation location) {
-		setLocation(location);
 		setCondition(condition);
 		setIfBody(ifBody);
 		setElseBody(elseBody);
+		setLocation(location);
 		
+		getCondition().setStatement(this);
 		getIfBody().setSuperStatement(this);
 		if (getElseBody() != null)
 			getElseBody().setSuperStatement(this);
@@ -43,17 +42,9 @@ public class IfStatement implements MyStatement {
 		return this.location;
 	}
 	
-	@Override
-	public int getSize() {
-		if (getElseBody() == null)
-			return getIfBody().getSize() + 1;
-		return ifBody.getSize() + elseBody.getSize() + 1;
-	}
-	
 
 	private void setCondition(MyExpression<Boolean> condition) {
 		this.condition = condition;
-		condition.setStatement(this);
 	}
 	
 	private void setIfBody(MyStatement ifBody) {
@@ -88,7 +79,6 @@ public class IfStatement implements MyStatement {
 	@Override
 	public void setExecuter(Executable executer) {
 		this.executer = executer;
-		getCondition().setStatement(this);
 		getIfBody().setExecuter(executer);
 		if (getElseBody() != null)
 			getElseBody().setExecuter(executer);
@@ -98,6 +88,7 @@ public class IfStatement implements MyStatement {
 	public void setSuperStatement(MyStatement statement) {
 		this.superStatement = statement;
 	}
+	
 	
 	
 	@Override
@@ -116,6 +107,7 @@ public class IfStatement implements MyStatement {
 			getElseBody().requestDeFlag();
 	}
 	
+	
 	@Override
 	public void execute() throws IllegalStateException {
 		if (getExecuter().getFlag(getLocation())) return;
@@ -126,7 +118,5 @@ public class IfStatement implements MyStatement {
 			getElseBody().execute();
 		requestFlag();
 	}
-
-
 	
 }

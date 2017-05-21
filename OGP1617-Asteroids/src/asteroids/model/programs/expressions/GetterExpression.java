@@ -9,9 +9,9 @@ import asteroids.part3.programs.SourceLocation;
 public class GetterExpression implements MyExpression<Double> {
 	
 	public GetterExpression(MyExpression<Entity> expression, GetterType getterType, SourceLocation location) {
-		setLocation(location);
 		setExpression(expression);
 		setGetterType(getterType);
+		setLocation(location);
 	}
 	
 	
@@ -48,7 +48,7 @@ public class GetterExpression implements MyExpression<Double> {
 
 	
 	
-	private MyStatement statement;
+	protected MyStatement statement;
 
 	
 	@Override
@@ -59,8 +59,6 @@ public class GetterExpression implements MyExpression<Double> {
 	
 	public void setStatement(MyStatement statement) {
 		this.statement = statement;
-		// getdir has no expression, see programfactory createGetDirectionExpression
-		if (getGetterType() == GetterType.GETDIR) return; 
 		getExpression().setStatement(statement);		
 	}
 

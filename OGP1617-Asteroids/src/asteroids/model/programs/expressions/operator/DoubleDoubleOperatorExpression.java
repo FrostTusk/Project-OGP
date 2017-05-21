@@ -1,19 +1,17 @@
 package asteroids.model.programs.expressions.operator;
 
 import asteroids.helper.program.OperatorType;
-import asteroids.model.programs.MyExpression;
-import asteroids.model.programs.MyStatement;
+import asteroids.model.programs.*;
 import asteroids.part3.programs.SourceLocation;
 
 public class DoubleDoubleOperatorExpression implements MyExpression<Double> {
 
 	public DoubleDoubleOperatorExpression(MyExpression<Double> expression1, MyExpression<Double> expression2, 
 			OperatorType operatorType, SourceLocation location) {
-		setLocation(location);
 		setExpression1(expression1);
 		setExpression2(expression2);
 		setOperatorType(operatorType);
-//		if (expression1.getClass() != expression2.getClass()) throw new RuntimeException();
+		setLocation(location);
 	}
 	
 	
@@ -66,24 +64,25 @@ public class DoubleDoubleOperatorExpression implements MyExpression<Double> {
 		return statement;
 	}
 
+	
 	@Override
 	public void setStatement(MyStatement statement) {
+		this.statement = statement;
 		getExpression1().setStatement(statement);
 		getExpression2().setStatement(statement);
-		this.statement = statement;
 	}
 
 	
 	
 	@Override
-	public Double evaluate() {
+	public Double evaluate() throws IllegalArgumentException {
 		switch (operatorType) {
-		case ADDITION:
-			return getExpression1().evaluate() + getExpression2().evaluate();
-		case MULTIPLICATION:
-			return getExpression1().evaluate() * getExpression2().evaluate();			
-		default:
-			throw new IllegalArgumentException();
+			case ADDITION:
+				return getExpression1().evaluate() + getExpression2().evaluate();
+			case MULTIPLICATION:
+				return getExpression1().evaluate() * getExpression2().evaluate();			
+			default:
+				throw new IllegalArgumentException();
 		}
 	}
 

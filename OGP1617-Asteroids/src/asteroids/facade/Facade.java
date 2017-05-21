@@ -7,6 +7,7 @@ import asteroids.util.ModelException;
 
 import java.util.*;
 
+import asteroids.helper.ExitOutException;
 import asteroids.helper.entity.*;
 import asteroids.model.*;
 import asteroids.model.programs.ProgramFactory;
@@ -955,19 +956,22 @@ public class Facade implements IFacade {
 		catch (AssertionError exc) {
 			throw new ModelException(exc);
 		}
+		catch (ExitOutException exc) {
+			throw new ExitOutException();
+		}
+		catch (ClassCastException exc) {
+			throw new ModelException(exc);
+		}
+		catch (IllegalArgumentException exc) {
+			throw new ModelException(exc);
+		}
 		catch (IllegalStateException exc) {
 			throw new ModelException(exc);
 		}
 		catch (IndexOutOfBoundsException exc) {
 			throw new ModelException(exc);
 		}
-		catch (IllegalArgumentException exc) {
-			throw new ModelException(exc);
-		}
 		catch (NullPointerException exc) {
-			throw new ModelException(exc);
-		}
-		catch (ClassCastException exc) {
 			throw new ModelException(exc);
 		}
 	}

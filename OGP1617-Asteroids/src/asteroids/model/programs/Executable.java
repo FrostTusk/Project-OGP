@@ -1,7 +1,6 @@
 package asteroids.model.programs;
 
-import asteroids.model.Program;
-import asteroids.model.Ship;
+import asteroids.model.*;
 import asteroids.part3.programs.SourceLocation;
 
 public interface Executable {
@@ -14,8 +13,8 @@ public interface Executable {
 	public Object getLocalVar(String name);
 	public Object getGlobalVar(String name);
 	public boolean canHaveAsName(String name);
-	public void addVar(String name, Object value);
 	public void addPrintValue(Object value);
+	public void addVar(String name, Object value);
 	public void flagLine(SourceLocation location);
 	public void deFlagLine(SourceLocation location);
 	public void setReturn(MyExpression<?> value);

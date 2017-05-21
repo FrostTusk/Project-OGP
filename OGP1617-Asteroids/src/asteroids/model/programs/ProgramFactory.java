@@ -7,6 +7,7 @@ import asteroids.helper.program.*;
 import asteroids.model.*;
 import asteroids.model.programs.expressions.*;
 import asteroids.model.programs.expressions.entity.*;
+import asteroids.model.programs.expressions.getter.DirGetterExpression;
 import asteroids.model.programs.expressions.operator.AllBooleanOperatorExpression;
 import asteroids.model.programs.expressions.operator.DoubleBooleanOperatorExpression;
 import asteroids.model.programs.expressions.operator.DoubleDoubleOperatorExpression;
@@ -161,25 +162,21 @@ public class ProgramFactory implements IProgramFactory<MyExpression, MyStatement
 
 	@Override
 	public MyExpression createLessThanExpression(MyExpression e1, MyExpression e2, SourceLocation location) {
-		//return new OperatorExpression(e1, e2, OperatorType.LESSTHAN, location);
 		return new DoubleBooleanOperatorExpression(e1, e2, OperatorType.LESSTHAN, location);
 	}
 
 	@Override
 	public MyExpression createEqualityExpression(MyExpression e1, MyExpression e2, SourceLocation location) {
-		//return new OperatorExpression(e1, e2, OperatorType.EQUALITY, location);
 		return new AllBooleanOperatorExpression<>(e1, e2, OperatorType.EQUALITY, location);
 	}
 
 	@Override
 	public MyExpression createAdditionExpression(MyExpression e1, MyExpression e2, SourceLocation location) {
-		//return new OperatorExpression(e1, e2, OperatorType.ADDITION, location);
 		return new DoubleDoubleOperatorExpression(e1, e2, OperatorType.ADDITION, location);
 	}
 
 	@Override
 	public MyExpression createMultiplicationExpression(MyExpression e1, MyExpression e2, SourceLocation location) {
-		//return new OperatorExpression(e1, e2, OperatorType.MULTIPLICATION, location);
 		return new DoubleDoubleOperatorExpression(e1, e2, OperatorType.MULTIPLICATION, location);
 	}
 
@@ -190,7 +187,7 @@ public class ProgramFactory implements IProgramFactory<MyExpression, MyStatement
 
 	@Override
 	public MyExpression createGetDirectionExpression(SourceLocation location) {
-		return new GetterExpression(null, GetterType.GETDIR, location);
+		return new DirGetterExpression(GetterType.GETDIR, location);
 	}
 
 	@Override
