@@ -911,7 +911,7 @@ public class Facade implements IFacade {
 	@Override
 	public double getPlanetoidTotalTraveledDistance(Planetoid planetoid) throws ModelException {
 		try {
-			return planetoid.getDistanceTravelled();
+			return planetoid.getDistanceTraveled();
 		}
 		catch (NullPointerException exc) {
 			throw new ModelException(exc);
@@ -956,10 +956,10 @@ public class Facade implements IFacade {
 		catch (AssertionError exc) {
 			throw new ModelException(exc);
 		}
-		catch (ExitOutException exc) {
-			throw new ExitOutException();
-		}
 		catch (ClassCastException exc) {
+			throw new ModelException(exc);
+		}
+		catch (ExitOutException exc) {
 			throw new ModelException(exc);
 		}
 		catch (IllegalArgumentException exc) {

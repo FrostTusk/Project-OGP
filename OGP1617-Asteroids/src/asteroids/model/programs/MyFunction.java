@@ -93,7 +93,7 @@ public class MyFunction implements Executable {
 	
 	
 	public Object getArgument(String name) {
-		return args.get(name)/*.evaluate()*/;
+		return args.get(name);
 	}
 	
 	@Override

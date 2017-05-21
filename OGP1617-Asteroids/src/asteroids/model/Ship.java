@@ -334,10 +334,7 @@ public class Ship extends Entity {
 	 */
 	@Basic @Raw
 	public Set<Bullet> getAllBullets() {
-		Set<Bullet> result = new HashSet<Bullet>();
-		for (Bullet bullet: bullets)
-			result.add(bullet);
-		return result;
+		return helper.deepCopySet(bullets);
 	}
 	
 	/**

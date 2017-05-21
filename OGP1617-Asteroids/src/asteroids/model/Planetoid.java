@@ -6,10 +6,30 @@ import asteroids.helper.entity.Entity;
 import asteroids.helper.entity.EntityType;
 import asteroids.helper.entity.MinorPlanet;
 import asteroids.helper.entity.Position;
+import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.Raw;
 
 public class Planetoid extends MinorPlanet {
 
-	public Planetoid(double positionX, double positionY, double velocityX, double velocityY, double radius, double distanceTravelled)
+	/**
+	 * Initialize this new asteroid with given position, velocities and radius. 
+	 *
+	 * @param  	positionX
+	 *         	The X position for this new planetoid.
+	 * @param  	positionY
+	 * 			The Y position of this new planetoid.
+	 * @param  	velocityX
+	 *         	The X velocity for this new planetoid.
+	 * @param	velocityY
+	 * 			The Y velocity for this new planetoid.
+	 * @param  	radius
+	 *         	The radius for this new planetoid.
+	 * @param	distanceTraveled
+	 * 			The distance this new planetoid has traveled.
+	 *         
+	 * @see implementation
+	 */
+	public Planetoid(double positionX, double positionY, double velocityX, double velocityY, double radius, double distanceTraveled)
 			throws IllegalArgumentException {
 		setDensity(0.917 * Math.pow(10, 12));
 		
@@ -23,31 +43,79 @@ public class Planetoid extends MinorPlanet {
 		setVelocity(velocityX, velocityY);
 		setRadius(radius);
 		initialRadius = getRadius();
-		setDistanceTravelled(distanceTravelled);
+		setDistanceTraveled(distanceTraveled);
 		setMass();
 	}
 	
 	
+	/**
+	 * Variable registering the initial radius.
+	 */
 	private double initialRadius;
-	private double distanceTravelled;
+	/**
+	 * Variable registering the distance traveled.
+	 */
+	private double distanceTraveled;
 	
 	
+	/**
+	 * Get the initial radius.
+	 */
+	@Basic
 	public double getInitialRadius() {
 		return initialRadius;
 	}
 	
-	public double getDistanceTravelled() {
-		return distanceTravelled;
+	/**
+	 * Get the distance traveled.
+	 */
+	@Basic
+	public double getDistanceTraveled() {
+		return distanceTraveled;
 	}
 	
 	
-	public void setDistanceTravelled(double distanceTravelled) {
-		this.distanceTravelled = distanceTravelled;
+	/**
+	 * Set the distance traveled to the given distanceTraveled.
+	 * 
+	 * @param 	distanceTraveled
+	 * 			The new distance traveled.
+	 * 
+	 * @see implementation
+	 */
+	private void setDistanceTraveled(double distanceTraveled) {
+		this.distanceTraveled = distanceTraveled;
 		updateRadius();
 	}
 	
 
-	@Override
+	/**
+	 * Change the position of this entity based on the current
+	 * position, velocity and a given time duration time.
+	 * 
+	 * @param  	time
+	 * 			the time duration in which this entity will move.
+	 * 
+	 * @post   	The X position of this new entity is equal to
+	 *         	the current X position times the X velocity times the given time
+	 *       	| new.getPositionX() == this.getpositionX() * this.getVelocityX() * time
+	 * @post   	The Y position of this new entity is equal to
+	 *         	the current X position times the Y velocity times the given time.   	
+	 *       	| new.getPositionY() == this.positionY() * this.getVelocityY() * time
+	 * @post	The distance traveled is equal to the last distance traveled plus
+	 * 			the distance traveled during move.
+	 * 			| new.getDistanceTraveled() = this.getDistanceTraveled() + 
+	 * 			| Math.sqrt(Math.pow(Math.abs(newPositionX - oldPositionX), 2) +
+				| Math.pow(Math.abs(newPositionY - oldPositionY), 2))
+				 
+	 * @throws 	IllegalArgumentException
+	 *         	The time was less than 0.
+	 *       	| time < 0     
+	 * @throws 	IllegalArgumentException
+	 *         	The new position for this entity is not a valid position for any entity.
+	 *       	| ! isValidPosition(new.getPositionX(), new.getPositionY())
+	 */
+	@Override @Raw 
 	public void move(double time) {
 		if (time < 0) throw new IllegalArgumentException();
 		
@@ -56,7 +124,7 @@ public class Planetoid extends MinorPlanet {
 		double oldPositionX = getPosition().getPositionX();
 		double oldPositionY = getPosition().getPositionY();
 		
-		setDistanceTravelled(getDistanceTravelled() + Math.sqrt(Math.pow(Math.abs(newPositionX - oldPositionX), 2) 
+		setDistanceTraveled(getDistanceTraveled() + Math.sqrt(Math.pow(Math.abs(newPositionX - oldPositionX), 2) 
 							 + Math.pow(Math.abs(newPositionY - oldPositionY), 2)));
 		
 		try {
@@ -68,15 +136,29 @@ public class Planetoid extends MinorPlanet {
 	}
 	
 	
+	/**
+	 * Update the current radius.
+	 * 
+	 * @see implementation
+	 */
 	private void updateRadius() {
 		try {
-			setRadius(getInitialRadius() - 0.000001 * getDistanceTravelled());
+			setRadius(getInitialRadius() - 0.000001 * getDistanceTraveled());
 		}
 		catch (IllegalArgumentException exc) {
 			this.terminate();
 		}
 	}
 	
+	
+	/**
+	 * Resolves the collision between this entity and a given ship.
+	 * 
+	 * @param 	ship
+	 * 			The ship to be used.
+	 * 
+	 * @see implementation
+	 */
 	@Override
 	public void resolveCollisionShip(Ship ship) {
 		Position newPosition = getRandomPosition(ship.getWorld());
@@ -94,6 +176,14 @@ public class Planetoid extends MinorPlanet {
 	}
 	
 	
+	/**
+	 * Get a random position in the given world.
+	 * @param 	world
+	 * 			The world in which a random position needs to be found.
+	 * 
+	 * @see implementation
+	 */
+	@Raw
 	private Position getRandomPosition(World world) {
 		return new Position(getRandomNumber(0, world.getWidth()), getRandomNumber(0, world.getHeight()));
 	}
@@ -106,12 +196,21 @@ public class Planetoid extends MinorPlanet {
 	 *			The lowest random double value. (Inclusive)
 	 * @param	high
 	 *			The highest random double value. (Exclusive)
+	 *
+	 * @see implementation
 	 */
+	@Raw
 	public double getRandomNumber(double low, double high) {
 	 	return ThreadLocalRandom.current().nextDouble(low, high);
 	}
 	
-	@Override
+	
+	/**
+	 * Returns the type of the class of this planetoid in enumeration format.
+	 * 
+	 * @see implementation
+	 */
+	@Raw @Override
 	public EntityType getType() {
 		return EntityType.PLANETOID;
 	}

@@ -193,6 +193,23 @@ public class Helper {
 	
 	
 	
+	/**
+	 * Deep copy a given Set.
+	 * 
+	 * @param 	set
+	 * 			The Set to be copied.
+	 * 
+	 * @return	Returns a Set made up by the elements in the given Set.
+	 */
+	public <T> Set<T> deepCopySet(Set<T> set) {
+		Set<T> result = new HashSet<T>();
+		for (T item: set)
+			result.add(item);
+		return result;
+	}
+	
+	
+	
 			/*
 		     * |------------------------------------------------------------------------|
 		     * | 3. The next methods are specific tool-box methods for this project.	|

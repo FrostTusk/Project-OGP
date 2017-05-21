@@ -411,7 +411,7 @@ public abstract class Entity {
 	*/
 	@Basic @Raw
 	public double getMass() {
-	return this.mass;
+		return this.mass;
 	}
 	
 	
@@ -468,7 +468,6 @@ public abstract class Entity {
 	*         
 	* @see implementation
 	*/
-//	public abstract boolean canHaveAsWorld(World world);
 	public boolean canHaveAsWorld(World world) {
 		if (world == null) 
 			return true;
@@ -684,7 +683,7 @@ public abstract class Entity {
 	 * 
 	 * @return	If there is collision, returns which boundaries are involved in it. Else the closest boundaries
 	 * 			are returned.
-	 * // TODO Declarative?
+	 * 			| (this.setPosition(new Position(result[0], result[1])).getDistanceBetween(entity) == 0
 	 */
 	@Raw
 	public double[] getCollisionBoundaries(World world) {
@@ -707,12 +706,13 @@ public abstract class Entity {
 	/**
 	 * Gets the time until the second non zero collision with a boundary by this entity.
 	 * Helper Method used to fix the Salamander bug in World.
+	 * 
 	 * @param  	world
 	 * 			he world to which the collision time needs to be calculated.
 	 * 
 	 * @return	The time returned will be equal to the time to second non zero collision with a
 	 * 			boundary and this entity.
-	 * 			| this.getDistanceBetween(world) == 0
+	 * 			| (this.move(result)).getDistanceBetween(entity) == 0
 	 */
 	@Raw
 	public double getTimeToSecondCollisionNonZero(World world) {
@@ -738,11 +738,10 @@ public abstract class Entity {
 	 * 
 	 * @return	The time returned will be larger than 0 and will be equal to
 	 * 			the time needed for the entity to reach a position where it collides with the boundaries of the world.
-	 * 			| this.getDistanceBetween(world) == 0
-	 * // TODO Problems with rounding?	// TODO If Ship, account for thruster?
+	 * 			| (this.move(result)).getDistanceBetween(entity) == 0
 	 */
 	@Raw
-	public double getTimeToCollisionNoThrust(World world) {	
+	public double getTimeToCollision(World world) {	
 		if (world == null)
 			return Double.POSITIVE_INFINITY;
 		double[] distance = getDistanceBetween(world);
@@ -769,46 +768,6 @@ public abstract class Entity {
 	}
 	
 	/**
-	* Gets the time to collision between this entity and a given world. This method
-	* is exactly the one as described in the assignment, we have no idea how to account
-	* for the thruster. Here we replace the second entity with the collision point between
-	* world and entity.
-	* 
-	* @param  	world
-	* 			The world to which the collision time needs to be calculated.
-	* 
-	* @return	The time returned will be larger than 0 and will be equal to
-	* 			the time needed for the entity to reach a position where it collides with the boundaries of the world.
-	* 			| this.getDistanceBetween(world) == 0
-	* // TODO Problems with rounding?	// TODO If Ship, account for thruster?
-	*/
-	@Raw
-	public double getTimeToCollision(World world) {		
-		if (world == null)
-			return Double.POSITIVE_INFINITY;
-		double[] distance = getDistanceBetween(world);
-		if ( (distance[0] == 0) || (distance[1] == world.getWidth()) || (distance[2] == 0) || (distance[3] == world.getHeight()) )
-			return 0;
-		
-		double[] collisionPosition = getCollisionPosition(world);
-		if (collisionPosition == null)
-			return Double.POSITIVE_INFINITY;
-		double[] deltaV = {this.getVelocityX(), this.getVelocityY()};
-		double[] deltaR = {this.getPosition().getPositionX() - collisionPosition[0], 
-						   this.getPosition().getPositionY() - collisionPosition[1]};
-		
-		if ( (helper.evaluateScalar(deltaR, deltaV) >= 0) || (Double.isNaN(helper.evaluateScalar(deltaR, deltaV))) )
-			return Double.POSITIVE_INFINITY;;
-		double d = Math.pow(helper.evaluateScalar(deltaV, deltaR), 2) -
-					(helper.evaluateScalar(deltaV)*(helper.evaluateScalar(deltaR) - Math.pow(this.getRadius(), 2)));
-		if (d <= 0) 
-			return Double.POSITIVE_INFINITY;
-		
-		double result =  -( (helper.evaluateScalar(deltaV, deltaR) + Math.sqrt(d)) / helper.evaluateScalar(deltaV) );
-		return (result < 0) ? 0: result;
-	}
-	
-	/**
 	* Gets the time to collision between this entity and a given entity.
 	* 
 	* @param  	entity
@@ -816,7 +775,7 @@ public abstract class Entity {
 	* 
 	* @return	The time returned will be larger than 0 and will be equal to
 	* 			the time needed for both entities to reach a position where they will collide with each other.
-	* 			| this.getDistanceBetween(entity) == 0
+	* 			| (this.move(result)).getDistanceBetween(entity) == 0
 	* 
 	* @throws 	IllegalArgumentException
 	* 			The entity overlaps this entity.
@@ -824,7 +783,6 @@ public abstract class Entity {
 	* @throws 	NullPointerException
 	* 			The other entity was null.
 	* 			| entity == null
-	* // TODO Problems with rounding?	// TODO If Ship, account for thruster?
 	*/
 	@Raw
 	public double getTimeToCollision(Entity entity) throws IllegalArgumentException, NullPointerException {
@@ -862,17 +820,15 @@ public abstract class Entity {
 	* 
 	* @return	The position returned will be the position where this ship and the world
 	* 			collide with each other. The method returns infinity if they never collide.
-	* 			| this.getDistanceBetween(world) == 0
-	* // TODO Problems with rounding?
+	* 			| (this.setPosition(new Position(result[0], result[1]))).getDistanceBetween(world) == 0
 	*/
 	@Raw
 	public double[] getCollisionPosition(World world) {	
-		double[] vector = {Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY};
-		double time = getTimeToCollisionNoThrust(world);
+		double time = getTimeToCollision(world);
 		if (time == Double.POSITIVE_INFINITY) 
-			return null; // TODO Is this right? Not null?
+			return null;
 		
-		vector = createDefaultVector(time);	// First create a default vector.
+		double[] vector = createDefaultVector(time);	// First create a default vector.
 		if (vector[0] + this.getRadius() == world.getWidth()) 
 			vector[0] += this.getRadius();	// Get the first collision position.
 		else if (vector[0] - this.getRadius() == 0) 
@@ -904,7 +860,7 @@ public abstract class Entity {
 	* 
 	* @return	The position returned will be the position where both entities
 	* 			collide with each other. The method returns null if they never collide.
-	* 			| this.getDistanceBetween(entity) == 0
+	* 			| (this.setPosition(new Position(result[0], result[1]))).getDistanceBetween(world) == 0
 	* 
 	* @throws 	IllegalArgumentException
 	* 			The entity overlaps this entity.
@@ -912,7 +868,6 @@ public abstract class Entity {
 	* @throws 	NullPointerException
 	* 			The other entity was null.
 	* 			| entity == null
-	* // TODO Problems with rounding?
 	*/
 	@Raw
 	public double[] getCollisionPosition(Entity entity) throws IllegalArgumentException, NullPointerException {
@@ -963,7 +918,6 @@ public abstract class Entity {
 	 * 
 	 * @see implementation
 	 */
-//	public abstract void resolveCollision(World world);
 	public void resolveCollision(World world) {
 		if (world == null) 
 			throw new NullPointerException();
@@ -986,33 +940,17 @@ public abstract class Entity {
 	 * 
 	 * @see implementation
 	 */
-//	public abstract void resolveCollision(Entity entity);
-	public void resolveCollision(Entity entity) throws IllegalArgumentException, NullPointerException {
+	public void resolveCollision(Entity entity) throws NullPointerException {
 		if (entity == null) 
 			throw new NullPointerException();
 		
-		if (this.getType() == EntityType.SHIP) {
-			entity.resolveCollisionShip((Ship) this);
-			return;
-		}
-		if (this.getType() == EntityType.BULLET) {
-			entity.resolveCollisionBullet((Bullet) this);
-			return;
-		}
-		
-		try {
-			if (entity.getType() == EntityType.SHIP) 
-				resolveCollisionShip((Ship)entity);
-			else if (entity.getType() == EntityType.BULLET) 
-				resolveCollisionBullet((Bullet)entity);
-			else if ( (entity.getType() == EntityType.ASTEROID) || (entity.getType() == EntityType.PLANETOID) )
-				resolveCollisionMinorPlanet((MinorPlanet) entity);
-		}
-		catch (IllegalArgumentException exc) {
-			throw new IllegalArgumentException(exc);
-		}
+		if (entity.getType() == EntityType.SHIP) 
+			resolveCollisionShip((Ship) entity);
+		else if (entity.getType() == EntityType.BULLET) 
+			resolveCollisionBullet((Bullet) entity);
+		else if (MinorPlanet.class.isAssignableFrom(entity.getClass()))
+			resolveCollisionMinorPlanet((MinorPlanet) entity);
 	}
-	
 	
 	/**
 	 * Resolves the collision between this entity and a given ship.
@@ -1032,15 +970,15 @@ public abstract class Entity {
 	 * 
 	 * @see implementation
 	 */
-//	public abstract void resolveCollisionBullet(Bullet bullet);
 	public void resolveCollisionBullet(Bullet bullet) {
 		this.terminate();
 		bullet.terminate();	
 	}
 
 	public void resolveCollisionMinorPlanet(MinorPlanet minorPlanet) {
-		return;	// This method will only be called by another minor planet. In minor planet this method is overridden.
-	}
+		minorPlanet.resolveCollision(this); 
+	}	// This method will only be called by another minor planet. In minor planet this method is overridden.
+	
 	
 	
 		/*
@@ -1104,7 +1042,7 @@ public abstract class Entity {
 	
 	
 	/**
-	 * Returns the type of the class of this entity in string format.
+	 * Returns the type of the class of this entity in enumeration format.
 	 * 
 	 * @see implementation
 	 */

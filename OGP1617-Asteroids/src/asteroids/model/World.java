@@ -949,9 +949,9 @@ public class World {
 	
 	@SuppressWarnings("unchecked")
 	public <T extends Entity> Set<T> getAllEntitiesSpecific(Class<T> entityClass) {
-		return ((Set<T>) getAllEntities().stream().
+		return helper.deepCopySet(((Set<T>) getAllEntities().stream().
 				filter(x -> entityClass.isAssignableFrom(x.getClass())).
-				collect(Collectors.toSet()));
+				collect(Collectors.toSet())));
 	}
 	
 	

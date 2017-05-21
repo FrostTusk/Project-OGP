@@ -65,8 +65,6 @@ public class Bullet extends Entity {
 	 * 			The Y velocity for this new bullet.
 	 * @param  	radius
 	 *         	The radius for this new bullet.
-	 * @param  	mass
-	 *         	The mass for this new bullet.
 	 * 
 	 * @see implementation
 	 */
@@ -386,7 +384,6 @@ public class Bullet extends Entity {
 	 * 			The world to be used.
 	 * 
 	 * @see implementation
-	 * // TODO Problems with rounding? 
 	 */
 	@Override
 	public void resolveCollision(World world) throws NullPointerException {
@@ -405,29 +402,6 @@ public class Bullet extends Entity {
 		}
 		else this.terminate();	// Terminate the bullet if it has exceeded the max amount of bounces.
 	}
-	
-	
-//	/** // TODO Is this ok?
-//	 * Resolves the collision between this ship and a given entity.
-//	 * 
-//	 * @param 	entity
-//	 * 			The entity to be used.
-//	 * 
-//	 * @see implementation
-//	 */
-//	@Override
-//	public void resolveCollision(Entity entity) throws IllegalArgumentException, NullPointerException {
-//		if (entity == null) throw new NullPointerException();
-//		try {
-//			if (entity.getType() == EntityType.SHIP) 
-//				resolveCollisionShip((Ship)entity);
-//			else if (entity.getType() == EntityType.BULLET) 
-//				resolveCollisionBullet((Bullet)entity);
-//		}
-//		catch (IllegalArgumentException exc) {
-//			throw new IllegalArgumentException(exc);
-//		}
-//	}
 	
 	
 	/**
@@ -490,7 +464,7 @@ public class Bullet extends Entity {
 	
 	
 	/**
-	 * Returns the type of this Ship Class in string format.
+	 * Returns the type of this Ship Class in enumeration format.
 	 */
 	@Basic @Override @Raw
 	public EntityType getType() {
