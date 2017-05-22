@@ -73,6 +73,13 @@ public class ManualTests {
 			sysOut.println("Strings are NOT equal");
 		
 		
+//		Object var = null;
+//		if (Entity.class.isAssignableFrom(var.getClass()))
+//			System.out.println("Entity.class.isAssignableFrom(var.getClass()) is TRUE");
+//		else
+//			System.out.println("Entity.class.isAssignableFrom(var.getClass()) is FALSE");
+		
+		
 		// Original Tests that were written at the very start of the project:
 		if (showOriginalTests) runOriginalTestHandler();	
 	}

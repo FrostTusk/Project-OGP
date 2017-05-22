@@ -1,5 +1,6 @@
 package asteroids.model.programs.statements;
 
+import asteroids.helper.entity.Entity;
 import asteroids.model.Program;
 import asteroids.model.programs.Executable;
 import asteroids.model.programs.MyExpression;
@@ -99,14 +100,22 @@ public class AssignmentStatement <T> implements MyStatement {
 		
 		Object localVar, globalVar;
 		try {
-			localVar = getExecuter().getLocalVar(getVariableName()); 
-			if (!localVar.getClass().isInstance(getValue().evaluate()))
+			localVar = getExecuter().getLocalVar(getVariableName());
+			if ( (localVar == null) && (!Entity.class.isAssignableFrom(getValue().evaluate().getClass())) )
+				throw new IllegalArgumentException();
+			if ( (localVar != null) && (getValue().evaluate() == null) && (!Entity.class.isAssignableFrom(localVar.getClass())) )
+				throw new IllegalArgumentException();
+			if (!localVar.getClass().isInstance(getValue().evaluate()) && (localVar != null) && (getValue().evaluate() != null) )
 				throw new IllegalArgumentException();
 		}
 		catch (NullPointerException exc1) {
 			try {
 				globalVar = getExecuter().getGlobalVar(getVariableName());
-				if (!globalVar.getClass().isInstance(getValue().evaluate()))
+				if ( (globalVar == null) && (!Entity.class.isAssignableFrom(getValue().evaluate().getClass())) )
+					throw new IllegalArgumentException();
+				if ( (globalVar != null) && (getValue().evaluate() == null) && (!Entity.class.isAssignableFrom(globalVar.getClass())) )
+					throw new IllegalArgumentException();
+				if ( (!globalVar.getClass().isInstance(getValue().evaluate())) && (globalVar != null) && (getValue().evaluate() != null) )
 						throw new IllegalArgumentException();
 			}
 			catch (NullPointerException exc2) {}

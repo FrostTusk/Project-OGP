@@ -36,8 +36,8 @@ public class WorldView2<F extends IFacade> extends JPanel implements KeyListener
 	private static final int TIMER_DELAY = 1000 / 30;
 
 	private AsteroidsFrame2<F> game;
-	private F facade;
-	private World world;
+	protected F facade;
+	protected World world;
 	private Ship player;
 	private double deltaAngle = Double.NaN;
 	private boolean thrusterChange = false;
@@ -355,7 +355,7 @@ public class WorldView2<F extends IFacade> extends JPanel implements KeyListener
 		}
 	}
 
-	private void evolveWorld(long millisSinceLastEvolve) {
+	protected void evolveWorld(long millisSinceLastEvolve) {
 		try {
 			millisSinceLastEvolve = Math.max(5, millisSinceLastEvolve);
 			facade.evolve(world, millisSinceLastEvolve / 1000., this);
@@ -400,7 +400,6 @@ public class WorldView2<F extends IFacade> extends JPanel implements KeyListener
 
 	@Override
 	public void boundaryCollision(Object entity, double x, double y) {
-
 	}
 
 	@Override

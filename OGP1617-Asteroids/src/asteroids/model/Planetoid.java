@@ -168,7 +168,8 @@ public class Planetoid extends MinorPlanet {
 	 */
 	@Override
 	public void resolveCollisionShip(Ship ship) throws IllegalArgumentException {
-		Position newPosition = getRandomPosition(ship.getWorld());
+//		Position newPosition = getRandomPosition(ship.getWorld());
+		Position newPosition = getRandomPosition(ship.getWorld(), ship.getRadius());
 		ship.setPosition(newPosition.getPositionX(), newPosition.getPositionY());
 		for (Entity entity: getWorld().getAllEntities()) {
 			if (entity == ship)
@@ -185,6 +186,7 @@ public class Planetoid extends MinorPlanet {
 	
 	/**
 	 * Get a random position in the given world.
+	 * 
 	 * @param 	world
 	 * 			The world in which a random position needs to be found.
 	 * 
@@ -193,6 +195,21 @@ public class Planetoid extends MinorPlanet {
 	@Raw
 	private Position getRandomPosition(World world) throws IllegalArgumentException {
 		return new Position(getRandomNumber(0, world.getWidth()), getRandomNumber(0, world.getHeight()));
+	}
+	
+	/**
+	 * Get a random position in the given world that fits the given radius.
+	 * 
+	 * @param 	world
+	 * 			The world in which a random position needs to be found.
+	 * @param	radius
+	 * 			The radius to be used.
+	 * 
+	 * @see implementation
+	 */
+	@Raw
+	private Position getRandomPosition(World world, double radius) throws IllegalArgumentException {
+		return new Position(getRandomNumber(radius, world.getWidth() - radius), getRandomNumber(radius, world.getHeight() - radius));
 	}
 	
 	

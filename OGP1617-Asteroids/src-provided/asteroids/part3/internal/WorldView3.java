@@ -20,6 +20,7 @@ public class WorldView3 extends WorldView2<IFacade> {
 
 	public WorldView3(AsteroidsFrame3 game, World world, Ship player, Ship other) throws ModelException {
 		super(game, world, player, Collections.singleton(other));
+		this.other = other;
 	}
 
 	@Override
@@ -106,6 +107,20 @@ public class WorldView3 extends WorldView2<IFacade> {
 		Image image = ResourceUtils.loadImage("asteroids/resources/deathstar.png").getScaledInstance(size, size,
 				Image.SCALE_DEFAULT);
 		return new PlanetoidVisualization(planetoid, image);
+	}
+	
+	
+	private Ship other;
+	@Override
+	protected void evolveWorld(long millisSinceLastEvolve) {
+		try {
+			millisSinceLastEvolve = Math.max(5, millisSinceLastEvolve);
+			if (other != null)
+				facade.executeProgram(other, millisSinceLastEvolve / 1000.);
+			facade.evolve(world, millisSinceLastEvolve / 1000., this);
+		} catch (ModelException exc) {
+			handleError(exc);
+		}
 	}
 
 }
