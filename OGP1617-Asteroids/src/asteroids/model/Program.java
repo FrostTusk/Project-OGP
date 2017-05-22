@@ -3,10 +3,13 @@ package asteroids.model;
 import java.util.*;
 
 import asteroids.helper.ExitOutException;
+import asteroids.helper.Helper;
 import asteroids.model.programs.*;
 import asteroids.part3.programs.SourceLocation;
 
 public class Program implements Executable {
+	
+	private Helper helper = new Helper();
 	
 	public Program(List<MyFunction> functions, MyStatement main) {
 		setFunctions(functions);
@@ -115,7 +118,7 @@ public class Program implements Executable {
 	public List<Object> getPrintTracker() {
 		if (!isTerminated())
 			return null;
-		return this.printTracker;
+		return helper.deepCopyList(this.printTracker);
 	}
 	
 	public boolean getFlag(SourceLocation location) throws NullPointerException {

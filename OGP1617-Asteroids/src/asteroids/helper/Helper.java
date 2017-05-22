@@ -212,6 +212,23 @@ public class Helper {
 		return result;
 	}
 	
+	/**
+	 * Deep copy a given List.
+	 * 
+	 * @param 	list
+	 * 			The List to be copied.
+	 * 
+	 * @return	Returns a List made up by the elements in the given List.
+	 */
+	public <T> List<T> deepCopyList(List<T> list) {
+		if (list == null)
+			return null;
+		List<T> result = new ArrayList<T>();
+		for (T item: list)
+			result.add(item);
+		return result;
+	}
+	
 	
 	
 			/*

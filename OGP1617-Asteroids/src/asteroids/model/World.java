@@ -591,6 +591,16 @@ public class World {
 	private void HandleCollisionListener(Entity[] collisionEntitiesMin) {
 		if (this.collisionListener == null) return;
 		
+		if ( (collisionEntitiesMin[0].getClass().isAssignableFrom(Bullet.class)) &&
+				(collisionEntitiesMin[1].getClass().isAssignableFrom(Ship.class)) &&
+				(((Bullet) collisionEntitiesMin[0]).getSource() == ((Ship) collisionEntitiesMin[1])) )
+			return;
+
+		if ( (collisionEntitiesMin[1].getClass().isAssignableFrom(Bullet.class)) &&
+				(collisionEntitiesMin[0].getClass().isAssignableFrom(Ship.class)) &&
+				(((Bullet) collisionEntitiesMin[1]).getSource() == ((Ship) collisionEntitiesMin[0])) )
+				return;
+		
 		if (collisionEntitiesMin[0] == collisionEntitiesMin[1])
 			this.collisionListener.boundaryCollision(collisionEntitiesMin[0], 
 					this.collisionPosition[0], this.collisionPosition[1]);
@@ -628,7 +638,6 @@ public class World {
 			handleAbNormalCase(collisionEntitiesMin, time);	
 		else 
 			handleNormalCase(collisionEntitiesMin, collisionTimeMin, time);
-		
 	}
 	
 	
@@ -688,13 +697,13 @@ public class World {
 		// We don't include zero in the above procedure, because update clears our "trackers" (List/Map).
 		if ( (0 <= collisionTimeMin) && (collisionTimeMin <= time) ) {
 				if ( collisionEntitiesMin[0] == collisionEntitiesMin[1] ) {	// If the collision is with the boundary.
+					HandleCollisionListener(collisionEntitiesMin);
 					collisionEntitiesMin[0].resolveCollision(this);	// This entity is added to the boundary tracker.
 					boundaryTracker.put(collisionEntitiesMin[0], collisionEntitiesMin[0].getCollisionBoundaries(this));
-					HandleCollisionListener(collisionEntitiesMin);
 				}
 				else {	// If the collision is between 2 entities.
-					collisionEntitiesMin[0].resolveCollision(collisionEntitiesMin[1]);
 					HandleCollisionListener(collisionEntitiesMin);
+					collisionEntitiesMin[0].resolveCollision(collisionEntitiesMin[1]);	
 				}
 				collisionTracker.add(collisionEntitiesMin);	// This entity is added to the collision tracker.
 				evolve(time - collisionTimeMin, this.collisionListener);	// Continue with evolve.

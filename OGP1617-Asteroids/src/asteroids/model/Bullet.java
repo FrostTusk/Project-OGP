@@ -411,9 +411,9 @@ public class Bullet extends Entity {
 	public void resolveCollisionShip(Ship ship) throws IllegalArgumentException, NullPointerException {
 		if (ship == null) 
 			throw new NullPointerException();
-		if (this.getSource() == ship) {	// Reload if this bullet hits it's source.
+
+		if (this.getSource() == ship)	// Reload if this bullet hits it's source.
 			ship.reloadBullet(this);
-		}
 		else {	// Terminate otherwise.
 			this.terminate();
 			ship.terminate();
