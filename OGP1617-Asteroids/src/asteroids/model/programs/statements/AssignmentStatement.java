@@ -8,7 +8,8 @@ import asteroids.part3.programs.SourceLocation;
 
 public class AssignmentStatement <T> implements MyStatement {
 
-	public AssignmentStatement(String variableName, MyExpression<T> value, SourceLocation location) {
+	public AssignmentStatement(String variableName, MyExpression<T> value, SourceLocation location) 
+		throws NullPointerException {
 		setVariableName(variableName);
 		setValue(value);
 		setLocation(location);
@@ -78,18 +79,18 @@ public class AssignmentStatement <T> implements MyStatement {
 
 	
 	@Override
-	public void requestFlag() {
+	public void requestFlag() throws NullPointerException {
 		getExecuter().flagLine(getLocation());
 	}
 
 	@Override
-	public void requestDeFlag() {
+	public void requestDeFlag() throws NullPointerException {
 		getExecuter().deFlagLine(getLocation());
 	}
 	
 	
 	@Override
-	public void execute() throws IllegalArgumentException {	
+	public void execute() throws IllegalArgumentException, NullPointerException {	
 		if (getExecuter().getFlag(getLocation())) return;
 		setExecuter(getExecuter());
 		

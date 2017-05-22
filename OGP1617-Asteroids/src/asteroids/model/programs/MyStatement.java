@@ -12,6 +12,6 @@ public interface MyStatement {
 	public void setSuperStatement(MyStatement statement);
 	public void requestFlag();
 	public void requestDeFlag();
-	public void execute() throws ExitOutException, IllegalStateException, IllegalArgumentException;
+	public void execute();
 	
 }

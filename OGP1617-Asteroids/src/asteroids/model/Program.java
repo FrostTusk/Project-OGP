@@ -1,6 +1,8 @@
 package asteroids.model;
 
 import java.util.*;
+
+import asteroids.helper.ExitOutException;
 import asteroids.model.programs.*;
 import asteroids.part3.programs.SourceLocation;
 
@@ -16,7 +18,6 @@ public class Program implements Executable {
 		this.printTracker = new ArrayList<Object>();
 		this.flagTracker = new HashMap<String, Boolean>();
 		this.globalVars = new HashMap<String, Object>();
-//		this.localVars = new HashMap<String, Object>();
 	}
 	
 	
@@ -117,17 +118,17 @@ public class Program implements Executable {
 		return this.printTracker;
 	}
 	
-	public boolean getFlag(SourceLocation location) {
+	public boolean getFlag(SourceLocation location) throws NullPointerException {
 		if (!flagTracker.containsKey(getPositionString(location)))
 			return false;
 		return flagTracker.get(getPositionString(location));
 	}
 	
-	public Object getLocalVar(String name) {
+	public Object getLocalVar(String name) throws NullPointerException {
 		throw new NullPointerException();
 	}
 	
-	public Object getGlobalVar(String name) {
+	public Object getGlobalVar(String name) throws NullPointerException {
 		if (!globalVars.containsKey(name))
 			throw new NullPointerException();
 		return globalVars.get(name);
@@ -138,12 +139,12 @@ public class Program implements Executable {
 		this.printTracker.add(value);
 	}
 	
-	public void flagLine(SourceLocation location) {
+	public void flagLine(SourceLocation location) throws NullPointerException {
 		flagTracker.put(getPositionString(location), true);
 	}
 
 	@Override
-	public void deFlagLine(SourceLocation location) {
+	public void deFlagLine(SourceLocation location) throws NullPointerException {
 		flagTracker.put(getPositionString(location), false);
 	}
 	
@@ -152,7 +153,7 @@ public class Program implements Executable {
 		addGlobalVar(name, value);		
 	}
 
-	public void addLocalVar(String name, Object variable) {
+	public void addLocalVar(String name, Object variable) throws IllegalArgumentException {
 		throw new IllegalArgumentException(); // Only functions have local variables.
 	}
 	
@@ -163,20 +164,16 @@ public class Program implements Executable {
 	
 	
 	@Override
-	public void setReturn(Object value) {
+	public void setReturn(Object value) throws IllegalArgumentException {
 		throw new IllegalArgumentException();
 	}
 	
+
 	
-//	public List<Object> execute(double time) {
-//		setTime(getTime() + time);
-//		main.execute();
-//		terminate();
-//		return getPrintTracker();
-//	}
 
 	@Override
-	public List<Object> execute(List<Object> actualArgs) {
+	public List<Object> execute(List<Object> actualArgs) 
+			throws ExitOutException, IllegalStateException, IllegalArgumentException, NullPointerException {
 		double time = ((Double) actualArgs.get(0));
 		setTime(getTime() + time);
 		main.execute();
@@ -185,7 +182,7 @@ public class Program implements Executable {
 	}
 	
 	
-	public String getPositionString(SourceLocation location) {
+	public String getPositionString(SourceLocation location) throws NullPointerException {
 		return Integer.toString(location.getLine()) + "," + Integer.toString(location.getColumn());
 	}
 	
