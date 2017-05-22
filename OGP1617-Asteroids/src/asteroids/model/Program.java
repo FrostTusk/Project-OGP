@@ -120,26 +120,14 @@ public class Program implements Executable {
 	public boolean getFlag(SourceLocation location) {
 		if (!flagTracker.containsKey(getPositionString(location)))
 			return false;
-		try {
-			return flagTracker.get(getPositionString(location));
-		}
-		catch (NullPointerException exc) {
-			return false;
-		}
+		return flagTracker.get(getPositionString(location));
 	}
 	
 	public Object getLocalVar(String name) {
-//		return null;
 		throw new NullPointerException();
 	}
 	
 	public Object getGlobalVar(String name) {
-//		try {
-//			return globalVars.get(name);
-//		}
-//		catch (NullPointerException exc) {
-//			return null;
-//		}
 		if (!globalVars.containsKey(name))
 			throw new NullPointerException();
 		return globalVars.get(name);
@@ -165,7 +153,7 @@ public class Program implements Executable {
 	}
 
 	public void addLocalVar(String name, Object variable) {
-		throw new IllegalArgumentException(); // Only Functions have local variables.
+		throw new IllegalArgumentException(); // Only functions have local variables.
 	}
 	
 	public void addGlobalVar(String name, Object variable) {
@@ -175,17 +163,26 @@ public class Program implements Executable {
 	
 	
 	@Override
-	public void setReturn(MyExpression<?> value) {
+	public void setReturn(Object value) {
 		throw new IllegalArgumentException();
 	}
 	
 	
-	public void execute(double time) {
+//	public List<Object> execute(double time) {
+//		setTime(getTime() + time);
+//		main.execute();
+//		terminate();
+//		return getPrintTracker();
+//	}
+
+	@Override
+	public List<Object> execute(List<Object> actualArgs) {
+		double time = ((Double) actualArgs.get(0));
 		setTime(getTime() + time);
 		main.execute();
 		terminate();
+		return getPrintTracker();
 	}
-
 	
 	
 	public String getPositionString(SourceLocation location) {

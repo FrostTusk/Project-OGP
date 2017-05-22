@@ -13,9 +13,12 @@ import org.junit.Test;
 import asteroids.facade.Facade;
 import asteroids.helper.entity.Entity;
 import asteroids.model.Bullet;
+import asteroids.model.Program;
 import asteroids.model.Ship;
 import asteroids.model.World;
-import asteroids.part2.facade.IFacade;
+import asteroids.part3.facade.IFacade;
+import asteroids.part3.programs.IProgramFactory;
+import asteroids.part3.programs.internal.ProgramParser;
 import asteroids.util.ModelException;
 
 /* 
@@ -55,10 +58,13 @@ public class TestFacade {
 	private static final double EPSILON = 0.0001;
 
 	IFacade facade;
+	IProgramFactory<?, ?, ?, Program> programFactory; 
 
-	@Before
-	public void setUp() {
+	
+	@Before @SuppressWarnings("unchecked")
+	public void setUp() throws ModelException {
 		facade = new Facade();
+		programFactory = (IProgramFactory<?, ?, ?, Program>) facade.createProgramFactory();
 	}
 
 	
@@ -1706,7 +1712,7 @@ public class TestFacade {
 		World world = facade.createWorld(1000, 1200);
 		Ship ship = facade.createShip(10, 10, 50, 0, 10, Math.PI, 0);		
 		facade.addShipToWorld(world, ship);
-		Set<Ship> ships = world.getAllShips();
+		Set<Ship> ships = world.getAllEntitiesSpecific(Ship.class);
 		assertEquals(ships, facade.getWorldShips(world));
 	}
 	
@@ -1715,7 +1721,7 @@ public class TestFacade {
 		World world = facade.createWorld(1000, 1200);
 		Bullet bullet = facade.createBullet(500, 500, 250, 0, 1);		
 		facade.addBulletToWorld(world, bullet);
-		Set<Bullet> bullets = world.getAllBullets();
+		Set<Bullet> bullets = world.getAllEntitiesSpecific(Bullet.class);
 		assertEquals(bullets, facade.getWorldBullets(world));
 	}
 	
@@ -1912,4 +1918,14 @@ public class TestFacade {
 		assertEquals(entities, facade.getEntities(world));
 	}
 	
+
+	
+	public void nullProgramTest() throws ModelException {
+		Ship ship = facade.createShip(10, 10, 50, 0, 10, Math.PI, 0);
+		String code = "a := null;" + "print a;";
+		Program program = ProgramParser.parseProgramFromString(code, programFactory);
+		facade.loadProgramOnShip(ship, program);
+		facade.executeProgram(ship, 1.0);
+	}
+  
 }

@@ -1,5 +1,7 @@
 package asteroids.model.programs;
 
+import java.util.List;
+
 import asteroids.model.*;
 import asteroids.part3.programs.SourceLocation;
 
@@ -17,6 +19,7 @@ public interface Executable {
 	public void addVar(String name, Object value);
 	public void flagLine(SourceLocation location);
 	public void deFlagLine(SourceLocation location);
-	public void setReturn(MyExpression<?> value);
+	public void setReturn(Object value);
+	public Object execute(List<Object> actualArgs);
 		
 }

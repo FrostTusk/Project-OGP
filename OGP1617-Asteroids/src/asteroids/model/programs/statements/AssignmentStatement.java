@@ -1,13 +1,10 @@
 package asteroids.model.programs.statements;
 
-import org.junit.internal.builders.NullBuilder;
-
 import asteroids.model.Program;
 import asteroids.model.programs.Executable;
 import asteroids.model.programs.MyExpression;
 import asteroids.model.programs.MyStatement;
 import asteroids.part3.programs.SourceLocation;
-import sun.tracing.NullProviderFactory;
 
 public class AssignmentStatement <T> implements MyStatement {
 
@@ -92,32 +89,14 @@ public class AssignmentStatement <T> implements MyStatement {
 	
 	
 	@Override
-	public void execute() throws IllegalArgumentException {
-//		if (getExecuter().getFlag(getLocation())) return;
-//		setExecuter(getExecuter());
-//		
-//		if (!getExecuter().canHaveAsName(getVariableName()) && (getExecuter() instanceof Program)/*(Program.class.isInstance(getExecuter()))*/)
-//			throw new IllegalArgumentException();
-//		Object localVar = getExecuter().getLocalVar(getVariableName());
-//		if ( (localVar != null) 
-//				&& (!localVar.getClass().isInstance(getValue().evaluate())) )
-//				throw new IllegalArgumentException();
-//		Object globalVar = getExecuter().getGlobalVar(getVariableName());
-//		if ( (localVar == null) && (globalVar != null)
-//				&& (!globalVar.getClass().isInstance(getValue().evaluate())))
-//			throw new IllegalArgumentException();
-//		
-//		getExecuter().addVar(getVariableName(), getValue().evaluate());
-//		requestFlag();
-		
+	public void execute() throws IllegalArgumentException {	
 		if (getExecuter().getFlag(getLocation())) return;
 		setExecuter(getExecuter());
 		
-		if (!getExecuter().canHaveAsName(getVariableName()) && (getExecuter() instanceof Program)/*(Program.class.isInstance(getExecuter()))*/)
+		if ( (!getExecuter().canHaveAsName(getVariableName())) && (getExecuter() instanceof Program) )
 			throw new IllegalArgumentException();
 		
 		Object localVar, globalVar;
-		
 		try {
 			localVar = getExecuter().getLocalVar(getVariableName()); 
 			if (!localVar.getClass().isInstance(getValue().evaluate()))

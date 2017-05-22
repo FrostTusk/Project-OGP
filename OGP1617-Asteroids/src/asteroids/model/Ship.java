@@ -819,8 +819,10 @@ public class Ship extends Entity {
 	 * @return
 	 */
 	public List<Object> executeProgram(double time) {
+		List<Object> args = new ArrayList<Object>();
+		args.add(Double.valueOf(time));
 		try {
-			program.execute(time);
+			return (List<Object>) program.execute(args);
 		}
 		catch (IllegalStateException exc) {} // Time out in the program. 
 		return program.getPrintTracker();

@@ -110,12 +110,6 @@ public class MyFunction implements Executable {
 
 	@Override
 	public Object getLocalVar(String name) {
-//		try {
-//			return localVars.get(name);
-//		}
-//		catch (NullPointerException exc) {
-//			return null;
-//		}
 		if (!localVars.containsKey(name))
 			throw new NullPointerException();
 		return localVars.get(name);
@@ -177,8 +171,8 @@ public class MyFunction implements Executable {
 	
 	
 	@Override
-	public void setReturn(MyExpression<?> value) {
-		this.returnValue = value.evaluate();
+	public void setReturn(Object value) {
+		this.returnValue = value;
 		this.returnSet = true;
 	}
 	
@@ -188,13 +182,12 @@ public class MyFunction implements Executable {
 		this.returnSet = false;
 		getBody().setExecuter(this);
 		getBody().requestDeFlag();
-		
 		registerArguments(actualArgs);
 		
 		try {
 			getBody().execute();
 		}
-		catch(ExitOutException exc) {
+		catch (ExitOutException exc) {
 			getBody().setExecuter(lastExecuter);
 			if (returnHasBeenSet())
 				return this.returnValue;
