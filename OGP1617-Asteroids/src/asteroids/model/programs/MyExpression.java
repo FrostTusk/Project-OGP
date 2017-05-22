@@ -6,7 +6,7 @@ public interface MyExpression <T> {
 	
 	public SourceLocation getLocation();
 	public MyStatement getStatement();
-	public void setStatement(MyStatement statement);
-	public T evaluate();
+	public void setStatement(MyStatement statement) throws NullPointerException;
+	public T evaluate() throws IllegalArgumentException, NullPointerException;
 	
 }

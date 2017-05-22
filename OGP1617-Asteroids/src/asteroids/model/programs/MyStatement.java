@@ -8,10 +8,10 @@ public interface MyStatement {
 	public SourceLocation getLocation();
 	public Executable getExecuter();
 	public MyStatement getSuperStatement();
-	public void setExecuter(Executable executer);
+	public void setExecuter(Executable executer) throws NullPointerException ;
 	public void setSuperStatement(MyStatement statement);
-	public void requestFlag();
-	public void requestDeFlag();
-	public void execute();
+	public void requestFlag() throws NullPointerException;
+	public void requestDeFlag() throws NullPointerException;
+	public void execute() throws ExitOutException, IllegalArgumentException, IllegalStateException, NullPointerException;
 	
 }

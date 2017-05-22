@@ -44,7 +44,7 @@ public class ChangeSignExpression implements MyExpression<Double> {
 	}
 	
 	
-	public void setStatement(MyStatement statement) {
+	public void setStatement(MyStatement statement) throws NullPointerException {
 		this.statement = statement;
 		getExpression().setStatement(statement);
 	}
@@ -52,7 +52,7 @@ public class ChangeSignExpression implements MyExpression<Double> {
 	
 	
 	@Override
-	public Double evaluate() {
+	public Double evaluate() throws IllegalArgumentException, NullPointerException {
 		return -1 * getExpression().evaluate();
 	}
 	

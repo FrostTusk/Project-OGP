@@ -51,7 +51,7 @@ public class VariableExpression implements MyExpression<Object> {
 	
 	
 	@Override
-	public Object evaluate() {
+	public Object evaluate() throws NullPointerException {
 		try {
 			return getStatement().getExecuter().getLocalVar(getVariableName());
 		}

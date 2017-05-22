@@ -25,7 +25,7 @@ public abstract class EntityExpression implements MyExpression<Entity> {
 	}
 	
 	
-	public abstract void setEntity();
+	public abstract void setEntity() throws NullPointerException;
 	
 	public void setEntity(Entity entity) {
 		this.entity = entity;

@@ -44,15 +44,15 @@ public class SqrtExpression implements MyExpression<Double> {
 	}
 
 	@Override
-	public void setStatement(MyStatement statement) {
-		getExpression().setStatement(statement);
+	public void setStatement(MyStatement statement) throws NullPointerException {
 		this.statement = statement;
+		getExpression().setStatement(statement);
 	}
 
 	
 	
 	@Override
-	public Double evaluate() {
+	public Double evaluate() throws IllegalArgumentException, NullPointerException {
 		return Math.sqrt(expression.evaluate());
 	}
 	

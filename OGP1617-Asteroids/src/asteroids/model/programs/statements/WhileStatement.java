@@ -6,7 +6,8 @@ import asteroids.part3.programs.SourceLocation;
 
 public class WhileStatement implements MyStatement {
 
-	public WhileStatement(MyExpression<Boolean> condition, MyStatement body, SourceLocation location) {
+	public WhileStatement(MyExpression<Boolean> condition, MyStatement body, SourceLocation location) 
+		throws NullPointerException {
 		setCondition(condition);
 		setBody(body);
 		setLocation(location);
@@ -66,7 +67,7 @@ public class WhileStatement implements MyStatement {
 
 	
 	@Override
-	public void setExecuter(Executable executer) {
+	public void setExecuter(Executable executer) throws NullPointerException {
 		this.executer = executer;
 		getBody().setExecuter(executer);
 	}
@@ -79,21 +80,21 @@ public class WhileStatement implements MyStatement {
 	
 	
 	@Override
-	public void requestFlag() {
+	public void requestFlag() throws NullPointerException {
 		getExecuter().flagLine(location);	
 		getBody().requestFlag();
 	}
 
 
 	@Override
-	public void requestDeFlag() {
+	public void requestDeFlag() throws NullPointerException {
 		getExecuter().deFlagLine(location);
 		getBody().requestDeFlag();
 	}
 	
 	
 	@Override
-	public void execute() throws IllegalStateException {
+	public void execute() throws IllegalArgumentException, IllegalStateException, NullPointerException {
 		if (getExecuter().getFlag(getLocation())) return;
 		setExecuter(getExecuter());
 		while (getCondition().evaluate()) {

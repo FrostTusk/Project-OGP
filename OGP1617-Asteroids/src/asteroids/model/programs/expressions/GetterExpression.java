@@ -57,7 +57,7 @@ public class GetterExpression implements MyExpression<Double> {
 	}
 	
 	
-	public void setStatement(MyStatement statement) {
+	public void setStatement(MyStatement statement) throws NullPointerException {
 		this.statement = statement;
 		getExpression().setStatement(statement);		
 	}
@@ -65,7 +65,7 @@ public class GetterExpression implements MyExpression<Double> {
 	
 	
 	@Override
-	public Double evaluate() {
+	public Double evaluate() throws IllegalArgumentException, NullPointerException {
 		switch(getGetterType()) {
 		case GETDIR:
 			return getStatement().getExecuter().getOwner().getOrientation();
@@ -80,7 +80,7 @@ public class GetterExpression implements MyExpression<Double> {
 		case GETY:
 			return getExpression().evaluate().getPosition().getPositionY();		
 		default:
-			return null;
+			throw new IllegalArgumentException();
 		}
 	}
 

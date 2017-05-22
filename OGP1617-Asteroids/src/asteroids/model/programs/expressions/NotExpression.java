@@ -27,7 +27,6 @@ public class NotExpression implements MyExpression<Boolean> {
 	
 	private void setExpression(MyExpression<Boolean> expression) {
 		this.expression = expression;
-		getExpression().setStatement(statement);
 	}
 
 	private void setLocation(SourceLocation location) {
@@ -45,7 +44,7 @@ public class NotExpression implements MyExpression<Boolean> {
 	}
 
 	@Override
-	public void setStatement(MyStatement statement) {
+	public void setStatement(MyStatement statement) throws NullPointerException {
 		this.statement = statement;
 		getExpression().setStatement(statement);
 	}
@@ -53,7 +52,7 @@ public class NotExpression implements MyExpression<Boolean> {
 	
 	
 	@Override
-	public Boolean evaluate() {
+	public Boolean evaluate() throws IllegalArgumentException, NullPointerException {
 		return (getExpression().evaluate() == true) ? false: true;
 	}
 	

@@ -1,12 +1,15 @@
 package asteroids.model.programs.statements;
 
 import java.util.List;
+
+import asteroids.helper.ExitOutException;
 import asteroids.model.programs.*;
 import asteroids.part3.programs.SourceLocation;
 
 public class SequenceStatement implements MyStatement {
 
-	public SequenceStatement(List<MyStatement> statements, SourceLocation location) {
+	public SequenceStatement(List<MyStatement> statements, SourceLocation location) 
+		throws NullPointerException {
 		setStatements(statements);
 		setLocation(location);
 		
@@ -55,7 +58,7 @@ public class SequenceStatement implements MyStatement {
 	
 
 	@Override
-	public void setExecuter(Executable executer) {
+	public void setExecuter(Executable executer) throws NullPointerException {
 		this.executer = executer;
 		for (MyStatement subStatement: getStatements())
 			subStatement.setExecuter(executer);
@@ -69,21 +72,21 @@ public class SequenceStatement implements MyStatement {
 	
 	
 	@Override
-	public void requestFlag() {
+	public void requestFlag() throws NullPointerException {
 		getExecuter().flagLine(getLocation());
 		for (MyStatement statement: getStatements())
 			statement.requestFlag();
 	}
 
 	@Override
-	public void requestDeFlag() {
+	public void requestDeFlag() throws NullPointerException {
 		getExecuter().deFlagLine(getLocation());
 		for (MyStatement statement: getStatements())
 			statement.requestDeFlag();
 	}
 	
 	@Override
-	public void execute() throws IllegalStateException {
+	public void execute() throws ExitOutException, IllegalArgumentException, IllegalStateException, NullPointerException {
 		setExecuter(getExecuter());
 		for (MyStatement subStatement: getStatements())
 			subStatement.execute();

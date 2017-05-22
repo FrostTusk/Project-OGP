@@ -74,7 +74,7 @@ public class FunctionCallExpression implements MyExpression<Object> {
 	
 	
 	@Override
-	public Object evaluate() {
+	public Object evaluate() throws NullPointerException {
 		MyFunction template = getStatement().getExecuter().getProgram().getFunction(getFunctionName());
 		MyFunction function = new MyFunction(template.getFunctionName(), template.getBody(), template.getLocation());
 		function.setProgram(getStatement().getExecuter().getProgram());
