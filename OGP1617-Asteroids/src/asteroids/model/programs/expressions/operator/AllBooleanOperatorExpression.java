@@ -6,7 +6,7 @@ import asteroids.model.programs.MyStatement;
 import asteroids.model.programs.expressions.OperatorExpression;
 import asteroids.part3.programs.SourceLocation;
 
-public class AllBooleanOperatorExpression <T> implements MyExpression<Boolean>{
+public class AllBooleanOperatorExpression <T> implements MyExpression<Boolean> {
 
 	
 	public AllBooleanOperatorExpression(MyExpression<T> expression1, MyExpression<T> expression2, 
