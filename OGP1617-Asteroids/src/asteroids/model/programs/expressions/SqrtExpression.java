@@ -1,5 +1,6 @@
 package asteroids.model.programs.expressions;
 
+import asteroids.helper.ExitOutException;
 import asteroids.model.programs.*;
 import asteroids.part3.programs.SourceLocation;
 
@@ -52,7 +53,7 @@ public class SqrtExpression implements MyExpression<Double> {
 	
 	
 	@Override
-	public Double evaluate() throws IllegalArgumentException, NullPointerException {
+	public Double evaluate() throws ExitOutException, IllegalArgumentException, IllegalStateException, NullPointerException {
 		return Math.sqrt(expression.evaluate());
 	}
 	

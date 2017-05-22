@@ -8,6 +8,8 @@ import be.kuleuven.cs.som.annotate.*;
  * By default this value will be +/- Infinity for maximum and minimum respectively.
  * This is because a position cannot be equal to infinity.
  * 
+ * @author Mathijs Hubrechtsen, Ruben Dhuyvetter 
+ * 
  * @invar  	Each position must be a valid position.
  *       	| this.isValidPosition(this.getPositionX(), this.getPositionY())
  */

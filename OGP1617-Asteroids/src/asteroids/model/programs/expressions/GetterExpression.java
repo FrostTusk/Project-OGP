@@ -1,5 +1,6 @@
 package asteroids.model.programs.expressions;
 
+import asteroids.helper.ExitOutException;
 import asteroids.helper.entity.Entity;
 import asteroids.helper.program.GetterType;
 import asteroids.model.programs.MyExpression;
@@ -65,7 +66,7 @@ public class GetterExpression implements MyExpression<Double> {
 	
 	
 	@Override
-	public Double evaluate() throws IllegalArgumentException, NullPointerException {
+	public Double evaluate() throws ExitOutException, IllegalArgumentException, IllegalStateException, NullPointerException {
 		switch(getGetterType()) {
 		case GETDIR:
 			return getStatement().getExecuter().getOwner().getOrientation();

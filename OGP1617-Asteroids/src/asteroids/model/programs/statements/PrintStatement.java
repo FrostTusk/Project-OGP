@@ -1,5 +1,6 @@
 package asteroids.model.programs.statements;
 
+import asteroids.helper.ExitOutException;
 import asteroids.model.programs.*;
 import asteroids.part3.programs.SourceLocation;
 
@@ -75,7 +76,7 @@ public class PrintStatement <T> implements MyStatement {
 	}
 	
 	@Override
-	public void execute() throws IllegalArgumentException, NullPointerException {
+	public void execute() throws ExitOutException, IllegalArgumentException, IllegalStateException, NullPointerException {
 		if (getExecuter().getFlag(getLocation())) return;
 		setExecuter(getExecuter());
 		System.out.println(getValue().evaluate());

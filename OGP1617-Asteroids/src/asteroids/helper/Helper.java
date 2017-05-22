@@ -18,6 +18,8 @@ import asteroids.model.World;
  * A helper class that includes tool-box methods such as convert a list to an array,
  * calculate a position, evaluate the cross (scalar) product, etc. This class also
  * includes the requested approximation methods.
+ * 
+ * @author Mathijs Hubrechtsen, Ruben Dhuyvetter
  */
 public class Helper {
 	
