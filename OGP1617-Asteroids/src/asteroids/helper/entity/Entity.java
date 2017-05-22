@@ -153,12 +153,7 @@ public abstract class Entity {
 	@Raw
 	public void setPosition(double positionX, double positionY) 
 			throws IllegalArgumentException {
-		try {
-			this.position = new Position(positionX, positionY);
-		}
-		catch(IllegalArgumentException exc) {
-			throw new IllegalArgumentException(exc);
-		}
+		this.position = new Position(positionX, positionY);
 	}
 	
 	
@@ -277,7 +272,8 @@ public abstract class Entity {
 	 */
 	@Raw
 	public void setMaxspeed(double speed) {
-		if (isValidMaxSpeed(speed)) this.maxSpeed = speed;
+		if (isValidMaxSpeed(speed)) 
+			this.maxSpeed = speed;
 	}
 	
 	/**
@@ -508,7 +504,7 @@ public abstract class Entity {
 	* @see implementation
 	*/
 	@Raw
-	public boolean isInWorld(World world) {
+	public boolean isInWorld(World world) throws NullPointerException {
 		return helper.apparentlyWithinBoundaries(this, world);
 	}
 	
@@ -574,12 +570,7 @@ public abstract class Entity {
 		double newPositionX = helper.calculatePosition(this, time)[0];
 		double newPositionY = helper.calculatePosition(this, time)[1];
 
-		try {
-			setPosition(newPositionX, newPositionY);
-		}
-		catch (IllegalArgumentException exc) {
-			throw new IllegalArgumentException(exc);
-		}
+		setPosition(newPositionX, newPositionY);
 	}
 	
 	
@@ -737,7 +728,7 @@ public abstract class Entity {
 	 * 			| (this.move(result)).getDistanceBetween(entity) == 0
 	 */
 	@Raw
-	public double getTimeToSecondCollisionNonZero(World world) {
+	public double getTimeToSecondCollisionNonZero(World world) throws NullPointerException {
 		double[] distance = getDistanceBetween(world);	
 		double[] timeNew = new double[6];
 		timeNew[0] = Double.POSITIVE_INFINITY;
@@ -895,13 +886,8 @@ public abstract class Entity {
 	public double[] getCollisionPosition(Entity entity) throws IllegalArgumentException, NullPointerException {
 		if (entity == null) 
 			throw new NullPointerException();
-		double time;
-		try {
-			time = getTimeToCollision(entity);
-		}
-		catch (IllegalArgumentException exc) {
-			throw new IllegalArgumentException(exc);
-		}
+		
+		double time = getTimeToCollision(entity);
 		if (time == Double.POSITIVE_INFINITY) return null;
 		if (this.getWorld() != entity.getWorld()) return null;
 		
@@ -940,9 +926,10 @@ public abstract class Entity {
 	 * 
 	 * @see implementation
 	 */
-	public void resolveCollision(World world) {
+	public void resolveCollision(World world) throws NullPointerException {
 		if (world == null) 
 			throw new NullPointerException();
+		
 		double[] position = getCollisionPosition(world);
 		if (position[0] == Double.POSITIVE_INFINITY && position[1] == Double.POSITIVE_INFINITY) return;	
 		// There is no collision so the collision does not need to be resolved.
@@ -1005,7 +992,7 @@ public abstract class Entity {
 	 * 
 	 * @see implementation
 	 */
-	public void resolveCollisionMinorPlanet(MinorPlanet minorPlanet) {
+	public void resolveCollisionMinorPlanet(MinorPlanet minorPlanet) throws NullPointerException {
 		minorPlanet.resolveCollision(this); 
 	}	// This method will only be called by another minor planet. In minor planet this method is overridden.
 	

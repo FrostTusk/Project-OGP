@@ -128,7 +128,7 @@ public class Planetoid extends MinorPlanet {
 	 *       	| ! isValidPosition(new.getPositionX(), new.getPositionY())
 	 */
 	@Override @Raw 
-	public void move(double time) {
+	public void move(double time) throws IllegalArgumentException {
 		if (time < 0) throw new IllegalArgumentException();
 		
 		double newPositionX = helper.calculatePosition(this, time)[0];
@@ -139,12 +139,7 @@ public class Planetoid extends MinorPlanet {
 		setDistanceTraveled(getDistanceTraveled() + Math.sqrt(Math.pow(Math.abs(newPositionX - oldPositionX), 2) 
 							 + Math.pow(Math.abs(newPositionY - oldPositionY), 2)));
 		
-		try {
-			setPosition(newPositionX, newPositionY);
-		}
-		catch (IllegalArgumentException exc) {
-			throw new IllegalArgumentException();
-		}
+		setPosition(newPositionX, newPositionY);
 	}
 	
 	
@@ -172,7 +167,7 @@ public class Planetoid extends MinorPlanet {
 	 * @see implementation
 	 */
 	@Override
-	public void resolveCollisionShip(Ship ship) {
+	public void resolveCollisionShip(Ship ship) throws IllegalArgumentException {
 		Position newPosition = getRandomPosition(ship.getWorld());
 		ship.setPosition(newPosition.getPositionX(), newPosition.getPositionY());
 		for (Entity entity: getWorld().getAllEntities()) {
@@ -196,7 +191,7 @@ public class Planetoid extends MinorPlanet {
 	 * @see implementation
 	 */
 	@Raw
-	private Position getRandomPosition(World world) {
+	private Position getRandomPosition(World world) throws IllegalArgumentException {
 		return new Position(getRandomNumber(0, world.getWidth()), getRandomNumber(0, world.getHeight()));
 	}
 	

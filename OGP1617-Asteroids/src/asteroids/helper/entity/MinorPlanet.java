@@ -80,9 +80,10 @@ public abstract class MinorPlanet extends Entity {
 	 * @see implementation
 	 */
 	@Override
-	public void resolveCollisionMinorPlanet(MinorPlanet minorPlanet) {
+	public void resolveCollisionMinorPlanet(MinorPlanet minorPlanet) throws NullPointerException {
 		if (minorPlanet == null) 
 			throw new NullPointerException();	// This method is pretty much a copy of the formula in the assignment.
+		
 		double[] deltaV = {minorPlanet.getVelocityX() - getVelocityX(), minorPlanet.getVelocityY() - getVelocityY()};
 		double[] deltaR = {minorPlanet.getPosition().getPositionX() - getPosition().getPositionX(), 
 						   minorPlanet.getPosition().getPositionY() - getPosition().getPositionY()};

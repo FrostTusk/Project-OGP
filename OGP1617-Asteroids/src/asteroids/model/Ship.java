@@ -117,13 +117,7 @@ public class Ship extends Entity {
 		setDensity(1.42 * Math.pow(10, 12));
 		setForce(1.1 * Math.pow(10, 18)); // FIXME Set it to (10,18) for assignment, (10,19) for demo.
 		
-		try {	// Check if the position can be set.
-			setPosition(positionX, positionY);
-		}
-		catch (IllegalArgumentException exc) {
-			throw new IllegalArgumentException();
-		}
-
+		setPosition(positionX, positionY);
 		setVelocity(velocityX, velocityY);	// Set the velocity.
 		assert isValidOrientation(orientation);	// Check if the orientation can be set.
 		setOrientation(orientation);
@@ -235,7 +229,7 @@ public class Ship extends Entity {
 	@Raw
 	public double getTotalMass() {
 		double totalMass = getMass();
-		for (Bullet bullet : this.bullets) 
+		for (Bullet bullet: this.bullets) 
 			totalMass += bullet.getMass();
 		return totalMass;
 	}
@@ -332,7 +326,7 @@ public class Ship extends Entity {
 	 * 			true if it can, false if not.
 	 */
 	@Raw
-	public boolean canHaveAsBullet(Bullet bullet) {
+	public boolean canHaveAsBullet(Bullet bullet) throws IllegalArgumentException {
 		return (bullet != null) && (!bullet.isTerminated()) && 
 			   (!this.bullets.contains(bullet)) && (helper.apparentlyWithinBoundaries(bullet, this));
 	}
@@ -384,12 +378,7 @@ public class Ship extends Entity {
 			throw new IllegalArgumentException();
 		
 		addBullet(bullet);
-		try {
-			bullet.setShip(this);
-		}
-		catch (IllegalArgumentException exc) {
-			throw new IllegalArgumentException(exc);
-		}
+		bullet.setShip(this);
 	}
 	
 	/**
@@ -402,16 +391,8 @@ public class Ship extends Entity {
 	 * @see implementation
 	 */
 	public void loadBullets(Collection<Bullet> bullets) throws IllegalArgumentException, NullPointerException {
-		try {
-			for (Bullet bullet: bullets) 
-				loadBullet(bullet);
-		}
-		catch (IllegalArgumentException exc) {
-			throw new IllegalArgumentException(exc);
-		}
-		catch (NullPointerException exc) {
-			throw new NullPointerException();
-		}
+		for (Bullet bullet: bullets) 
+			loadBullet(bullet);
 	}
 	
 	/**
@@ -423,20 +404,12 @@ public class Ship extends Entity {
 	 * @see implementation
 	 */
 	public void reloadBullet(Bullet bullet) throws IllegalArgumentException, NullPointerException {
-		try {
-			if (bullet.getWorld() != null) 
-				bullet.getWorld().removeEntity(bullet);
-			bullet.setPosition(getPosition().getPositionX(), getPosition().getPositionY());
-			bullet.resetSource(this);
-			bullet.setWorld(null);
-			loadBullet(bullet);
-		}
-		catch (IllegalArgumentException exc) {
-			throw new IllegalArgumentException(exc);
-		}
-		catch (NullPointerException exc) {
-			throw new NullPointerException();
-		}
+		if (bullet.getWorld() != null) 
+			bullet.getWorld().removeEntity(bullet);
+		bullet.setPosition(getPosition().getPositionX(), getPosition().getPositionY());
+		bullet.resetSource(this);
+		bullet.setWorld(null);
+		loadBullet(bullet);
 	}
 	
 	
@@ -753,14 +726,8 @@ public class Ship extends Entity {
 	public void resolveCollisionBullet(Bullet bullet) throws IllegalArgumentException, NullPointerException {
 		if (bullet == null) 
 			throw new NullPointerException();
-		if (bullet.getSource() == this) {	// Reload if this bullet hits it's source.
-			try {
-				reloadBullet(bullet);
-			}
-			catch (IllegalArgumentException exc) {
-				throw new IllegalArgumentException(exc);
-			}
-		}
+		if (bullet.getSource() == this)	// Reload if this bullet hits it's source.
+			reloadBullet(bullet);
 		else {	// Terminate otherwise.
 			this.terminate();
 			bullet.terminate();

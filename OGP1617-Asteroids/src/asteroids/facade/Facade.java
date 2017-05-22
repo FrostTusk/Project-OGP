@@ -710,7 +710,6 @@ public class Facade implements IFacade {
 	@Override
 	public Set<? extends Planetoid> getWorldPlanetoids(World world) throws ModelException {
 		try {
-//			return ((Set<Planetoid>)world.getAllEntitiesSpecific(EntityType.ASTEROID));
 			return world.getAllEntitiesSpecific(Planetoid.class);
 		}
 		catch (NullPointerException exc) {

@@ -68,20 +68,14 @@ public class Bullet extends Entity {
 	 * 
 	 * @see implementation
 	 */
-	public Bullet(double positionX, double positionY, double velocityX, double velocityY, double radius)
+	public Bullet(double positionX, double positionY, double velocityX, double velocityY, double radius) 
 		throws IllegalArgumentException {
 		setMinRadius(1);
 		setDensity(7.8 * Math.pow(10, 12));
 		setBoundaryCollisionMax(3);
 		setBoundaryCollisionCounter(0);
 		
-		try {
-			setPosition(positionX, positionY);
-		}
-		catch (IllegalArgumentException exc) {
-			throw new IllegalArgumentException();
-		}
-
+		setPosition(positionX, positionY);
 		setVelocity(velocityX, velocityY);
 		setRadius(radius);
 		setMass();
@@ -400,7 +394,8 @@ public class Bullet extends Entity {
 			     (position[3] == getWorld().getHeight() || position[3] == 0) ) 	// or with corner.
 				setVelocity(getVelocityX(), -getVelocityY());
 		}
-		else this.terminate();	// Terminate the bullet if it has exceeded the max amount of bounces.
+		else 
+			this.terminate();	// Terminate the bullet if it has exceeded the max amount of bounces.
 	}
 	
 	
@@ -417,12 +412,7 @@ public class Bullet extends Entity {
 		if (ship == null) 
 			throw new NullPointerException();
 		if (this.getSource() == ship) {	// Reload if this bullet hits it's source.
-			try {
-				ship.reloadBullet(this);
-			}
-			catch (IllegalArgumentException exc) {
-				throw new IllegalArgumentException(exc);
-			}
+			ship.reloadBullet(this);
 		}
 		else {	// Terminate otherwise.
 			this.terminate();
