@@ -38,8 +38,8 @@ public abstract class MinorPlanet extends Entity {
 			try {
 				getWorld().removeEntity(this);
 			}
-			catch (IllegalArgumentException exc) {}	// Empty catch because if an IllegalArgument Exception
-		}								// is thrown, it means that the association wasn't set to begin with.
+			catch (IllegalArgumentException exc) {setWorld(null);}	// Near empty catch because if an IllegalArgument Exception
+		}				 						// is thrown, it means that the association wasn't set to begin with.		
 		// This means that the association already doesn't exist. We don't have to do anything.
 		this.isTerminated = true;
 	}

@@ -8,6 +8,7 @@ import asteroids.helper.entity.MinorPlanet;
 import asteroids.helper.entity.Position;
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
+import jdk.internal.dynalink.linker.LinkerServices.Implementation;
 
 /**
  * A class of planetoids.
@@ -58,6 +59,28 @@ public class Planetoid extends MinorPlanet {
 		setDistanceTraveled(distanceTraveled);
 		setMass();
 	}
+	
+	
+	/**
+	 * Terminates this minorPlanet. Breaks up any associations with entities and worlds.
+	 * Prepares this object for the garbage collector.
+	 * @see implementation
+	 */
+	@Override
+	public void terminate() {
+		if (isTerminated()) return;
+		World world = getWorld();
+		if (getWorld() != null) { 
+			try {
+				getWorld().removeEntity(this);
+			}
+			catch (IllegalArgumentException exc) {setWorld(null);}	// Near empty catch because if an IllegalArgument Exception
+		}				 						// is thrown, it means that the association wasn't set to begin with.						
+		// This means that the association already doesn't exist. We don't have to do anything.
+		this.isTerminated = true;
+		spawnAsteroids(world);
+	}
+	
 	
 	
 	/**
@@ -227,6 +250,43 @@ public class Planetoid extends MinorPlanet {
 	public double getRandomNumber(double low, double high) {
 	 	return ThreadLocalRandom.current().nextDouble(low, high);
 	}
+	
+	
+	/**
+	 * Returns a single random sign.
+	 * @see implementation
+	 */
+	@Raw
+	public int getRandomSign() {
+		int[] numbers = {-1, 1};
+		return numbers[ThreadLocalRandom.current().nextInt(2)];
+	}
+	
+	
+	
+	/**
+	 * Spawns 2 asteroids at the position of this planetoid.
+	 * 
+	 * @param 	world
+	 * 			The former world of this planetoid.
+	 * 
+	 * @see Implementation
+	 */
+	private void spawnAsteroids(World world) {
+		if ( (world == null) || (getRadius() < 30) )
+			return;
+		double s = getRandomSign();
+		Asteroid asteroid1 = new Asteroid(getPosition().getPositionX() - (getRadius() / 2), 
+									getPosition().getPositionY(), s * 1.5 * getVelocityX(),
+									s * 1.5 * getVelocityY(), getRadius() / 2);
+		Asteroid asteroid2 = new Asteroid(getPosition().getPositionX() + (getRadius() / 2), 
+				getPosition().getPositionY(), -s * 1.5 * getVelocityX(),
+				-s * 1.5 * getVelocityY(), getRadius() / 2);
+		
+		world.addEntity(asteroid1);
+		world.addEntity(asteroid2);
+	}
+	
 	
 	
 	/**

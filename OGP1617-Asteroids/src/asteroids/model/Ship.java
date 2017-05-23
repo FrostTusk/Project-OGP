@@ -1,6 +1,8 @@
 package asteroids.model;
 
 import java.util.*;
+
+import asteroids.helper.ExitOutException;
 import asteroids.helper.entity.*;
 import be.kuleuven.cs.som.annotate.*;
 
@@ -139,8 +141,8 @@ public class Ship extends Entity {
 				getWorld().removeEntity(this);
 				this.setWorld(null);
 			}
-			catch (IllegalArgumentException exc) {}	// Empty catch because if an IllegalArgumentException
-		}											// is thrown, it means that the association wasn't set to begin with.	
+			catch (IllegalArgumentException exc) {setWorld(null);}	// Near empty catch because if an IllegalArgument Exception
+		}				 						// is thrown, it means that the association wasn't set to begin with.			
 		List<Bullet> iterator = helper.convertSetToList(getAllBullets());	// This means that the association already doesn't exist 
 		for (Bullet bullet: iterator) {							// we don't have to do anything.
 			try {
@@ -785,7 +787,7 @@ public class Ship extends Entity {
 	 * 			The time during which the program needs to be executed.
 	 * @return
 	 */
-	public List<Object> executeProgram(double time) {
+	public List<Object> executeProgram(double time) throws ExitOutException, IllegalArgumentException, NullPointerException {
 		List<Object> args = new ArrayList<Object>();
 		args.add(Double.valueOf(time));
 		try {
@@ -803,7 +805,19 @@ public class Ship extends Entity {
 		     * |--------------------------------------------| 
 		     */
 	
-
+	
+	
+	/**
+	 * Helper method of evolve in World.
+	 */
+	@Override
+	public void morph(double time) throws ExitOutException, IllegalArgumentException, NullPointerException {
+		move(time);
+		thrust(getAcceleration(), time);
+		if (getProgram() != null)
+			executeProgram(time);
+	}
+	
 	
 	/**
 	 * Returns the type of this Ship Class in enumeration format.

@@ -5,8 +5,8 @@ import java.util.stream.Collectors;
 
 import asteroids.helper.*;
 import asteroids.helper.entity.Entity;
-import asteroids.helper.entity.EntityType;
 import asteroids.helper.entity.Position;
+import asteroids.helper.entity.Terminateable;
 import asteroids.part2.CollisionListener;
 import be.kuleuven.cs.som.annotate.*;
 
@@ -42,7 +42,7 @@ import be.kuleuven.cs.som.annotate.*;
  * @author	Mathijs Hubrechtsen
  */
 
-public class World {
+public class World implements Terminateable {
 	
 		/*
 	     * |----------------------------|
@@ -738,11 +738,9 @@ public class World {
 	private void update(double time) throws NullPointerException {
 		collisionTracker.clear();	// Clears the trackers because we are moving positions and won't be stuck in a loop anymore.
 		boundaryTracker.clear();
-		for (Entity entity: getAllEntitiesList()) {	// getAllEntitiesList(), returns a new list, iterating is possible.
-			entity.move(time);
-			if ( (entity.getType() == EntityType.SHIP) && ((Ship) entity).getThrustStatus()) 
-				((Ship) entity).thrust(((Ship) entity).getAcceleration(), time);
-		}
+		getAllEntitiesList().forEach(x -> x.morph(time));
+//		for (Entity entity: getAllEntitiesList())// getAllEntitiesList(), returns a new list, iterating is possible.
+//			entity.morph(time);
 		updateMap();	// Positions were changed, the map needs to be updated.
 	}
 	
@@ -889,8 +887,9 @@ public class World {
 	@Raw
 	public Set<Entity> getAllEntities() {
 		Set<Entity> entitiesResult = new HashSet<Entity>();
-		for (Entity entity: entities.values()) 
-			entitiesResult.add(entity);
+		entities.values().forEach(x -> entitiesResult.add(x));
+//		for (Entity entity: entities.values()) 
+//			entitiesResult.add(entity);
 		return entitiesResult;
 	}
 		

@@ -1,5 +1,6 @@
 package asteroids.helper.entity;
 
+import asteroids.helper.ExitOutException;
 import asteroids.helper.Helper;
 import asteroids.model.*;
 import be.kuleuven.cs.som.annotate.*;
@@ -49,7 +50,7 @@ import be.kuleuven.cs.som.annotate.*;
  *   
  * @author	Mathijs Hubrechtsen, Ruben Dhuyvetter
  */
-public abstract class Entity {
+public abstract class Entity implements Evolvable, Terminateable {
 	
 	/*
      * |----------------------------|
@@ -1003,14 +1004,24 @@ public abstract class Entity {
 	     * | #Header-5# Other Methods.	|
 	     * |----------------------------| 
 	     */
-
-
+	
+	
+	
 			/*
 		     * |--------------------------------------------|
 		     * | 11. The next methods are Helper Methods.	|
 		     * |--------------------------------------------| 
 		     */
 
+	
+	
+	/**
+	 * Helper method of evolve in World.
+	 */
+	@Override
+	public void morph(double time) throws ExitOutException, IllegalArgumentException, NullPointerException {
+		move(time);
+	}
 	
 	
 	/**

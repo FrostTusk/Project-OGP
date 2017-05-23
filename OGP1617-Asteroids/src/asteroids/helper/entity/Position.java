@@ -8,6 +8,9 @@ import be.kuleuven.cs.som.annotate.*;
  * By default this value will be +/- Infinity for maximum and minimum respectively.
  * This is because a position cannot be equal to infinity.
  * 
+ * Update: If the bounds are not given, they will also not be checked,
+ * 		   the default values will NOT be used.
+ * 
  * @author Mathijs Hubrechtsen, Ruben Dhuyvetter 
  * 
  * @invar  	Each position must be a valid position.
@@ -18,29 +21,37 @@ public class Position {
 	 
 	/**
 	 * Initialize this new position with given X and Y position and default values for
-	 * the minimum and maximum position.
+	 * the minimum and maximum position, this means the bounds will not be checked.
 	 *
 	 * @param  	positionX
 	 *         	The X position for this new bullet.
 	 * @param  	positionY
 	 * 			The Y position of this new position
 	 * 
-	 * @effect 	The positions of this new position are set to
-	 *         	the given X position and Y position.
-	 *       	| this.setPosition(positionX, positionY)
-	 *         	 
+	 * @post   	The X position of this new position is equal to
+	 *         	the given X position.
+	 *       	| new.getPositionX() == positionX
+	 * @post   	The Y position of this new position is equal to
+	 *         	the given Y position.
+	 *       	| new.getPositionY() == positionY
+	 *       
 	 * @throws 	IllegalArgumentException
-	 *         	This new position cannot have the given X and Y position as position.
+	 *         	The given positions cannot be a valid position for any
+	 *         	position.
 	 *       	| ! this.isValidPosition(positionX, positionY)
 	 */
 	public Position(double positionX, double positionY) throws IllegalArgumentException {
 		this.boundsSet = false;
-		try {
-			this.setPosition(positionX, positionY);
-		}
-		catch (IllegalArgumentException exc) {
+		this.minPositionX = Double.NEGATIVE_INFINITY;	// These value are never used
+		this.maxPositionX = Double.POSITIVE_INFINITY;	// because boundsSet == false.
+		this.minPositionY = Double.NEGATIVE_INFINITY;
+		this.maxPositionY = Double.POSITIVE_INFINITY;
+
+		if (!isValidPosition(positionX, positionY))
 			throw new IllegalArgumentException();
-		}
+		
+		this.positionX = positionX;
+		this.positionY = positionY;
 	}
 	
 	/**
@@ -60,12 +71,16 @@ public class Position {
 	 * @param	maxPositionY
 	 * 			The maximum Y position of this new position.
 	 * 
-	 * @effect 	The positions of this new position are set to
-	 *         	the given X position and Y position.
-	 *       	| this.setPosition(positionX, positionY)
-	 *         	 
+	 * @post   	The X position of this new position is equal to
+	 *         	the given X position.
+	 *       	| new.getPositionX() == positionX
+	 * @post   	The Y position of this new position is equal to
+	 *         	the given Y position.
+	 *       	| new.getPositionY() == positionY
+	 *       
 	 * @throws 	IllegalArgumentException
-	 *         	This new position cannot have the given X and Y position as position.
+	 *         	The given positions cannot be a valid position for any
+	 *         	position.
 	 *       	| ! this.isValidPosition(positionX, positionY)
 	 */
 	public Position(double positionX, double positionY,
@@ -76,40 +91,39 @@ public class Position {
 		this.minPositionY = minPositionY;
 		this.maxPositionY = maxPositionY;
 			
-		try {
-			this.setPosition(positionX, positionY);
-		}
-		catch (IllegalArgumentException exc) {
+		if (!isValidPosition(positionX, positionY))
 			throw new IllegalArgumentException();
-		}
+		
+		this.positionX = positionX;
+		this.positionY = positionY;
 	}
 	
 	
-	private boolean boundsSet;
+	private final boolean boundsSet;
 	/**
 	 * Variable registering the X position of this position.
 	 */
-	private double positionX;
+	private final double positionX;
 	/**
 	 * Variable registering the minimum X position of this position.
 	 */
-	private double minPositionX;
+	private final double minPositionX;
 	/**
 	 * Variable registering the maximum X position of this position.
 	 */
-	private double maxPositionX;
+	private final double maxPositionX;
 	/**
 	 * Variable registering the Y position of this position.
 	 */
-	private double positionY;
+	private final double positionY;
 	/**
 	 * Variable registering the minimum Y position of this position.
 	 */
-	private double minPositionY;
+	private final  double minPositionY;
 	/**
 	 * Variable registering the maximum Y position of this position.
 	 */
-	private double maxPositionY;
+	private final double maxPositionY;
 	
 	
 	/**
@@ -184,35 +198,6 @@ public class Position {
 		// A position cannot be smaller/bigger or equal to its lower and upper bounds.
 		return (getMinPositionX() < positionX) && (getMaxPositionX() > positionX) &&
 				(getMinPositionY() < positionY) && (getMaxPositionY() > positionY);
-	}
-	
-	
-	/**
-	 * Set the position of this position to the given position.
-	 * 
-	 * @param  	positionX
-	 *         	The new X position for this position.
-	 * @param  	positionY
-	 * 		   	The new Y position for this position.
-	 * 
-	 * @post   	The X position of this new position is equal to
-	 *         	the given X position.
-	 *       	| new.getPositionX() == positionX
-	 * @post   	The Y position of this new position is equal to
-	 *         	the given Y position.
-	 *       	| new.getPositionY() == positionY
-	 *       
-	 * @throws 	IllegalArgumentException
-	 *         	The given positions cannot be a valid position for any
-	 *         	position.
-	 *       	| ! this.isValidPosition(positionX, positionY)
-	 */
-	@Raw
-	private void setPosition(double positionX, double positionY) throws IllegalArgumentException {
-		if (! isValidPosition(positionX, positionY)) 
-			throw new IllegalArgumentException();
-		this.positionX = positionX;
-		this.positionY = positionY;
 	}
 
 }

@@ -4,10 +4,11 @@ import java.util.*;
 
 import asteroids.helper.ExitOutException;
 import asteroids.helper.Helper;
+import asteroids.helper.entity.Terminateable;
 import asteroids.model.programs.*;
 import asteroids.part3.programs.SourceLocation;
 
-public class Program implements Executable {
+public class Program implements Executable, Terminateable {
 	
 	private Helper helper = new Helper();
 	
