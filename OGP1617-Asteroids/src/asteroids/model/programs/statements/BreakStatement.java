@@ -55,18 +55,18 @@ public class BreakStatement implements MyStatement {
 	
 	
 	@Override
-	public void requestFlag() {
+	public void requestFlag() throws NullPointerException {
 		getExecuter().flagLine(getLocation());
 	}
 
 	@Override
-	public void requestDeFlag() {
+	public void requestDeFlag() throws NullPointerException {
 		getExecuter().deFlagLine(getLocation());
 	}
 	
 	
 	@Override
-	public void execute() throws ExitOutException {
+	public void execute() throws ExitOutException, IllegalArgumentException, NullPointerException {
 		if (getExecuter().getFlag(getLocation())) return;
 		MyStatement superStatement = getSuperStatement();
 		while (!WhileStatement.class.isInstance(superStatement)) {

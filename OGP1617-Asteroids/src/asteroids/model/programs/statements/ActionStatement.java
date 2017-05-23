@@ -17,7 +17,7 @@ public class ActionStatement implements MyStatement {
 	}
 	
 	public ActionStatement(ActionType type, MyExpression<Double> angle, SourceLocation location) 
-			throws IllegalArgumentException {
+			throws IllegalArgumentException, NullPointerException {
 		if (type != ActionType.TURN)
 			throw new IllegalArgumentException();
 		setActionType(type);
@@ -81,18 +81,18 @@ public class ActionStatement implements MyStatement {
 	
 	
 	@Override
-	public void requestFlag() {
+	public void requestFlag() throws NullPointerException {
 		getExecuter().flagLine(getLocation());
 	}
 
 	@Override
-	public void requestDeFlag() {
+	public void requestDeFlag() throws NullPointerException {
 		getExecuter().deFlagLine(getLocation());
 	}
 
 	
 	@Override
-	public void execute() throws IllegalArgumentException, IllegalStateException {
+	public void execute() throws IllegalArgumentException, IllegalStateException, NullPointerException {
 		if (getExecuter().getFlag(getLocation())) return;
 		setExecuter(getExecuter());
 		if (MyFunction.class.isInstance(getExecuter()))

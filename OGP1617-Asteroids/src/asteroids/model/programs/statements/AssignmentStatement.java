@@ -1,17 +1,16 @@
 package asteroids.model.programs.statements;
 
-import org.junit.internal.builders.NullBuilder;
-
+import asteroids.helper.entity.Entity;
 import asteroids.model.Program;
 import asteroids.model.programs.Executable;
 import asteroids.model.programs.MyExpression;
 import asteroids.model.programs.MyStatement;
 import asteroids.part3.programs.SourceLocation;
-import sun.tracing.NullProviderFactory;
 
 public class AssignmentStatement <T> implements MyStatement {
 
-	public AssignmentStatement(String variableName, MyExpression<T> value, SourceLocation location) {
+	public AssignmentStatement(String variableName, MyExpression<T> value, SourceLocation location) 
+		throws NullPointerException {
 		setVariableName(variableName);
 		setValue(value);
 		setLocation(location);
@@ -81,52 +80,42 @@ public class AssignmentStatement <T> implements MyStatement {
 
 	
 	@Override
-	public void requestFlag() {
+	public void requestFlag() throws NullPointerException {
 		getExecuter().flagLine(getLocation());
 	}
 
 	@Override
-	public void requestDeFlag() {
+	public void requestDeFlag() throws NullPointerException {
 		getExecuter().deFlagLine(getLocation());
 	}
 	
 	
 	@Override
-	public void execute() throws IllegalArgumentException {
-//		if (getExecuter().getFlag(getLocation())) return;
-//		setExecuter(getExecuter());
-//		
-//		if (!getExecuter().canHaveAsName(getVariableName()) && (getExecuter() instanceof Program)/*(Program.class.isInstance(getExecuter()))*/)
-//			throw new IllegalArgumentException();
-//		Object localVar = getExecuter().getLocalVar(getVariableName());
-//		if ( (localVar != null) 
-//				&& (!localVar.getClass().isInstance(getValue().evaluate())) )
-//				throw new IllegalArgumentException();
-//		Object globalVar = getExecuter().getGlobalVar(getVariableName());
-//		if ( (localVar == null) && (globalVar != null)
-//				&& (!globalVar.getClass().isInstance(getValue().evaluate())))
-//			throw new IllegalArgumentException();
-//		
-//		getExecuter().addVar(getVariableName(), getValue().evaluate());
-//		requestFlag();
-		
+	public void execute() throws IllegalArgumentException, NullPointerException {	
 		if (getExecuter().getFlag(getLocation())) return;
 		setExecuter(getExecuter());
 		
-		if (!getExecuter().canHaveAsName(getVariableName()) && (getExecuter() instanceof Program)/*(Program.class.isInstance(getExecuter()))*/)
+		if ( (!getExecuter().canHaveAsName(getVariableName())) && (getExecuter() instanceof Program) )
 			throw new IllegalArgumentException();
 		
 		Object localVar, globalVar;
-		
 		try {
-			localVar = getExecuter().getLocalVar(getVariableName()); 
-			if (!localVar.getClass().isInstance(getValue().evaluate()))
+			localVar = getExecuter().getLocalVar(getVariableName());
+			if ( (localVar == null) && (!Entity.class.isAssignableFrom(getValue().evaluate().getClass())) )
+				throw new IllegalArgumentException();
+			if ( (localVar != null) && (getValue().evaluate() == null) && (!Entity.class.isAssignableFrom(localVar.getClass())) )
+				throw new IllegalArgumentException();
+			if (!localVar.getClass().isInstance(getValue().evaluate()) && (localVar != null) && (getValue().evaluate() != null) )
 				throw new IllegalArgumentException();
 		}
 		catch (NullPointerException exc1) {
 			try {
 				globalVar = getExecuter().getGlobalVar(getVariableName());
-				if (!globalVar.getClass().isInstance(getValue().evaluate()))
+				if ( (globalVar == null) && (!Entity.class.isAssignableFrom(getValue().evaluate().getClass())) )
+					throw new IllegalArgumentException();
+				if ( (globalVar != null) && (getValue().evaluate() == null) && (!Entity.class.isAssignableFrom(globalVar.getClass())) )
+					throw new IllegalArgumentException();
+				if ( (!globalVar.getClass().isInstance(getValue().evaluate())) && (globalVar != null) && (getValue().evaluate() != null) )
 						throw new IllegalArgumentException();
 			}
 			catch (NullPointerException exc2) {}

@@ -18,6 +18,8 @@ import asteroids.model.World;
  * A helper class that includes tool-box methods such as convert a list to an array,
  * calculate a position, evaluate the cross (scalar) product, etc. This class also
  * includes the requested approximation methods.
+ * 
+ * @author Mathijs Hubrechtsen, Ruben Dhuyvetter
  */
 public class Helper {
 	
@@ -52,7 +54,7 @@ public class Helper {
 	 * 
 	 * @return	Returns the cross product of the given vector with itself.
 	 */
-	public double evaluateScalar(double[] vector) {
+	public double evaluateScalar(double[] vector) throws NullPointerException {
 		return Math.pow(vector[0], 2) + Math.pow(vector[1], 2);
 	}
 	
@@ -66,7 +68,7 @@ public class Helper {
 	 * 
 	 * @return	Returns the cross product of two given vectors.
 	 */
-	public double evaluateScalar(double[] vector1, double[] vector2) {
+	public double evaluateScalar(double[] vector1, double[] vector2) throws NullPointerException {
 		return vector1[0]*vector2[0] + vector1[1]*vector2[1];
 	}
 	
@@ -80,7 +82,7 @@ public class Helper {
 	 * 
 	 * @return	Returns the position of the second smallest non zero element in the given array.
 	 */
-	public int findSecondSmallestNotZero(double[] array) {
+	public int findSecondSmallestNotZero(double[] array) throws NullPointerException {
 		int smallest = 0;
 		for (int i = 1; i < array.length; i++)	// First perform a linear search to find the smallest element.
 			if (array[i] < array[smallest]) smallest = i;
@@ -137,7 +139,7 @@ public class Helper {
 	 * 
 	 * @return	Returns a List made up by the elements in the given Array.
 	 */	
-	public <T> List<T> convertArrayToList(T[] array) {
+	public <T> List<T> convertArrayToList(T[] array) throws NullPointerException {
 		List<T> list = new ArrayList<T>();
 		for (T item: array) list.add(item);
 		return list;
@@ -151,7 +153,7 @@ public class Helper {
 	 * 
 	 * @return	Returns an Array made up by the elements in the given List.
 	 */	
-	public <T> Object[] convertListToArray(List<T> list) {
+	public <T> Object[] convertListToArray(List<T> list) throws NullPointerException {
 		Object[] result = new Object[list.size()];
 		int count = 0;
 		for (Object object: list) {
@@ -170,7 +172,7 @@ public class Helper {
 	 * 
 	 * @return	Returns a List made up by the elements in the given Collection.
 	 */
-	public <T> List<T> convertCollectionToList(Collection<T> collection) {
+	public <T> List<T> convertCollectionToList(Collection<T> collection) throws NullPointerException {
 		List<T> list = new ArrayList<T>();
 		for (T item: collection) list.add(item);
 		return list;
@@ -185,7 +187,7 @@ public class Helper {
 	 * 
 	 * @return	Returns a List made up by the elements in the given Set.
 	 */
-	public <T> List<T> convertSetToList(Set<T> set) {
+	public <T> List<T> convertSetToList(Set<T> set) throws NullPointerException {
 		List<T> list = new ArrayList<T>();
 		for (T item: set) list.add(item);
 		return list;
@@ -202,8 +204,27 @@ public class Helper {
 	 * @return	Returns a Set made up by the elements in the given Set.
 	 */
 	public <T> Set<T> deepCopySet(Set<T> set) {
+		if (set == null)
+			return null;
 		Set<T> result = new HashSet<T>();
 		for (T item: set)
+			result.add(item);
+		return result;
+	}
+	
+	/**
+	 * Deep copy a given List.
+	 * 
+	 * @param 	list
+	 * 			The List to be copied.
+	 * 
+	 * @return	Returns a List made up by the elements in the given List.
+	 */
+	public <T> List<T> deepCopyList(List<T> list) {
+		if (list == null)
+			return null;
+		List<T> result = new ArrayList<T>();
+		for (T item: list)
 			result.add(item);
 		return result;
 	}
@@ -226,7 +247,7 @@ public class Helper {
 	 * 
 	 * @return	Returns the position in it's String format.
 	 */
-	public String convertPositionToString(Position position) {
+	public String convertPositionToString(Position position) throws NullPointerException {
 		return Double.toString(position.getPositionX()) + "," + Double.toString(position.getPositionY());
 	}
 
@@ -243,7 +264,7 @@ public class Helper {
 	 * 
 	 * @return	the position after the given time.
 	 */
-	public double[] calculatePosition(Entity entity, double time) {
+	public double[] calculatePosition(Entity entity, double time) throws NullPointerException {
 		double[] position = {entity.getPosition().getPositionX() + entity.getVelocityX() * time,
 						   	 entity.getPosition().getPositionY() + entity.getVelocityY() * time};
 		return position;
@@ -255,13 +276,15 @@ public class Helper {
 	 * 
 	 * @param 	entity1
 	 * 		  	The first entity to be used.
-	 *  @param 	entities
+	 * @param 	entities
 	 * 			The entities to be check.
 	 * 
 	 * @return	true if it does overlap, false if not.
 	 */
-	public boolean operlapsWithOtherEntities(Entity entity1, List<Entity> entities) {
-		for (Entity entity2: entities) if ( entity1.overlap(entity2) && (entity2 != entity1) ) return true;
+	public boolean operlapsWithOtherEntities(Entity entity1, List<Entity> entities) throws NullPointerException {
+		for (Entity entity2: entities) 
+			if ( entity1.overlap(entity2) && (entity2 != entity1) ) 
+				return true;
 		return false;
 	}
 
@@ -287,8 +310,8 @@ public class Helper {
 	 * 
 	 * @return	true if they overlap significantly, false if they do not.
 	 */
-	public boolean significantOverlap(Entity entity1, Entity entity2, double distance) throws IllegalArgumentException {
-		if ( (entity1 == null) || (entity2 == null) ) throw new IllegalArgumentException();
+	public boolean significantOverlap(Entity entity1, Entity entity2, double distance) throws NullPointerException {
+		if ( (entity1 == null) || (entity2 == null) ) throw new NullPointerException();
 		return distance <= (0.99)*(entity1.getRadius() + entity2.getRadius());
 	}
 	
@@ -303,8 +326,8 @@ public class Helper {
 	 * 
 	 * @return	true if the entity is apparently in the boundaries, false if it is not.
 	 */
-	public boolean apparentlyWithinBoundaries(Entity entity, World world) throws IllegalArgumentException {
-		if ( (entity == null) || (world == null) ) throw new IllegalArgumentException();
+	public boolean apparentlyWithinBoundaries(Entity entity, World world) throws NullPointerException {
+		if ( (entity == null) || (world == null) ) throw new NullPointerException();
 		return ( (entity.getPosition().getPositionX() - entity.getRadius() * 0.99 >= 0) &&
 				 (entity.getPosition().getPositionX() + entity.getRadius() * 0.99 <= world.getWidth()) &&
 				 (entity.getPosition().getPositionY() - entity.getRadius() * 0.99 >= 0) &&
@@ -322,8 +345,8 @@ public class Helper {
 	 * 
 	 * @return	true if the entity is apparently in the boundaries, false if it is not.
 	 */
-	public boolean apparentlyWithinBoundaries(Entity entityContained, Entity entityContainer) throws IllegalArgumentException {
-		if ( (entityContained == null) || (entityContainer == null) ) throw new IllegalArgumentException();
+	public boolean apparentlyWithinBoundaries(Entity entityContained, Entity entityContainer) throws NullPointerException {
+		if ( (entityContained == null) || (entityContainer == null) ) throw new NullPointerException();
 		return ( (entityContained.getPosition().getPositionX() - entityContained.getRadius() * 0.99 >= 
 				entityContainer.getPosition().getPositionX() - entityContainer.getRadius()) &&
 				 (entityContained.getPosition().getPositionX() + entityContained.getRadius() * 0.99 <= 
@@ -347,8 +370,8 @@ public class Helper {
 	 * 
 	 * @return	true if they apparently collide, false if they do not.
 	 */
-	public boolean apparentlyCollide(Entity entity1, Entity entity2, double distance) throws IllegalArgumentException {
-		if ( (entity1 == null) || (entity2 == null) ) throw new IllegalArgumentException();
+	public boolean apparentlyCollide(Entity entity1, Entity entity2, double distance) throws NullPointerException {
+		if ( (entity1 == null) || (entity2 == null) ) throw new NullPointerException();
 		return ( distance >= (0.99) * (entity1.getRadius() + entity2.getRadius()) ) && 
 				( distance <= (1.01) * (entity1.getRadius() + entity2.getRadius()) ); 
 	}

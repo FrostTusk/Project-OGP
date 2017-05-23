@@ -1,5 +1,6 @@
 package asteroids.model.programs.expressions;
 
+import asteroids.helper.ExitOutException;
 import asteroids.model.programs.*;
 import asteroids.part3.programs.SourceLocation;
 
@@ -27,7 +28,6 @@ public class NotExpression implements MyExpression<Boolean> {
 	
 	private void setExpression(MyExpression<Boolean> expression) {
 		this.expression = expression;
-		getExpression().setStatement(statement);
 	}
 
 	private void setLocation(SourceLocation location) {
@@ -45,7 +45,7 @@ public class NotExpression implements MyExpression<Boolean> {
 	}
 
 	@Override
-	public void setStatement(MyStatement statement) {
+	public void setStatement(MyStatement statement) throws NullPointerException {
 		this.statement = statement;
 		getExpression().setStatement(statement);
 	}
@@ -53,7 +53,7 @@ public class NotExpression implements MyExpression<Boolean> {
 	
 	
 	@Override
-	public Boolean evaluate() {
+	public Boolean evaluate() throws ExitOutException, IllegalArgumentException, IllegalStateException, NullPointerException {
 		return (getExpression().evaluate() == true) ? false: true;
 	}
 	

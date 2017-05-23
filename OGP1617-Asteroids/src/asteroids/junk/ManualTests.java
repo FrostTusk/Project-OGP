@@ -3,6 +3,8 @@ package asteroids.junk;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
+
 import asteroids.helper.*;
 import asteroids.helper.entity.Entity;
 import asteroids.model.*;
@@ -71,6 +73,15 @@ public class ManualTests {
 			sysOut.println("Strings are equal");
 		else
 			sysOut.println("Strings are NOT equal");
+		
+//		for (int i = 0; i < 15; i++)
+//			System.out.println(ThreadLocalRandom.current().nextInt(-1, 2));
+		
+//		Object var = null;
+//		if (Entity.class.isAssignableFrom(var.getClass()))
+//			System.out.println("Entity.class.isAssignableFrom(var.getClass()) is TRUE");
+//		else
+//			System.out.println("Entity.class.isAssignableFrom(var.getClass()) is FALSE");
 		
 		
 		// Original Tests that were written at the very start of the project:

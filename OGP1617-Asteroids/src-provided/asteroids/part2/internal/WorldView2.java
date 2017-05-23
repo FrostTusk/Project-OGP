@@ -400,7 +400,6 @@ public class WorldView2<F extends IFacade> extends JPanel implements KeyListener
 
 	@Override
 	public void boundaryCollision(Object entity, double x, double y) {
-
 	}
 
 	@Override

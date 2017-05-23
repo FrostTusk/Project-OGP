@@ -38,8 +38,8 @@ public abstract class MinorPlanet extends Entity {
 			try {
 				getWorld().removeEntity(this);
 			}
-			catch (IllegalArgumentException exc) {}	// Empty catch because if an IllegalArgument Exception
-		}								// is thrown, it means that the association wasn't set to begin with.
+			catch (IllegalArgumentException exc) {setWorld(null);}	// Near empty catch because if an IllegalArgument Exception
+		}				 						// is thrown, it means that the association wasn't set to begin with.		
 		// This means that the association already doesn't exist. We don't have to do anything.
 		this.isTerminated = true;
 	}
@@ -80,9 +80,10 @@ public abstract class MinorPlanet extends Entity {
 	 * @see implementation
 	 */
 	@Override
-	public void resolveCollisionMinorPlanet(MinorPlanet minorPlanet) {
+	public void resolveCollisionMinorPlanet(MinorPlanet minorPlanet) throws NullPointerException {
 		if (minorPlanet == null) 
 			throw new NullPointerException();	// This method is pretty much a copy of the formula in the assignment.
+		
 		double[] deltaV = {minorPlanet.getVelocityX() - getVelocityX(), minorPlanet.getVelocityY() - getVelocityY()};
 		double[] deltaR = {minorPlanet.getPosition().getPositionX() - getPosition().getPositionX(), 
 						   minorPlanet.getPosition().getPositionY() - getPosition().getPositionY()};

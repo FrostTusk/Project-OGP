@@ -71,15 +71,15 @@ public class MyFunction implements Executable {
 	
 	
 	@Override
-	public void setTime(double time) {
-		this.time = time;
+	public void setTime(double time) throws NullPointerException {
+		getProgram().setTime(time);
 	}
 	
 	private void setOwner(Ship owner) {
 		this.owner = owner;
 	}
 	
-	public void setProgram(Program program) {
+	public void setProgram(Program program) throws NullPointerException {
 		this.program = program;
 		setOwner(getProgram().getOwner());
 		setTime(getProgram().getTime());
@@ -109,25 +109,19 @@ public class MyFunction implements Executable {
 	}
 
 	@Override
-	public Object getLocalVar(String name) {
-//		try {
-//			return localVars.get(name);
-//		}
-//		catch (NullPointerException exc) {
-//			return null;
-//		}
+	public Object getLocalVar(String name) throws NullPointerException {
 		if (!localVars.containsKey(name))
 			throw new NullPointerException();
 		return localVars.get(name);
 	}
 
 	@Override
-	public Object getGlobalVar(String name) {
+	public Object getGlobalVar(String name) throws NullPointerException {
 		return getProgram().getGlobalVar(name);
 	}
 
 
-	public boolean canHaveAsName(String name) {
+	public boolean canHaveAsName(String name) throws NullPointerException {
 		if (getProgram().getAllFunctions() == null)
 			return true;
 		for (MyFunction ownedFunction: getProgram().getAllFunctions())
@@ -137,7 +131,7 @@ public class MyFunction implements Executable {
 	}
 	
 	
-	public void registerArguments(List<Object> argFeed) {
+	public void registerArguments(List<Object> argFeed) throws NullPointerException {
 		this.args = new HashMap<String, Object>();
 		if (argFeed == null) return;
 			
@@ -146,17 +140,17 @@ public class MyFunction implements Executable {
 	}
 	
 	@Override
-	public void addPrintValue(Object value) {
+	public void addPrintValue(Object value) throws NullPointerException {
 		getProgram().addPrintValue(value);
 	}
 
 	@Override
-	public void flagLine(SourceLocation location) {
+	public void flagLine(SourceLocation location) throws NullPointerException {
 		flagTracker.put(getPositionString(location), true);
 	}
 
 	@Override
-	public void deFlagLine(SourceLocation location) {
+	public void deFlagLine(SourceLocation location) throws NullPointerException {
 		flagTracker.put(getPositionString(location), false);
 	}
 	
@@ -177,24 +171,24 @@ public class MyFunction implements Executable {
 	
 	
 	@Override
-	public void setReturn(MyExpression<?> value) {
-		this.returnValue = value.evaluate();
+	public void setReturn(Object value) {
+		this.returnValue = value;
 		this.returnSet = true;
 	}
 	
 	
-	public Object execute(List<Object> actualArgs) {
+	public Object execute(List<Object> actualArgs) 
+			throws ExitOutException, IllegalArgumentException, IllegalStateException, NullPointerException {
 		Executable lastExecuter = getBody().getExecuter();
 		this.returnSet = false;
 		getBody().setExecuter(this);
 		getBody().requestDeFlag();
-		
 		registerArguments(actualArgs);
 		
 		try {
 			getBody().execute();
 		}
-		catch(ExitOutException exc) {
+		catch (ExitOutException exc) {
 			getBody().setExecuter(lastExecuter);
 			if (returnHasBeenSet())
 				return this.returnValue;
@@ -206,7 +200,7 @@ public class MyFunction implements Executable {
 	
 
 	
-	public String getPositionString(SourceLocation location) {
+	public String getPositionString(SourceLocation location) throws NullPointerException {
 		return Integer.toString(location.getLine()) + "," + Integer.toString(location.getColumn());
 	}
 

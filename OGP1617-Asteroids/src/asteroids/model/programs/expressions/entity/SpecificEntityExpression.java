@@ -27,7 +27,7 @@ public class SpecificEntityExpression extends EntityExpression {
 	}
 	
 	@Override
-	public void setEntity() {
+	public void setEntity() throws NullPointerException {
 		try {
 			setEntity(getClosestEntity(getEntityType()));	
 		}
@@ -41,7 +41,7 @@ public class SpecificEntityExpression extends EntityExpression {
 	
 	
 	
-	public Entity getClosestEntity(Class<? extends Entity> entityType) throws  IndexOutOfBoundsException {
+	public Entity getClosestEntity(Class<? extends Entity> entityType) throws IndexOutOfBoundsException, NullPointerException {
 		Entity[] entitiesArray = getEntitiesArray(entityType); // Get the array of entities of the given type.
 		Entity startEntity = getDifferentEntity(entitiesArray, getStatement().getExecuter().getOwner());
 		Entity tempEntity = startEntity; // Get an entity that's different from the owner.
@@ -74,7 +74,7 @@ public class SpecificEntityExpression extends EntityExpression {
 	 * @throws 	IndexOutOfBoundsException
 	 * 			Thrown if entities is null.
 	 */
-	public Entity getDifferentEntity(Entity[] entities, Entity excludeEntity) throws IndexOutOfBoundsException {
+	public Entity getDifferentEntity(Entity[] entities, Entity excludeEntity) throws IndexOutOfBoundsException, NullPointerException {
 		for (int i = 0; i < entities.length; i++)
 			if (entities[i] != excludeEntity)
 				return entities[i];

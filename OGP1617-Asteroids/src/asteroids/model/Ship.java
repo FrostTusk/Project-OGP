@@ -1,6 +1,8 @@
 package asteroids.model;
 
 import java.util.*;
+
+import asteroids.helper.ExitOutException;
 import asteroids.helper.entity.*;
 import be.kuleuven.cs.som.annotate.*;
 
@@ -117,13 +119,7 @@ public class Ship extends Entity {
 		setDensity(1.42 * Math.pow(10, 12));
 		setForce(1.1 * Math.pow(10, 18)); // FIXME Set it to (10,18) for assignment, (10,19) for demo.
 		
-		try {	// Check if the position can be set.
-			setPosition(positionX, positionY);
-		}
-		catch (IllegalArgumentException exc) {
-			throw new IllegalArgumentException();
-		}
-
+		setPosition(positionX, positionY);
 		setVelocity(velocityX, velocityY);	// Set the velocity.
 		assert isValidOrientation(orientation);	// Check if the orientation can be set.
 		setOrientation(orientation);
@@ -145,8 +141,8 @@ public class Ship extends Entity {
 				getWorld().removeEntity(this);
 				this.setWorld(null);
 			}
-			catch (IllegalArgumentException exc) {}	// Empty catch because if an IllegalArgumentException
-		}											// is thrown, it means that the association wasn't set to begin with.	
+			catch (IllegalArgumentException exc) {setWorld(null);}	// Near empty catch because if an IllegalArgument Exception
+		}				 						// is thrown, it means that the association wasn't set to begin with.			
 		List<Bullet> iterator = helper.convertSetToList(getAllBullets());	// This means that the association already doesn't exist 
 		for (Bullet bullet: iterator) {							// we don't have to do anything.
 			try {
@@ -235,7 +231,7 @@ public class Ship extends Entity {
 	@Raw
 	public double getTotalMass() {
 		double totalMass = getMass();
-		for (Bullet bullet : this.bullets) 
+		for (Bullet bullet: this.bullets) 
 			totalMass += bullet.getMass();
 		return totalMass;
 	}
@@ -332,7 +328,7 @@ public class Ship extends Entity {
 	 * 			true if it can, false if not.
 	 */
 	@Raw
-	public boolean canHaveAsBullet(Bullet bullet) {
+	public boolean canHaveAsBullet(Bullet bullet) throws IllegalArgumentException {
 		return (bullet != null) && (!bullet.isTerminated()) && 
 			   (!this.bullets.contains(bullet)) && (helper.apparentlyWithinBoundaries(bullet, this));
 	}
@@ -384,12 +380,7 @@ public class Ship extends Entity {
 			throw new IllegalArgumentException();
 		
 		addBullet(bullet);
-		try {
-			bullet.setShip(this);
-		}
-		catch (IllegalArgumentException exc) {
-			throw new IllegalArgumentException(exc);
-		}
+		bullet.setShip(this);
 	}
 	
 	/**
@@ -402,16 +393,8 @@ public class Ship extends Entity {
 	 * @see implementation
 	 */
 	public void loadBullets(Collection<Bullet> bullets) throws IllegalArgumentException, NullPointerException {
-		try {
-			for (Bullet bullet: bullets) 
-				loadBullet(bullet);
-		}
-		catch (IllegalArgumentException exc) {
-			throw new IllegalArgumentException(exc);
-		}
-		catch (NullPointerException exc) {
-			throw new NullPointerException();
-		}
+		for (Bullet bullet: bullets) 
+			loadBullet(bullet);
 	}
 	
 	/**
@@ -423,20 +406,12 @@ public class Ship extends Entity {
 	 * @see implementation
 	 */
 	public void reloadBullet(Bullet bullet) throws IllegalArgumentException, NullPointerException {
-		try {
-			if (bullet.getWorld() != null) 
-				bullet.getWorld().removeEntity(bullet);
-			bullet.setPosition(getPosition().getPositionX(), getPosition().getPositionY());
-			bullet.resetSource(this);
-			bullet.setWorld(null);
-			loadBullet(bullet);
-		}
-		catch (IllegalArgumentException exc) {
-			throw new IllegalArgumentException(exc);
-		}
-		catch (NullPointerException exc) {
-			throw new NullPointerException();
-		}
+		if (bullet.getWorld() != null) 
+			bullet.getWorld().removeEntity(bullet);
+		bullet.setPosition(getPosition().getPositionX(), getPosition().getPositionY());
+		bullet.resetSource(this);
+		bullet.setWorld(null);
+		loadBullet(bullet);
 	}
 	
 	
@@ -753,14 +728,8 @@ public class Ship extends Entity {
 	public void resolveCollisionBullet(Bullet bullet) throws IllegalArgumentException, NullPointerException {
 		if (bullet == null) 
 			throw new NullPointerException();
-		if (bullet.getSource() == this) {	// Reload if this bullet hits it's source.
-			try {
-				reloadBullet(bullet);
-			}
-			catch (IllegalArgumentException exc) {
-				throw new IllegalArgumentException(exc);
-			}
-		}
+		if (bullet.getSource() == this)	// Reload if this bullet hits it's source.
+			reloadBullet(bullet);
 		else {	// Terminate otherwise.
 			this.terminate();
 			bullet.terminate();
@@ -818,9 +787,11 @@ public class Ship extends Entity {
 	 * 			The time during which the program needs to be executed.
 	 * @return
 	 */
-	public List<Object> executeProgram(double time) {
+	public List<Object> executeProgram(double time) throws ExitOutException, IllegalArgumentException, NullPointerException {
+		List<Object> args = new ArrayList<Object>();
+		args.add(Double.valueOf(time));
 		try {
-			program.execute(time);
+			return (List<Object>) program.execute(args);
 		}
 		catch (IllegalStateException exc) {} // Time out in the program. 
 		return program.getPrintTracker();
@@ -834,7 +805,19 @@ public class Ship extends Entity {
 		     * |--------------------------------------------| 
 		     */
 	
-
+	
+	
+	/**
+	 * Helper method of evolve in World.
+	 */
+	@Override
+	public void morph(double time) throws ExitOutException, IllegalArgumentException, NullPointerException {
+		move(time);
+		thrust(getAcceleration(), time);
+		if (getProgram() != null)
+			executeProgram(time);
+	}
+	
 	
 	/**
 	 * Returns the type of this Ship Class in enumeration format.

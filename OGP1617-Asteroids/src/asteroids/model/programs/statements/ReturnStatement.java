@@ -6,7 +6,7 @@ import asteroids.part3.programs.SourceLocation;
 
 public class ReturnStatement <T> implements MyStatement{
 	
-	public ReturnStatement(MyExpression<T> value, SourceLocation location) {
+	public ReturnStatement(MyExpression<T> value, SourceLocation location) throws NullPointerException {
 		setValue(value);
 		setLocation(location);
 		
@@ -56,7 +56,6 @@ public class ReturnStatement <T> implements MyStatement{
 	@Override
 	public void setExecuter(Executable executer) {
 		this.executer = executer;
-		getValue().setStatement(this);
 	}
 
 	@Override
@@ -67,21 +66,21 @@ public class ReturnStatement <T> implements MyStatement{
 	
 	
 	@Override
-	public void requestFlag() {
+	public void requestFlag() throws NullPointerException {
 		getExecuter().flagLine(getLocation());
 	}
 
 	@Override
-	public void requestDeFlag() {
+	public void requestDeFlag() throws NullPointerException {
 		getExecuter().deFlagLine(getLocation());
 	}
 	
 	
 	@Override
-	public void execute() {
+	public void execute() throws ExitOutException, IllegalArgumentException, NullPointerException {
 		if (getExecuter().getFlag(getLocation())) return;
 		setExecuter(getExecuter());
-		getExecuter().setReturn(getValue());
+		getExecuter().setReturn(getValue().evaluate());
 		requestFlag();
 		throw new ExitOutException();
 	}

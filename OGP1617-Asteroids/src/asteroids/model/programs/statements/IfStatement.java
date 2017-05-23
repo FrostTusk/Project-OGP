@@ -1,12 +1,13 @@
 package asteroids.model.programs.statements;
 
+import asteroids.helper.ExitOutException;
 import asteroids.model.programs.*;
 import asteroids.part3.programs.SourceLocation;
 
 public class IfStatement implements MyStatement {
 
 	public IfStatement(MyExpression<Boolean> condition, MyStatement ifBody, MyStatement elseBody,
-			SourceLocation location) {
+			SourceLocation location) throws NullPointerException {
 		setCondition(condition);
 		setIfBody(ifBody);
 		setElseBody(elseBody);
@@ -77,7 +78,7 @@ public class IfStatement implements MyStatement {
 	
 
 	@Override
-	public void setExecuter(Executable executer) {
+	public void setExecuter(Executable executer) throws NullPointerException {
 		this.executer = executer;
 		getIfBody().setExecuter(executer);
 		if (getElseBody() != null)
@@ -92,7 +93,7 @@ public class IfStatement implements MyStatement {
 	
 	
 	@Override
-	public void requestFlag() {
+	public void requestFlag() throws NullPointerException {
 		getExecuter().flagLine(getLocation());
 		getIfBody().requestFlag();
 		if (getElseBody() != null)
@@ -100,7 +101,7 @@ public class IfStatement implements MyStatement {
 	}
 
 	@Override
-	public void requestDeFlag() {
+	public void requestDeFlag() throws NullPointerException {
 		getExecuter().deFlagLine(getLocation());
 		getIfBody().requestDeFlag();
 		if (getElseBody() != null)
@@ -109,7 +110,7 @@ public class IfStatement implements MyStatement {
 	
 	
 	@Override
-	public void execute() throws IllegalStateException {
+	public void execute() throws ExitOutException, IllegalArgumentException, IllegalStateException, NullPointerException {
 		if (getExecuter().getFlag(getLocation())) return;
 		setExecuter(getExecuter());
 		if (getCondition().evaluate())

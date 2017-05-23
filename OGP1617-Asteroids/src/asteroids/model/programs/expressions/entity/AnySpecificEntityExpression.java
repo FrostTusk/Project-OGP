@@ -10,7 +10,7 @@ public class AnySpecificEntityExpression extends SpecificEntityExpression {
 	}
 
 	@Override
-	public void setEntity() {
+	public void setEntity() throws NullPointerException {
 		try {
 			if (getClosestEntity(getEntityType()) == null)
 				throw new NullPointerException();

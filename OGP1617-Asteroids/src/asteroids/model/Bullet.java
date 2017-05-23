@@ -68,20 +68,14 @@ public class Bullet extends Entity {
 	 * 
 	 * @see implementation
 	 */
-	public Bullet(double positionX, double positionY, double velocityX, double velocityY, double radius)
+	public Bullet(double positionX, double positionY, double velocityX, double velocityY, double radius) 
 		throws IllegalArgumentException {
 		setMinRadius(1);
 		setDensity(7.8 * Math.pow(10, 12));
 		setBoundaryCollisionMax(3);
 		setBoundaryCollisionCounter(0);
 		
-		try {
-			setPosition(positionX, positionY);
-		}
-		catch (IllegalArgumentException exc) {
-			throw new IllegalArgumentException();
-		}
-
+		setPosition(positionX, positionY);
 		setVelocity(velocityX, velocityY);
 		setRadius(radius);
 		setMass();
@@ -100,8 +94,8 @@ public class Bullet extends Entity {
 			try {
 				getWorld().removeEntity(this);
 			}
-			catch (IllegalArgumentException exc) {}	// Empty catch because if an IllegalArgument Exception
-		}								// is thrown, it means that the association wasn't set to begin with.
+			catch (IllegalArgumentException exc) {setWorld(null);}	// Near empty catch because if an IllegalArgument Exception
+		}				 						// is thrown, it means that the association wasn't set to begin with.		
 		if (getShip() != null) {		// This means that the association already doesn't exist. We don't have to do anything.
 			try {
 				getShip().removeBullet(this);
@@ -400,7 +394,8 @@ public class Bullet extends Entity {
 			     (position[3] == getWorld().getHeight() || position[3] == 0) ) 	// or with corner.
 				setVelocity(getVelocityX(), -getVelocityY());
 		}
-		else this.terminate();	// Terminate the bullet if it has exceeded the max amount of bounces.
+		else 
+			this.terminate();	// Terminate the bullet if it has exceeded the max amount of bounces.
 	}
 	
 	
@@ -416,14 +411,9 @@ public class Bullet extends Entity {
 	public void resolveCollisionShip(Ship ship) throws IllegalArgumentException, NullPointerException {
 		if (ship == null) 
 			throw new NullPointerException();
-		if (this.getSource() == ship) {	// Reload if this bullet hits it's source.
-			try {
-				ship.reloadBullet(this);
-			}
-			catch (IllegalArgumentException exc) {
-				throw new IllegalArgumentException(exc);
-			}
-		}
+
+		if (this.getSource() == ship)	// Reload if this bullet hits it's source.
+			ship.reloadBullet(this);
 		else {	// Terminate otherwise.
 			this.terminate();
 			ship.terminate();

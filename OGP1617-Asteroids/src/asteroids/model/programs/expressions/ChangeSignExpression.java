@@ -1,5 +1,6 @@
 package asteroids.model.programs.expressions;
 
+import asteroids.helper.ExitOutException;
 import asteroids.model.programs.*;
 import asteroids.part3.programs.SourceLocation;
 
@@ -44,7 +45,7 @@ public class ChangeSignExpression implements MyExpression<Double> {
 	}
 	
 	
-	public void setStatement(MyStatement statement) {
+	public void setStatement(MyStatement statement) throws NullPointerException {
 		this.statement = statement;
 		getExpression().setStatement(statement);
 	}
@@ -52,7 +53,7 @@ public class ChangeSignExpression implements MyExpression<Double> {
 	
 	
 	@Override
-	public Double evaluate() {
+	public Double evaluate() throws ExitOutException, IllegalArgumentException, IllegalStateException, NullPointerException {
 		return -1 * getExpression().evaluate();
 	}
 	

@@ -4,6 +4,8 @@ import be.kuleuven.cs.som.annotate.*;
 
 /** 
  * A class of thrusters.
+ * 
+ * @author Mathijs Hubrechtsen
  */
 public class Thruster {
 

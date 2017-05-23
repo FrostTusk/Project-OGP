@@ -1,0 +1,19 @@
+Changes to provided code:
+1. WorldView2.java
+	1. private F facade => protected F facade
+	2. private World world => protected World world
+	3. private void evolveWorld(..) => protected void evolveWorld(..)
+2. WorldView3.java
+	1. added override method:
+		@Override
+		protected void evolveWorld(long millisSinceLastEvolve) {
+		try {
+			millisSinceLastEvolve = Math.max(5, millisSinceLastEvolve);
+			facade.evolve(world, millisSinceLastEvolve / 1000., this);
+			facade.executeProgram(other, millisSinceLastEvolve / 1000.);
+		} catch (ModelException exc) {
+			handleError(exc);
+		}
+		}
+	2. added private Ship other
+	3. constructor => added this.other = other

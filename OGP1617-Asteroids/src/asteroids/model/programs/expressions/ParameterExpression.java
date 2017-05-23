@@ -50,8 +50,10 @@ public class ParameterExpression implements MyExpression<Object> {
 		this.statement = statement;
 	}
 
+	
+	
 	@Override
-	public Object evaluate() {
+	public Object evaluate() throws IllegalArgumentException, NullPointerException {
 		if (!(getStatement().getExecuter() instanceof MyFunction))
 			throw new IllegalArgumentException();
 		return ((MyFunction) getStatement().getExecuter()).getArgument(getParameterName());

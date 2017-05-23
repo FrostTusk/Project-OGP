@@ -2,6 +2,8 @@ package asteroids.model.programs.expressions;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import asteroids.helper.ExitOutException;
 import asteroids.model.programs.*;
 import asteroids.part3.programs.SourceLocation;
 
@@ -29,7 +31,7 @@ public class FunctionCallExpression implements MyExpression<Object> {
 		return this.actualArgs;
 	}
 	
-	public List<Object> getEvaluatedArgs() {
+	public List<Object> getEvaluatedArgs() throws ExitOutException, IllegalArgumentException, IllegalStateException, NullPointerException {
 		List<Object> result = new ArrayList<Object>();
 		for (MyExpression expression: getActualArgs())
 			result.add(expression.evaluate());
@@ -74,7 +76,7 @@ public class FunctionCallExpression implements MyExpression<Object> {
 	
 	
 	@Override
-	public Object evaluate() {
+	public Object evaluate() throws ExitOutException, IllegalArgumentException, IllegalStateException, NullPointerException {
 		MyFunction template = getStatement().getExecuter().getProgram().getFunction(getFunctionName());
 		MyFunction function = new MyFunction(template.getFunctionName(), template.getBody(), template.getLocation());
 		function.setProgram(getStatement().getExecuter().getProgram());

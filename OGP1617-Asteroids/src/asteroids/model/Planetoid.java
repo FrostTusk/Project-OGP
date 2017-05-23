@@ -8,6 +8,7 @@ import asteroids.helper.entity.MinorPlanet;
 import asteroids.helper.entity.Position;
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
+import jdk.internal.dynalink.linker.LinkerServices.Implementation;
 
 /**
  * A class of planetoids.
@@ -58,6 +59,28 @@ public class Planetoid extends MinorPlanet {
 		setDistanceTraveled(distanceTraveled);
 		setMass();
 	}
+	
+	
+	/**
+	 * Terminates this minorPlanet. Breaks up any associations with entities and worlds.
+	 * Prepares this object for the garbage collector.
+	 * @see implementation
+	 */
+	@Override
+	public void terminate() {
+		if (isTerminated()) return;
+		World world = getWorld();
+		if (getWorld() != null) { 
+			try {
+				getWorld().removeEntity(this);
+			}
+			catch (IllegalArgumentException exc) {setWorld(null);}	// Near empty catch because if an IllegalArgument Exception
+		}				 						// is thrown, it means that the association wasn't set to begin with.						
+		// This means that the association already doesn't exist. We don't have to do anything.
+		this.isTerminated = true;
+		spawnAsteroids(world);
+	}
+	
 	
 	
 	/**
@@ -128,7 +151,7 @@ public class Planetoid extends MinorPlanet {
 	 *       	| ! isValidPosition(new.getPositionX(), new.getPositionY())
 	 */
 	@Override @Raw 
-	public void move(double time) {
+	public void move(double time) throws IllegalArgumentException {
 		if (time < 0) throw new IllegalArgumentException();
 		
 		double newPositionX = helper.calculatePosition(this, time)[0];
@@ -139,12 +162,7 @@ public class Planetoid extends MinorPlanet {
 		setDistanceTraveled(getDistanceTraveled() + Math.sqrt(Math.pow(Math.abs(newPositionX - oldPositionX), 2) 
 							 + Math.pow(Math.abs(newPositionY - oldPositionY), 2)));
 		
-		try {
-			setPosition(newPositionX, newPositionY);
-		}
-		catch (IllegalArgumentException exc) {
-			throw new IllegalArgumentException();
-		}
+		setPosition(newPositionX, newPositionY);
 	}
 	
 	
@@ -172,8 +190,9 @@ public class Planetoid extends MinorPlanet {
 	 * @see implementation
 	 */
 	@Override
-	public void resolveCollisionShip(Ship ship) {
-		Position newPosition = getRandomPosition(ship.getWorld());
+	public void resolveCollisionShip(Ship ship) throws IllegalArgumentException {
+//		Position newPosition = getRandomPosition(ship.getWorld());
+		Position newPosition = getRandomPosition(ship.getWorld(), ship.getRadius());
 		ship.setPosition(newPosition.getPositionX(), newPosition.getPositionY());
 		for (Entity entity: getWorld().getAllEntities()) {
 			if (entity == ship)
@@ -190,14 +209,30 @@ public class Planetoid extends MinorPlanet {
 	
 	/**
 	 * Get a random position in the given world.
+	 * 
 	 * @param 	world
 	 * 			The world in which a random position needs to be found.
 	 * 
 	 * @see implementation
 	 */
 	@Raw
-	private Position getRandomPosition(World world) {
+	private Position getRandomPosition(World world) throws IllegalArgumentException {
 		return new Position(getRandomNumber(0, world.getWidth()), getRandomNumber(0, world.getHeight()));
+	}
+	
+	/**
+	 * Get a random position in the given world that fits the given radius.
+	 * 
+	 * @param 	world
+	 * 			The world in which a random position needs to be found.
+	 * @param	radius
+	 * 			The radius to be used.
+	 * 
+	 * @see implementation
+	 */
+	@Raw
+	private Position getRandomPosition(World world, double radius) throws IllegalArgumentException {
+		return new Position(getRandomNumber(radius, world.getWidth() - radius), getRandomNumber(radius, world.getHeight() - radius));
 	}
 	
 	
@@ -215,6 +250,43 @@ public class Planetoid extends MinorPlanet {
 	public double getRandomNumber(double low, double high) {
 	 	return ThreadLocalRandom.current().nextDouble(low, high);
 	}
+	
+	
+	/**
+	 * Returns a single random sign.
+	 * @see implementation
+	 */
+	@Raw
+	public int getRandomSign() {
+		int[] numbers = {-1, 1};
+		return numbers[ThreadLocalRandom.current().nextInt(2)];
+	}
+	
+	
+	
+	/**
+	 * Spawns 2 asteroids at the position of this planetoid.
+	 * 
+	 * @param 	world
+	 * 			The former world of this planetoid.
+	 * 
+	 * @see Implementation
+	 */
+	private void spawnAsteroids(World world) {
+		if ( (world == null) || (getRadius() < 30) )
+			return;
+		double s = getRandomSign();
+		Asteroid asteroid1 = new Asteroid(getPosition().getPositionX() - (getRadius() / 2), 
+									getPosition().getPositionY(), s * 1.5 * getVelocityX(),
+									s * 1.5 * getVelocityY(), getRadius() / 2);
+		Asteroid asteroid2 = new Asteroid(getPosition().getPositionX() + (getRadius() / 2), 
+				getPosition().getPositionY(), -s * 1.5 * getVelocityX(),
+				-s * 1.5 * getVelocityY(), getRadius() / 2);
+		
+		world.addEntity(asteroid1);
+		world.addEntity(asteroid2);
+	}
+	
 	
 	
 	/**
