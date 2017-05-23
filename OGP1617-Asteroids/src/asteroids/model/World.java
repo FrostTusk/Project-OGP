@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 import asteroids.helper.*;
 import asteroids.helper.entity.Entity;
 import asteroids.helper.entity.Position;
-import asteroids.helper.entity.Terminateable;
 import asteroids.part2.CollisionListener;
 import be.kuleuven.cs.som.annotate.*;
 

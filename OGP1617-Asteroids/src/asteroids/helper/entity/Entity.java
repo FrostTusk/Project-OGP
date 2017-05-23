@@ -1,7 +1,9 @@
 package asteroids.helper.entity;
 
+import asteroids.helper.Evolvable;
 import asteroids.helper.ExitOutException;
 import asteroids.helper.Helper;
+import asteroids.helper.Terminateable;
 import asteroids.model.*;
 import be.kuleuven.cs.som.annotate.*;
 
