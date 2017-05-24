@@ -321,28 +321,28 @@ public abstract class Entity implements Evolvable, Terminateable {
 
 
 	/**
-	* Variable registering the radius of this entity.
-	*/
+	 * Variable registering the radius of this entity.
+	 */
 	private double radius;	
 	/**
-	* Variable registering the minimum radius of this entity.
-	* This minimum radius is hard coded into the sub classes of Entity so that it
-	* never changes during the program's execution.
-	*/
-	private double minRadius;	// #Constant-2#
+ 	 * Variable registering the minimum radius of this entity.
+	 * This minimum radius is hard coded into the sub classes of Entity so that it
+	 * never changes during the program's execution.
+	 */
+	protected double minRadius;	// #Constant-2#
 	
 	
 	/**
-	* Return the minimum radius of this entity.
-	*/
+	 * Return the minimum radius of this entity.
+	 */
 	@Basic @Immutable @Raw
 	public double getMinRadius() {
 		return this.minRadius;
 	}
 	
 	/**
-	* Return the radius of this entity.
-	*/
+	 * Return the radius of this entity.
+	 */
 	@Basic @Raw
 	public double getRadius() {
 		return this.radius;
@@ -350,18 +350,33 @@ public abstract class Entity implements Evolvable, Terminateable {
 	
 	
 	/**
-	* Check whether this entity can have the given radius as its radius.
-	*  
-	* @param  	radius
-	*         	The radius to check.
-	*         
-	* @return	Returns whether or not the given radius is a valid radius
-	* 			true if it is, false if not.
-	*       	| result == (POSITIVE_INFINITY > radius) && (radius >= this.getMinRadius())
-	*/
+	 * Check whether this entity can have the given radius as its radius.
+	 *  
+	 * @param  	radius
+	 *         	The radius to check.
+	 *         
+	 * @return	Returns whether or not the given radius is a valid radius
+	 * 			true if it is, false if not.
+	 *       	| result == (POSITIVE_INFINITY > radius) && (radius >= this.getMinRadius())
+	 */
 	@Raw
 	public boolean canHaveAsRadius(double radius) {
 		return (Double.POSITIVE_INFINITY > radius) && (radius >= this.getMinRadius()); 
+	}
+	
+	/**
+	 * Check whether this entity can have the given radius as its radius.
+	 *  
+	 * @param  	radius
+	 *         	The radius to check.
+	 *         
+	 * @return	Returns whether or not the given radius is a valid radius
+	 * 			true if it is, false if not.
+	 *       	| result == (POSITIVE_INFINITY > radius) && (radius >= this.getMinRadius())
+	 */
+	@Raw
+	public boolean canHaveAsMinRadius(double minRadius) {
+		return (minRadius < 0) ? false: true;
 	}
 	
 	
@@ -373,8 +388,14 @@ public abstract class Entity implements Evolvable, Terminateable {
 	 * 
 	 * @post	The minimum radius is equal to the given minimum radius.
 	 * 			this.getMinRadius() == minRadius
+	 * 
+	 * @throws 	IllegalArgumentException
+	 * 			The given minRadius is not a valid minRadius.
+	 * 			| ! this.canHaveAsMinRadius(minRadius)
 	 */
-	protected void setMinRadius(double minRadius) {
+	protected void setMinRadius(double minRadius) throws IllegalArgumentException {
+		if (!canHaveAsMinRadius(minRadius))
+			throw new IllegalArgumentException();
 		this.minRadius = minRadius;
 	}
 	

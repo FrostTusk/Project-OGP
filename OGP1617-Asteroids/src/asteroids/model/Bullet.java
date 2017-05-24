@@ -311,9 +311,9 @@ public class Bullet extends Entity {
 	/**
 	 * Variable registering the maximum amount of boundary collisions allowed for this bullet.
 	 */
-	private double boundaryCollisionMax;	// #Constant-1#
+	private double boundaryCollisionMax;	// TODO #Constant-1#
 	/**
-	 * Variable registering the amount of times this bullet has hit a boundary.
+	 * Variable registering the amount of times this bullet has hit a boundary
 	 */
 	private double boundaryCollisionCounter;
 
