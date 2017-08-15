@@ -1,4 +1,5 @@
 Changes to provided code:
+Not in the final version!
 1. WorldView2.java
 	1. private F facade => protected F facade
 	2. private World world => protected World world

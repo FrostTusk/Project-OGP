@@ -606,7 +606,7 @@ public class Ship extends Entity {
 	/**
 	 * Variable registering the force of this ship.
 	 */
-	private double force;	// #Constant-1#
+	private double force;	// TODO: #Constant-1#
 	/**
 	 * Variable registering the thruster of this ship.
  	 */

@@ -172,7 +172,7 @@ public abstract class Entity implements Evolvable, Terminateable {
 	/**
 	* Variable registering the max speed of this entity.
 	*/
-	private double maxSpeed;	// #Constant-1#
+	private double maxSpeed;	// TODO: #Constant-1#
 	/**
 	* Variable registering the X velocity of this entity.
 	*/
@@ -329,7 +329,7 @@ public abstract class Entity implements Evolvable, Terminateable {
 	 * This minimum radius is hard coded into the sub classes of Entity so that it
 	 * never changes during the program's execution.
 	 */
-	protected double minRadius;	// #Constant-2#
+	protected double minRadius;	// TODO: #Constant-2#
 	
 	
 	/**
@@ -433,7 +433,7 @@ public abstract class Entity implements Evolvable, Terminateable {
 	 * Variable registering the density of this entity.
 	 * The density is always set by the sub classes of Entity. 
 	 */
-	private double density;	// #Constant-3#
+	private double density;	// TODO: #Constant-3#
 	/**
 	* Variable registering the mass of this ship.
 	*/
